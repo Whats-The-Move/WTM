@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,14 @@
 		08CF039F297CB6040074A878 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08CF039D297CB6040074A878 /* LaunchScreen.storyboard */; };
 		08CF03AA297CB6040074A878 /* WTMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03A9297CB6040074A878 /* WTMTests.swift */; };
 		08CF03B5297CB6040074A878 /* WTMUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03B4297CB6040074A878 /* WTMUITests.swift */; };
+		08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C2297CB7590074A878 /* AppHomeViewController.swift */; };
+		08CF03C5297CC1D50074A878 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08CF03C4297CC1D50074A878 /* GoogleService-Info.plist */; };
+		08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */; };
+		08CF03C9297CEFAB0074A878 /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C8297CEFAB0074A878 /* Party.swift */; };
+		08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03D8297D52770074A878 /* popUpViewController.swift */; };
+		87B3A25C22BDABC5E151EB54 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */; };
+		C52C8394DE2F30A11A45F653 /* Pods_WTMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */; };
+		FE3C2AA2ABD043C2057B7DA4 /* Pods_WTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB76CBAFD2F98C545E9E5097 /* Pods_WTM.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +57,20 @@
 		08CF03B0297CB6040074A878 /* WTMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WTMUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CF03B4297CB6040074A878 /* WTMUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WTMUITests.swift; sourceTree = "<group>"; };
 		08CF03B6297CB6040074A878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		08CF03C2297CB7590074A878 /* AppHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHomeViewController.swift; sourceTree = "<group>"; };
+		08CF03C4297CC1D50074A878 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingPageViewController.swift; sourceTree = "<group>"; };
+		08CF03C8297CEFAB0074A878 /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
+		08CF03D8297D52770074A878 /* popUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
+		0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.release.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.release.xcconfig"; sourceTree = "<group>"; };
+		48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.release.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.release.xcconfig"; sourceTree = "<group>"; };
+		548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABB5FD54F81C7C12C4B542F6 /* Pods-WTMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTMTests.release.xcconfig"; path = "Target Support Files/Pods-WTMTests/Pods-WTMTests.release.xcconfig"; sourceTree = "<group>"; };
+		DBAE5B692D580334EE3F0C4B /* Pods-WTM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.debug.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.debug.xcconfig"; sourceTree = "<group>"; };
+		EB76CBAFD2F98C545E9E5097 /* Pods_WTM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F26F7EB5623DC7A2D20A66A9 /* Pods-WTMTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTMTests.debug.xcconfig"; path = "Target Support Files/Pods-WTMTests/Pods-WTMTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FBC5672E6DD8D826665DDC20 /* Pods-WTM-WTMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.debug.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE3C2AA2ABD043C2057B7DA4 /* Pods_WTM.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C52C8394DE2F30A11A45F653 /* Pods_WTMTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87B3A25C22BDABC5E151EB54 /* Pods_WTM_WTMUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +108,8 @@
 				08CF03A8297CB6040074A878 /* WTMTests */,
 				08CF03B3297CB6040074A878 /* WTMUITests */,
 				08CF0390297CB6030074A878 /* Products */,
+				0FF5A9EE156DFEC342E41766 /* Pods */,
+				C2F3D44BD2ACE906CA082C5E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,9 +126,14 @@
 		08CF0391297CB6030074A878 /* WTM */ = {
 			isa = PBXGroup;
 			children = (
+				08CF03C4297CC1D50074A878 /* GoogleService-Info.plist */,
 				08CF0392297CB6030074A878 /* AppDelegate.swift */,
 				08CF0394297CB6030074A878 /* SceneDelegate.swift */,
 				08CF0396297CB6030074A878 /* ViewController.swift */,
+				08CF03C2297CB7590074A878 /* AppHomeViewController.swift */,
+				08CF03C8297CEFAB0074A878 /* Party.swift */,
+				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
+				08CF03D8297D52770074A878 /* popUpViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				08CF039B297CB6040074A878 /* Assets.xcassets */,
 				08CF039D297CB6040074A878 /* LaunchScreen.storyboard */,
@@ -128,6 +160,29 @@
 			path = WTMUITests;
 			sourceTree = "<group>";
 		};
+		0FF5A9EE156DFEC342E41766 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DBAE5B692D580334EE3F0C4B /* Pods-WTM.debug.xcconfig */,
+				48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */,
+				FBC5672E6DD8D826665DDC20 /* Pods-WTM-WTMUITests.debug.xcconfig */,
+				32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */,
+				F26F7EB5623DC7A2D20A66A9 /* Pods-WTMTests.debug.xcconfig */,
+				ABB5FD54F81C7C12C4B542F6 /* Pods-WTMTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		C2F3D44BD2ACE906CA082C5E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EB76CBAFD2F98C545E9E5097 /* Pods_WTM.framework */,
+				0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */,
+				548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +190,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08CF03B9297CB6040074A878 /* Build configuration list for PBXNativeTarget "WTM" */;
 			buildPhases = (
+				6245B178149A170F7CDB39D8 /* [CP] Check Pods Manifest.lock */,
 				08CF038B297CB6030074A878 /* Sources */,
 				08CF038C297CB6030074A878 /* Frameworks */,
 				08CF038D297CB6030074A878 /* Resources */,
+				2116F83C8ED513DA3C8D06D4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -152,6 +209,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08CF03BC297CB6040074A878 /* Build configuration list for PBXNativeTarget "WTMTests" */;
 			buildPhases = (
+				2CE1906F94BE91ED212933B4 /* [CP] Check Pods Manifest.lock */,
 				08CF03A1297CB6040074A878 /* Sources */,
 				08CF03A2297CB6040074A878 /* Frameworks */,
 				08CF03A3297CB6040074A878 /* Resources */,
@@ -170,9 +228,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08CF03BF297CB6040074A878 /* Build configuration list for PBXNativeTarget "WTMUITests" */;
 			buildPhases = (
+				6DF4FEDE019617E2C2C3D2AF /* [CP] Check Pods Manifest.lock */,
 				08CF03AC297CB6040074A878 /* Sources */,
 				08CF03AD297CB6040074A878 /* Frameworks */,
 				08CF03AE297CB6040074A878 /* Resources */,
+				1E8CF6F9746D083A14274EE9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -231,6 +291,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08CF03C5297CC1D50074A878 /* GoogleService-Info.plist in Resources */,
 				08CF039F297CB6040074A878 /* LaunchScreen.storyboard in Resources */,
 				08CF039C297CB6040074A878 /* Assets.xcassets in Resources */,
 				08CF039A297CB6030074A878 /* Main.storyboard in Resources */,
@@ -253,6 +314,109 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1E8CF6F9746D083A14274EE9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2116F83C8ED513DA3C8D06D4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2CE1906F94BE91ED212933B4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WTMTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6245B178149A170F7CDB39D8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WTM-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6DF4FEDE019617E2C2C3D2AF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WTM-WTMUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		08CF038B297CB6030074A878 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -260,7 +424,11 @@
 			files = (
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */,
+				08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
+				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
+				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
+				08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,10 +601,12 @@
 		};
 		08CF03BA297CB6040074A878 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DBAE5B692D580334EE3F0C4B /* Pods-WTM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 012820231;
 				DEVELOPMENT_TEAM = Q5KHT58ZCF;
 				INFOPLIST_FILE = WTM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -452,10 +622,12 @@
 		};
 		08CF03BB297CB6040074A878 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 012820231;
 				DEVELOPMENT_TEAM = Q5KHT58ZCF;
 				INFOPLIST_FILE = WTM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -471,6 +643,7 @@
 		};
 		08CF03BD297CB6040074A878 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F26F7EB5623DC7A2D20A66A9 /* Pods-WTMTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -493,6 +666,7 @@
 		};
 		08CF03BE297CB6040074A878 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ABB5FD54F81C7C12C4B542F6 /* Pods-WTMTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -515,6 +689,7 @@
 		};
 		08CF03C0297CB6040074A878 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FBC5672E6DD8D826665DDC20 /* Pods-WTM-WTMUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -535,6 +710,7 @@
 		};
 		08CF03C1297CB6040074A878 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
