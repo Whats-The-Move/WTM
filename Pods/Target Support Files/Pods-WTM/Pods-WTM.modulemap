@@ -1,0 +1,6 @@
+framework module Pods_WTM {
+  umbrella header "Pods-WTM-umbrella.h"
+
+  export *
+  module * { export * }
+}
