@@ -39,6 +39,8 @@ class AppHomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         gifImage.loadGif(name: "finalillini")
+        partyList.overrideUserInterfaceStyle = .dark
+        searchBar.overrideUserInterfaceStyle = .dark
     }
     
     override func viewWillAppear(_ animated: Bool) {

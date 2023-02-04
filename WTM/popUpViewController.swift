@@ -44,6 +44,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         map.showsUserLocation = true
         map.userTrackingMode = .follow
         locationManger.desiredAccuracy = kCLLocationAccuracyBest
+        map.overrideUserInterfaceStyle = .dark
         
         map.delegate = self
         

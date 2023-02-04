@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         authenticated = UserDefaults.standard.bool(forKey: "authenticated")
-
         return true
     }
 
