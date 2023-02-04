@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
             super.viewDidLoad()
+        email.textColor = .black
         // Do any additional setup after loading the view.
     }
 
@@ -31,29 +32,24 @@ class ViewController: UIViewController {
             })
         }
         else {
+            UserDefaults.standard.set(true, forKey: "authenticated")
             signUP()
         }
     }
     
     func signUP() {
-        Auth.auth().createUser(withEmail: email.text!, password: "12345678") { (authResult, error) in
-
-            guard let user = authResult?.user, error == nil else {
-                print("Error \(error?.localizedDescription)")
-                return
-            }
             
             // Create a reference to the Realtime Database
             let databaseRef = Database.database().reference()
             var username = ""
             
-            if user.email != nil && user.email!.contains("illinois.edu") == true{
-                let i = user.email!.firstIndex(of: "@")
-                username = user.email!.substring(to: i!)
+        if email.text != nil && email.text!.contains("illinois.edu") == true{
+            let i = email.text!.firstIndex(of: "@")
+            username = email.text!.substring(to: i!)
             }
 
             // Listen for new user creation events in Firebase Authentication
-            if user.email != nil && user.email!.contains("illinois.edu") == true {
+        if email.text != nil && email.text!.contains("illinois.edu") == true {
                 Auth.auth().addStateDidChangeListener { (auth, user) in
                     if let user = user {
                         // A new user has signed up
@@ -72,7 +68,6 @@ class ViewController: UIViewController {
             let vc = storyboard.instantiateViewController(identifier: "AppHome")
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
-        }
     }
 
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
+		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
+		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
 		08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0392297CB6030074A878 /* AppDelegate.swift */; };
 		08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0394297CB6030074A878 /* SceneDelegate.swift */; };
 		08CF0397297CB6030074A878 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0396297CB6030074A878 /* ViewController.swift */; };
@@ -43,6 +46,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
+		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
+		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
 		08CF038F297CB6030074A878 /* WTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CF0392297CB6030074A878 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		08CF0394297CB6030074A878 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,10 +137,13 @@
 				08CF0394297CB6030074A878 /* SceneDelegate.swift */,
 				08CF0396297CB6030074A878 /* ViewController.swift */,
 				08CF03C2297CB7590074A878 /* AppHomeViewController.swift */,
+				087FE8EB298DDA26001B17B6 /* Gif.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
 				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
 				08CF03D8297D52770074A878 /* popUpViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
+				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
+				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
 				08CF039B297CB6040074A878 /* Assets.xcassets */,
 				08CF039D297CB6040074A878 /* LaunchScreen.storyboard */,
 				08CF03A0297CB6040074A878 /* Info.plist */,
@@ -293,8 +302,10 @@
 			files = (
 				08CF03C5297CC1D50074A878 /* GoogleService-Info.plist in Resources */,
 				08CF039F297CB6040074A878 /* LaunchScreen.storyboard in Resources */,
+				087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */,
 				08CF039C297CB6040074A878 /* Assets.xcassets in Resources */,
 				08CF039A297CB6030074A878 /* Main.storyboard in Resources */,
+				087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +435,7 @@
 			files = (
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */,
+				087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */,
 				08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,

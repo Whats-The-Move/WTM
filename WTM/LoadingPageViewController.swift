@@ -13,7 +13,7 @@ class LoadingPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if launchedBefore {
+        if launchedBefore && authenticated {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(identifier: "AppHome")
             vc.modalPresentationStyle = .overFullScreen

@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 
 public var launchedBefore = false
+public var authenticated = false
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+        authenticated = UserDefaults.standard.bool(forKey: "authenticated")
 
         return true
     }

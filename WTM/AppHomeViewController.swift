@@ -20,6 +20,7 @@ class AppHomeViewController: UIViewController {
         }
     }
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var gifImage: UIImageView!
     
     var partyArray = [String]()
     var searching = false
@@ -37,6 +38,7 @@ class AppHomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        gifImage.loadGif(name: "finalillini")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +61,7 @@ class AppHomeViewController: UIViewController {
                 if let row = self?.parties.count {
                     let indexPath = IndexPath(row: row - 1, section: 0)
                     self?.partyList.insertRows(at: [indexPath], with: .automatic)
-                    if((self?.parties.count)! <= 49){
+                    if((self?.parties.count)! <= 50){
                         self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
                     } else {
                         self?.scrollToTop()
