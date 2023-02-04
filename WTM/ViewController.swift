@@ -56,8 +56,7 @@ class ViewController: UIViewController {
                         // Create a new user in the Realtime Database
                         let userRef = databaseRef.child("Users").child(username)
                         let userData = [
-                            "name": (user.email)!,
-                            "votes": 5
+                            "name": (self.email.text)!
                         ] as [String : Any]
                         userRef.setValue(userData)
                     }
