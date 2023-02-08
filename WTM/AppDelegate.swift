@@ -10,16 +10,33 @@ import Firebase
 
 public var launchedBefore = false
 public var authenticated = false
+public var user_address = ""
+public var currentDate = ""
+public var votesLabel = 0
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         authenticated = UserDefaults.standard.bool(forKey: "authenticated")
+        user_address = UserDefaults.standard.string(forKey: "user_address") ?? "user"
+        votesLabel = UserDefaults.standard.integer(forKey: "votesLabel")
+        currentDate = UserDefaults.standard.string(forKey: "currentDate") ?? ""
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        let newDate = dateFormatter.string(from: Date())
+        
+        if newDate != currentDate {
+            UserDefaults.standard.setValue(5, forKey: "votesLabel")
+            UserDefaults.standard.setValue(newDate, forKey: "currentDate")
+        } else {
+            UserDefaults.standard.setValue(newDate, forKey: "currentDate")
+        }
+                
         return true
     }
 

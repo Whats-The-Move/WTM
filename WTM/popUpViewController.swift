@@ -32,10 +32,14 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     @IBOutlet weak var downvoteLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var map: MKMapView!
+    @IBOutlet weak var user_name: UILabel!
     
     var locationManger = CLLocationManager()
     
     override func viewDidLoad() {
+        
+        upvoteButton.imageView?.contentMode = .scaleAspectFit
+        downvoteButton.imageView?.contentMode = .scaleAspectFit
         
         locationManger.delegate = self
         locationManger.requestAlwaysAuthorization()
@@ -58,7 +62,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         upvoteLabel.textColor = .black
         downvoteLabel.text = String(dislikesLabel)
         downvoteLabel.textColor = .black
-        num.text = String(votesLabel)
+        num.text = String(UserDefaults.standard.integer(forKey: "votesLabel"))
         num.textColor = .black
         votesLeftLabel.textColor = .black
         wasItTheMoveLabel.textColor = .black
@@ -105,9 +109,17 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         }
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
+        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
         // Do any additional setup after loading the view.
         
+    }
+    
+    @objc func handleTap() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "AppHome") as! AppHomeViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
     }
     /*
     func mapThis(destinationCoord : CLLocationCoordinate2D){
@@ -166,14 +178,15 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     @IBAction func likeButtonTapped(_ sender: Any) {
         //print(titleText)
         //print("liked")
-        if(votesLabel > 0){
+        if(UserDefaults.standard.integer(forKey: "votesLabel") > 0){
             let database = Database.database().reference()
             database.child("Parties").child((titleLabel.text)!).updateChildValues(["Likes" : ServerValue.increment(1)])
             database.child("Parties").child((titleLabel.text)!).updateChildValues(["allTimeLikes" : ServerValue.increment(1)])
             let number = Int(upvoteLabel.text!)
             likesLabel = number! + 1
             let votesNumber = Int(num.text!)
-            votesLabel = votesNumber! - 1
+            let votesB = votesNumber! - 1
+            UserDefaults.standard.setValue(votesB, forKey: "votesLabel")
         } else {
             let alert = UIAlertController(title: "Alert", message: "No votes left!", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -187,14 +200,15 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     @IBAction func dislikeButtonTapped(_ sender: Any) {
         //print(titleText)
         //print("disliked")
-        if(votesLabel > 0){
+        if(UserDefaults.standard.integer(forKey: "votesLabel") > 0){
             let database = Database.database().reference()
             database.child("Parties").child((titleLabel.text)!).updateChildValues(["Dislikes" : ServerValue.increment(1)])
             database.child("Parties").child((titleLabel.text)!).updateChildValues(["allTimeDislikes" : ServerValue.increment(1)])
             let number = Int(downvoteLabel.text!)
             dislikesLabel = number! + 1
             let votesNumber = Int(num.text!)
-            votesLabel = votesNumber! - 1
+            let votesB = votesNumber! - 1
+            UserDefaults.standard.setValue(votesB, forKey: "votesLabel")
         } else {
             let alert = UIAlertController(title: "Alert", message: "No votes left!", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

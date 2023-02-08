@@ -21,6 +21,7 @@ class AppHomeViewController: UIViewController {
     }
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var gifImage: UIImageView!
+    @IBOutlet weak var refreshButton: UIButton!
     
     var partyArray = [String]()
     var searching = false
@@ -38,7 +39,17 @@ class AppHomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        refreshButton.layer.cornerRadius = 4
+        
+        for recognizer in view.gestureRecognizers ?? [] {
+            if let swipeRecognizer = recognizer as? UISwipeGestureRecognizer, swipeRecognizer.direction == .down {
+                view.removeGestureRecognizer(swipeRecognizer)
+            }
+        }
+        
         gifImage.loadGif(name: "finalillini")
+        gifImage.contentMode = .scaleAspectFit
         partyList.overrideUserInterfaceStyle = .dark
         searchBar.overrideUserInterfaceStyle = .dark
     }
@@ -71,9 +82,16 @@ class AppHomeViewController: UIViewController {
                 }
             }
         }
+        partyList.reloadData()
     }
     
-
+    @IBAction func refreshButtonTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "AppHome") as! AppHomeViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
+    }
+    
     func scrollToTop() {
         let indexPath = IndexPath(row: 0, section: 0)
         partyList.scrollToRow(at: indexPath, at: .top, animated: false)

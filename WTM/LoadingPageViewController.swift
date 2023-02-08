@@ -7,8 +7,6 @@
 
 import UIKit
 
-public var votesLabel = 5
-
 class LoadingPageViewController: UIViewController {
 
     override func viewDidLoad() {
