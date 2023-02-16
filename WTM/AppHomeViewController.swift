@@ -74,7 +74,7 @@ class AppHomeViewController: UIViewController {
                 if let row = self?.parties.count {
                     let indexPath = IndexPath(row: row - 1, section: 0)
                     self?.partyList.insertRows(at: [indexPath], with: .automatic)
-                    if((self?.parties.count)! <= 51){
+                    if((self?.parties.count)! <= 58){
                         self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
                     } else {
                         self?.scrollToTop()
