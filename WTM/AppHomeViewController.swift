@@ -22,6 +22,8 @@ class AppHomeViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var gifImage: UIImageView!
     @IBOutlet weak var refreshButton: UIButton!
+    @IBOutlet weak var logoutButton: UIButton!
+    @IBOutlet weak var helloWorld: UILabel!
     
     var partyArray = [String]()
     var searching = false
@@ -39,9 +41,11 @@ class AppHomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
+
+        helloWorld.text = "Hello " + user_address1
         refreshButton.layer.cornerRadius = 4
-        
+        logoutButton.layer.cornerRadius = 4        
         for recognizer in view.gestureRecognizers ?? [] {
             if let swipeRecognizer = recognizer as? UISwipeGestureRecognizer, swipeRecognizer.direction == .down {
                 view.removeGestureRecognizer(swipeRecognizer)
@@ -53,6 +57,8 @@ class AppHomeViewController: UIViewController {
         partyList.overrideUserInterfaceStyle = .dark
         searchBar.overrideUserInterfaceStyle = .dark
         refreshButton.overrideUserInterfaceStyle = .light
+        logoutButton.overrideUserInterfaceStyle = .light
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,6 +102,16 @@ class AppHomeViewController: UIViewController {
         newViewController.modalPresentationStyle = .fullScreen
         present(newViewController, animated: false, completion: nil)
     }
+    
+    @IBAction func logOutButtonTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "SignUpPage") as! ViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
+        UserDefaults.standard.set(false, forKey: "authenticated")
+
+    }
+
     
     func scrollToTop() {
         let indexPath = IndexPath(row: 0, section: 0)

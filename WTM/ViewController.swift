@@ -44,9 +44,11 @@ class ViewController: UIViewController {
             var username = ""
             
         if email.text != nil && email.text!.contains("illinois.edu") == true{
-            UserDefaults.standard.set(email.text!, forKey: "user_address")
+          
             let i = email.text!.firstIndex(of: "@")
             username = email.text!.substring(to: i!)
+            UserDefaults.standard.set(username, forKey: "user_address")
+
             }
         
         let newUserId = databaseRef.child("Users").childByAutoId().key ?? ""
