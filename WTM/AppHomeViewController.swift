@@ -24,6 +24,7 @@ class AppHomeViewController: UIViewController {
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var logoutButton: UIButton!
     @IBOutlet weak var helloWorld: UILabel!
+    @IBOutlet weak var Profile: UILabel!
     
     var partyArray = [String]()
     var searching = false
@@ -111,6 +112,14 @@ class AppHomeViewController: UIViewController {
         UserDefaults.standard.set(false, forKey: "authenticated")
 
     }
+    @IBAction func profileButtonTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "profile") as! ViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
+        UserDefaults.standard.set(false, forKey: "authenticated")
+    }
+  
 
     
     func scrollToTop() {

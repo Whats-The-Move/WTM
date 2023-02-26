@@ -23,6 +23,7 @@
 		08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */; };
 		08CF03C9297CEFAB0074A878 /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C8297CEFAB0074A878 /* Party.swift */; };
 		08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03D8297D52770074A878 /* popUpViewController.swift */; };
+		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		87B3A25C22BDABC5E151EB54 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */; };
 		C52C8394DE2F30A11A45F653 /* Pods_WTMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */; };
 		FE3C2AA2ABD043C2057B7DA4 /* Pods_WTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB76CBAFD2F98C545E9E5097 /* Pods_WTM.framework */; };
@@ -69,6 +70,7 @@
 		08CF03C8297CEFAB0074A878 /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
 		08CF03D8297D52770074A878 /* popUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
 		0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.release.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.release.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.release.xcconfig"; sourceTree = "<group>"; };
 		548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,6 +143,7 @@
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
 				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
 				08CF03D8297D52770074A878 /* popUpViewController.swift */,
+				10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -439,6 +442,7 @@
 				08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
+				10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */,
 			);
