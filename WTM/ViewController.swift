@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     func signUP() {
             
             // Create a reference to the Realtime Database
-            let databaseRef = Database.database().reference()
+        let databaseRef = Database.database().reference()
             var username = ""
             
         if email.text != nil && email.text!.contains("illinois.edu") == true{
@@ -48,21 +48,13 @@ class ViewController: UIViewController {
             let i = email.text!.firstIndex(of: "@")
             username = email.text!.substring(to: i!)
             }
-
-            // Listen for new user creation events in Firebase Authentication
-        if email.text != nil && email.text!.contains("illinois.edu") == true {
-                Auth.auth().addStateDidChangeListener { (auth, user) in
-                    if let user = user {
-                        // A new user has signed up
-                        // Create a new user in the Realtime Database
-                        let userRef = databaseRef.child("Users").child(username)
-                        let userData = [
-                            "name": (self.email.text)!
-                        ] as [String : Any]
-                        userRef.setValue(userData)
-                    }
-                }
-            }
+        
+        let newUserId = databaseRef.child("Users").childByAutoId().key ?? ""
+        let newUserRef = databaseRef.child("Users").child(username)
+        let newUser = [
+            "email": (self.email.text)!
+        ]
+        newUserRef.setValue(newUser)
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(identifier: "AppHome")
