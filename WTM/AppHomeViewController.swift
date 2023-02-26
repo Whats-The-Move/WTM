@@ -52,6 +52,7 @@ class AppHomeViewController: UIViewController {
         gifImage.contentMode = .scaleAspectFit
         partyList.overrideUserInterfaceStyle = .dark
         searchBar.overrideUserInterfaceStyle = .dark
+        refreshButton.overrideUserInterfaceStyle = .light
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,11 +75,15 @@ class AppHomeViewController: UIViewController {
                 if let row = self?.parties.count {
                     let indexPath = IndexPath(row: row - 1, section: 0)
                     self?.partyList.insertRows(at: [indexPath], with: .automatic)
-                    if((self?.parties.count)! <= 58){
-                        self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                    } else {
-                        self?.scrollToTop()
-                    }
+                    //if((self?.parties.count)! <= 58){
+                      //  self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
+                    //} else {
+                        self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                            self?.scrollToTop()
+                            print("scrolled to top")
+                        }
+                    //}
                 }
             }
         }
@@ -94,7 +99,7 @@ class AppHomeViewController: UIViewController {
     
     func scrollToTop() {
         let indexPath = IndexPath(row: 0, section: 0)
-        partyList.scrollToRow(at: indexPath, at: .top, animated: false)
+        partyList.scrollToRow(at: indexPath, at: .top, animated: true)
     }
     
     func updateDicts() {
@@ -146,7 +151,7 @@ extension AppHomeViewController: UITableViewDataSource {
             cell.textLabel?.text = searchParty[indexPath.row]
             cell.detailTextLabel?.text = ""
         }
-        
+
         return cell
     }
     

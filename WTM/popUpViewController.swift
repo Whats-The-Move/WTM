@@ -77,7 +77,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
             //print(lat)
             //print(lon)
             
-            let sourceCoordinate = (self.locationManger.location?.coordinate)!
+            let sourceCoordinate = self.locationManger.location?.coordinate ?? CLLocationCoordinate2DMake(0, 0)
             //print(sourceCoordinate)
             
             let sourcePlaceMark = MKPlacemark(coordinate: sourceCoordinate)
