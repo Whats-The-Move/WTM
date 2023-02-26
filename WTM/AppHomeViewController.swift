@@ -78,7 +78,7 @@ class AppHomeViewController: UIViewController {
                     //if((self?.parties.count)! <= 58){
                       //  self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
                     //} else {
-                        self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                        self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                             self?.scrollToTop()
                             print("scrolled to top")
