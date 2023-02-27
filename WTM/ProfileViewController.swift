@@ -11,12 +11,16 @@ import FirebaseAuth
 
 class ProfileViewController: UIViewController {
 //    @IBOutlet weak var userbox: UILabel!
-
+    @IBOutlet weak var userbox: UILabel!
+    @IBOutlet weak var emailbox: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*
+        
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "none"
-        userbox.text =  user_address1*/
+        userbox.text =  "username: " + user_address1
+        var email_address1 = user_address1 + "@illinois.edu"
+        emailbox.text =  "email: " + email_address1
 
         // Do any additional setup after loading the view.
     }
