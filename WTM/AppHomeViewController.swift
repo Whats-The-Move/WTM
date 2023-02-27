@@ -96,6 +96,7 @@ class AppHomeViewController: UIViewController {
         }
         partyList.reloadData()
     }
+   
     
     @IBAction func refreshButtonTapped(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

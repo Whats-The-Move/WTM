@@ -59,7 +59,7 @@ class ViewController: UIViewController {
         newUserRef.setValue(newUser)
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(identifier: "AppHome")
+            let vc = storyboard.instantiateViewController(identifier: "TabBarController")
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
     }
