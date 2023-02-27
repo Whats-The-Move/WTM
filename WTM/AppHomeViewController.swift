@@ -112,14 +112,14 @@ class AppHomeViewController: UIViewController {
         UserDefaults.standard.set(false, forKey: "authenticated")
 
     }
+ 
     @IBAction func profileButtonTapped(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyboard.instantiateViewController(withIdentifier: "profile") as! ViewController
-        newViewController.modalPresentationStyle = .fullScreen
-        present(newViewController, animated: false, completion: nil)
-        UserDefaults.standard.set(false, forKey: "authenticated")
+        let vc = storyboard.instantiateViewController(identifier: "ProfilePage")
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: true)
     }
-  
+    
 
     
     func scrollToTop() {
