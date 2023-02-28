@@ -26,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         votesLabel = UserDefaults.standard.integer(forKey: "votesLabel")
         currentDate = UserDefaults.standard.string(forKey: "currentDate") ?? ""
 
-
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         let newDate = dateFormatter.string(from: Date())
