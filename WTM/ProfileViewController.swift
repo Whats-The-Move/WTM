@@ -19,13 +19,11 @@ class ProfileViewController: UIViewController {
         
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "none"
         userbox.text =  "username: " + user_address1
-        var email_address1 = user_address1 + "@illinois.edu"
+        let email_address1 = user_address1 + "@illinois.edu"
         emailbox.text =  "email: " + email_address1
 
         // Do any additional setup after loading the view.
     }
-
-
     /*
     // MARK: - Navigation
 
