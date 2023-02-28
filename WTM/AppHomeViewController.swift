@@ -59,10 +59,43 @@ class AppHomeViewController: UIViewController {
         searchBar.overrideUserInterfaceStyle = .dark
         refreshButton.overrideUserInterfaceStyle = .light
         logoutButton.overrideUserInterfaceStyle = .light
+        
+        partyList.reloadData()
+        
+        databaseRef = Database.database().reference().child("Parties")
+        databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
+            let key = snapshot.key
+            guard let value = snapshot.value as? [String : Any] else {return}
+            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String {
+                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address)
+                self?.parties.append(party)
+                self?.likeDict[party.name] = party.likes
+                self?.dislikeDict[party.name] = party.dislikes
+                self?.overallLikeDict[party.name] = party.allTimeLikes
+                self?.overallDislikeDict[party.name] = party.allTimeDislikes
+                self?.addressDict[party.name] = party.address
+                self?.partyArray.append(party.name)
+                if let row = self?.parties.count {
+                    let indexPath = IndexPath(row: row - 1, section: 0)
+                    self?.partyList.insertRows(at: [indexPath], with: .automatic)
+                    //if((self?.parties.count)! <= 58){
+                      //  self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
+                    //} else {
+                        self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                            self?.scrollToTop()
+                            print("scrolled to top")
+                        }
+                    //}
+                }
+            }
+        }
+        partyList.reloadData()
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        /*
         partyList.reloadData()
         super.viewWillAppear(animated)
         
@@ -95,14 +128,23 @@ class AppHomeViewController: UIViewController {
             }
         }
         partyList.reloadData()
+         */
     }
    
     
     @IBAction func refreshButtonTapped(_ sender: Any) {
+        /*
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyboard.instantiateViewController(withIdentifier: "AppHome") as! AppHomeViewController
         newViewController.modalPresentationStyle = .fullScreen
         present(newViewController, animated: false, completion: nil)
+        */
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+        TabBarController.modalPresentationStyle = .fullScreen
+        present(TabBarController, animated: false, completion: nil)
+        
     }
     
     @IBAction func logOutButtonTapped(_ sender: Any) {
@@ -113,14 +155,6 @@ class AppHomeViewController: UIViewController {
         UserDefaults.standard.set(false, forKey: "authenticated")
 
     }
- 
-    @IBAction func profileButtonTapped(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(identifier: "ProfilePage")
-        vc.modalPresentationStyle = .overFullScreen
-        self.present(vc, animated: true)
-    }
-    
 
     
     func scrollToTop() {
