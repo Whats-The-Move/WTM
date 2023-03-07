@@ -39,6 +39,8 @@ class AppHomeViewController: UIViewController {
     public var overallDislikeDict = [String : Double]()
     public var addressDict = [String : String]()
     public var userVotes = [String : Int]()
+    public var rankDict = [String : Int]()
+    public var countNum = 33
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,24 +70,29 @@ class AppHomeViewController: UIViewController {
             guard let value = snapshot.value as? [String : Any] else {return}
             if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String {
                 let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address)
-                self?.parties.append(party)
+                self?.parties.insert(party, at: 0)
                 self?.likeDict[party.name] = party.likes
                 self?.dislikeDict[party.name] = party.dislikes
                 self?.overallLikeDict[party.name] = party.allTimeLikes
                 self?.overallDislikeDict[party.name] = party.allTimeDislikes
                 self?.addressDict[party.name] = party.address
-                self?.partyArray.append(party.name)
+                self?.rankDict[party.name] = self?.countNum
+                self?.partyArray.insert(party.name, at: 0)
                 if let row = self?.parties.count {
-                    let indexPath = IndexPath(row: row - 1, section: 0)
+                    let indexPath = IndexPath(row: 0, section: 0)
                     self?.partyList.insertRows(at: [indexPath], with: .automatic)
+                    self?.countNum -= 1
                     //if((self?.parties.count)! <= 58){
                       //  self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
                     //} else {
+                    /*
                         self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                             self?.scrollToTop()
                             print("scrolled to top")
+                     
                         }
+                     */
                     //}
                 }
             }
@@ -192,19 +199,17 @@ extension AppHomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //print(parties.count)
-        let party = parties[parties.count - 1 - indexPath.row]
+        let party = parties[indexPath.row]
         //let party = parties[indexPath.row]
         let cell = partyList.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath)
-        
-        rank = indexPath.row + 1
 
         cell.textLabel?.text = party.name
         
         if overallLikeDict[party.name] != nil &&  overallLikeDict[party.name]! + overallDislikeDict[party.name]! != 0{
             let percent = String(((overallLikeDict[party.name]! / (overallLikeDict[party.name]! + overallDislikeDict[party.name]!)) * 100).truncate(places: 2)) + "%"
-            cell.detailTextLabel?.text = "#" + String(rank) + " Rank   |" + "   " + "Overall Approval Percentage: " +  percent
+            cell.detailTextLabel?.text = "#" + String(rankDict[party.name]!) + " Rank   |" + "   " + "Overall Approval Percentage: " +  percent
         } else {
-            cell.detailTextLabel?.text = "#" + String(rank) + " Rank   |" + "   " + "Not the move tonight!"
+            cell.detailTextLabel?.text = "#" + String(rankDict[party.name]!) + " Rank   |" + "   " + "Not the move tonight!"
         }
         
         if searching {
