@@ -97,7 +97,6 @@ class AppHomeViewController: UIViewController {
                 }
             }
         }
-        partyList.reloadData()
 
     }
     
