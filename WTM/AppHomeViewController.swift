@@ -40,7 +40,7 @@ class AppHomeViewController: UIViewController {
     public var addressDict = [String : String]()
     public var userVotes = [String : Int]()
     public var rankDict = [String : Int]()
-    public var countNum = 33
+    public var countNum = 34
 
     override func viewDidLoad() {
         super.viewDidLoad()

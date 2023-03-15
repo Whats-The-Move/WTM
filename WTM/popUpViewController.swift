@@ -49,7 +49,6 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         map.userTrackingMode = .follow
         locationManger.desiredAccuracy = kCLLocationAccuracyBest
         map.overrideUserInterfaceStyle = .dark
-        
         map.delegate = self
         
         popupView.layer.cornerRadius = 8
@@ -112,6 +111,9 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
         // Do any additional setup after loading the view.
+        
+        let mapTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap))
+        map.addGestureRecognizer(mapTapGesture)
         
     }
     
@@ -219,4 +221,27 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         viewDidLoad()
     }
     
+    @objc func handleMapTap(_ sender: UITapGestureRecognizer) {
+        let geocoder = CLGeocoder()
+            geocoder.geocodeAddressString(addressLabel) {
+                placemarks, error in
+                let placemark = placemarks?.first
+                let lat = (placemark?.location?.coordinate.latitude)!
+                let lon = (placemark?.location?.coordinate.longitude)!
+                
+                let destinationPlaceMark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
+                let destinationItem = MKMapItem(placemark: destinationPlaceMark)
+                destinationItem.name = self.titleText
+                
+                destinationItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking])
+            }
+    }
+    
+    func openInMaps(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        let placemark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = "Destination"
+        mapItem.openInMaps(launchOptions: nil)
+    }
+
 }
