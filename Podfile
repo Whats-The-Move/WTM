@@ -9,6 +9,8 @@ target 'WTM' do
 pod 'Firebase/Analytics' 
 pod 'Firebase/Auth' 
 pod 'Firebase/Database'
+pod 'Firebase/Core'
+pod 'GoogleSignIn'
 
   target 'WTMTests' do
     inherit! :search_paths
