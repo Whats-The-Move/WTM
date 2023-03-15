@@ -148,6 +148,7 @@ class AppHomeViewController: UIViewController {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+        TabBarController.overrideUserInterfaceStyle = .dark
         TabBarController.modalPresentationStyle = .fullScreen
         present(TabBarController, animated: false, completion: nil)
         
