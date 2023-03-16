@@ -32,6 +32,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     @IBOutlet weak var downvoteLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var map: MKMapView!
+    @IBOutlet weak var reviewButon: UIButton!
     @IBOutlet weak var user_name: UILabel!
     
     var locationManger = CLLocationManager()
@@ -243,5 +244,11 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         mapItem.name = "Destination"
         mapItem.openInMaps(launchOptions: nil)
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "reviewSegue" {
+            let destinationViewController = segue.destination as! reviewViewController
+            destinationViewController.titleText = titleText
+        }
+    }
 }
