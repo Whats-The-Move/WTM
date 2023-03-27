@@ -28,11 +28,23 @@ class ViewController: UIViewController {
         
         if FirebaseAuth.Auth.auth().currentUser != nil {
             //TAKE PAST LOGIN SCREEN TO HOME SCREEN
+            print("USER IS IN")
+            UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(identifier: "TabBarController")
-                    vc.modalPresentationStyle = .overFullScreen
-                    self.present(vc, animated: true)
+            let vc = storyboard.instantiateViewController(identifier: "TabBarController")
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true)
 
+
+        }
+        let authenticated = UserDefaults.standard.bool(forKey: "authenticated")
+        if authenticated {
+            print("USER IS IN")
+
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(identifier: "TabBarController")
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true)
 
         }
         email.textColor = .black
@@ -42,20 +54,63 @@ class ViewController: UIViewController {
     @IBAction func signInTapped(_ sender: Any) {
         //need to add wrong password button
         print("poo")
+        if email.text!.contains(".edu") == false {
+            print("Please use school email")
+            let alert = UIAlertController(title: "Alert", message: "Please use school email", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion:  {
+                return
+            })
+            
+        return
+        }
         guard let email = email.text, !email.isEmpty,
                 let password = password.text, !password.isEmpty
         else{
             print("missing field data")
             return
         }
-
+        
         FirebaseAuth.Auth.auth().signIn( withEmail: email, password: password, completion: {[weak self] result, error in
             guard let strongSelf = self else {return}
             guard error == nil else{
                 //say if pass wrong error here. look through user database, if this is already a user then say wrong password and return out of function here
-                strongSelf.showCreateAccount(email: email, password: password)
-                
-                return }
+                //look through what we have in firestore, is the email entered already there? if so give alert which says wrong password
+                UserDefaults.standard.set(true, forKey: "authenticated")
+
+                let db = Firestore.firestore()
+                let usersCollection = db.collection("users")
+                usersCollection.whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
+                  if let error = error {
+                    // Handle the error
+                    print("Error getting documents: \(error)")
+                  } else {
+                    // Check if the query returned any documents
+                      if let document = querySnapshot?.documents.first {
+                          // Document exists with the given email
+                          print("email already exists, wrong password")
+                          let alert = UIAlertController(title: "Alert", message: "wrong password", preferredStyle: .alert)
+                          alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                          self?.present(alert, animated: true, completion:  {
+                              return
+                          })
+                          //exit everything, wrong password happened
+                          return
+                          
+                      
+                      print("Document data: \(document.data())")
+                    } else {
+                      // No document exists with the given email, make new account
+                      print("Document does not exist")
+                        strongSelf.showCreateAccount(email: email, password: password)
+                        
+                    }
+                  }
+                }
+
+                    
+
+                 return }
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let vc = storyboard.instantiateViewController(identifier: "TabBarController")
                         vc.modalPresentationStyle = .overFullScreen
@@ -103,12 +158,14 @@ class ViewController: UIViewController {
                 
 
 
+                UserDefaults.standard.set(true, forKey: "authenticated")
 
 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                             let vc = storyboard.instantiateViewController(identifier: "TabBarController")
                             vc.modalPresentationStyle = .overFullScreen
                 self?.present(vc, animated: true)
+                
                     //switch view controller?
                     /*
                     strongSelf.label.isHidden = true
@@ -168,7 +225,7 @@ class ViewController: UIViewController {
             signUP()
         }
     }*/
-    
+    /*
     func signUP() {
             
             // Create a reference to the Realtime Database
@@ -194,7 +251,8 @@ class ViewController: UIViewController {
             let vc = storyboard.instantiateViewController(identifier: "TabBarController")
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
-    }
+    }*/
 
 }
+
 
