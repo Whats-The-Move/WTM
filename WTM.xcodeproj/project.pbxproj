@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		086042D129C292C900066892 /* reviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086042D029C292C900066892 /* reviewViewController.swift */; };
 		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
 		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		086042D029C292C900066892 /* reviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewViewController.swift; sourceTree = "<group>"; };
 		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
 		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
 				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
 				08CF03D8297D52770074A878 /* popUpViewController.swift */,
+				086042D029C292C900066892 /* reviewViewController.swift */,
 				10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
@@ -444,6 +447,7 @@
 				08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */,
 				087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */,
 				08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */,
+				086042D129C292C900066892 /* reviewViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
 				10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */,

@@ -212,9 +212,9 @@ class ViewController: UIViewController {
         if email.text?.isEmpty == true {
             print ("No text in email field")
             return
-        } else if email.text!.contains("illinois.edu") == false {
+        } else if email.text!.contains(".edu") == false {
             print("This app currently only accepts UIUC students")
-            let alert = UIAlertController(title: "Alert", message: "This app currently only accepts UIUC students", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Alert", message: "This app currently only accepts college students", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion:  {
                 return
@@ -232,7 +232,7 @@ class ViewController: UIViewController {
         let databaseRef = Database.database().reference()
             var username = ""
             
-        if email.text != nil && email.text!.contains("illinois.edu") == true{
+        if email.text != nil && email.text!.contains(".edu") == true{
           
             let i = email.text!.firstIndex(of: "@")
             username = email.text!.substring(to: i!)
@@ -251,8 +251,10 @@ class ViewController: UIViewController {
             let vc = storyboard.instantiateViewController(identifier: "TabBarController")
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
-    }*/
 
+    }
+    
+    
 }
 
 
