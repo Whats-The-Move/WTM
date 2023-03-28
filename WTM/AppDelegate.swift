@@ -7,6 +7,7 @@
 //AMAN'S FIRST TEST COMMIT
 import UIKit
 import Firebase
+import GoogleSignIn
 
 public var launchedBefore = false
 public var authenticated = false
