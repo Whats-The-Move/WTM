@@ -34,6 +34,9 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var reviewButon: UIButton!
     @IBOutlet weak var user_name: UILabel!
+    @IBOutlet weak var hoursLabel: UILabel!
+    @IBOutlet weak var coverLabel: UILabel!
+    @IBOutlet weak var ratioLabel: UILabel!
     
     var locationManger = CLLocationManager()
     
@@ -66,7 +69,31 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         num.textColor = .black
         votesLeftLabel.textColor = .black
         wasItTheMoveLabel.textColor = .black
-        
+        let hoursRef = Database.database().reference().child("Parties").child(titleLabel.text!).child("Hours")
+
+        hoursRef.observeSingleEvent(of: .value, with: { snapshot in
+            print(snapshot)
+          let hours = snapshot.value as? String ?? ""
+            print(hours)
+            print("Hours for \(self.titleLabel.text!): \(hours)")
+            self.hoursLabel.text = hours
+        })
+        let coverRef = Database.database().reference().child("Parties").child(titleLabel.text!).child("Cover")
+
+        coverRef.observeSingleEvent(of: .value, with: { snapshot in
+          let cover = snapshot.value as? String ?? ""
+            print(cover)
+            print("cover for \(self.titleLabel.text!): \(cover)")
+            self.coverLabel.text = cover
+        })
+        let ratioRef = Database.database().reference().child("Parties").child(titleLabel.text!).child("Ratio")
+
+        ratioRef.observeSingleEvent(of: .value, with: { snapshot in
+          let ratio = snapshot.value as? String ?? ""
+            print("ratio for \(self.titleLabel.text!): \(ratio)")
+            self.ratioLabel.text = ratio
+        })
+
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(addressLabel) {
             placemarks, error in

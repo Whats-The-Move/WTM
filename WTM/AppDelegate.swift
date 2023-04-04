@@ -12,7 +12,7 @@ import FirebaseAuth
 import GoogleSignIn
 import FirebaseCore
 
-
+public var partyAccount = false
 public var launchedBefore = false
 public var authenticated = false
 public var user_address = ""
@@ -25,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        
+        partyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
         launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         authenticated = UserDefaults.standard.bool(forKey: "authenticated")
         user_address = UserDefaults.standard.string(forKey: "user_address") ?? "user"
@@ -41,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             UserDefaults.standard.setValue(newDate, forKey: "currentDate")
         }
+        
                 
         return true
     }
