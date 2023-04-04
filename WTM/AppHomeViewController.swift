@@ -155,11 +155,19 @@ class AppHomeViewController: UIViewController {
     }
     
     @IBAction func logOutButtonTapped(_ sender: Any) {
+        do{
+            try FirebaseAuth.Auth.auth().signOut()
+            UserDefaults.standard.set(false, forKey: "authenticated")
+            //TAKE THEM TO LOG IN SCREEN
+        }
+        catch{
+            print("error")
+        }
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyboard.instantiateViewController(withIdentifier: "SignUpPage") as! ViewController
         newViewController.modalPresentationStyle = .fullScreen
         present(newViewController, animated: false, completion: nil)
-        UserDefaults.standard.set(false, forKey: "authenticated")
+
 
     }
 
