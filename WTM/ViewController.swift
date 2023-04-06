@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var emailInvalid: UILabel!
     
+    @IBOutlet weak var fratButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -200,6 +201,10 @@ class ViewController: UIViewController {
         password.isSecureTextEntry = true
         password.frame = CGRect(x: 20, y: email.frame.origin.y + email.frame.size.height + 10, width: view.frame.size.width - 100, height: 50)
         button.frame = CGRect(x: -70 + view.frame.size.width, y: password.frame.origin.y, width: 50, height: 50)
+        fratButton.frame = CGRect(x: 20,
+                                  y: label.frame.origin.y + label.frame.size.height + 180,
+                                  width: view.frame.size.width - 40,
+                                  height: 50)
 
 
 
