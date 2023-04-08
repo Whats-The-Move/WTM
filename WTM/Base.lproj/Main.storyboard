@@ -921,6 +921,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Application successfully submitted" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LBt-DE-3a2">
+                                        <rect key="frame" x="27" y="491" width="253" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -961,6 +969,7 @@
                         <outlet property="contactEmail" destination="OSP-f3-ePc" id="hjg-yc-vj3"/>
                         <outlet property="partyName" destination="9UQ-oL-6OS" id="7eI-nb-Pa1"/>
                         <outlet property="personName" destination="3Vr-a2-gnJ" id="e3J-wi-8kx"/>
+                        <outlet property="success" destination="LBt-DE-3a2" id="T6g-Ua-VXT"/>
                         <outlet property="uploadLabel" destination="xdk-F4-WzM" id="XFv-9x-oQ7"/>
                         <outlet property="venueAddress" destination="K6y-2R-rjm" id="NXu-Ys-kde"/>
                     </connections>

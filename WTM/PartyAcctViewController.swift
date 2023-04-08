@@ -18,7 +18,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     @IBOutlet weak var contactEmail: UITextField!
     @IBOutlet weak var uploadLabel: UILabel!
     @IBOutlet weak var certificateUpload: UIButton!
-    
+    @IBOutlet weak var success: UILabel!
     
     let imagePickerController = UIImagePickerController()
 
@@ -42,11 +42,29 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         uploadLabel.numberOfLines = 0
         uploadLabel.lineBreakMode = .byWordWrapping
         uploadLabel.textAlignment = .center
+        success.isHidden = true
+        success.frame = CGRect(x: 20,
+                                  y: certificateUpload.frame.origin.y + certificateUpload.frame.size.height + 10,
+                                  width: view.frame.size.width - 40,
+                                  height: 50)
 
        
     }
 
     @IBAction func certificateUploadTapped(_ sender: Any) {
+        guard let partyName = partyName.text, !partyName.isEmpty,
+                let personName = personName.text, !personName.isEmpty,
+                let contactEmail = contactEmail.text, !contactEmail.isEmpty,
+                let venueAddress = venueAddress.text, !venueAddress.isEmpty
+        else{
+            let alert = UIAlertController(title: "Alert", message: "missing field data", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion:  {
+                return
+            })
+            print("missing field data")
+            return
+        }
         let imagePickerActionSheet = UIAlertController(title: "Select Image", message: nil, preferredStyle: .actionSheet)
         
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
@@ -73,7 +91,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
                 // Upload the image to Firebase Storage
-                let storageRef = Storage.storage().reference().child("partyImages/bob.jpg")
+            let storageRef = Storage.storage().reference().child("partyImages/\(String(describing: self.partyName.text)).jpg")
             //"partyImages/\(UUID().uuidString).jpg"
                 guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
                     return
@@ -98,6 +116,10 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                         let data: [String: Any] = [
                            
                             "imageUrl": downloadURL.absoluteString,
+                            "venueName": self.partyName.text,
+                            "venueAddress": self.venueAddress.text,
+                            "email": self.contactEmail.text,
+                            "personName" : self.personName.text
                             // Add other fields as needed
                         ]
                         userRef.setData(data) { error in
@@ -108,6 +130,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                             }
                             
                             // Success!
+                            self.success.isHidden = false
                             print("Image uploaded and download URL stored in Firestore!")
                         }
                     }
