@@ -206,8 +206,10 @@ class ViewController: UIViewController {
                                   width: view.frame.size.width - 40,
                                   height: 50)
         fratButton.contentHorizontalAlignment = .center
-        fratButton.layer.borderWidth = 3
+        fratButton.layer.borderWidth = 4
         fratButton.layer.borderColor = UIColor.black.cgColor
+        fratButton.layer.cornerRadius = 10
+        fratButton.clipsToBounds = true
 
 
 
