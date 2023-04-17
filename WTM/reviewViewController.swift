@@ -83,7 +83,7 @@ class reviewViewController: UIViewController {
             }
         
         let alert = UIAlertController(title: "Alert", message: "thanks for the input... not a single mf asked", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "You're right nobody did", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         present(alert, animated: true, completion:  {
             return
         })
