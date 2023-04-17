@@ -44,7 +44,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         personName.placeholder = "Name of Person who is point of contact"
         contactEmail.placeholder = "Email address of primary contact"
         venueAddress.placeholder = "Address of Frat/Bar/Party"
-        uploadLabel.text = "Upon submission, you are required to submit photo verification (proof of business registration, proof of venue ownership, etc)"
+        uploadLabel.text = "Upon submission, upload photo proof that you are a legitimate Bar/Frat/Club (business registration, liquor license, etc). Don't waste our fucking time with genitalia (balls, tits, etc)"
         uploadLabel.numberOfLines = 0
         uploadLabel.lineBreakMode = .byWordWrapping
         uploadLabel.textAlignment = .center

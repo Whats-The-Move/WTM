@@ -56,9 +56,9 @@ class ViewController: UIViewController {
         //need to add wrong password button
         print("poo")
         if email.text!.contains(".edu") == false {
-            print("Please use school email")
-            let alert = UIAlertController(title: "Alert", message: "Please use school email", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            print("it says use SCHOOL email")
+            let alert = UIAlertController(title: "Alert", message: "It says use SCHOOL email dumbass", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Sorry I won't do it again", style: .default, handler: nil))
             present(alert, animated: true, completion:  {
                 return
             })
@@ -90,8 +90,8 @@ class ViewController: UIViewController {
                       if let document = querySnapshot?.documents.first {
                           // Document exists with the given email
                           print("email already exists, wrong password")
-                          let alert = UIAlertController(title: "Alert", message: "wrong password", preferredStyle: .alert)
-                          alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                          let alert = UIAlertController(title: "Alert", message: "Wrong password", preferredStyle: .alert)
+                          alert.addAction(UIAlertAction(title: "Sorry, I'll get it right this time", style: .default, handler: nil))
                           self?.present(alert, animated: true, completion:  {
                               return
                           })
@@ -122,7 +122,7 @@ class ViewController: UIViewController {
     }
     
     func showCreateAccount(email: String, password: String){
-        let alert = UIAlertController(title: "Create Account", message: "Would you like to create account", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Create Account", message: "Would you like to create an account", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "continue", style: .default, handler: {_ in
             FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: {[weak self] result, error in
                 
@@ -160,12 +160,21 @@ class ViewController: UIViewController {
 
 
                 UserDefaults.standard.set(true, forKey: "authenticated")
-
-
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let alert = UIAlertController(title: "Congrats!", message: "You've just sold your soul to a lifetime of degeneracy and alcoholism!", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
+                    alert.dismiss(animated: true) {
+                            // Present the new view controller
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
                             let vc = storyboard.instantiateViewController(identifier: "TabBarController")
                             vc.modalPresentationStyle = .overFullScreen
-                self?.present(vc, animated: true)
+                            self?.present(vc, animated: true)
+                        }
+                }))
+                self?.present(alert, animated: true, completion:  {
+                    return
+                })
+
+                
                 
                     //switch view controller?
                     /*
