@@ -205,7 +205,9 @@ class ViewController: UIViewController {
                                   y: label.frame.origin.y + label.frame.size.height + 180,
                                   width: view.frame.size.width - 40,
                                   height: 50)
-
+        fratButton.contentHorizontalAlignment = .center
+        fratButton.layer.borderWidth = 3
+        fratButton.layer.borderColor = UIColor.black.cgColor
 
 
 

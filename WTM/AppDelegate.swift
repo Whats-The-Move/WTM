@@ -18,6 +18,7 @@ public var authenticated = false
 public var user_address = ""
 public var currentDate = ""
 public var votesLabel = 0
+public var barName = ""
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        
+        barName = UserDefaults.standard.string(forKey: "barName") ?? ""
         partyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
         launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         authenticated = UserDefaults.standard.bool(forKey: "authenticated")

@@ -47,7 +47,11 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                                   y: certificateUpload.frame.origin.y + certificateUpload.frame.size.height + 10,
                                   width: view.frame.size.width - 40,
                                   height: 50)
-
+        partyName.frame = CGRect(x: 20,
+                                  y: certificateUpload.frame.origin.y + certificateUpload.frame.size.height ,
+                                  width: view.frame.size.width - 40,
+                                  height: 50)
+        
        
     }
 

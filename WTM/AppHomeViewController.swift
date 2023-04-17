@@ -45,7 +45,7 @@ class AppHomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
-
+        helloWorld.isHidden = true
         helloWorld.text = "Hello " + user_address1
         refreshButton.layer.cornerRadius = 4
         logoutButton.layer.cornerRadius = 4        
