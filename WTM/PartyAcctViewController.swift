@@ -20,6 +20,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     @IBOutlet weak var certificateUpload: UIButton!
     @IBOutlet weak var success: UILabel!
     
+    @IBOutlet weak var borderView: UIView!
     let imagePickerController = UIImagePickerController()
 
     override func viewDidLoad() {
@@ -34,6 +35,11 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        borderView.layer.cornerRadius = 6
+        borderView.layer.borderWidth = 8
+        borderView.layer.borderColor = UIColor.black.cgColor
+        view.layer.cornerRadius = 10
+
         partyName.placeholder = "Name of Frat/Bar/Party"
         personName.placeholder = "Name of Person who is point of contact"
         contactEmail.placeholder = "Email address of primary contact"

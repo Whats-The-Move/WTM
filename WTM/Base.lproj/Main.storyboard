@@ -185,7 +185,7 @@
                                 </connections>
                             </searchBar>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7lB-aE-mUV">
-                                <rect key="frame" x="100" y="99" width="178" height="183"/>
+                                <rect key="frame" x="100" y="99" width="178" height="231"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HDi-hm-bpZ">
                                 <rect key="frame" x="9" y="241" width="87.666666666666671" height="32"/>
@@ -245,7 +245,7 @@
                             <constraint firstItem="h7n-Zv-bqp" firstAttribute="trailing" secondItem="x7Z-io-Eo8" secondAttribute="trailing" constant="60.333333333333371" id="mgP-lP-bB0"/>
                             <constraint firstItem="ny7-WR-ZZK" firstAttribute="trailing" secondItem="OlS-8c-7Ec" secondAttribute="trailing" id="moc-1y-soS"/>
                             <constraint firstItem="7lB-aE-mUV" firstAttribute="centerX" secondItem="ny7-WR-ZZK" secondAttribute="centerX" constant="-6" id="mys-Jo-eVO"/>
-                            <constraint firstItem="h7n-Zv-bqp" firstAttribute="bottom" secondItem="7lB-aE-mUV" secondAttribute="bottom" constant="479" id="rny-FY-qbE"/>
+                            <constraint firstItem="h7n-Zv-bqp" firstAttribute="bottom" secondItem="7lB-aE-mUV" secondAttribute="bottom" constant="431" id="rny-FY-qbE"/>
                             <constraint firstItem="ny7-WR-ZZK" firstAttribute="top" secondItem="Gqy-vc-kxa" secondAttribute="bottom" constant="10" id="t6R-TB-bg9"/>
                         </constraints>
                     </view>
@@ -981,6 +981,9 @@
                                         <color key="textColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Voh-6W-KV9">
+                                        <rect key="frame" x="-7" y="-7" width="313" height="672"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -992,15 +995,19 @@
                                     <constraint firstItem="xdk-F4-WzM" firstAttribute="leading" secondItem="3Xu-hI-ocW" secondAttribute="leading" constant="21" id="E8J-aF-4Av"/>
                                     <constraint firstItem="3Vr-a2-gnJ" firstAttribute="leading" secondItem="OSP-f3-ePc" secondAttribute="leading" id="EVq-Bb-TNr"/>
                                     <constraint firstItem="K6y-2R-rjm" firstAttribute="top" secondItem="9UQ-oL-6OS" secondAttribute="bottom" constant="17" id="KM9-fj-n8b"/>
+                                    <constraint firstItem="Voh-6W-KV9" firstAttribute="leading" secondItem="3Xu-hI-ocW" secondAttribute="leading" constant="-7" id="Kf3-ps-AUb"/>
                                     <constraint firstItem="9UQ-oL-6OS" firstAttribute="leading" secondItem="3Xu-hI-ocW" secondAttribute="leading" constant="12" id="Lbd-nS-vZb"/>
                                     <constraint firstItem="9UQ-oL-6OS" firstAttribute="top" secondItem="csr-Ix-SIX" secondAttribute="bottom" constant="25" id="NI3-iv-gUZ"/>
+                                    <constraint firstItem="Voh-6W-KV9" firstAttribute="centerY" secondItem="3Xu-hI-ocW" secondAttribute="centerY" id="P48-LI-ciP"/>
                                     <constraint firstItem="3Vr-a2-gnJ" firstAttribute="trailing" secondItem="OSP-f3-ePc" secondAttribute="trailing" id="PjY-6V-udW"/>
+                                    <constraint firstItem="Voh-6W-KV9" firstAttribute="centerX" secondItem="9UQ-oL-6OS" secondAttribute="centerX" id="SWk-2q-Dhe"/>
                                     <constraint firstItem="OSP-f3-ePc" firstAttribute="centerX" secondItem="rEG-UZ-FcM" secondAttribute="centerX" id="SjJ-PP-VAa"/>
                                     <constraint firstItem="csr-Ix-SIX" firstAttribute="top" secondItem="3Xu-hI-ocW" secondAttribute="top" id="TSv-TZ-X3P"/>
                                     <constraint firstItem="P79-BY-Yzu" firstAttribute="centerX" secondItem="9UQ-oL-6OS" secondAttribute="centerX" id="TdO-QB-S5Z"/>
                                     <constraint firstItem="K6y-2R-rjm" firstAttribute="trailing" secondItem="3Vr-a2-gnJ" secondAttribute="trailing" id="UqV-Cw-aXs"/>
                                     <constraint firstItem="rEG-UZ-FcM" firstAttribute="top" secondItem="xdk-F4-WzM" secondAttribute="bottom" constant="53" id="deC-3L-bXd"/>
                                     <constraint firstItem="LBt-DE-3a2" firstAttribute="top" secondItem="rEG-UZ-FcM" secondAttribute="bottom" constant="75" id="hCz-BO-swt"/>
+                                    <constraint firstItem="Voh-6W-KV9" firstAttribute="top" secondItem="3Xu-hI-ocW" secondAttribute="top" constant="-7" id="i85-J4-ydI"/>
                                     <constraint firstItem="OSP-f3-ePc" firstAttribute="top" secondItem="3Vr-a2-gnJ" secondAttribute="bottom" constant="26" id="lNc-Ih-dmo"/>
                                     <constraint firstItem="xdk-F4-WzM" firstAttribute="centerX" secondItem="LBt-DE-3a2" secondAttribute="centerX" id="pqq-8w-gpa"/>
                                     <constraint firstItem="P79-BY-Yzu" firstAttribute="top" secondItem="3Xu-hI-ocW" secondAttribute="top" constant="19" id="sZv-iA-5qp"/>
@@ -1024,6 +1031,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="7Is-dV-bAU"/>
                     <connections>
+                        <outlet property="borderView" destination="Voh-6W-KV9" id="OpZ-zD-yGL"/>
                         <outlet property="certificateUpload" destination="rEG-UZ-FcM" id="3Xz-eY-0By"/>
                         <outlet property="contactEmail" destination="OSP-f3-ePc" id="hjg-yc-vj3"/>
                         <outlet property="partyName" destination="9UQ-oL-6OS" id="7eI-nb-Pa1"/>
