@@ -290,6 +290,11 @@
                             <view contentMode="scaleToFill" restorationIdentifier="popupView" translatesAutoresizingMaskIntoConstraints="NO" id="ykv-1C-nQQ">
                                 <rect key="frame" x="23" y="26" width="344" height="751"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NNb-0Y-5af">
+                                        <rect key="frame" x="0.0" y="0.0" width="344" height="751"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tkY-B4-9Sb">
                                         <rect key="frame" x="226" y="322" width="63" height="61"/>
                                         <constraints>
@@ -325,13 +330,13 @@
                                         <rect key="frame" x="85" y="455" width="181" height="276"/>
                                     </mapView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Votes Left:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hm-Ym-4jL">
-                                        <rect key="frame" x="125" y="483" width="79.666666666666515" height="22.666666666666686"/>
+                                        <rect key="frame" x="125" y="483" width="79.666666666666686" height="22.666666666666686"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wup-6c-uZ2">
-                                        <rect key="frame" x="145" y="8" width="54" height="29"/>
+                                        <rect key="frame" x="145" y="12" width="54" height="29"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="22"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -425,10 +430,10 @@
                                     <constraint firstItem="clN-DJ-WzK" firstAttribute="leading" secondItem="FMg-vx-Q8t" secondAttribute="leading" id="S2X-5E-IFr"/>
                                     <constraint firstItem="HqQ-IQ-Z85" firstAttribute="leading" secondItem="1hm-Ym-4jL" secondAttribute="trailing" constant="6.3333333333334849" id="Tle-6z-LKJ"/>
                                     <constraint firstItem="clN-DJ-WzK" firstAttribute="leading" secondItem="ykv-1C-nQQ" secondAttribute="leading" constant="43" id="UB7-fd-l4e"/>
-                                    <constraint firstItem="wup-6c-uZ2" firstAttribute="top" secondItem="ykv-1C-nQQ" secondAttribute="topMargin" id="UrD-h2-5px"/>
+                                    <constraint firstItem="wup-6c-uZ2" firstAttribute="top" secondItem="ykv-1C-nQQ" secondAttribute="topMargin" constant="4" id="UrD-h2-5px"/>
                                     <constraint firstItem="4dz-cV-RCf" firstAttribute="bottom" secondItem="tkY-B4-9Sb" secondAttribute="bottom" id="Uzd-R1-uFx"/>
                                     <constraint firstItem="clN-DJ-WzK" firstAttribute="baseline" secondItem="iuE-Nl-WLf" secondAttribute="baseline" id="VIC-AV-jiv"/>
-                                    <constraint firstItem="iuE-Nl-WLf" firstAttribute="top" secondItem="wup-6c-uZ2" secondAttribute="bottom" constant="31" id="XRl-9c-VtL"/>
+                                    <constraint firstItem="iuE-Nl-WLf" firstAttribute="top" secondItem="wup-6c-uZ2" secondAttribute="bottom" constant="27" id="XRl-9c-VtL"/>
                                     <constraint firstItem="tkY-B4-9Sb" firstAttribute="top" secondItem="phZ-qg-7B5" secondAttribute="bottom" constant="9" id="c8k-cx-HoM"/>
                                     <constraint firstItem="DQg-cH-Hiy" firstAttribute="trailing" secondItem="vIX-fr-2fa" secondAttribute="trailing" id="cks-Ba-HNp"/>
                                     <constraint firstItem="4dz-cV-RCf" firstAttribute="leading" secondItem="Ktc-dR-ap7" secondAttribute="leading" id="feq-iq-Lxa"/>
@@ -459,6 +464,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="oLH-NK-bB6"/>
                     <connections>
+                        <outlet property="borderView" destination="NNb-0Y-5af" id="CXX-DM-XH2"/>
                         <outlet property="coverLabel" destination="DQg-cH-Hiy" id="eoK-e1-Ong"/>
                         <outlet property="downvoteButton" destination="tkY-B4-9Sb" id="cPL-pv-stb"/>
                         <outlet property="downvoteLabel" destination="Hr2-Cw-2Ru" id="gN6-3x-X5M"/>

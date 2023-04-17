@@ -38,10 +38,16 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     @IBOutlet weak var coverLabel: UILabel!
     @IBOutlet weak var ratioLabel: UILabel!
     
+    @IBOutlet weak var borderView: UIView!
     var locationManger = CLLocationManager()
     
     override func viewDidLoad() {
-        
+        borderView.layer.borderWidth = 9
+        borderView.layer.borderColor = UIColor.black.cgColor
+        borderView.layer.cornerRadius = 7
+        view.layer.cornerRadius = 10
+
+
         upvoteButton.imageView?.contentMode = .scaleAspectFit
         downvoteButton.imageView?.contentMode = .scaleAspectFit
         
