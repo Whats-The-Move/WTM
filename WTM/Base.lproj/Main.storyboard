@@ -573,6 +573,7 @@
                                         </constraints>
                                         <state key="normal" backgroundImage="arrow">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleShadowColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                         <connections>
                                             <action selector="signInTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ETi-np-Zre"/>
@@ -586,7 +587,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fhw-j0-tld">
                                         <rect key="frame" x="96" y="733.66666666666663" width="52" height="33"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title=""/>
+                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title="">
+                                            <color key="baseForegroundColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="star2Tapped:" destination="x5c-h0-UOG" eventType="touchUpInside" id="HIW-Ge-J29"/>
                                         </connections>
@@ -594,7 +597,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hP3-sj-6Tf">
                                         <rect key="frame" x="146" y="733" width="52" height="34.333333333333371"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title=""/>
+                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title="">
+                                            <color key="baseForegroundColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="star3Tapped:" destination="x5c-h0-UOG" eventType="touchUpInside" id="DSd-h1-ZfJ"/>
                                         </connections>
@@ -602,7 +607,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6HJ-mi-smg">
                                         <rect key="frame" x="197" y="733" width="52" height="34.333333333333371"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title=""/>
+                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title="">
+                                            <color key="baseForegroundColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="star4Tapped:" destination="x5c-h0-UOG" eventType="touchUpInside" id="1O8-1A-euB"/>
                                         </connections>
@@ -610,7 +617,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvb-gX-443">
                                         <rect key="frame" x="249" y="733" width="52" height="34.333333333333371"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title=""/>
+                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title="">
+                                            <color key="baseForegroundColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="star5Tapped:" destination="x5c-h0-UOG" eventType="touchUpInside" id="0UN-Uk-TVM"/>
                                         </connections>
@@ -621,7 +630,9 @@
                                             <accessibilityTraits key="traits" button="YES" image="YES"/>
                                         </accessibility>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title=""/>
+                                        <buttonConfiguration key="configuration" style="plain" image="star" catalog="system" title="">
+                                            <color key="baseForegroundColor" red="0.80370887140000002" green="0.283118916" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="star1Tapped:" destination="x5c-h0-UOG" eventType="touchUpInside" id="Hu4-y6-MVI"/>
                                         </connections>
