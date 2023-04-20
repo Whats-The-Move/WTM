@@ -38,6 +38,7 @@ class reviewViewController: UIViewController {
 
    // The selected rating (initially 0, indicating no rating selected yet)
    var rating = 0
+    var avg = 0.0
     
     @IBOutlet weak var reviewList: UITableView! {
         didSet {
@@ -49,6 +50,8 @@ class reviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
         star1.setImage(unselectedStarImage, for: .normal)
         star2.setImage(unselectedStarImage, for: .normal)
         star3.setImage(unselectedStarImage, for: .normal)
@@ -86,7 +89,22 @@ class reviewViewController: UIViewController {
                         self.reviews.insert(review, at: 0)
                     }
             }
-            self.avgStars.text = String(Float(totalRating)/Float(reviewCount))
+            
+            if reviewCount != 0 {
+                self.avg = Double(totalRating) / Double(reviewCount)
+                
+            }
+
+            
+                self.avg = round(self.avg * 10) / 10.0
+                self.databaseRef = Database.database().reference().child("Parties").child(self.titleText)
+                self.databaseRef?.child("avgStars").setValue(self.avg)
+            print("self.avg is " + String(self.avg))
+           self.avgStars.text = String(self.avg)
+            
+            
+
+            
             self.reviewList.reloadData()
         }) { (error) in
             print(error.localizedDescription)
@@ -100,7 +118,7 @@ class reviewViewController: UIViewController {
     @IBAction func submitReviewTapped(_ sender: Any) {
         let uuid = UUID().uuidString
         let randomString = String(uuid.prefix(8))
-        let databaseRef = Database.database().reference()
+        var databaseRef = Database.database().reference()
         let review = textField.text
         let Dateobj = Date()
         let formatter = DateFormatter()
@@ -199,7 +217,7 @@ extension reviewViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         let review = reviews[indexPath.row]
-        cell.textLabel?.text = review.date + ": " + String(review.rating) + " star: " + (review.reviewText ??  "")
+        cell.textLabel?.text = review.date + ": " + (review.reviewText ??  "")
         return cell
     }
 }
