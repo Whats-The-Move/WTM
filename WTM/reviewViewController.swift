@@ -25,6 +25,7 @@ class reviewViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var popUpView: UIView!
+    @IBOutlet weak var avgStars: UILabel!
     
     @IBOutlet weak var star1: UIButton!
     @IBOutlet weak var star2: UIButton!
@@ -68,6 +69,8 @@ class reviewViewController: UIViewController {
         
         databaseRef = Database.database().reference().child("Parties").child(titleText).child("Reviews")
         databaseRef?.observeSingleEvent(of: .value, with: { (snapshot) in
+            var totalRating = 0
+            var reviewCount = 0
             for child in snapshot.children {
                     if let childSnapshot = child as? DataSnapshot,
                        let reviewDict = childSnapshot.value as? [String:Any]{
@@ -76,9 +79,14 @@ class reviewViewController: UIViewController {
                        let date = reviewDict["date"] as? String
                        let rating = reviewDict["rating"] as? Int
                         let review = Reviews(reviewText: comment, rating: rating ?? 5, date: date ?? " ")
+                        if let rating = reviewDict["rating"] as? Int {
+                            totalRating += rating
+                            reviewCount += 1
+                        }
                         self.reviews.insert(review, at: 0)
                     }
             }
+            self.avgStars.text = String(Float(totalRating)/Float(reviewCount))
             self.reviewList.reloadData()
         }) { (error) in
             print(error.localizedDescription)
