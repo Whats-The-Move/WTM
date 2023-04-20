@@ -11,6 +11,8 @@ import Foundation
 
 struct Reviews {
     var reviewText: String?
+    var rating: Int
+    var date: String
 }
 
 class reviewViewController: UIViewController {
@@ -67,11 +69,15 @@ class reviewViewController: UIViewController {
         databaseRef = Database.database().reference().child("Parties").child(titleText).child("Reviews")
         databaseRef?.observeSingleEvent(of: .value, with: { (snapshot) in
             for child in snapshot.children {
-                if let childSnapshot = child as? DataSnapshot,
-                    let reviewText = childSnapshot.value as? String {
-                    let review = Reviews(reviewText: reviewText)
-                    self.reviews.insert(review, at: 0)
-                }
+                    if let childSnapshot = child as? DataSnapshot,
+                       let reviewDict = childSnapshot.value as? [String:Any]{
+                        print(reviewDict)
+                        let comment = reviewDict["comment"] as? String
+                       let date = reviewDict["date"] as? String
+                       let rating = reviewDict["rating"] as? Int
+                        let review = Reviews(reviewText: comment, rating: rating ?? 5, date: date ?? " ")
+                        self.reviews.insert(review, at: 0)
+                    }
             }
             self.reviewList.reloadData()
         }) { (error) in
@@ -88,9 +94,14 @@ class reviewViewController: UIViewController {
         let randomString = String(uuid.prefix(8))
         let databaseRef = Database.database().reference()
         let review = textField.text
+        let Dateobj = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        let currentDate = formatter.string(from: Dateobj)
         let reviewDict = [
             "comment": review,
             "rating": rating,
+            "date": currentDate
         ] as [String : Any]
 
         //let newUserId = databaseRef.child("Parties").child(titleText).child("Reviews").childByAutoId().key ?? ""
@@ -180,7 +191,7 @@ extension reviewViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         let review = reviews[indexPath.row]
-        cell.textLabel?.text = review.reviewText
+        cell.textLabel?.text = review.date + ": " + String(review.rating) + " star: " + (review.reviewText ??  "")
         return cell
     }
 }
