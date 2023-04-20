@@ -88,10 +88,15 @@ class reviewViewController: UIViewController {
         let randomString = String(uuid.prefix(8))
         let databaseRef = Database.database().reference()
         let review = textField.text
+        let reviewDict = [
+            "comment": review,
+            "rating": rating,
+        ] as [String : Any]
+
         //let newUserId = databaseRef.child("Parties").child(titleText).child("Reviews").childByAutoId().key ?? ""
         let newUserRef = databaseRef.child("Parties").child(titleText).child("Reviews")
         let newReviewRef = newUserRef.childByAutoId()
-        newReviewRef.setValue(review) { (error, ref) in
+        newReviewRef.setValue(reviewDict) { (error, ref) in
                 if let error = error {
                     print("Error adding review: \(error.localizedDescription)")
                 } else {
