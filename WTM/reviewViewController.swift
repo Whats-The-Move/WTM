@@ -23,6 +23,19 @@ class reviewViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var popUpView: UIView!
+    
+    @IBOutlet weak var star1: UIButton!
+    @IBOutlet weak var star2: UIButton!
+    @IBOutlet weak var star3: UIButton!
+    @IBOutlet weak var star4: UIButton!
+    @IBOutlet weak var star5: UIButton!
+    // Unselected and selected star images
+    let unselectedStarImage = UIImage(systemName: "star")
+    let selectedStarImage = UIImage(systemName: "star.fill")
+
+   // The selected rating (initially 0, indicating no rating selected yet)
+   var rating = 0
+    
     @IBOutlet weak var reviewList: UITableView! {
         didSet {
             reviewList.dataSource = self
@@ -33,6 +46,11 @@ class reviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        star1.setImage(unselectedStarImage, for: .normal)
+        star2.setImage(unselectedStarImage, for: .normal)
+        star3.setImage(unselectedStarImage, for: .normal)
+        star4.setImage(unselectedStarImage, for: .normal)
+        star5.setImage(unselectedStarImage, for: .normal)
         titleLabel.text = titleText + " Reviews"
         
         popUpView.layer.cornerRadius = 8
@@ -89,6 +107,64 @@ class reviewViewController: UIViewController {
         })
         viewDidLoad()
     }
+
+    @IBAction func star1Tapped(_ sender: Any) {
+        star1.setImage(selectedStarImage, for: .normal)
+        star2.setImage(unselectedStarImage, for: .normal)
+        star3.setImage(unselectedStarImage, for: .normal)
+        star4.setImage(unselectedStarImage, for: .normal)
+        star5.setImage(unselectedStarImage, for: .normal)
+       // Update the rating variable to reflect the user's selection
+       rating = 1
+        print("star1")
+        
+    }
+    
+    @IBAction func star2Tapped(_ sender: Any) {
+        star1.setImage(selectedStarImage, for: .normal)
+        star2.setImage(selectedStarImage, for: .normal)
+        star3.setImage(unselectedStarImage, for: .normal)
+        star4.setImage(unselectedStarImage, for: .normal)
+        star5.setImage(unselectedStarImage, for: .normal)
+       // Update the rating variable to reflect the user's selection
+       rating = 2
+        print("star2")
+    }
+    
+    @IBAction func star3Tapped(_ sender: Any) {
+        star1.setImage(selectedStarImage, for: .normal)
+        star2.setImage(selectedStarImage, for: .normal)
+        star3.setImage(selectedStarImage, for: .normal)
+        star4.setImage(unselectedStarImage, for: .normal)
+        star5.setImage(unselectedStarImage, for: .normal)
+       // Update the rating variable to reflect the user's selection
+       rating = 3
+        print("star3")
+    }
+    
+    @IBAction func star4Tapped(_ sender: Any) {
+        star1.setImage(selectedStarImage, for: .normal)
+        star2.setImage(selectedStarImage, for: .normal)
+        star3.setImage(selectedStarImage, for: .normal)
+        star4.setImage(selectedStarImage, for: .normal)
+        star5.setImage(unselectedStarImage, for: .normal)
+       // Update the rating variable to reflect the user's selection
+       rating = 4
+        print("star4")
+    }
+    
+    
+    @IBAction func star5Tapped(_ sender: Any) {
+        star1.setImage(selectedStarImage, for: .normal)
+        star2.setImage(selectedStarImage, for: .normal)
+        star3.setImage(selectedStarImage, for: .normal)
+        star4.setImage(selectedStarImage, for: .normal)
+        star5.setImage(selectedStarImage, for: .normal)
+       // Update the rating variable to reflect the user's selection
+       rating = 5
+        print("star5")
+    }
+    
 }
 
 extension reviewViewController: UITableViewDataSource {
