@@ -12,7 +12,7 @@ import Foundation
 struct Reviews {
     var reviewText: String?
     var rating: Int
-    var date: String
+    var date: Double
 }
 
 class reviewViewController: UIViewController {
@@ -79,9 +79,9 @@ class reviewViewController: UIViewController {
                        let reviewDict = childSnapshot.value as? [String:Any]{
                         print(reviewDict)
                         let comment = reviewDict["comment"] as? String
-                       let date = reviewDict["date"] as? String
+                       let date = reviewDict["date"] as? Double
                        let rating = reviewDict["rating"] as? Int
-                        let review = Reviews(reviewText: comment, rating: rating ?? 5, date: date ?? " ")
+                        let review = Reviews(reviewText: comment, rating: rating ?? 5, date: date ?? 1682310604178)
                         if let rating = reviewDict["rating"] as? Int {
                             totalRating += rating
                             reviewCount += 1
@@ -123,7 +123,8 @@ class reviewViewController: UIViewController {
         let Dateobj = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM d"
-        let currentDate = formatter.string(from: Dateobj)
+        //let currentDate = formatter.string(from: Dateobj)
+        let currentDate = ServerValue.timestamp()
         let reviewDict = [
             "comment": review,
             "rating": rating,
@@ -213,11 +214,26 @@ extension reviewViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return reviews.count
     }
-    
+    func timeAgoString(from timestamp: Double) -> String {
+        let date = Date(timeIntervalSince1970: (timestamp - 1000)/1000 )
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        formatter.dateTimeStyle = .numeric
+        return formatter.localizedString(for: date, relativeTo: Date())
+    }
+
+
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         let review = reviews[indexPath.row]
-        cell.textLabel?.text = review.date + ": " + (review.reviewText ??  "")
+       
+
+        let reviewDate = review.date
+        let timeString = timeAgoString(from: reviewDate )
+        
+        
+        cell.textLabel?.text = timeString + ": " + (review.reviewText ??  "")
         return cell
     }
 }
