@@ -145,19 +145,17 @@ class ViewController: UIViewController {
                 let usersCollection = db.collection("users")
 
                 // Add a new user to the "users" collection with some data
-                usersCollection.addDocument(data: [
-              
-                  "email": email,
-                  "uid": uid!
+                usersCollection.document(uid!).setData([
+                    "email": email,
+                    "uid": uid!,
+                    "images": []
                 ]) { (error) in
-                  if let error = error {
-                    print("Error adding document: \(error)")
-                  } else {
-                    print("Document added successfully")
-                  }
+                    if let error = error {
+                        print("Error adding document: \(error)")
+                    } else {
+                        print("Document added successfully")
+                    }
                 }
-                
-
 
                 UserDefaults.standard.set(true, forKey: "authenticated")
                 let alert = UIAlertController(title: "Congrats!", message: "You've just sold your soul to a lifetime of degeneracy and alcoholism!", preferredStyle: .alert)
