@@ -33,9 +33,16 @@ class PicturesViewController: UIViewController {
             data.append(model)
         }
         let layout = UICollectionViewFlowLayout()
+        var tabBarHeight = CGFloat(83.0)
+        if let tabBarController = self.tabBarController {
+            tabBarHeight = tabBarController.tabBar.frame.size.height
+            print("Tab bar height: \(tabBarHeight)")
+        }
+
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: view.frame.size.width, height: view.frame.size.height)
+        layout.itemSize = CGSize(width: view.frame.size.width, height: view.frame.size.height - tabBarHeight)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.minimumLineSpacing = 0
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView?.register(PicturesCollectionViewCell.self, forCellWithReuseIdentifier: PicturesCollectionViewCell.identifier)
         collectionView?.isPagingEnabled = true
