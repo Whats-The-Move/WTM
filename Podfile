@@ -13,6 +13,7 @@ pod 'Firebase/Core'
 pod 'Firebase/Storage'
 pod 'GoogleSignIn'
 pod 'Firebase/Firestore'
+pod 'Kingfisher'
 
 
   target 'WTMTests' do
