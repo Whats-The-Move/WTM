@@ -257,7 +257,7 @@
                                 <color systemColor="tertiaryLabelColor"/>
                             </hierarchicalColors>
                         </imageReference>
-                        <imageReference key="selectedImage" image="house.fill" catalog="system" symbolScale="medium" renderingMode="hierarchical">
+                        <imageReference key="selectedImage" image="house.fill" catalog="system" symbolScale="large" renderingMode="hierarchical">
                             <hierarchicalColors>
                                 <color red="0.84267407660000004" green="0.44431845640000001" blue="0.81477690820000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color systemColor="secondaryLabelColor"/>
@@ -279,7 +279,7 @@
             </objects>
             <point key="canvasLocation" x="2681.5384615384614" y="54.739336492890992"/>
         </scene>
-        <!--Item-->
+        <!--Pictures View Controller-->
         <scene sceneID="vAt-Ca-lUZ">
             <objects>
                 <viewController id="8Bq-zV-L7g" customClass="PicturesViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
@@ -289,7 +289,22 @@
                         <viewLayoutGuide key="safeArea" id="TYb-78-ri9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="Ide-eu-eif"/>
+                    <tabBarItem key="tabBarItem" id="Ide-eu-eif">
+                        <imageReference key="image" image="person.3.sequence" catalog="system" symbolScale="medium" renderingMode="hierarchical">
+                            <hierarchicalColors>
+                                <color red="0.85788498710000005" green="0.35705748710000002" blue="0.82294161880000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color red="0.85788498710000005" green="0.35705748710000002" blue="0.82294161880000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color red="0.85788498710000005" green="0.35705748710000002" blue="0.82294161880000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </hierarchicalColors>
+                        </imageReference>
+                        <imageReference key="selectedImage" image="person.3.sequence.fill" catalog="system" symbolScale="large" renderingMode="hierarchical">
+                            <hierarchicalColors>
+                                <color red="0.857884987113402" green="0.35705748708439311" blue="0.82294161877621907" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color red="0.85788498710000005" green="0.35705748710000002" blue="0.82294161880000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color red="0.85788498710000005" green="0.35705748710000002" blue="0.82294161880000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </hierarchicalColors>
+                        </imageReference>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ej-qZ-2k9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -843,7 +858,7 @@
                                 <color systemColor="tertiaryLabelColor"/>
                             </hierarchicalColors>
                         </imageReference>
-                        <imageReference key="selectedImage" image="person.fill" catalog="system" symbolScale="medium" renderingMode="hierarchical">
+                        <imageReference key="selectedImage" image="person.fill" catalog="system" symbolScale="large" renderingMode="hierarchical">
                             <hierarchicalColors>
                                 <color red="0.84267407660000004" green="0.44431845640000001" blue="0.81477690820000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color systemColor="secondaryLabelColor"/>
@@ -871,13 +886,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.18085534793814428" green="0.18085534793814428" blue="0.18085534793814428" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="barTintColor" systemColor="tintColor"/>
                     </tabBar>
                     <connections>
                         <segue destination="M1m-Q3-HIT" kind="relationship" relationship="viewControllers" id="uCY-7B-vHM"/>
                         <segue destination="RD5-aH-ryf" kind="relationship" relationship="viewControllers" id="bwj-27-WjL"/>
-                        <segue destination="UOj-3c-4gn" kind="relationship" relationship="viewControllers" id="RQe-av-0T1"/>
-                        <segue destination="8Bq-zV-L7g" kind="relationship" relationship="viewControllers" id="gKq-jZ-iuw"/>
+                        <segue destination="8Bq-zV-L7g" kind="relationship" relationship="viewControllers" id="zai-bn-xvx"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UPN-kv-oKl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -889,7 +904,7 @@
             <objects>
                 <viewController storyboardIdentifier="MyFriends" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UOj-3c-4gn" customClass="MyFriendsViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Lra-oA-Dse">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="WTM_" translatesAutoresizingMaskIntoConstraints="NO" id="8uK-WJ-S6x">
@@ -899,7 +914,7 @@
                                 </constraints>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jOv-bI-pF0">
-                                <rect key="frame" x="0.0" y="317" width="390" height="444"/>
+                                <rect key="frame" x="0.0" y="317" width="390" height="493"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>

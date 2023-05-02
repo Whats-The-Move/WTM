@@ -44,6 +44,9 @@ class AppHomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let customColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 0.6)
+
+        self.tabBarController?.tabBar.tintColor = customColor // set to the desired color
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
         helloWorld.isHidden = true
         helloWorld.text = "Hello " + user_address1
