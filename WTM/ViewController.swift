@@ -137,7 +137,12 @@ class ViewController: UIViewController {
                 print(Auth.auth().currentUser!)
                 let uid = Auth.auth().currentUser?.uid
                 
-            
+                
+                let i = email.firstIndex(of: "@")
+                let username = email.substring(to: i!)
+                UserDefaults.standard.set(username, forKey: "user_address")
+                print(username)
+                
                 print(uid ?? String())
                 let db = Firestore.firestore()
 

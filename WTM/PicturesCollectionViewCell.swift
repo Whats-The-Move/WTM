@@ -160,20 +160,42 @@ class PicturesCollectionViewCell: UICollectionViewCell {
             guard let model = model else {
                 return
             }
-            guard let path = Bundle.main.path(forResource: model.fileName,
-                                              ofType: model.fileFormat) else {
-                                                print("Failed to find video")
-                                                return
-            }
-            player = AVPlayer(url: URL(fileURLWithPath: path))
 
-            let playerView = AVPlayerLayer()
-            playerView.player = player
-            playerView.frame = contentView.bounds
-            playerView.videoGravity = .resizeAspectFill
-            pictureContainer.layer.addSublayer(playerView)
-            player?.volume = 0
-            player?.play()
+            
+        
+            
+        /**/
+            if let fileExtension = model.imageURL?.pathExtension {
+                if ["jpg", "jpeg", "png", "gif"].contains(fileExtension.lowercased()) {
+                    let imageView = UIImageView()
+                    
+                        if let url = model.imageURL {
+                            imageView.kf.setImage(with: url)
+                        }
+                    
+                        imageView.frame = contentView.bounds
+                        imageView.contentMode = .scaleAspectFit
+                        pictureContainer.addSubview(imageView)
+                }
+                else if ["mp4", "mov"].contains(fileExtension.lowercased()){
+                    if let videoURL = model.imageURL {
+                        player = AVPlayer(url: videoURL)
+                    
+                    }
+                    let playerView = AVPlayerLayer()
+                    playerView.player = player
+                    playerView.frame = contentView.bounds
+                    playerView.videoGravity = .resizeAspectFill
+                    pictureContainer.layer.addSublayer(playerView)
+                    player?.volume = 0
+                    player?.play()
+                }
+                else{
+                    print("unrecognized format")
+                }
+                print("couldn't find extension")
+            }
+            
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

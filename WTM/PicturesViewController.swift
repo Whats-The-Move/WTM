@@ -14,6 +14,7 @@ struct PictureModel {
     let audioTrackName: String
     let fileName: String
     let fileFormat: String
+    let imageURL: URL?
 }
 class PicturesViewController: UIViewController, UICollectionViewDelegate {
     private var collectionView: UICollectionView?
@@ -28,7 +29,9 @@ class PicturesViewController: UIViewController, UICollectionViewDelegate {
                 username: "uid to come later",
                 audioTrackName: "audio track",
                 fileName: "video",
-                fileFormat: "mov"
+                fileFormat: "mov",
+                imageURL: URL(string: "https://firebasestorage.googleapis.com:443/v0/b/whatsthemove-1b3f6.appspot.com/o/partyImages%2F8927766C-8E26-429B-B34E-DE17CEEC4B50.jpg?alt=media&token=87f1c264-e82e-43f1-b7df-c844eabed748")
+                
             )
             data.append(model)
         }
@@ -41,8 +44,8 @@ class PicturesViewController: UIViewController, UICollectionViewDelegate {
         let headerHeight = 20.0
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: view.frame.size.width, height: view.frame.size.height - tabBarHeight - headerHeight)
-        layout.sectionInset = UIEdgeInsets(top: headerHeight, left: 0, bottom: 0, right: 0)
-        layout.minimumLineSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.minimumLineSpacing = headerHeight
  
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -74,10 +77,13 @@ class PicturesViewController: UIViewController, UICollectionViewDelegate {
         case UICollectionView.elementKindSectionHeader:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView", for: indexPath) as! HeaderCollectionReusableView
             headerView.titleLabel.text = "Your Header Title"
+            headerView.backgroundColor = .white
+
             return headerView
         default:
             assert(false, "Unexpected element kind")
         }
+
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 50)

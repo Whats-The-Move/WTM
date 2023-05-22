@@ -25,7 +25,6 @@ class AppHomeViewController: UIViewController {
     @IBOutlet weak var logoutButton: UIButton!
     @IBOutlet weak var helloWorld: UILabel!
     @IBOutlet weak var Profile: UILabel!
-    
     var partyArray = [String]()
     var searching = false
     var searchParty = [String]()
@@ -40,16 +39,17 @@ class AppHomeViewController: UIViewController {
     public var addressDict = [String : String]()
     public var userVotes = [String : Int]()
     public var rankDict = [String : Int]()
+    public var ratingDict = [String : Double]()
     public var countNum = 34
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let customColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 0.6)
+        partyList.rowHeight = 100.0 // Adjust this value as needed
+        //partyList.rowHeight = UITableView.automaticDimension
 
-        self.tabBarController?.tabBar.tintColor = customColor // set to the desired color
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
-        helloWorld.isHidden = true
-        helloWorld.text = "Hello " + user_address1
+        helloWorld.isHidden = false
+        helloWorld.text = "Hey " + user_address1 + "!"
         refreshButton.layer.cornerRadius = 4
         logoutButton.layer.cornerRadius = 4        
         for recognizer in view.gestureRecognizers ?? [] {
@@ -71,8 +71,8 @@ class AppHomeViewController: UIViewController {
         databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}
-            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String {
-                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address)
+            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String, let rating = value["avgStars"] as? Double {
+                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating)
                 self?.parties.insert(party, at: 0)
                 self?.likeDict[party.name] = party.likes
                 self?.dislikeDict[party.name] = party.dislikes
@@ -81,6 +81,7 @@ class AppHomeViewController: UIViewController {
                 self?.addressDict[party.name] = party.address
                 self?.rankDict[party.name] = self?.countNum
                 self?.partyArray.insert(party.name, at: 0)
+                self?.ratingDict[party.name] = party.rating
                 if let row = self?.parties.count {
                     let indexPath = IndexPath(row: 0, section: 0)
                     self?.partyList.insertRows(at: [indexPath], with: .automatic)
@@ -157,6 +158,7 @@ class AppHomeViewController: UIViewController {
         
     }
     
+
     @IBAction func logOutButtonTapped(_ sender: Any) {
         do{
             try FirebaseAuth.Auth.auth().signOut()
@@ -186,13 +188,14 @@ class AppHomeViewController: UIViewController {
         databaseRef?.observe(.childAdded){ [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}
-            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String {
-                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address)
+            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String, let rating = value["avgStars"] as? Double {
+                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating)
                     self?.likeDict[party.name] = party.likes
                     self?.dislikeDict[party.name] = party.dislikes
                     self?.overallLikeDict[party.name] = party.allTimeLikes
                     self?.overallDislikeDict[party.name] = party.allTimeDislikes
                     self?.addressDict[party.name] = party.address
+                    self?.ratingDict[party.name] = party.rating
             }
         }
         
@@ -214,18 +217,37 @@ extension AppHomeViewController: UITableViewDataSource {
         //let party = parties[indexPath.row]
         let cell = partyList.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath)
 
-        cell.textLabel?.text = party.name
-        
+        //cell.textLabel?.text = party.name
+        if let label = cell.viewWithTag(1) as? UILabel {
+            label.text = party.name
+        }
+
         if overallLikeDict[party.name] != nil &&  overallLikeDict[party.name]! + overallDislikeDict[party.name]! != 0{
-            let percent = String(((overallLikeDict[party.name]! / (overallLikeDict[party.name]! + overallDislikeDict[party.name]!)) * 100).truncate(places: 2)) + "%"
-            cell.detailTextLabel?.text = "#" + String(rankDict[party.name]!) + " Rank   |" + "   " + "Overall Approval Percentage: " +  percent
+            let percent = String(((overallLikeDict[party.name]! / (overallLikeDict[party.name]! + overallDislikeDict[party.name]!)) * 5).truncate(places: 1))
+            if let subtitle = cell.viewWithTag(2) as? UILabel {
+                subtitle.text = "#" + String(rankDict[party.name]!)
+                //+ "   " + "Overall Approval Percentage: " +  percent
+                
+            }
+            if let starRating = cell.viewWithTag(3) as? UILabel {
+                starRating.text = String(party.rating)
+            }
         } else {
-            cell.detailTextLabel?.text = "#" + String(rankDict[party.name]!) + " Rank   |" + "   " + "Not the move tonight!"
+            if let subtitle = cell.viewWithTag(2) as? UILabel {
+                subtitle.text = "#" + String(rankDict[party.name]!)
+            }
+            let percent = String(((overallLikeDict[party.name]! / (overallLikeDict[party.name]! + overallDislikeDict[party.name]!)) * 5).truncate(places: 1))
+            if let starRating = cell.viewWithTag(3) as? UILabel {
+                starRating.text = String(party.rating)
+            }
         }
         
         if searching {
-            cell.textLabel?.text = searchParty[indexPath.row]
-            cell.detailTextLabel?.text = ""
+            if let label = cell.viewWithTag(1) as? UILabel {
+                label.text = party.name
+            }
+            //cell.textLabel?.text = searchParty[indexPath.row]
+            //cell.detailTextLabel?.text = ""
         }
 
         return cell
@@ -251,10 +273,12 @@ extension AppHomeViewController: UITableViewDataSource {
         if segue.identifier == "popupSegue" {
                 let destinationVC = segue.destination as! popUpViewController
                 if let cell = sender as? UITableViewCell {
-                    destinationVC.titleText = (cell.textLabel?.text)!
-                    destinationVC.likesLabel = likeDict[(cell.textLabel?.text)!]!
-                    destinationVC.dislikesLabel = dislikeDict[(cell.textLabel?.text)!]!
-                    destinationVC.addressLabel = addressDict[(cell.textLabel?.text)!]!
+                    if let label = cell.viewWithTag(1) as? UILabel {
+                        destinationVC.titleText = (label.text)!
+                        destinationVC.likesLabel = likeDict[(label.text)!]!
+                        destinationVC.dislikesLabel = dislikeDict[(label.text)!]!
+                        destinationVC.addressLabel = addressDict[(label.text)!]!                    }
+                    
                 }
             }
     }
