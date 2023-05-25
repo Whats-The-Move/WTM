@@ -214,33 +214,8 @@ extension AppHomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //print(parties.count)
         let party = parties[indexPath.row]
-        //let party = parties[indexPath.row]
-        let cell = partyList.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath)
-
-        //cell.textLabel?.text = party.name
-        if let label = cell.viewWithTag(1) as? UILabel {
-            label.text = party.name
-        }
-
-        if overallLikeDict[party.name] != nil &&  overallLikeDict[party.name]! + overallDislikeDict[party.name]! != 0{
-            let percent = String(((overallLikeDict[party.name]! / (overallLikeDict[party.name]! + overallDislikeDict[party.name]!)) * 5).truncate(places: 1))
-            if let subtitle = cell.viewWithTag(2) as? UILabel {
-                subtitle.text = "#" + String(rankDict[party.name]!)
-                //+ "   " + "Overall Approval Percentage: " +  percent
-                
-            }
-            if let starRating = cell.viewWithTag(3) as? UILabel {
-                starRating.text = String(party.rating)
-            }
-        } else {
-            if let subtitle = cell.viewWithTag(2) as? UILabel {
-                subtitle.text = "#" + String(rankDict[party.name]!)
-            }
-            let percent = String(((overallLikeDict[party.name]! / (overallLikeDict[party.name]! + overallDislikeDict[party.name]!)) * 5).truncate(places: 1))
-            if let starRating = cell.viewWithTag(3) as? UILabel {
-                starRating.text = String(party.rating)
-            }
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
+        cell.configure(with: party, rankDict: rankDict)
         
         if searching {
             if let label = cell.viewWithTag(1) as? UILabel {

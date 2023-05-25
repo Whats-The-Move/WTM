@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		083B618E2A1FCE6400018798 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 083B618D2A1FCE6400018798 /* video.png */; };
+		083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083B618F2A1FD00400018798 /* CustomCellClass.swift */; };
 		086042D129C292C900066892 /* reviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086042D029C292C900066892 /* reviewViewController.swift */; };
 		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
@@ -29,7 +31,6 @@
 		10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */; };
 		10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */; };
 		10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */; };
-		10B500292A01E982004FAC97 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 10B500282A01E982004FAC97 /* video.png */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		87B3A25C22BDABC5E151EB54 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */; };
 		C52C8394DE2F30A11A45F653 /* Pods_WTMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */; };
@@ -54,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		083B618D2A1FCE6400018798 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
+		083B618F2A1FD00400018798 /* CustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellClass.swift; sourceTree = "<group>"; };
 		086042D029C292C900066892 /* reviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewViewController.swift; sourceTree = "<group>"; };
 		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
@@ -83,7 +86,6 @@
 		10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewController.swift; sourceTree = "<group>"; };
 		10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesCollectionViewCell.swift; sourceTree = "<group>"; };
 		10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
-		10B500282A01E982004FAC97 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = video.png; path = ../../../../Desktop/video.png; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.release.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.release.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.release.xcconfig"; sourceTree = "<group>"; };
@@ -158,11 +160,12 @@
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
 				087FE8EB298DDA26001B17B6 /* Gif.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
+				083B618F2A1FD00400018798 /* CustomCellClass.swift */,
 				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
 				08CF03D8297D52770074A878 /* popUpViewController.swift */,
 				086042D029C292C900066892 /* reviewViewController.swift */,
 				10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */,
-				10B500282A01E982004FAC97 /* video.png */,
+				083B618D2A1FCE6400018798 /* video.png */,
 				10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */,
 				10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
@@ -327,8 +330,8 @@
 				08CF03C5297CC1D50074A878 /* GoogleService-Info.plist in Resources */,
 				08CF039F297CB6040074A878 /* LaunchScreen.storyboard in Resources */,
 				087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */,
+				083B618E2A1FCE6400018798 /* video.png in Resources */,
 				08CF039C297CB6040074A878 /* Assets.xcassets in Resources */,
-				10B500292A01E982004FAC97 /* video.png in Resources */,
 				08CF039A297CB6030074A878 /* Main.storyboard in Resources */,
 				087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */,
 			);
@@ -459,6 +462,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */,
+				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */,
 				087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */,
