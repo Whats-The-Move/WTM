@@ -10,8 +10,10 @@ import FirebaseDatabase
 import FirebaseAuth
 import MapKit
 import CoreLocation
+import FirebaseStorage
+import Firebase
 
-class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     var titleText: String = ""
     var likesLabel: Int = 0
@@ -34,14 +36,19 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var reviewButon: UIButton!
     @IBOutlet weak var user_name: UILabel!
-    @IBOutlet weak var hoursLabel: UILabel!
-    @IBOutlet weak var coverLabel: UILabel!
-    @IBOutlet weak var ratioLabel: UILabel!
+    //@IBOutlet weak var hoursLabel: UILabel!
+    //@IBOutlet weak var coverLabel: UILabel!
+    //@IBOutlet weak var ratioLabel: UILabel!
+    @IBOutlet weak var imageUploadButton: UIButton!
     
     @IBOutlet weak var borderView: UIView!
     var locationManger = CLLocationManager()
+    let imagePickerController = UIImagePickerController()
+
     
     override func viewDidLoad() {
+        imagePickerController.delegate = self
+
         borderView.layer.borderWidth = 9
         borderView.layer.borderColor = UIColor.black.cgColor
         borderView.layer.cornerRadius = 7
@@ -75,30 +82,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         num.textColor = .black
         votesLeftLabel.textColor = .black
         wasItTheMoveLabel.textColor = .black
-        let hoursRef = Database.database().reference().child("Parties").child(titleLabel.text!).child("Hours")
-
-        hoursRef.observeSingleEvent(of: .value, with: { snapshot in
-            print(snapshot)
-          let hours = snapshot.value as? String ?? ""
-            print(hours)
-            print("Hours for \(self.titleLabel.text!): \(hours)")
-            self.hoursLabel.text = hours
-        })
-        let coverRef = Database.database().reference().child("Parties").child(titleLabel.text!).child("Cover")
-
-        coverRef.observeSingleEvent(of: .value, with: { snapshot in
-          let cover = snapshot.value as? String ?? ""
-            print(cover)
-            print("cover for \(self.titleLabel.text!): \(cover)")
-            self.coverLabel.text = cover
-        })
-        let ratioRef = Database.database().reference().child("Parties").child(titleLabel.text!).child("Ratio")
-
-        ratioRef.observeSingleEvent(of: .value, with: { snapshot in
-          let ratio = snapshot.value as? String ?? ""
-            print("ratio for \(self.titleLabel.text!): \(ratio)")
-            self.ratioLabel.text = ratio
-        })
+        
 
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(addressLabel) {
@@ -211,6 +195,136 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func imageUploadButtonTapped(_ sender: Any) {
+        let imagePickerActionSheet = UIAlertController(title: "Select Image", message: nil, preferredStyle: .actionSheet)
+        
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let libraryButton = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
+                self.imagePickerController.sourceType = .photoLibrary
+                self.present(self.imagePickerController, animated: true, completion: nil)
+            }
+            imagePickerActionSheet.addAction(libraryButton)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let cameraButton = UIAlertAction(title: "Take Photo", style: .default) { (action) in
+                self.imagePickerController.sourceType = .camera
+                self.present(self.imagePickerController, animated: true, completion: nil)
+            }
+            imagePickerActionSheet.addAction(cameraButton)
+        }
+        
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        imagePickerActionSheet.addAction(cancelButton)
+        
+        present(imagePickerActionSheet, animated: true, completion: nil)
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            // Upload the image to Firebase Storage
+            let storageRef = Storage.storage().reference().child("partyImages/\(UUID().uuidString).jpg")
+            //"partyImages/\(UUID().uuidString).jpg"
+            guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
+                return
+            }
+            storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                if let error = error {
+                    // Handle the error
+                    print("Error uploading image: \(error.localizedDescription)")
+                    return
+                }
+                
+                // Once the image is uploaded, get its download URL and store it in Firestore
+                storageRef.downloadURL { (url, error) in
+                    guard let downloadURL = url else {
+                        // Handle the error
+                        print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
+                        return
+                    }
+                    guard let uid = Auth.auth().currentUser?.uid else {
+                        print("Error: No user is currently signed in.")
+                        return
+                    }
+                    print("uid")
+                    print(uid)
+                    // Store the download URL in Firestore
+                    
+                    let userRef = Firestore.firestore().collection("users").document(uid)
+                    
+                    // Get the current images array from Firestore (if it exists)
+                    userRef.getDocument { (document, error) in
+                        if let document = document, document.exists {
+                            // Retrieve the current images array
+                            var images = document.data()?["images"] as? [String] ?? []
+                            
+                            // Add the new image URL to the array
+                            images.append(downloadURL.absoluteString)
+                            
+                            // Update the images field in Firestore
+                            userRef.updateData(["images": images]) { error in
+                                if let error = error {
+                                    // Handle the error
+                                    print("Error updating Firestore document: \(error.localizedDescription)")
+                                    return
+                                }
+                                
+                                // Success!
+                                print("Image uploaded and download URL stored in Firestore!")
+                            }
+                        } else {
+                            // Handle the error
+                            let images = [downloadURL.absoluteString]
+                            
+                            // Set the images field in Firestore
+                            userRef.updateData(["images": images]) { error in
+                                if let error = error {
+                                    // Handle the error
+                                    print("Error creating Firestore document: \(error.localizedDescription)")
+                                    return
+                                }
+                                
+                                // Success!
+                                print("Image uploaded and download URL stored in Firestore!")
+                            }
+                        }
+                    }
+                    
+                    var database = Database.database().reference()
+                    let partyRef = database.child("Parties").child((self.titleLabel.text)!)
+
+                    partyRef.runTransactionBlock({ (currentData: MutableData) -> TransactionResult in
+                        if var partyData = currentData.value as? [String: Any] {
+                            var images = partyData["images"] as? [String] ?? [] // Get existing images or create empty array
+                            images.append(downloadURL.absoluteString) // Append new image URL
+                            partyData["images"] = images // Update the images array in the party data
+                            
+                            // If the images field didn't exist before, add it to the party data
+                            if partyData["images"] == nil {
+                                partyData["images"] = images
+                            }
+
+                            currentData.value = partyData
+                            return TransactionResult.success(withValue: currentData)
+                        }
+                        return TransactionResult.success(withValue: currentData)
+                    }) { (error, _, _) in
+                        if let error = error {
+                            print("Transaction failed with error: \(error.localizedDescription)")
+                        } else {
+                            print("Transaction successful.")
+                        }
+                    }}
+            }
+        }
+        
+        dismiss(animated: true, completion: nil)
+        
+
+
+       
+        
+    }
+
     @IBAction func likeButtonTapped(_ sender: Any) {
         //print(titleText)
         //print("liked")

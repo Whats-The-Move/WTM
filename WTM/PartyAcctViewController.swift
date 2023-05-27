@@ -101,7 +101,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
                 // Upload the image to Firebase Storage
-            let storageRef = Storage.storage().reference().child("partyImages/\(String(describing: self.partyName.text)).jpg")
+            let storageRef = Storage.storage().reference().child("pendingParties/\(String(describing: self.partyName.text)).jpg")
             //"partyImages/\(UUID().uuidString).jpg"
                 guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
                     return

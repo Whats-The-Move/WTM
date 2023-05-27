@@ -23,7 +23,6 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var emailInvalid: UILabel!
     
-    @IBOutlet weak var fratButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -137,7 +136,12 @@ class ViewController: UIViewController {
                 print(Auth.auth().currentUser!)
                 let uid = Auth.auth().currentUser?.uid
                 
-            
+                
+                let i = email.firstIndex(of: "@")
+                let username = email.substring(to: i!)
+                UserDefaults.standard.set(username, forKey: "user_address")
+                print(username)
+                
                 print(uid ?? String())
                 let db = Firestore.firestore()
 
@@ -145,19 +149,18 @@ class ViewController: UIViewController {
                 let usersCollection = db.collection("users")
 
                 // Add a new user to the "users" collection with some data
-                usersCollection.addDocument(data: [
-              
-                  "email": email,
-                  "uid": uid!
+                usersCollection.document(uid!).setData([
+                    "email": email,
+                    "uid": uid!,
+                    "images": [],
+                    "username": username
                 ]) { (error) in
-                  if let error = error {
-                    print("Error adding document: \(error)")
-                  } else {
-                    print("Document added successfully")
-                  }
+                    if let error = error {
+                        print("Error adding document: \(error)")
+                    } else {
+                        print("Document added successfully")
+                    }
                 }
-                
-
 
                 UserDefaults.standard.set(true, forKey: "authenticated")
                 let alert = UIAlertController(title: "Congrats!", message: "You've just sold your soul to a lifetime of degeneracy and alcoholism!", preferredStyle: .alert)
@@ -210,15 +213,6 @@ class ViewController: UIViewController {
         password.isSecureTextEntry = true
         password.frame = CGRect(x: 20, y: email.frame.origin.y + email.frame.size.height + 10, width: view.frame.size.width - 100, height: 50)
         button.frame = CGRect(x: -70 + view.frame.size.width, y: password.frame.origin.y, width: 50, height: 50)
-        fratButton.frame = CGRect(x: 20,
-                                  y: label.frame.origin.y + label.frame.size.height + 180,
-                                  width: view.frame.size.width - 40,
-                                  height: 50)
-        fratButton.contentHorizontalAlignment = .center
-        fratButton.layer.borderWidth = 4
-        fratButton.layer.borderColor = UIColor.black.cgColor
-        fratButton.layer.cornerRadius = 10
-        fratButton.clipsToBounds = true
 
 
 

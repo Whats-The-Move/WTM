@@ -14,13 +14,15 @@ class Party {
     var allTimeLikes: Double
     var allTimeDislikes: Double
     var address: String
+    var rating : Double
     
-    init(name: String, likes: Int, dislikes: Int, allTimeLikes: Double, allTimeDislikes: Double, address: String) {
+    init(name: String, likes: Int, dislikes: Int, allTimeLikes: Double, allTimeDislikes: Double, address: String, rating: Double) {
         self.name = name
         self.likes = likes
         self.dislikes = dislikes
         self.allTimeLikes = allTimeLikes
         self.allTimeDislikes = allTimeDislikes
         self.address = address
+        self.rating = rating
     }
 }
