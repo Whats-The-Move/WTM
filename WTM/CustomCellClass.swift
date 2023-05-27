@@ -42,12 +42,16 @@ class CustomCellClass: UITableViewCell {
                     titleLabel.textColor = UIColor.white
                     titleLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
                 }
-                let backgroundColor = isGoing ? UIColor.green : UIColor.systemPink
+                let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 1.0)
+                let greenColor = UIColor(red: 0.0, green: 200.0/255, blue: 0.0, alpha: 1.0)
+
+                let backgroundColor = isGoing ? greenColor : pinkColor
                 print(backgroundColor)
                 goingButton.backgroundColor = backgroundColor
-                //let backgroundImage = isGoing ? UIImage(named: "video.png") : UIImage(named: "video.png")
-                            //goingButton.setBackgroundImage(backgroundImage, for: .normal)
-                
+                goingButton.layer.cornerRadius = 8.0
+                goingButton.layer.masksToBounds = true
+
+               
                
             }
             goingButton.addTarget(self, action: #selector(buttonClicked(_:)), for: .touchUpInside)
