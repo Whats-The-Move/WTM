@@ -53,7 +53,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     }
                 }
                 else{
-                    let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text=Profile"
+                    let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
                     if let backupImageURL = URL(string: backupProfile) {
                         DispatchQueue.global().async {
                             if let imageData = try? Data(contentsOf: backupImageURL) {
@@ -106,6 +106,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         imagePickerActionSheet.addAction(cancelButton)
         
         present(imagePickerActionSheet, animated: true, completion: nil)
+        viewDidLoad()
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var uid = ""
