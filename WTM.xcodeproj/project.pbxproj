@@ -32,6 +32,7 @@
 		10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */; };
 		10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */; };
 		10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */; };
+		10B5002B2A268214004FAC97 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		87B3A25C22BDABC5E151EB54 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */; };
 		C52C8394DE2F30A11A45F653 /* Pods_WTMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */; };
@@ -88,6 +89,7 @@
 		10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewController.swift; sourceTree = "<group>"; };
 		10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesCollectionViewCell.swift; sourceTree = "<group>"; };
 		10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.release.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.release.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.release.xcconfig"; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */,
 				08CF0396297CB6030074A878 /* ViewController.swift */,
 				10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */,
+				10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */,
 				08CF03C2297CB7590074A878 /* AppHomeViewController.swift */,
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
 				087FE8EB298DDA26001B17B6 /* Gif.swift */,
@@ -470,6 +473,7 @@
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */,
 				087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */,
+				10B5002B2A268214004FAC97 /* CreateAccountViewController.swift in Sources */,
 				08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */,
 				086042D129C292C900066892 /* reviewViewController.swift in Sources */,
 				10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */,
