@@ -46,7 +46,7 @@ class CustomCellClass: UITableViewCell {
                 let greenColor = UIColor(red: 0.0, green: 200.0/255, blue: 0.0, alpha: 1.0)
 
                 let backgroundColor = isGoing ? greenColor : pinkColor
-                print(backgroundColor)
+                //print(backgroundColor)
                 goingButton.backgroundColor = backgroundColor
                 goingButton.layer.cornerRadius = 8.0
                 goingButton.layer.masksToBounds = true

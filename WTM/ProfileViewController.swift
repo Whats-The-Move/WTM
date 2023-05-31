@@ -23,11 +23,35 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         super.viewDidLoad()
         viewDidLayoutSubviews()
         imagePickerController.delegate = self
+        if let uid = Auth.auth().currentUser?.uid {
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let data = document.data(), let username = data["username"] as? String {
+                        // Access the username value
+                        
+                        self.userbox.text = "Hey " + username + "!"
+                    }
+                }
+                
+            }
+        }
 
-        let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "none"
-        userbox.text =  "username: " + user_address1
-        let email_address1 = user_address1 + "@illinois.edu"
-        emailbox.text =  "email: " + email_address1
+        if let uid = Auth.auth().currentUser?.uid {
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let data = document.data(), let email = data["email"] as? String {
+                        // Access the username value
+                        
+                        self.emailbox.text = "Email: " + email +  "!"
+                    }
+                }
+                
+            }
+        }
 
 
 

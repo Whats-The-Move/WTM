@@ -98,14 +98,12 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         helloWorld.isHidden = false
         helloWorld.text = ""
         if let uid = Auth.auth().currentUser?.uid {
-            print("SOMEONE LOGGED IN")
             let userRef = Firestore.firestore().collection("users").document(uid)
             
             userRef.getDocument { (document, error) in
                 if let document = document, document.exists {
                     if let data = document.data(), let username = data["username"] as? String {
                         // Access the username value
-                        print("Username: \(username)")
                         
                         self.helloWorld.text = "Hey " + username + "!"
                     }
