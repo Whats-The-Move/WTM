@@ -29,8 +29,8 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         name.borderStyle = .line
         username.backgroundColor = UIColor.white // Set the desired background color
         name.backgroundColor = UIColor.white // Set the desired background color
-        username.frame = CGRect(x: username.frame.origin.x, y: username.frame.origin.y, width: username.frame.size.width, height: 50)
-        name.frame = CGRect(x: name.frame.origin.x, y: name.frame.origin.y, width: name.frame.size.width, height: 50)
+        username.autocapitalizationType = .none
+
 
 
 
@@ -87,6 +87,16 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             profilePic.layer.cornerRadius = minDimension / 2
             profilePic.clipsToBounds = true
             profilePic.contentMode = .scaleAspectFill
+
+        username.borderStyle = .line
+        name.borderStyle = .line
+        username.backgroundColor = UIColor.white // Set the desired background color
+        name.backgroundColor = UIColor.white // Set the desired background color
+        profilePic.frame = CGRect(x: profilePic.frame.origin.x, y: profilePic.frame.origin.y, width: 150, height: 150)
+        uploadPFP.frame = CGRect(x: profilePic.frame.origin.x, y: profilePic.frame.origin.y + 167, width: 150, height: 30)
+        username.frame = CGRect(x: username.frame.origin.x, y: uploadPFP.frame.origin.y + 60, width: username.frame.size.width, height: 40)
+        name.frame = CGRect(x: name.frame.origin.x, y: username.frame.origin.y + 55, width: name.frame.size.width, height: 40)
+        doneButton.frame = CGRect(x: uploadPFP.frame.origin.x, y: name.frame.origin.y + 60, width: uploadPFP.frame.size.width, height: 30)
 
     }
     
@@ -235,10 +245,35 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
     }
 
 
+    func checkUsernameAvailability(username: String, completion: @escaping (Bool, Error?) -> Void) {
+        let db = Firestore.firestore()
+        let usersCollection = db.collection("users")
+        
+        let query = usersCollection.whereField("username", isEqualTo: username)
+        
+        query.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                // Handle the error
+                completion(false, error)
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                // No documents found, username is available
+                completion(true, nil)
+                return
+            }
+            
+            // If any documents are found, the username is already taken
+            let isTaken = !documents.isEmpty
+            completion(!isTaken, nil)
+        }
+    }
+
     @IBAction func doneTapped(_ sender: Any) {
         //check for empty feilds
         //todo: username cant have spaces, uppercases, can't be used by anyone, must have pfp
-        
+//check for empty
         guard let username = username.text, !username.isEmpty,
               let name = name.text, !name.isEmpty
         else{
@@ -250,6 +285,16 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             })
             return
         }
+        
+        //check for spaces
+        if username.contains(" ") {
+            print("Username contains spaces")
+            let alert = UIAlertController(title: "Alert", message: "Username should not contain spaces", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
             
@@ -274,39 +319,59 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
                 }
             }
         }
-        //just checked if pfp existed ^^^
+        //just checked if pfp was submitted ^^^
         
-        
-        if let currentUser = Auth.auth().currentUser {
-            // User is signed in
-            let uid = currentUser.uid
-            
-            let userRef = Firestore.firestore().collection("users").document(uid)
-            let data: [String: Any] = [
-                "username": username ,
-                "name": name
-                
-            ]
-            
-            userRef.setData(data, merge: true) { error in
-                if let error = error {
-                    // Handle the error
-                    print("Error creating Firestore document: \(error.localizedDescription)")
-                    return
-                }
-                
-                // Success!
-                print("Image uploaded and download URL stored in Firestore!")
+        checkUsernameAvailability(username: username) { isAvailable, error in
+            if let error = error {
+                // Handle the error
+                print("Error checking username availability: \(error.localizedDescription)")
+                return
             }
-        } else {
-            // No user is signed in
-            print("No user is currently signed in")
+            
+            if isAvailable {
+                // Username is available
+                print("Username is available")
+                if let currentUser = Auth.auth().currentUser {
+                    // User is signed in
+                    let uid = currentUser.uid
+                    
+                    let userRef = Firestore.firestore().collection("users").document(uid)
+                    let data: [String: Any] = [
+                        "username": username ,
+                        "name": name
+                        
+                    ]
+                    
+                    userRef.setData(data, merge: true) { error in
+                        if let error = error {
+                            // Handle the error
+                            print("Error creating Firestore document: \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        // Success!
+                        print("added username and name")
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                    let vc = storyboard.instantiateViewController(identifier: "TabBarController")
+                                    vc.modalPresentationStyle = .overFullScreen
+                        self.present(vc, animated: true)
+                    }
+                } else {
+                    // No user is signed in
+                    print("No user is currently signed in")
+                }
+            } else {
+                // Username is already taken
+                print("Username is already taken")
+                let alert = UIAlertController(title: "Alert", message: "Username taken", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                return // Exit the entire function
+            }
         }
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(identifier: "TabBarController")
-                    vc.modalPresentationStyle = .overFullScreen
-        self.present(vc, animated: true)
+        
+
     }
     
     
