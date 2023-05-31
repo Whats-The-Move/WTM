@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseAuth
+import FirebaseFirestore
 
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate {
     func buttonClicked(for party: Party) {
@@ -94,14 +95,31 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        helloWorld.isHidden = false
+        helloWorld.text = ""
+        if let uid = Auth.auth().currentUser?.uid {
+            print("SOMEONE LOGGED IN")
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let data = document.data(), let username = data["username"] as? String {
+                        // Access the username value
+                        print("Username: \(username)")
+                        
+                        self.helloWorld.text = "Hey " + username + "!"
+                    }
+                }
+                
+            }
+        }
+
         partyList.delegate = self
 
         partyList.rowHeight = 100.0 // Adjust this value as needed
         //partyList.rowHeight = UITableView.automaticDimension
 
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
-        helloWorld.isHidden = false
-        helloWorld.text = "Hey " + user_address1 + "!"
         refreshButton.layer.cornerRadius = 4
         logoutButton.layer.cornerRadius = 4        
         for recognizer in view.gestureRecognizers ?? [] {
