@@ -245,21 +245,26 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                         print("Error: No user is currently signed in.")
                         return
                     }
-                    print("uid")
-                    print(uid)
-                    // Store the download URL in Firestore
-                    
+
                     let userRef = Firestore.firestore().collection("users").document(uid)
-                    
-                    // Get the current images array from Firestore (if it exists)
+
+                    // Get the current images dictionary from Firestore (if it exists)
                     userRef.getDocument { (document, error) in
                         if let document = document, document.exists {
-                            // Retrieve the current images array
-                            var images = document.data()?["images"] as? [String] ?? []
+                            // Retrieve the current images dictionary
+                            var images = document.data()?["images"] as? [String: [String]] ?? [:]
+
+                            // Add the new image URL with the current timestamp (Unix) as the key
+                            let currentTimeStamp = Int(Date().timeIntervalSince1970) - (12 * 3600) // Subtract 12 hours in seconds
                             
-                            // Add the new image URL to the array
-                            images.append(downloadURL.absoluteString)
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd MMM yyyy"
+                            let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
                             
+                            var imageList = images[dateString] ?? []
+                            imageList.append(downloadURL.absoluteString)
+                            images[dateString] = imageList
+
                             // Update the images field in Firestore
                             userRef.updateData(["images": images]) { error in
                                 if let error = error {
@@ -267,25 +272,26 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                                     print("Error updating Firestore document: \(error.localizedDescription)")
                                     return
                                 }
-                                
-                                // Success!
-                                print("Image uploaded and download URL stored in Firestore!")
+                                // Images updated successfully
                             }
                         } else {
-                            // Handle the error
-                            //if the images array doesn't exist
-                            let images = [downloadURL.absoluteString]
+                            // Document doesn't exist, create a new document with the image URL
+                            let currentTimeStamp = Int(Date().timeIntervalSince1970) - (12 * 3600) // Subtract 12 hours in seconds
                             
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd MMM yyyy"
+                            let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
+                            
+                            let images = [dateString: [downloadURL.absoluteString]]
+
                             // Set the images field in Firestore
-                            userRef.updateData(["images": images]) { error in
+                            userRef.setData(["images": images]) { error in
                                 if let error = error {
                                     // Handle the error
                                     print("Error creating Firestore document: \(error.localizedDescription)")
                                     return
                                 }
-                                
-                                // Success!
-                                print("Image uploaded and download URL stored in Firestore!")
+                                // Images created successfully
                             }
                         }
                     }
