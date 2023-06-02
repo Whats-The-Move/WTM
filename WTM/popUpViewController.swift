@@ -273,6 +273,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                             }
                         } else {
                             // Handle the error
+                            //if the images array doesn't exist
                             let images = [downloadURL.absoluteString]
                             
                             // Set the images field in Firestore

@@ -19,6 +19,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     @IBOutlet weak var editProfileButton: UIButton!
     @IBOutlet weak var profilePic: UIImageView!
+    
+    @IBOutlet weak var mainPicture: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidLayoutSubviews()
@@ -46,7 +48,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     if let data = document.data(), let email = data["email"] as? String {
                         // Access the username value
                         
-                        self.emailbox.text = "Email: " + email +  "!"
+                        self.emailbox.text = "Email: " + email 
                     }
                 }
                 
@@ -103,6 +105,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
         profilePic.clipsToBounds = true
         profilePic.contentMode = .scaleAspectFill
+        mainPicture.layer.cornerRadius = profilePic.frame.size.width / 2
+        mainPicture.clipsToBounds = true
+        mainPicture.contentMode = .scaleAspectFill
     }
 
     

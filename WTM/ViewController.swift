@@ -152,7 +152,7 @@ class ViewController: UIViewController {
                 usersCollection.document(uid!).setData([
                     "email": email,
                     "uid": uid!,
-                    //"images": [],
+                    "images": [],
                     //"username": username
                 ]) { (error) in
                     if let error = error {
