@@ -10,10 +10,12 @@ import FirebaseDatabase
 import FirebaseAuth
 import Firebase
 import FirebaseStorage
+import FSCalendar
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FSCalendarDelegate, FSCalendarDataSource {
 //    @IBOutlet weak var userbox: UILabel!
     var imageFromLast = 1
+    var calendar = FSCalendar()
     @IBOutlet weak var userbox: UILabel!
     @IBOutlet weak var emailbox: UILabel!
     let imagePickerController = UIImagePickerController()
@@ -31,7 +33,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         super.viewDidLoad()
         viewDidLayoutSubviews()
         imagePickerController.delegate = self
+        calendar.delegate = self // Make sure your view controller conforms to the FSCalendarDelegate protocol
+        calendar.dataSource = self // Make sure your view controller conforms to the FSCalendarDataSource protocol
         updateDateLabel()
+        calendar.isHidden = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dateLabelTapped))
+            dateLabel.addGestureRecognizer(tapGesture)
+            dateLabel.isUserInteractionEnabled = true
+        
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
             
@@ -113,10 +122,26 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         mainPicture.layer.cornerRadius = mainPicture.frame.size.width / 2
         mainPicture.clipsToBounds = true
         mainPicture.contentMode = .scaleAspectFill
+        calendar.frame = CGRect(x: 0, y: dateLabel.frame.origin.y + 50, width: view.frame.size.width, height: view.frame.size.width) // Set the desired frame for the calendar view
+        calendar.backgroundColor = .white
+        view.addSubview(calendar)
         //backButton.setTitle("", for: .normal)
         //forwardButton.setTitle("", for: .normal)
         //dateLabel.text = "hello"
 
+    }
+    @objc func dateLabelTapped() {
+        if self.calendar.isHidden {
+            self.calendar.isHidden = false
+
+        }
+        else{
+            self.calendar.isHidden = true
+        }
+    }
+
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        let formatter = DateFormatter()
     }
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
