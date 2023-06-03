@@ -856,6 +856,9 @@
                                     <color key="baseForegroundColor" red="0.91591566800000002" green="0.085548634669999998" blue="0.85494592250000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <color key="baseBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="backButtonTapped:" destination="RD5-aH-ryf" eventType="touchUpInside" id="kB3-dP-8IY"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZLw-fj-jpI">
                                 <rect key="frame" x="323" y="334" width="51" height="35"/>
@@ -864,6 +867,9 @@
                                     <color key="baseForegroundColor" red="0.91591566800000002" green="0.085548634669999998" blue="0.85494592250000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <color key="baseBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="forwardButtonTapped:" destination="RD5-aH-ryf" eventType="touchUpInside" id="8HZ-bM-InI"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AJL-Em-DND"/>
@@ -919,9 +925,11 @@
                     </tabBarItem>
                     <navigationItem key="navigationItem" id="xkk-It-2wJ"/>
                     <connections>
+                        <outlet property="backButton" destination="Cqh-Pl-QwT" id="dPR-6r-K4C"/>
                         <outlet property="dateLabel" destination="7DR-iT-d3h" id="MDL-21-fpm"/>
                         <outlet property="editProfileButton" destination="XEl-iC-y3X" id="8yf-V0-SXP"/>
                         <outlet property="emailbox" destination="Pad-ZY-o0W" id="gKU-iL-9Yb"/>
+                        <outlet property="forwardButton" destination="ZLw-fj-jpI" id="afr-ve-9cV"/>
                         <outlet property="mainPicture" destination="2bB-9e-mCj" id="EiH-ro-3gV"/>
                         <outlet property="profilePic" destination="pRK-Yg-l04" id="fce-iD-qdU"/>
                         <outlet property="userbox" destination="ssh-iA-fhn" id="QAp-Oa-2ik"/>

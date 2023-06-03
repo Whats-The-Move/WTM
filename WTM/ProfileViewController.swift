@@ -13,6 +13,7 @@ import FirebaseStorage
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 //    @IBOutlet weak var userbox: UILabel!
+    var imageFromLast = 1
     @IBOutlet weak var userbox: UILabel!
     @IBOutlet weak var emailbox: UILabel!
     let imagePickerController = UIImagePickerController()
@@ -23,6 +24,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var mainPicture: UIImageView!
     
+    @IBOutlet weak var backButton: UIButton!
+    
+    @IBOutlet weak var forwardButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         viewDidLayoutSubviews()
@@ -130,7 +134,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
 
-    func updateDateLabel() {
+    func updateDateLabel(selectedIndex: Int = 1) {
         // Assuming you have an outlet for your date label
         guard let dateLabel = dateLabel else {
             return
@@ -155,18 +159,22 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 let sortedDates = imagesDict.keys.sorted(by: >)
                 
                 // Check if there are any dates available
-                guard let latestDate = sortedDates.first else {
-                    print("No images found")
+                guard sortedDates.count >= selectedIndex else {
+                    print("Not enough images found for the selected index")
+                    //not enough images, set imagefromlast back to what it was earlier
+                    self.imageFromLast -= 1
+                    
                     return
                 }
                 
-                // Retrieve the image URLs for the latest date
-                if let imageUrls = imagesDict[latestDate] {
+                // Retrieve the image URLs for the selected date
+                let selectedDate = sortedDates[max(selectedIndex - 1, 0)]
+                if let imageUrls = imagesDict[selectedDate] {
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd MMM yyyy"
                     
-                    // Convert the latest date to the desired string format
-                    let dateString = dateFormatter.string(from: dateFormatter.date(from: latestDate)!)
+                    // Convert the selected date to the desired string format
+                    let dateString = dateFormatter.string(from: dateFormatter.date(from: selectedDate)!)
                     
                     // Set the date string to the label
                     dateLabel.text = dateString
@@ -175,13 +183,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     // For example, you can display the first image URL in an image view
                     if let firstImageUrl = imageUrls.first {
                         // Set the image to your image view
-                        print("heres where i load img")
                         self.loadImage(from: firstImageUrl, to: self.mainPicture)
-
-                        //imageView.loadImage(from: firstImageUrl) // Assuming you have a custom function to load the image from URL
                     }
                 } else {
-                    print("No image URLs found for the latest date")
+                    print("No image URLs found for the selected date")
                 }
             } else {
                 print("User document does not exist")
@@ -282,6 +287,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             
             dismiss(animated: true, completion: nil)
        }
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        self.imageFromLast += 1
+        updateDateLabel(selectedIndex: self.imageFromLast)
+    }
+    @IBAction func forwardButtonTapped(_ sender: Any) {
+        if self.imageFromLast > 1 {
+            self.imageFromLast -= 1
+        }
+        updateDateLabel(selectedIndex: self.imageFromLast)
+
+    }
     /*
     // MARK: - Navigation
 
