@@ -255,10 +255,10 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                             var images = document.data()?["images"] as? [String: [String]] ?? [:]
 
                             // Add the new image URL with the current timestamp (Unix) as the key
-                            let currentTimeStamp = Int(Date().timeIntervalSince1970) - (12 * 3600) // Subtract 12 hours in seconds
+                            let currentTimeStamp = Int(Date().timeIntervalSince1970) - (5 * 3600) // Subtract 5 hours in seconds
                             
                             let dateFormatter = DateFormatter()
-                            dateFormatter.dateFormat = "dd MMM yyyy"
+                            dateFormatter.dateFormat = "MMM dd yyyy"
                             let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
                             
                             var imageList = images[dateString] ?? []

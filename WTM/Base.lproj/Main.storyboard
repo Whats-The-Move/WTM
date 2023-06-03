@@ -849,17 +849,6 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2bB-9e-mCj">
                                 <rect key="frame" x="0.0" y="380" width="390" height="390"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cqh-Pl-QwT">
-                                <rect key="frame" x="29" y="338" width="51" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" image="arrowshape.backward.fill" catalog="system" title="">
-                                    <color key="baseForegroundColor" red="0.91591566800000002" green="0.085548634669999998" blue="0.85494592250000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                    <color key="baseBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="backButtonTapped:" destination="RD5-aH-ryf" eventType="touchUpInside" id="kB3-dP-8IY"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZLw-fj-jpI">
                                 <rect key="frame" x="323" y="334" width="51" height="35"/>
                                 <state key="normal" title="Button"/>
@@ -871,6 +860,17 @@
                                     <action selector="forwardButtonTapped:" destination="RD5-aH-ryf" eventType="touchUpInside" id="8HZ-bM-InI"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cqh-Pl-QwT">
+                                <rect key="frame" x="34" y="334" width="51" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="arrowshape.backward.fill" catalog="system" title="">
+                                    <color key="baseForegroundColor" red="0.91591566800000002" green="0.085548634669999998" blue="0.85494592250000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <color key="baseBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="backButtonTapped:" destination="RD5-aH-ryf" eventType="touchUpInside" id="kB3-dP-8IY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AJL-Em-DND"/>
                         <color key="backgroundColor" red="0.84267407660000004" green="0.44431845640000001" blue="0.81477690820000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -878,7 +878,7 @@
                             <constraint firstItem="XEl-iC-y3X" firstAttribute="leading" secondItem="pRK-Yg-l04" secondAttribute="leading" id="0GI-PW-NQY"/>
                             <constraint firstItem="AJL-Em-DND" firstAttribute="trailing" secondItem="7DR-iT-d3h" secondAttribute="trailing" constant="55" id="2dR-Hy-kPu"/>
                             <constraint firstItem="AJL-Em-DND" firstAttribute="trailing" secondItem="Pad-ZY-o0W" secondAttribute="trailing" constant="8" id="5Hl-0R-BCU"/>
-                            <constraint firstItem="2bB-9e-mCj" firstAttribute="top" secondItem="Cqh-Pl-QwT" secondAttribute="bottom" constant="7" id="Ck1-Fc-wcg"/>
+                            <constraint firstItem="2bB-9e-mCj" firstAttribute="top" secondItem="Cqh-Pl-QwT" secondAttribute="bottom" constant="11" id="Ck1-Fc-wcg"/>
                             <constraint firstItem="2bB-9e-mCj" firstAttribute="leading" secondItem="AJL-Em-DND" secondAttribute="leading" id="Dbh-Vy-Mlb"/>
                             <constraint firstItem="7DR-iT-d3h" firstAttribute="top" secondItem="Pad-ZY-o0W" secondAttribute="bottom" constant="66.666666666666629" id="E5J-2g-yzE"/>
                             <constraint firstItem="XEl-iC-y3X" firstAttribute="trailing" secondItem="pRK-Yg-l04" secondAttribute="trailing" id="Fq3-C0-AFT"/>
@@ -886,7 +886,7 @@
                             <constraint firstItem="2bB-9e-mCj" firstAttribute="top" secondItem="7DR-iT-d3h" secondAttribute="bottom" constant="17" id="NSK-zo-r5Q"/>
                             <constraint firstItem="2bB-9e-mCj" firstAttribute="centerX" secondItem="vk2-z7-PoG" secondAttribute="centerX" id="QTc-U6-hrX"/>
                             <constraint firstItem="Pad-ZY-o0W" firstAttribute="top" secondItem="ssh-iA-fhn" secondAttribute="bottom" constant="78.000000000000028" id="SQS-je-PEA"/>
-                            <constraint firstItem="Cqh-Pl-QwT" firstAttribute="leading" secondItem="AJL-Em-DND" secondAttribute="leading" constant="29" id="VFn-hm-oW3"/>
+                            <constraint firstItem="Cqh-Pl-QwT" firstAttribute="leading" secondItem="AJL-Em-DND" secondAttribute="leading" constant="34" id="VFn-hm-oW3"/>
                             <constraint firstItem="ssh-iA-fhn" firstAttribute="leading" secondItem="pRK-Yg-l04" secondAttribute="trailing" constant="8" id="Zql-r7-fzY"/>
                             <constraint firstItem="ssh-iA-fhn" firstAttribute="top" secondItem="6de-Ww-e0t" secondAttribute="bottom" constant="15" id="apZ-hW-dhM"/>
                             <constraint firstItem="ZLw-fj-jpI" firstAttribute="trailing" secondItem="ssh-iA-fhn" secondAttribute="trailing" id="bMm-S1-0q9"/>

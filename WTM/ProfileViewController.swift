@@ -14,7 +14,8 @@ import FSCalendar
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FSCalendarDelegate, FSCalendarDataSource {
 //    @IBOutlet weak var userbox: UILabel!
-    var imageFromLast = 1
+    var datesWithPictures: [String] = []
+
     var calendar = FSCalendar()
     @IBOutlet weak var userbox: UILabel!
     @IBOutlet weak var emailbox: UILabel!
@@ -122,13 +123,21 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         mainPicture.layer.cornerRadius = mainPicture.frame.size.width / 2
         mainPicture.clipsToBounds = true
         mainPicture.contentMode = .scaleAspectFill
-        calendar.frame = CGRect(x: 0, y: dateLabel.frame.origin.y + 50, width: view.frame.size.width, height: view.frame.size.width) // Set the desired frame for the calendar view
-        calendar.backgroundColor = .white
+        calendar.frame = CGRect(x: 50, y: dateLabel.frame.origin.y + 30, width: view.frame.size.width * 3/4, height: view.frame.size.width) // Set the desired frame for the calendar view
+        calendar.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         view.addSubview(calendar)
         //backButton.setTitle("", for: .normal)
         //forwardButton.setTitle("", for: .normal)
         //dateLabel.text = "hello"
 
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Call the function to load and update the data
+        // Reload the calendar to reflect the updated data
+        
+        calendar.reloadData()
     }
     @objc func dateLabelTapped() {
         if self.calendar.isHidden {
@@ -142,7 +151,24 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd YYYY"
+        let string = formatter.string(from: date)
+        print(string)
+        updateDateLabel(selectedDate: string)
     }
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd yyyy"
+        
+        // Convert the given date to the desired string format
+        let dateString = dateFormatter.string(from: date)
+        print(datesWithPictures)
+        // Check if the dateString is in the datesWithPictures set
+        if datesWithPictures.contains(dateString) {
+                return 1
+            }
+            
+            return 0    }
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")
@@ -159,7 +185,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
 
-    func updateDateLabel(selectedIndex: Int = 1) {
+    func updateDateLabel(selectedDate: String? = nil) {
         // Assuming you have an outlet for your date label
         guard let dateLabel = dateLabel else {
             return
@@ -180,45 +206,66 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 // Retrieve the images dictionary from the document
                 let imagesDict = document.data()?["images"] as? [String: [String]] ?? [:]
                 
-                // Sort the dates in descending order
-                let sortedDates = imagesDict.keys.sorted(by: >)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM dd yyyy"
                 
-                // Check if there are any dates available
-                guard sortedDates.count >= selectedIndex else {
-                    print("Not enough images found for the selected index")
-                    //not enough images, set imagefromlast back to what it was earlier
-                    self.imageFromLast -= 1
-                    
-                    return
+                var selectedDateFormatted: Date?
+                
+                // Convert the selected date string to the desired format if provided
+                if let selectedDate = selectedDate {
+                    selectedDateFormatted = dateFormatter.date(from: selectedDate)
                 }
                 
-                // Retrieve the image URLs for the selected date
-                let selectedDate = sortedDates[max(selectedIndex - 1, 0)]
-                if let imageUrls = imagesDict[selectedDate] {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd MMM yyyy"
-                    
-                    // Convert the selected date to the desired string format
-                    let dateString = dateFormatter.string(from: dateFormatter.date(from: selectedDate)!)
-                    
+                // Sort the dates in descending order
+                let sortedDates = imagesDict.keys.sorted(by: >)
+                print(sortedDates)
+                self.datesWithPictures = sortedDates
+                print(self.datesWithPictures)
+                if let firstDate = sortedDates.first {
                     // Set the date string to the label
-                    dateLabel.text = dateString
+                    dateLabel.text = dateFormatter.string(from: dateFormatter.date(from: firstDate)!)
                     
-                    // Use the imageUrls array as needed
-                    // For example, you can display the first image URL in an image view
-                    if let firstImageUrl = imageUrls.first {
+                    // Use the imageUrls array from the most recent date
+                    if let imageUrls = imagesDict[firstDate], let firstImageUrl = imageUrls.first {
                         // Set the image to your image view
                         self.loadImage(from: firstImageUrl, to: self.mainPicture)
                     }
                 } else {
-                    print("No image URLs found for the selected date")
+                    print("No images found")
+                }
+                
+                if let selectedDate = selectedDateFormatted {
+                    // Iterate through the images dictionary and find the first image under the selected date
+                    for (date, imageUrls) in imagesDict {
+                        guard let dateFormatted = dateFormatter.date(from: date) else {
+                            print("Invalid date format for \(date)")
+                            continue
+                        }
+                        
+                        // Compare the selected date with the dates in the dictionary
+                        if Calendar.current.isDate(dateFormatted, inSameDayAs: selectedDate) {
+                            // Set the date string to the label
+                            dateLabel.text = dateFormatter.string(from: dateFormatted)
+                            
+                            // Use the imageUrls array as needed
+                            // For example, you can display the first image URL in an image view
+                            if let firstImageUrl = imageUrls.first {
+                                // Set the image to your image view
+                                self.loadImage(from: firstImageUrl, to: self.mainPicture)
+                            }
+                            
+                            return
+                        }
+                    }
+                    
+                    print("No image found for the selected date")
                 }
             } else {
                 print("User document does not exist")
             }
         }
-    }
 
+    }
 
     @IBAction func editProfileClicked(_ sender: Any) {
         print("edit clicked")
@@ -314,14 +361,68 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
        }
     
     @IBAction func backButtonTapped(_ sender: Any) {
-        self.imageFromLast += 1
-        updateDateLabel(selectedIndex: self.imageFromLast)
+        guard let currentDateText = dateLabel.text else {
+                return
+            }
+            
+            // Get the current user's UID
+            guard let uid = Auth.auth().currentUser?.uid else {
+                print("Error: No user is currently signed in.")
+                return
+            }
+            
+            // Reference to the user's document in the "users" collection
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            // Get the "images" field from the user's document
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    // Retrieve the images dictionary from the document
+                    let imagesDict = document.data()?["images"] as? [String: [String]] ?? [:]
+                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "MMM-dd-yyyy"
+                    
+                    guard let currentDate = dateFormatter.date(from: currentDateText) else {
+                        print("Invalid date format for \(currentDateText)")
+                        return
+                    }
+                    
+                    // Sort the dates in descending order
+                    let sortedDates = imagesDict.keys.sorted(by: >)
+                    
+                    // Find the index of the current date in the sorted dates array
+                    if let currentIndex = sortedDates.firstIndex(of: dateFormatter.string(from: currentDate)) {
+                        let previousIndex = currentIndex + 1
+                        
+                        // Check if there is a previous date available
+                        guard previousIndex < sortedDates.count else {
+                            print("No previous date available")
+                            return
+                        }
+                        
+                        let previousDate = sortedDates[previousIndex]
+                        
+                        // Retrieve the image URLs for the previous date
+                        if let imageUrls = imagesDict[previousDate], let firstImageUrl = imageUrls.first {
+                            // Set the date string to the label
+                            self.dateLabel.text = dateFormatter.string(from: dateFormatter.date(from: previousDate)!)
+                            
+                            // Load the first image from the previous date
+                            self.loadImage(from: firstImageUrl, to: self.mainPicture)
+                        } else {
+                            print("No image URLs found for the previous date")
+                        }
+                    } else {
+                        print("Current date not found in the images dictionary")
+                    }
+                } else {
+                    print("User document does not exist")
+                }
+            }
     }
     @IBAction func forwardButtonTapped(_ sender: Any) {
-        if self.imageFromLast > 1 {
-            self.imageFromLast -= 1
-        }
-        updateDateLabel(selectedIndex: self.imageFromLast)
+        
 
     }
     /*
