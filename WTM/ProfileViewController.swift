@@ -142,7 +142,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @objc func dateLabelTapped() {
         if self.calendar.isHidden {
             self.calendar.isHidden = false
-
+            calendar.reloadData()
         }
         else{
             self.calendar.isHidden = true
@@ -361,68 +361,36 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
        }
     
     @IBAction func backButtonTapped(_ sender: Any) {
-        guard let currentDateText = dateLabel.text else {
-                return
-            }
+        let current = dateLabel.text
+        var index = 50
+        if datesWithPictures.contains(current ?? ""){
+            index = datesWithPictures.firstIndex(of: current ?? "") ?? 0
+            print(index)
+            print(datesWithPictures[index])
             
-            // Get the current user's UID
-            guard let uid = Auth.auth().currentUser?.uid else {
-                print("Error: No user is currently signed in.")
-                return
-            }
-            
-            // Reference to the user's document in the "users" collection
-            let userRef = Firestore.firestore().collection("users").document(uid)
-            
-            // Get the "images" field from the user's document
-            userRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    // Retrieve the images dictionary from the document
-                    let imagesDict = document.data()?["images"] as? [String: [String]] ?? [:]
-                    
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "MMM-dd-yyyy"
-                    
-                    guard let currentDate = dateFormatter.date(from: currentDateText) else {
-                        print("Invalid date format for \(currentDateText)")
-                        return
-                    }
-                    
-                    // Sort the dates in descending order
-                    let sortedDates = imagesDict.keys.sorted(by: >)
-                    
-                    // Find the index of the current date in the sorted dates array
-                    if let currentIndex = sortedDates.firstIndex(of: dateFormatter.string(from: currentDate)) {
-                        let previousIndex = currentIndex + 1
-                        
-                        // Check if there is a previous date available
-                        guard previousIndex < sortedDates.count else {
-                            print("No previous date available")
-                            return
-                        }
-                        
-                        let previousDate = sortedDates[previousIndex]
-                        
-                        // Retrieve the image URLs for the previous date
-                        if let imageUrls = imagesDict[previousDate], let firstImageUrl = imageUrls.first {
-                            // Set the date string to the label
-                            self.dateLabel.text = dateFormatter.string(from: dateFormatter.date(from: previousDate)!)
-                            
-                            // Load the first image from the previous date
-                            self.loadImage(from: firstImageUrl, to: self.mainPicture)
-                        } else {
-                            print("No image URLs found for the previous date")
-                        }
-                    } else {
-                        print("Current date not found in the images dictionary")
-                    }
-                } else {
-                    print("User document does not exist")
-                }
-            }
+        }
+        if datesWithPictures.count - 1 == index {
+            //do nothing
+        }
+        else{
+            updateDateLabel(selectedDate: datesWithPictures[index + 1])
+        }
     }
     @IBAction func forwardButtonTapped(_ sender: Any) {
-        
+        let current = dateLabel.text
+        var index = 50
+        if datesWithPictures.contains(current ?? ""){
+            index = datesWithPictures.firstIndex(of: current ?? "") ?? 0
+            print(index)
+            print(datesWithPictures[index])
+            
+        }
+        if index == 0 {
+            //do nothing
+        }
+        else{
+            updateDateLabel(selectedDate: datesWithPictures[index - 1])
+        }
 
     }
     /*
