@@ -283,9 +283,6 @@ extension AppHomeViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
 
         cell.delegate = self // Set the view controller as the delegate for the cell
-
-        cell.configure(with: party, rankDict: rankDict)
-
         
         let party: Party
         if searching {
