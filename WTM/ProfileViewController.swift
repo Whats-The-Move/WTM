@@ -18,9 +18,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "none"
-        userbox.text =  "username: " + user_address1
-        let email_address1 = user_address1 + "@illinois.edu"
-        emailbox.text =  "email: " + email_address1
+        emailbox.text =  "email: " + user_address1
 
         // Do any additional setup after loading the view.
     }
