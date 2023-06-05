@@ -19,6 +19,7 @@ public var user_address = ""
 public var currentDate = ""
 public var votesLabel = 0
 public var barName = ""
+public var UID = ""
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        UID = UserDefaults.standard.string(forKey: "UID") ?? ""
         barName = UserDefaults.standard.string(forKey: "barName") ?? ""
         partyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
         launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
@@ -44,6 +46,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             UserDefaults.standard.setValue(newDate, forKey: "currentDate")
         }
+        
+        if let currentUser = Auth.auth().currentUser {
+            let uid = currentUser.uid
+            print("User UID:", uid)
+            UserDefaults.standard.setValue(uid, forKey: "UID")
+
+        } else {
+            print("No user is currently signed in.")
+        }
+
         
                 
         return true

@@ -8,8 +8,59 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseAuth
+import FirebaseFirestore
 
-class AppHomeViewController: UIViewController {
+class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate {
+    func buttonClicked(for party: Party) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("User not authenticated.")
+            return
+        }
+        
+        let partyRef = Database.database().reference().child("Parties").child(party.name)
+        partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() { //if uid is already in the list, take it out (if someone cancels their attendance to a party)
+                if var attendees = snapshot.value as? [String] {
+                    if let index = attendees.firstIndex(of: uid) {
+                        attendees.remove(at: index)
+                        partyRef.child("isGoing").setValue(attendees) { error, _ in
+                            if let error = error {
+                                print("Failed to update party attendance:", error)
+                            } else {
+                                print("Successfully updated party attendance.")
+                            }
+                        }
+                    } else { //this adds the uid to the list if they say they're going
+                        attendees.append(uid)
+                        partyRef.child("isGoing").setValue(attendees) { error, _ in
+                            if let error = error {
+                                print("Failed to update party attendance:", error)
+                            } else {
+                                print("Successfully updated party attendance.")
+                            }
+                        }
+                    }
+                }
+            } else { //if the node doesn't exist in firebase then create a node and add the uid
+                print(" creating node")
+                partyRef.child("isGoing").setValue([uid]) { error, _ in
+                    if let error = error {
+                        print("Failed to update party attendance:", error)
+                    } else {
+                        print("Successfully updated party attendance.")
+                    }
+                }
+            }
+        }
+    //reloadlist
+    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+    TabBarController.overrideUserInterfaceStyle = .dark
+    TabBarController.modalPresentationStyle = .fullScreen
+    present(TabBarController, animated: false, completion: nil)
+    }
+
+    
     
     var rank = 0
     var timer: Timer?
@@ -44,12 +95,29 @@ class AppHomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        helloWorld.isHidden = false
+        helloWorld.text = ""
+        if let uid = Auth.auth().currentUser?.uid {
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let data = document.data(), let username = data["username"] as? String {
+                        // Access the username value
+                        
+                        self.helloWorld.text = "Hey " + username + "!"
+                    }
+                }
+                
+            }
+        }
+
+        partyList.delegate = self
+
         partyList.rowHeight = 100.0 // Adjust this value as needed
         //partyList.rowHeight = UITableView.automaticDimension
 
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
-        helloWorld.isHidden = false
-        helloWorld.text = "Hey " + user_address1 + "!"
         refreshButton.layer.cornerRadius = 4
         logoutButton.layer.cornerRadius = 4        
         for recognizer in view.gestureRecognizers ?? [] {
@@ -213,6 +281,11 @@ extension AppHomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
+
+        cell.delegate = self // Set the view controller as the delegate for the cell
+
+        cell.configure(with: party, rankDict: rankDict)
+
         
         let party: Party
         if searching {

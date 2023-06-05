@@ -14,6 +14,7 @@ pod 'Firebase/Storage'
 pod 'GoogleSignIn'
 pod 'Firebase/Firestore'
 pod 'Kingfisher'
+pod 'FSCalendar'
 
 
   target 'WTMTests' do

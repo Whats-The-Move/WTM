@@ -131,7 +131,7 @@ class ViewController: UIViewController {
                         }
                     print("signed in")
                 // Get a reference to the "users" collection
-                print(Auth.auth().currentUser!)
+                //print(Auth.auth().currentUser!)
                 let uid = Auth.auth().currentUser?.uid
                 
                 
@@ -151,7 +151,7 @@ class ViewController: UIViewController {
                     "email": email,
                     "uid": uid!,
                     "images": [],
-                    "username": username
+                    //"username": username
                 ]) { (error) in
                     if let error = error {
                         print("Error adding document: \(error)")
@@ -166,7 +166,7 @@ class ViewController: UIViewController {
                     alert.dismiss(animated: true) {
                             // Present the new view controller
                             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                            let vc = storyboard.instantiateViewController(identifier: "TabBarController")
+                            let vc = storyboard.instantiateViewController(identifier: "CreateAccount")
                             vc.modalPresentationStyle = .overFullScreen
                             self?.present(vc, animated: true)
                         }
