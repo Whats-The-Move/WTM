@@ -82,6 +82,7 @@ class PicturesViewController: UIViewController, UICollectionViewDelegate {
             return headerView
         default:
             assert(false, "Unexpected element kind")
+            return UICollectionReusableView()
         }
 
     }
