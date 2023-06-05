@@ -29,6 +29,7 @@ class ViewController: UIViewController {
         if FirebaseAuth.Auth.auth().currentUser != nil {
             //TAKE PAST LOGIN SCREEN TO HOME SCREEN
             print("USER IS IN")
+            UserDefaults.standard.set(FirebaseAuth.Auth.auth().currentUser?.email, forKey: "user_address")
             UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(identifier: "TabBarController")
@@ -107,9 +108,6 @@ class ViewController: UIViewController {
                     }
                   }
                 }
-
-                    
-
                  return }
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let vc = storyboard.instantiateViewController(identifier: "TabBarController")

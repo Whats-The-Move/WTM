@@ -392,6 +392,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             updateDateLabel(selectedDate: datesWithPictures[index - 1])
         }
 
+
     }
     /*
     // MARK: - Navigation

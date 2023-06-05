@@ -280,21 +280,21 @@ extension AppHomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //print(parties.count)
-        let party = parties[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
+
         cell.delegate = self // Set the view controller as the delegate for the cell
 
         cell.configure(with: party, rankDict: rankDict)
-        
-        if searching {
-            if let label = cell.viewWithTag(1) as? UILabel {
-                label.text = party.name
-            }
-            //cell.textLabel?.text = searchParty[indexPath.row]
-            //cell.detailTextLabel?.text = ""
-        }
 
+        
+        let party: Party
+        if searching {
+            party = parties.first { $0.name == searchParty[indexPath.row] }!
+        } else {
+            party = parties[indexPath.row]
+        }
+        
+        cell.configure(with: party, rankDict: rankDict)
         return cell
     }
     
