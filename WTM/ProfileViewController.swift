@@ -17,10 +17,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var datesWithPictures: [String] = []
 
     var calendar = FSCalendar()
-    @IBOutlet weak var userbox: UILabel!
-    @IBOutlet weak var emailbox: UILabel!
     let imagePickerController = UIImagePickerController()
 
+    @IBOutlet weak var userbox: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var editNameImage: UIImageView!
+
+    @IBOutlet weak var bkgdView: UIView!
     @IBOutlet weak var editProfileButton: UIButton!
     @IBOutlet weak var profilePic: UIImageView!
     
@@ -50,7 +53,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     if let data = document.data(), let username = data["username"] as? String {
                         // Access the username value
                         
-                        self.userbox.text = "Hey " + username + "!"
+                        self.userbox.text = username
                     }
                 }
                 
@@ -62,18 +65,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             
             userRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let data = document.data(), let email = data["email"] as? String {
-                        // Access the username value
+                    if let data = document.data(), let name = data["name"] as? String {
+                        self.nameLabel.text = name
                         
-                        self.emailbox.text = "Email: " + email 
+                        
                     }
                 }
                 
             }
         }
-
-
-
+        let tapGestureName = UITapGestureRecognizer(target: self, action: #selector(nameLabelTapped))
+              editNameImage.isUserInteractionEnabled = true
+              editNameImage.addGestureRecognizer(tapGestureName)
+        
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
@@ -126,6 +130,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         calendar.frame = CGRect(x: 50, y: dateLabel.frame.origin.y + 30, width: view.frame.size.width * 3/4, height: view.frame.size.width) // Set the desired frame for the calendar view
         calendar.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         view.addSubview(calendar)
+        bkgdView.layer.cornerRadius = 10.0
+        bkgdView.layer.masksToBounds = true
         //backButton.setTitle("", for: .normal)
         //forwardButton.setTitle("", for: .normal)
         //dateLabel.text = "hello"
@@ -265,6 +271,42 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
         }
 
+    }
+
+    @objc func nameLabelTapped() {
+        let alertController = UIAlertController(title: "Edit Name", message: nil, preferredStyle: .alert)
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Enter your name"
+        }
+        let saveAction = UIAlertAction(title: "Save", style: .default) { (_) in
+            if let newName = alertController.textFields?.first?.text {
+                self.saveName(newName)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    func saveName(_ name: String) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("Error: No user is currently signed in.")
+            return
+        }
+        
+        let userRef = Firestore.firestore().collection("users").document(uid)
+        
+        userRef.setData(["name": name], merge: true) { error in
+            if let error = error {
+                // Handle the error
+                print("Error updating user's name in Firestore: \(error.localizedDescription)")
+                return
+            }
+            // Name updated successfully
+            print("Name updated in Firestore.")
+            
+            // Update the UI or perform any other necessary actions after saving the name
+        }
     }
 
     @IBAction func editProfileClicked(_ sender: Any) {
