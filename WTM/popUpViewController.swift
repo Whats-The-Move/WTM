@@ -352,9 +352,6 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
        
         
     }
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
 
     @IBAction func likeButtonTapped(_ sender: Any) {
         //print(titleText)
