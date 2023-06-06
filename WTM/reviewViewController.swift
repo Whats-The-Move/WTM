@@ -50,7 +50,9 @@ class reviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+       NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
         star1.setImage(unselectedStarImage, for: .normal)
         star2.setImage(unselectedStarImage, for: .normal)
@@ -113,6 +115,27 @@ class reviewViewController: UIViewController {
     
     @objc func dismissViewController() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        
+        // Calculate the height of the keyboard
+        let keyboardHeight = keyboardFrame.size.height
+        
+        // Adjust the view's frame to move the text field above the keyboard
+        UIView.animate(withDuration: 0.3) {
+            self.view.frame.origin.y = -keyboardHeight
+        }
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        // Restore the original position of the view
+        UIView.animate(withDuration: 0.3) {
+            self.view.frame.origin.y = 0
+        }
     }
     
     @IBAction func submitReviewTapped(_ sender: Any) {

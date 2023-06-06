@@ -11,7 +11,7 @@ import FirebaseAuth
 import Firebase
 import FirebaseStorage
 
-class CreateAccountViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class CreateAccountViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
 
     @IBOutlet weak var profilePic: UIImageView!
@@ -24,6 +24,12 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        username.delegate = self
+        name.delegate = self
+        
         viewDidLayoutSubviews()
         username.borderStyle = .line
         name.borderStyle = .line
@@ -100,6 +106,34 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
 
     }
     
+    @objc func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+
+        // Calculate the height of the keyboard
+        let keyboardHeight = keyboardFrame.size.height
+
+        // Check if the text field is hidden by the keyboard
+        if username.isFirstResponder || name.isFirstResponder {
+            let maxY = max(username.frame.maxY, name.frame.maxY)
+            let visibleHeight = view.frame.height - keyboardHeight
+            if maxY > visibleHeight {
+                // Adjust the view's frame to move the text field above the keyboard
+                let offsetY = maxY - visibleHeight + 10 // Add 10 for padding
+                UIView.animate(withDuration: 0.3) {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: -offsetY)
+                }
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        // Restore the original position of the view
+        UIView.animate(withDuration: 0.3) {
+            self.view.transform = .identity
+        }
+    }
 
     @IBAction func uploadPFPclicked(_ sender: Any) {
         print("edit clicked")
@@ -243,7 +277,11 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         newViewController.modalPresentationStyle = .fullScreen
         present(newViewController, animated: false, completion: nil)*/
     }
-
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 
     func checkUsernameAvailability(username: String, completion: @escaping (Bool, Error?) -> Void) {
         let db = Firestore.firestore()
