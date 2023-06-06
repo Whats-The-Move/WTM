@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow WTM access to camera for capturing photos</string>
 	<key>CFBundleDisplayName</key>
 	<string>What&apos;s the Move?</string>
 	<key>CFBundleExecutable</key>

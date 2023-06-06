@@ -29,6 +29,7 @@
 		08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */; };
 		08F92B832A2AC68500ABB873 /* pendingFriendRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */; };
 		08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */; };
+		103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */; };
 		105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */; };
 		10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */; };
 		10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */; };
@@ -88,6 +89,7 @@
 		08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pendingFriendRequestViewController.swift; sourceTree = "<group>"; };
 		08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendRequestCellClass.swift; sourceTree = "<group>"; };
 		0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
 		105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFriendsViewController.swift; sourceTree = "<group>"; };
 		10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyAcctViewController.swift; sourceTree = "<group>"; };
 		10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				08CF0392297CB6030074A878 /* AppDelegate.swift */,
 				08CF0394297CB6030074A878 /* SceneDelegate.swift */,
 				10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */,
+				103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */,
 				08CF0396297CB6030074A878 /* ViewController.swift */,
 				10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */,
 				10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */,
@@ -473,6 +476,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */,
 				105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */,
 				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
