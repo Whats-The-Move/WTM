@@ -268,31 +268,57 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
 
     @IBAction func editProfileClicked(_ sender: Any) {
-        print("edit clicked")
-        let imagePickerActionSheet = UIAlertController(title: "Select Image", message: nil, preferredStyle: .actionSheet)
         
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            let libraryButton = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
-                self.imagePickerController.sourceType = .photoLibrary
-                self.present(self.imagePickerController, animated: true, completion: nil)
+        // Check camera permission
+        let permissionManager = CameraPermissionManager()
+        CameraPermissionManager.checkCameraPermission { granted in
+            if granted {
+                DispatchQueue.main.async {
+                    
+                    // Camera permission granted, show image picker
+                    let imagePickerActionSheet = UIAlertController(title: "Select Image", message: nil, preferredStyle: .actionSheet)
+                    
+                    if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                        let libraryButton = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
+                            self.imagePickerController.sourceType = .photoLibrary
+                            self.present(self.imagePickerController, animated: true, completion: nil)
+                            
+                        }
+                        imagePickerActionSheet.addAction(libraryButton)
+                    }
+                    
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        let cameraButton = UIAlertAction(title: "Take Photo", style: .default) { (action) in
+                            
+                            self.imagePickerController.sourceType = .camera
+                            self.present(self.imagePickerController, animated: true, completion: nil)
+                            
+                        }
+                        imagePickerActionSheet.addAction(cameraButton)
+                    }
+                    
+                    let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    imagePickerActionSheet.addAction(cancelButton)
+                    
+                    self.present(imagePickerActionSheet, animated: true, completion: nil)
+                }
+                
+            } else {
+                // Camera permission not granted, show an alert or take appropriate action
+                let alertController = UIAlertController(title: "Camera Access Denied", message: "Please allow access to the camera in Settings to use this feature.", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                self.present(alertController, animated: true, completion: nil)
             }
-            imagePickerActionSheet.addAction(libraryButton)
         }
+
+            
+        //viewDidLoad()
         
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let cameraButton = UIAlertAction(title: "Take Photo", style: .default) { (action) in
-                self.imagePickerController.sourceType = .camera
-                self.present(self.imagePickerController, animated: true, completion: nil)
-            }
-            imagePickerActionSheet.addAction(cameraButton)
-        }
-        
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        imagePickerActionSheet.addAction(cancelButton)
-        
-        present(imagePickerActionSheet, animated: true, completion: nil)
-        viewDidLoad()
     }
+    
+    
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var uid = ""
         if let currentUser = Auth.auth().currentUser {
