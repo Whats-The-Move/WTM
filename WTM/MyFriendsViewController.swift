@@ -106,8 +106,8 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "friendPopUpSegue" {
             let destinationVC = segue.destination as! friendPopUpViewController
-            if let cell = sender as? UITableViewCell {
-                let titleText = cell.textLabel?.text ?? "error"
+            if let cell = sender as? addFriendCustomCellClass {
+                let titleText = cell.nameLabel.text ?? "error"
                 print("Title text to be passed: \(titleText)")
                 destinationVC.titleText = titleText
             }

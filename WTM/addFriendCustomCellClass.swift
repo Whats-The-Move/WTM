@@ -11,7 +11,7 @@ class addFriendCustomCellClass: UITableViewCell {
         return imageView
     }()
     
-    private let nameLabel: UILabel = {
+    public let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .white
