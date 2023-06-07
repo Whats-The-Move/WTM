@@ -17,6 +17,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
     var searching = false
     var searchUser: [User] = []
     var pendingFriends: [String] = []
+    var friends: [String] = []
     var db: Firestore!
 
     @IBOutlet weak var pendingFriendList: UITableView!
@@ -41,14 +42,15 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
         db = Firestore.firestore()
         
         fetchPendingFriends()
-        fetchUsers()
     }
 
     func fetchUsers() {
         let db = Firestore.firestore()
         let usersCollection = db.collection("users")
 
-        usersCollection.getDocuments { (snapshot, error) in
+        usersCollection.getDocuments { [weak self] (snapshot, error) in
+            guard let self = self else { return }
+
             if let error = error {
                 print("Error getting users: \(error.localizedDescription)")
                 return
@@ -59,7 +61,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
                 return
             }
 
-            self.allUsers = snapshot.documents.compactMap { document in
+            let allUsers = snapshot.documents.compactMap { document -> User? in
                 let data = document.data()
                 let uid = document.documentID
                 let email = data["email"] as? String
@@ -67,6 +69,12 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
                 let username = data["username"] as? String
                 let profilePic = data["profilePic"] as? String
                 return User(uid: uid, email: email ?? "N/A", name: name ?? "N/A", username: username ?? "N/A", profilePic: profilePic ?? "")
+            }
+
+            // Filter out users who are in pendingFriendRequests or friends array
+            let myUid = Auth.auth().currentUser?.uid
+            self.allUsers = allUsers.filter { user in
+                !self.pendingFriends.contains(user.uid) && !self.friends.contains(user.uid) && user.uid != myUid && user.username != "N/A"
             }
 
             self.users = self.allUsers
@@ -85,9 +93,15 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
                 return
             }
             
+            if let data = snapshot.data(), let friends = data["friends"] as? [String] {
+                self.friends = friends
+            }
+            
             if let data = snapshot.data(), let pendingFriends = data["pendingFriendRequests"] as? [String] {
                 // Update the pendingFriends array
                 self.pendingFriends = pendingFriends
+                
+                self.fetchUsers()
                 
                 // Reload the table view
                 self.pendingFriendList.reloadData()
