@@ -21,7 +21,7 @@ class friendPopUpViewController: UIViewController{
         super.viewDidLoad()
         print("Title text: \(titleText)")
         friendName.text = titleText
-        friendName.text = .black
+        friendName.textColor = .black
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
         //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))

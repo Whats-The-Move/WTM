@@ -1,10 +1,14 @@
 import UIKit
 import FirebaseFirestore
 import FirebaseAuth
+import Kingfisher
 
 struct User {
     let uid: String
     let email: String
+    let name: String
+    let username: String
+    let profilePic: String
 }
 
 class MyFriendsViewController: UIViewController, UITableViewDelegate {
@@ -30,7 +34,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
         userList.delegate = self
         userList.dataSource = self
         userList.overrideUserInterfaceStyle = .dark
-        userList.register(UITableViewCell.self, forCellReuseIdentifier: "UserCell")
+        userList.register(addFriendCustomCellClass.self, forCellReuseIdentifier: "UserCell")
         searchBar.overrideUserInterfaceStyle = .dark
         
         // Set up Firestore
@@ -59,7 +63,10 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
                 let data = document.data()
                 let uid = document.documentID
                 let email = data["email"] as? String
-                return User(uid: uid, email: email ?? "N/A")
+                let name = data["name"] as? String
+                let username = data["username"] as? String
+                let profilePic = data["profilePic"] as? String
+                return User(uid: uid, email: email ?? "N/A", name: name ?? "N/A", username: username ?? "N/A", profilePic: profilePic ?? "")
             }
 
             self.users = self.allUsers
@@ -123,10 +130,10 @@ extension MyFriendsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == userList{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! addFriendCustomCellClass
+            
             let user = searching ? searchUser[indexPath.row] : users[indexPath.row]
-            cell.textLabel?.text = user.email
-            cell.textLabel?.textColor = .white
+            cell.configure(with: user)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "pendingCell", for: indexPath) as! FriendRequestCellClass
@@ -162,7 +169,7 @@ extension MyFriendsViewController: UISearchBarDelegate {
             return
         }
 
-        searchUser = allUsers.filter { $0.email.lowercased().contains(searchText.lowercased()) }
+        searchUser = allUsers.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         searching = true
         userList.reloadData()
     }
