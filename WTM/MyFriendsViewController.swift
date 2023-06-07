@@ -42,6 +42,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
         db = Firestore.firestore()
         
         fetchPendingFriends()
+        fetchUsers()
     }
 
     func fetchUsers() {
@@ -201,32 +202,32 @@ extension MyFriendsViewController: FriendRequestCellDelegate {
         let friendUID = pendingFriends[index]
         let currentUserUID = Auth.auth().currentUser?.uid ?? ""
         
+        let batch = db.batch()
+        
         // Update the current user's "friends" array
-        db.collection("users").document(currentUserUID).updateData([
-            "friends": FieldValue.arrayUnion([friendUID])
-        ]) { [weak self] error in
+        let currentUserRef = db.collection("users").document(currentUserUID)
+        batch.updateData(["friends": FieldValue.arrayUnion([friendUID])], forDocument: currentUserRef)
+        
+        // Update the friend's "friends" array
+        let friendUserRef = db.collection("users").document(friendUID)
+        batch.updateData(["friends": FieldValue.arrayUnion([currentUserUID])], forDocument: friendUserRef)
+        
+        // Remove the friendUID from the current user's "pendingFriendRequests" array
+        batch.updateData(["pendingFriendRequests": FieldValue.arrayRemove([friendUID])], forDocument: currentUserRef)
+        
+        // Commit the batch write
+        batch.commit { [weak self] error in
             if let error = error {
                 // Handle the error
                 print("Error accepting friend request: \(error.localizedDescription)")
                 return
             }
             
-            // Remove the friendUID from the current user's "pendingFriendRequests" array
-            self?.db.collection("users").document(currentUserUID).updateData([
-                "pendingFriendRequests": FieldValue.arrayRemove([friendUID])
-            ]) { [weak self] error in
-                if let error = error {
-                    // Handle the error
-                    print("Error removing friend request from pending: \(error.localizedDescription)")
-                    return
-                }
-                
-                // Remove the friendUID from the local pendingFriends array
-                self?.pendingFriends.remove(at: index)
-                
-                // Reload the table view
-                self?.pendingFriendList.reloadData()
-            }
+            // Remove the friendUID from the local pendingFriends array
+            self?.pendingFriends.remove(at: index)
+            
+            // Reload the table view
+            self?.pendingFriendList.reloadData()
         }
     }
     

@@ -39,6 +39,8 @@ class friendPopUpViewController: UIViewController{
         let usersCollection = db.collection("users")
         let query = usersCollection.whereField("email", isEqualTo: personUsername)
         
+        self.dismissViewController()
+        
         query.getDocuments { (snapshot, error) in
             if let error = error {
                 // Handle the error
