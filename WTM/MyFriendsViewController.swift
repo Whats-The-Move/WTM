@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 struct User {
     let uid: String
@@ -11,19 +12,31 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
     var allUsers: [User] = []
     var searching = false
     var searchUser: [User] = []
+    var pendingFriends: [String] = []
+    var db: Firestore!
 
+    @IBOutlet weak var pendingFriendList: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var userList: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        pendingFriendList.delegate = self
+        pendingFriendList.dataSource = self
+        pendingFriendList.overrideUserInterfaceStyle = .dark
+        pendingFriendList.register(FriendRequestCellClass.self, forCellReuseIdentifier: "pendingCell")
         searchBar.delegate = self
         userList.delegate = self
         userList.dataSource = self
         userList.overrideUserInterfaceStyle = .dark
         userList.register(UITableViewCell.self, forCellReuseIdentifier: "UserCell")
         searchBar.overrideUserInterfaceStyle = .dark
-
+        
+        // Set up Firestore
+        db = Firestore.firestore()
+        
+        fetchPendingFriends()
         fetchUsers()
     }
 
@@ -54,10 +67,33 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
         }
     }
     
+    func fetchPendingFriends() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        db.collection("users").document(uid).getDocument { [weak self] (snapshot, error) in
+            guard let self = self, let snapshot = snapshot else {
+                // Handle error or nil self
+                return
+            }
+            
+            if let data = snapshot.data(), let pendingFriends = data["pendingFriendRequests"] as? [String] {
+                // Update the pendingFriends array
+                self.pendingFriends = pendingFriends
+                
+                // Reload the table view
+                self.pendingFriendList.reloadData()
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Row selected at index: \(indexPath.row)")
-        let selectedCell = userList.cellForRow(at: indexPath)
-        performSegue(withIdentifier: "friendPopUpSegue", sender: selectedCell)
+        if tableView == userList{
+            print("Row selected at index: \(indexPath.row)")
+            let selectedCell = userList.cellForRow(at: indexPath)
+            performSegue(withIdentifier: "friendPopUpSegue", sender: selectedCell)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,18 +107,49 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
         }
     }
 
+    @IBAction func backButtonPushed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 extension MyFriendsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searching ? searchUser.count : users.count
+        if tableView == userList{
+            return searching ? searchUser.count : users.count
+        } else {
+            return pendingFriends.count
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath)
-        let user = searching ? searchUser[indexPath.row] : users[indexPath.row]
-        cell.textLabel?.text = user.email
-        return cell
+        if tableView == userList{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath)
+            let user = searching ? searchUser[indexPath.row] : users[indexPath.row]
+            cell.textLabel?.text = user.email
+            cell.textLabel?.textColor = .white
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "pendingCell", for: indexPath) as! FriendRequestCellClass
+            
+            let friendUID = pendingFriends[indexPath.row]
+            
+            // Fetch friend's email from Firestore
+            db.collection("users").document(friendUID).getDocument { (snapshot, error) in
+                if let error = error {
+                    // Handle the error
+                    print("Error fetching friend's email: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let data = snapshot?.data(), let friendEmail = data["email"] as? String {
+                    // Configure the cell with the friend's email
+                    cell.configure(with: friendEmail, index: indexPath.row)
+                    cell.delegate = self
+                }
+            }
+            
+            return cell
+        }
     }
 }
 
@@ -105,5 +172,62 @@ extension MyFriendsViewController: UISearchBarDelegate {
         searchBar.text = ""
         searchBar.resignFirstResponder()
         userList.reloadData()
+    }
+}
+
+extension MyFriendsViewController: FriendRequestCellDelegate {
+    func didTapAcceptButton(at index: Int) {
+        let friendUID = pendingFriends[index]
+        let currentUserUID = Auth.auth().currentUser?.uid ?? ""
+        
+        // Update the current user's "friends" array
+        db.collection("users").document(currentUserUID).updateData([
+            "friends": FieldValue.arrayUnion([friendUID])
+        ]) { [weak self] error in
+            if let error = error {
+                // Handle the error
+                print("Error accepting friend request: \(error.localizedDescription)")
+                return
+            }
+            
+            // Remove the friendUID from the current user's "pendingFriendRequests" array
+            self?.db.collection("users").document(currentUserUID).updateData([
+                "pendingFriendRequests": FieldValue.arrayRemove([friendUID])
+            ]) { [weak self] error in
+                if let error = error {
+                    // Handle the error
+                    print("Error removing friend request from pending: \(error.localizedDescription)")
+                    return
+                }
+                
+                // Remove the friendUID from the local pendingFriends array
+                self?.pendingFriends.remove(at: index)
+                
+                // Reload the table view
+                self?.pendingFriendList.reloadData()
+            }
+        }
+    }
+    
+    func didTapDenyButton(at index: Int) {
+        let friendUID = pendingFriends[index]
+        let currentUserUID = Auth.auth().currentUser?.uid ?? ""
+        
+        // Remove the friendUID from the current user's "pendingFriendRequests" array
+        db.collection("users").document(currentUserUID).updateData([
+            "pendingFriendRequests": FieldValue.arrayRemove([friendUID])
+        ]) { [weak self] error in
+            if let error = error {
+                // Handle the error
+                print("Error removing friend request from pending: \(error.localizedDescription)")
+                return
+            }
+            
+            // Remove the friendUID from the local pendingFriends array
+            self?.pendingFriends.remove(at: index)
+            
+            // Reload the table view
+            self?.pendingFriendList.reloadData()
+        }
     }
 }

@@ -49,6 +49,7 @@ class ViewController: UIViewController {
 
         }
         email.textColor = .black
+        password.textColor = .black
         // Do any additional setup after loading the view.
     }
 

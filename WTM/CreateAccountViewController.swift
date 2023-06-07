@@ -35,6 +35,8 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         name.borderStyle = .line
         username.backgroundColor = UIColor.white // Set the desired background color
         name.backgroundColor = UIColor.white // Set the desired background color
+        name.textColor = .black
+        username.textColor = .black
         username.autocapitalizationType = .none
 
 

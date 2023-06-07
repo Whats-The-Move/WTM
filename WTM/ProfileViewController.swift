@@ -15,9 +15,13 @@ import FSCalendar
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FSCalendarDelegate, FSCalendarDataSource {
 //    @IBOutlet weak var userbox: UILabel!
     var datesWithPictures: [String] = []
+    var currentDateIndex: Int = 0
+    var currentImages: [String] = []
 
     var calendar = FSCalendar()
     let imagePickerController = UIImagePickerController()
+    
+    let db = Firestore.firestore()
 
     @IBOutlet weak var userbox: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -35,6 +39,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var forwardButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
+        mainPicture.isUserInteractionEnabled = true
+        let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(mainPictureTapped))
+        mainPicture.addGestureRecognizer(pictapGesture)
         viewDidLayoutSubviews()
         imagePickerController.delegate = self
         calendar.delegate = self // Make sure your view controller conforms to the FSCalendarDelegate protocol
@@ -114,10 +121,55 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 print("User document not found")
             }
         }
-
-        
         
     }
+    
+    @objc func mainPictureTapped() {
+        updateMainPicture(for: dateLabel.text ?? "error")
+        guard currentImages.count > 0 else {
+            return
+        }
+        
+        currentDateIndex = (currentDateIndex + 1) % currentImages.count
+        loadImage(from: currentImages[currentDateIndex], to: mainPicture)
+    }
+    
+    func updateMainPicture(for date: String) {
+            print("Date: \(date)")
+            
+            guard let uid = Auth.auth().currentUser?.uid else {
+                return
+            }
+
+            let userRef = db.collection("users").document(uid)
+
+            userRef.getDocument { [weak self] (document, error) in
+                guard let self = self, let document = document else {
+                    // Handle error or nil self
+                    return
+                }
+                
+                if let imagesDict = document.data()?["images"] as? [String: [String]] {
+                    // Get the current date in the desired format
+                    let currentDate = date// Your logic to get the current date in the desired format
+                    
+                    if let currentImages = imagesDict[currentDate] {
+                        // Update the currentImages array with the images for the current date
+                        self.currentImages = currentImages
+                        
+                        // Print the images
+                        print(self.currentImages)
+                    } else {
+                        print("No images found for the current date")
+                    }
+                } else {
+                    print("No images data found")
+                }
+            }
+
+        }
+
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -161,6 +213,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let string = formatter.string(from: date)
         print(string)
         updateDateLabel(selectedDate: string)
+        updateMainPicture(for: string)
     }
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let dateFormatter = DateFormatter()
@@ -252,6 +305,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                         if Calendar.current.isDate(dateFormatted, inSameDayAs: selectedDate) {
                             // Set the date string to the label
                             dateLabel.text = dateFormatter.string(from: dateFormatted)
+                            self.updateMainPicture(for: dateLabel.text ?? "error")
                             
                             // Use the imageUrls array as needed
                             // For example, you can display the first image URL in an image view
@@ -304,6 +358,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
             // Name updated successfully
             print("Name updated in Firestore.")
+            self.nameLabel.text = name
             
             // Update the UI or perform any other necessary actions after saving the name
         }
@@ -415,6 +470,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                                 
                                 // Success!
                                 print("Image uploaded and download URL stored in Firestore!")
+                                
                             }
                         } else {
                             // No user is signed in
@@ -429,39 +485,49 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
        }
     
     @IBAction func backButtonTapped(_ sender: Any) {
-        let current = dateLabel.text
-        var index = 50
-        if datesWithPictures.contains(current ?? ""){
-            index = datesWithPictures.firstIndex(of: current ?? "") ?? 0
-            print(index)
-            print(datesWithPictures[index])
-            
-        }
-        if datesWithPictures.count - 1 == index {
-            //do nothing
-        }
-        else{
-            updateDateLabel(selectedDate: datesWithPictures[index + 1])
+        if datesWithPictures.count == 0 {
+            let alert = UIAlertController(title: "No Pictures Added", message: "You have no pictures added yet.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            present(alert, animated: true, completion: nil)
+        } else {
+            let current = dateLabel.text
+            var index = 50
+            if datesWithPictures.contains(current ?? "") {
+                index = datesWithPictures.firstIndex(of: current ?? "") ?? 0
+                print(index)
+                print(datesWithPictures[index])
+            }
+            if datesWithPictures.count - 1 == index {
+                // do nothing
+            } else {
+                updateDateLabel(selectedDate: datesWithPictures[index + 1])
+            }
         }
     }
+
     @IBAction func forwardButtonTapped(_ sender: Any) {
-        let current = dateLabel.text
-        var index = 50
-        if datesWithPictures.contains(current ?? ""){
-            index = datesWithPictures.firstIndex(of: current ?? "") ?? 0
-            print(index)
-            print(datesWithPictures[index])
-            
+        if datesWithPictures.count == 0 {
+            let alert = UIAlertController(title: "No Pictures Added", message: "You have no pictures added yet.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            present(alert, animated: true, completion: nil)
+        } else {
+            let current = dateLabel.text
+            var index = 50
+            if datesWithPictures.contains(current ?? "") {
+                index = datesWithPictures.firstIndex(of: current ?? "") ?? 0
+                print(index)
+                print(datesWithPictures[index])
+            }
+            if index == 0 {
+                // do nothing
+            } else {
+                updateDateLabel(selectedDate: datesWithPictures[index - 1])
+            }
         }
-        if index == 0 {
-            //do nothing
-        }
-        else{
-            updateDateLabel(selectedDate: datesWithPictures[index - 1])
-        }
-
-
     }
+
     /*
     // MARK: - Navigation
 
