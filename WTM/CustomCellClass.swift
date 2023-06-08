@@ -68,38 +68,11 @@ class CustomCellClass: UITableViewCell {
             // Handle the commonFriends array here
             print("Common friends from the completion handler:")
             print(commonFriends)
-            var friendUID = "jSp9XTx1e7aeVCmL1EtrgjLJk2g2"
-            var friendsnum = commonFriends.count
-            if let firstFriendUID = commonFriends.first{
-                friendUID = firstFriendUID
-            }
+
+            self.assignProfilePictures(commonFriends: commonFriends)
 
             
-            if let profile1 = self.viewWithTag(5) as? UIImageView {
-                //print("accessed tag 5")
-                profile1.layer.cornerRadius = profile1.frame.size.width / 2
-                profile1.clipsToBounds = true
-                profile1.contentMode = .scaleAspectFill
-                let userRef = Firestore.firestore().collection("users").document(friendUID)
-                    
-                    userRef.getDocument { (document, error) in
-                        if let error = error {
-                            print("Error retrieving profile picture: \(error.localizedDescription)")
-                            return
-                        }
-                        
-                        if let document = document, document.exists {
-                            if let profilePicURL = document.data()?["profilePic"] as? String {
-                                // Assuming you have a function to retrieve the image from the URL
-                                self.loadImage(from: profilePicURL, to: profile1)
-                                }
-                            else{
-                                print("no prof pic found")
-                            }
-                        }
-                    }
-                        
-             }
+
         }
 
         //print("common friends")
@@ -135,6 +108,50 @@ class CustomCellClass: UITableViewCell {
         }
     }
 
+    private func assignProfilePictures(commonFriends: [String]) {
+        let imageTags = [5, 6, 7, 8] // Update with the appropriate image view tags
+        if commonFriends.count - 4 > 0 {
+            if let plusMore = viewWithTag(10) as? UILabel {
+                plusMore.text = "+" + String(commonFriends.count - 4) 
+            }
+        }
+        else{
+            if let plusMore = viewWithTag(10) as? UILabel {
+                plusMore.text = ""
+            }
+        }
+        for i in 0..<min(commonFriends.count, imageTags.count) {
+            let friendUID = commonFriends[i]
+            let tag = imageTags[i]
+            
+            if let profileImageView = self.viewWithTag(tag) as? UIImageView {
+                // Assign profile picture to the image view
+                profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
+                profileImageView.clipsToBounds = true
+                profileImageView.contentMode = .scaleAspectFill
+                profileImageView.layer.borderWidth = 2.0
+                profileImageView.layer.borderColor = UIColor.white.cgColor
+                profileImageView.frame = CGRect(x: profileImageView.frame.origin.x, y: profileImageView.frame.origin.y, width: 39, height: 39)
+                
+                let userRef = Firestore.firestore().collection("users").document(friendUID)
+                userRef.getDocument { (document, error) in
+                    if let error = error {
+                        print("Error retrieving profile picture: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    if let document = document, document.exists {
+                        if let profilePicURL = document.data()?["profilePic"] as? String {
+                            // Assuming you have a function to retrieve the image from the URL
+                            self.loadImage(from: profilePicURL, to: profileImageView)
+                        } else {
+                            print("No profile picture found for friend with UID: \(friendUID)")
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     
     func loadImage(from urlString: String, to imageView: UIImageView) {
