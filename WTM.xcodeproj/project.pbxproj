@@ -13,6 +13,7 @@
 		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
 		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
+		088D72B82A32371C00ECFA4F /* friendsGoingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088D72B72A32371C00ECFA4F /* friendsGoingViewController.swift */; };
 		08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */; };
 		08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */; };
 		08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0392297CB6030074A878 /* AppDelegate.swift */; };
@@ -68,6 +69,7 @@
 		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
 		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
+		088D72B72A32371C00ECFA4F /* friendsGoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendsGoingViewController.swift; sourceTree = "<group>"; };
 		08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allFriendsPopUpViewController.swift; sourceTree = "<group>"; };
 		08CF038F297CB6030074A878 /* WTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -186,6 +188,7 @@
 				08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */,
 				086042D029C292C900066892 /* reviewViewController.swift */,
 				10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */,
+				088D72B72A32371C00ECFA4F /* friendsGoingViewController.swift */,
 				083B618D2A1FCE6400018798 /* video.png */,
 				10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */,
 				10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */,
@@ -484,6 +487,7 @@
 			files = (
 				103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */,
 				105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */,
+				088D72B82A32371C00ECFA4F /* friendsGoingViewController.swift in Sources */,
 				08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */,
 				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
