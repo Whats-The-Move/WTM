@@ -428,61 +428,63 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             print("No user is currently signed in")
         }
         if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                // Upload the image to Firebase Storage
+            // Update the profile picture locally
+            profilePic.image = selectedImage
+            
+            // Upload the image to Firebase Storage
             let storageRef = Storage.storage().reference().child("profilePics/\(String(describing: uid)).jpg")
-            //"partyImages/\(UUID().uuidString).jpg"
-                guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
+            
+            guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
+                return
+            }
+            
+            storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                if let error = error {
+                    // Handle the error
+                    print("Error uploading image: \(error.localizedDescription)")
                     return
                 }
-                storageRef.putData(imageData, metadata: nil) { (metadata, error) in
-                    if let error = error {
+                
+                // Once the image is uploaded, get its download URL and store it in Firestore
+                storageRef.downloadURL { (url, error) in
+                    guard let downloadURL = url else {
                         // Handle the error
-                        print("Error uploading image: \(error.localizedDescription)")
+                        print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
                         return
                     }
                     
-                    // Once the image is uploaded, get its download URL and store it in Firestore
-                    storageRef.downloadURL { (url, error) in
-                        guard let downloadURL = url else {
-                            // Handle the error
-                            print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
-                            return
-                        }
+                    // Store the download URL in Firestore
+                    
+                    if let currentUser = Auth.auth().currentUser {
+                        // User is signed in
+                        let uid = currentUser.uid
                         
-                        // Store the download URL in Firestore
+                        let userRef = Firestore.firestore().collection("users").document(uid)
+                        let data: [String: Any] = [
+                            "profilePic": downloadURL.absoluteString,
+                        ]
                         
-                        if let currentUser = Auth.auth().currentUser {
-                            // User is signed in
-                            let uid = currentUser.uid
-                            
-                            let userRef = Firestore.firestore().collection("users").document(uid)
-                            let data: [String: Any] = [
-                                "profilePic": downloadURL.absoluteString,
-                                
-                            ]
-                            
-                            userRef.setData(data, merge: true) { error in
-                                if let error = error {
-                                    // Handle the error
-                                    print("Error creating Firestore document: \(error.localizedDescription)")
-                                    return
-                                }
-                                
-                                // Success!
-                                print("Image uploaded and download URL stored in Firestore!")
-                                
+                        userRef.setData(data, merge: true) { error in
+                            if let error = error {
+                                // Handle the error
+                                print("Error creating Firestore document: \(error.localizedDescription)")
+                                return
                             }
-                        } else {
-                            // No user is signed in
-                            print("No user is currently signed in")
+                            
+                            // Success!
+                            print("Image uploaded and download URL stored in Firestore!")
+                            
                         }
-
+                    } else {
+                        // No user is signed in
+                        print("No user is currently signed in")
                     }
                 }
             }
-            
-            dismiss(animated: true, completion: nil)
-       }
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
     
     @IBAction func backButtonTapped(_ sender: Any) {
         if datesWithPictures.count == 0 {

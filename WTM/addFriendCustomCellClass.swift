@@ -19,7 +19,7 @@ class addFriendCustomCellClass: UITableViewCell {
         return label
     }()
     
-    private let usernameLabel: UILabel = {
+    public let usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .white
