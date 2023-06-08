@@ -132,7 +132,10 @@ class CustomCellClass: UITableViewCell {
                 profileImageView.layer.borderWidth = 2.0
                 profileImageView.layer.borderColor = UIColor.white.cgColor
                 profileImageView.frame = CGRect(x: profileImageView.frame.origin.x, y: profileImageView.frame.origin.y, width: 39, height: 39)
-                
+                profileImageView.isUserInteractionEnabled = true
+                            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
+                            profileImageView.addGestureRecognizer(tapGesture)
+                            
                 let userRef = Firestore.firestore().collection("users").document(friendUID)
                 userRef.getDocument { (document, error) in
                     if let error = error {
@@ -153,7 +156,19 @@ class CustomCellClass: UITableViewCell {
         }
     }
 
-    
+    @objc private func profTapped(_ sender: UITapGestureRecognizer) {
+        guard let profileImageView = sender.view as? UIImageView else {
+            return
+        }
+        
+        // Handle the tap event for the profile image view
+        // You can access the corresponding friend's information using the image view's tag or any other identifier
+        
+        // Example: Get friend UID using the image view's tag
+        let friendUID = "Friend UID" // Replace with your logic to get the friend's UID
+        print("Profile tapped for friend with UID: \(friendUID)")
+    }
+
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")
