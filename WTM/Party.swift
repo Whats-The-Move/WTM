@@ -15,8 +15,9 @@ class Party {
     var allTimeDislikes: Double
     var address: String
     var rating : Double
+    var isGoing: [String]
     
-    init(name: String, likes: Int, dislikes: Int, allTimeLikes: Double, allTimeDislikes: Double, address: String, rating: Double) {
+    init(name: String, likes: Int, dislikes: Int, allTimeLikes: Double, allTimeDislikes: Double, address: String, rating: Double, isGoing: [String]) {
         self.name = name
         self.likes = likes
         self.dislikes = dislikes
@@ -24,5 +25,7 @@ class Party {
         self.allTimeDislikes = allTimeDislikes
         self.address = address
         self.rating = rating
+        self.isGoing = isGoing
+        
     }
 }
