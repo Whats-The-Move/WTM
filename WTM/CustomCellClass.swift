@@ -38,13 +38,13 @@ class CustomCellClass: UITableViewCell {
                 // Use the value of isUserGoing to update the button's appearance or perform any other action
                 isGoingBool = isUserGoing
                 if let titleLabel = goingButton.titleLabel {
-                    let label = isGoingBool ? "See you there" : "Yeah I'll Be There"
+                    let label = isGoingBool ? "I'm Going!" : "Not going"
                     titleLabel.text = label
                     titleLabel.textColor = UIColor.white
                     titleLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
                 }
-                let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 1.0)
-                let greenColor = UIColor(red: 0.0, green: 200.0/255, blue: 0.0, alpha: 1.0)
+                let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
+                let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
 
                 let backgroundColor = isGoingBool ? greenColor : pinkColor
                 //print(backgroundColor)

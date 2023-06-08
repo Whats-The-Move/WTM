@@ -179,10 +179,12 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        /*
+        
         partyList.reloadData()
         super.viewWillAppear(animated)
         
+    }
+        /*
         databaseRef = Database.database().reference().child("Parties")
         databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
             let key = snapshot.key
@@ -212,8 +214,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             }
         }
         partyList.reloadData()
-         */
-    }
+         
+    }*/
    
     
     @IBAction func refreshButtonTapped(_ sender: Any) {
