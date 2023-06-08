@@ -139,8 +139,14 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}
-            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String, let rating = value["avgStars"] as? Double {
-                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating)
+            if let likes = value["Likes"] as? Int,
+                let dislikes = value["Dislikes"] as? Int,
+                let allTimeLikes = value["allTimeLikes"] as? Double,
+                let allTimeDislikes = value["allTimeDislikes"] as? Double,
+                let address = value["Address"] as? String,
+                let rating = value["avgStars"] as? Double,
+                let isGoing = value["isGoing"] as? [String] {
+                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing : isGoing)
                 self?.parties.insert(party, at: 0)
                 self?.likeDict[party.name] = party.likes
                 self?.dislikeDict[party.name] = party.dislikes
@@ -256,8 +262,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         databaseRef?.observe(.childAdded){ [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}
-            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String, let rating = value["avgStars"] as? Double {
-                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating)
+            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String, let rating = value["avgStars"] as? Double, let isGoing = value["isGoing"] as? [String] {
+                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
                     self?.likeDict[party.name] = party.likes
                     self?.dislikeDict[party.name] = party.dislikes
                     self?.overallLikeDict[party.name] = party.allTimeLikes

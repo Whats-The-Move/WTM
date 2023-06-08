@@ -172,20 +172,29 @@
                                                         <color key="baseBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </buttonConfiguration>
                                                 </button>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dvF-Wj-PJe">
+                                                    <rect key="frame" x="222" y="47" width="39" height="39"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="39" id="37S-TK-BRu"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="VG2-Kp-ojo" firstAttribute="leading" secondItem="ygt-yJ-1tQ" secondAttribute="trailing" constant="8.6666666666666714" id="6pE-xg-M9H"/>
                                                 <constraint firstItem="iS5-ti-ddv" firstAttribute="leading" secondItem="VG2-Kp-ojo" secondAttribute="trailing" constant="8" id="9MN-ah-sY2"/>
+                                                <constraint firstItem="dvF-Wj-PJe" firstAttribute="leading" secondItem="peI-1Q-D9z" secondAttribute="trailing" constant="8" id="BPZ-oH-3BC"/>
                                                 <constraint firstItem="peI-1Q-D9z" firstAttribute="bottom" secondItem="T3M-V2-tB2" secondAttribute="bottomMargin" id="LMo-M1-eVW"/>
                                                 <constraint firstItem="VG2-Kp-ojo" firstAttribute="centerY" secondItem="iS5-ti-ddv" secondAttribute="centerY" constant="-4" id="MJI-oq-4VM"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="iS5-ti-ddv" secondAttribute="trailing" constant="-87" id="MeE-lc-4zm"/>
                                                 <constraint firstItem="ygt-yJ-1tQ" firstAttribute="top" secondItem="T3M-V2-tB2" secondAttribute="topMargin" id="chX-gi-I8K"/>
                                                 <constraint firstItem="ygt-yJ-1tQ" firstAttribute="firstBaseline" secondItem="iS5-ti-ddv" secondAttribute="firstBaseline" id="d1k-eK-oJa"/>
+                                                <constraint firstItem="dvF-Wj-PJe" firstAttribute="top" secondItem="iS5-ti-ddv" secondAttribute="bottom" constant="3.3333333333333357" id="daK-dl-Fn8"/>
                                                 <constraint firstItem="pgw-ae-U4m" firstAttribute="centerX" secondItem="VG2-Kp-ojo" secondAttribute="centerX" id="f7c-kN-j93"/>
                                                 <constraint firstItem="pgw-ae-U4m" firstAttribute="top" secondItem="T3M-V2-tB2" secondAttribute="topMargin" constant="2" id="h3A-wa-Jgt"/>
                                                 <constraint firstItem="pgw-ae-U4m" firstAttribute="centerY" secondItem="VG2-Kp-ojo" secondAttribute="centerY" id="i9d-bs-HTt"/>
                                                 <constraint firstItem="iS5-ti-ddv" firstAttribute="baseline" secondItem="ygt-yJ-1tQ" secondAttribute="firstBaseline" id="kFg-Sl-oON"/>
                                                 <constraint firstItem="VG2-Kp-ojo" firstAttribute="top" secondItem="T3M-V2-tB2" secondAttribute="topMargin" constant="-11" id="p3L-fY-Vaz"/>
+                                                <constraint firstItem="peI-1Q-D9z" firstAttribute="bottom" secondItem="dvF-Wj-PJe" secondAttribute="bottom" id="uqy-bn-hVr"/>
                                                 <constraint firstItem="peI-1Q-D9z" firstAttribute="centerX" secondItem="pgw-ae-U4m" secondAttribute="centerX" constant="32" id="vGe-S3-V4y"/>
                                                 <constraint firstItem="peI-1Q-D9z" firstAttribute="leading" secondItem="T3M-V2-tB2" secondAttribute="leadingMargin" constant="20" id="zIA-te-05w"/>
                                             </constraints>
