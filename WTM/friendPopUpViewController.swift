@@ -37,7 +37,7 @@ class friendPopUpViewController: UIViewController{
         let personUsername = titleText
         let db = Firestore.firestore()
         let usersCollection = db.collection("users")
-        let query = usersCollection.whereField("email", isEqualTo: personUsername)
+        let query = usersCollection.whereField("username", isEqualTo: personUsername)
         
         self.dismissViewController()
         
@@ -55,7 +55,7 @@ class friendPopUpViewController: UIViewController{
             }
 
             let personUID = document.documentID
-            let friendRequestData = ["pendingFriendRequests": FieldValue.arrayUnion([currentUserUID])]
+            let friendRequestData = ["pendingFriendRequests": FieldValue.arrayUnion([currentUserUID ?? "N/A"])]
             usersCollection.document(personUID).updateData(friendRequestData) { error in
                 if let error = error {
                     // Handle the error

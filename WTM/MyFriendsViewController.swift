@@ -122,7 +122,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
         if segue.identifier == "friendPopUpSegue" {
             let destinationVC = segue.destination as! friendPopUpViewController
             if let cell = sender as? addFriendCustomCellClass {
-                let titleText = cell.nameLabel.text ?? "error"
+                let titleText = cell.usernameLabel.text ?? "error"
                 print("Title text to be passed: \(titleText)")
                 destinationVC.titleText = titleText
             }
