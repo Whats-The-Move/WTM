@@ -234,6 +234,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             return
         }
         
+        imageView.kf.setImage(with: url)
+    }
+    /*func loadImage(from urlString: String, to imageView: UIImageView) {
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL: \(urlString)")
+            return
+        }
+        
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url) {
                 DispatchQueue.main.async {
@@ -242,7 +250,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 }
             }
         }
-    }
+    }*/
 
     func updateDateLabel(selectedDate: String? = nil) {
         // Assuming you have an outlet for your date label
