@@ -26,13 +26,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     var parties = [Party]()
     
     
-    @IBOutlet weak var votesLeftLabel: UILabel!
-    @IBOutlet weak var wasItTheMoveLabel: UILabel!
-    @IBOutlet weak var num: UILabel!
-    @IBOutlet weak var upvoteButton: UIButton!
-    @IBOutlet weak var downvoteButton: UIButton!
-    @IBOutlet weak var upvoteLabel: UILabel!
-    @IBOutlet weak var downvoteLabel: UILabel!
+
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var reviewButon: UIButton!
@@ -56,8 +50,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         view.layer.cornerRadius = 10
 
 
-        upvoteButton.imageView?.contentMode = .scaleAspectFit
-        downvoteButton.imageView?.contentMode = .scaleAspectFit
+      
         
         locationManger.delegate = self
         locationManger.requestAlwaysAuthorization()
@@ -75,14 +68,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         print("address: \(addressLabel)")
         titleLabel.text = titleText
         titleLabel.textColor = .black
-        upvoteLabel.text = String(likesLabel)
-        upvoteLabel.textColor = .black
-        downvoteLabel.text = String(dislikesLabel)
-        downvoteLabel.textColor = .black
-        num.text = String(UserDefaults.standard.integer(forKey: "votesLabel"))
-        num.textColor = .black
-        votesLeftLabel.textColor = .black
-        wasItTheMoveLabel.textColor = .black
+        
         
 
         let geocoder = CLGeocoder()
@@ -353,50 +339,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         
     }
 
-    @IBAction func likeButtonTapped(_ sender: Any) {
-        //print(titleText)
-        //print("liked")
-        if(UserDefaults.standard.integer(forKey: "votesLabel") > 0){
-            let database = Database.database().reference()
-            database.child("Parties").child((titleLabel.text)!).updateChildValues(["Likes" : ServerValue.increment(1)])
-            database.child("Parties").child((titleLabel.text)!).updateChildValues(["allTimeLikes" : ServerValue.increment(1)])
-            let number = Int(upvoteLabel.text!)
-            likesLabel = number! + 1
-            let votesNumber = Int(num.text!)
-            let votesB = votesNumber! - 1
-            UserDefaults.standard.setValue(votesB, forKey: "votesLabel")
-        } else {
-            let alert = UIAlertController(title: "Alert", message: "No votes left!", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion:  {
-                return
-            })
-        }
-        viewDidLoad()
-    }
-
-    @IBAction func dislikeButtonTapped(_ sender: Any) {
-        //print(titleText)
-        //print("disliked")
-        if(UserDefaults.standard.integer(forKey: "votesLabel") > 0){
-            let database = Database.database().reference()
-            database.child("Parties").child((titleLabel.text)!).updateChildValues(["Dislikes" : ServerValue.increment(1)])
-            database.child("Parties").child((titleLabel.text)!).updateChildValues(["allTimeDislikes" : ServerValue.increment(1)])
-            let number = Int(downvoteLabel.text!)
-            dislikesLabel = number! + 1
-            let votesNumber = Int(num.text!)
-            let votesB = votesNumber! - 1
-            UserDefaults.standard.setValue(votesB, forKey: "votesLabel")
-        } else {
-            let alert = UIAlertController(title: "Alert", message: "No votes left!", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion:  {
-                return
-            })
-        }
-        viewDidLoad()
-    }
-    
+   
     @objc func handleMapTap(_ sender: UITapGestureRecognizer) {
         let geocoder = CLGeocoder()
             geocoder.geocodeAddressString(addressLabel) {
