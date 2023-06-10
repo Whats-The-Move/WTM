@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import FirebaseAuth
 import Firebase
+import Kingfisher
 protocol CustomCellDelegate: AnyObject {
     func buttonClicked(for party: Party)
 }
@@ -168,7 +169,15 @@ class CustomCellClass: UITableViewCell {
         let friendUID = "Friend UID" // Replace with your logic to get the friend's UID
         print("Profile tapped for friend with UID: \(friendUID)")
     }
-
+    func loadImage(from urlString: String, to imageView: UIImageView) {
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL: \(urlString)")
+            return
+        }
+        
+        imageView.kf.setImage(with: url)
+    }
+    /*
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")
@@ -183,7 +192,7 @@ class CustomCellClass: UITableViewCell {
                 }
             }
         }
-    }
+    }*/   
     private func checkIfUserIsGoing(party: Party, completion: @escaping (Bool) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(false)
