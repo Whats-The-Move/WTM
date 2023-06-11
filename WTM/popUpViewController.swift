@@ -29,14 +29,13 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     var party = Party(name: "", likes: 0, dislikes: 0, allTimeLikes: 0, allTimeDislikes: 0, address: "", rating: 0, isGoing: [""])
     
 
+    @IBOutlet weak var friendsView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var reviewButon: UIButton!
-    @IBOutlet weak var user_name: UILabel!
     @IBOutlet weak var isGoingButton: UIButton!
-    //@IBOutlet weak var hoursLabel: UILabel!
-    //@IBOutlet weak var coverLabel: UILabel!
-    //@IBOutlet weak var ratioLabel: UILabel!
+    @IBOutlet weak var numPeople: UILabel!
+
     @IBOutlet weak var imageUploadButton: UIButton!
     
     @IBOutlet weak var borderView: UIView!
@@ -45,27 +44,10 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
     
     override func viewDidLoad() {
-        databaseRef = Database.database().reference().child("Parties").child("Joes")
-        databaseRef?.child("isGoing").observeSingleEvent(of: .value) { snapshot in
-            if let value = snapshot.value as? [String: Any] {
-                let key = snapshot.key // Get the key of the snapshot
-                if let likes = value["Likes"] as? Int,
-                   let dislikes = value["Dislikes"] as? Int,
-                   let allTimeLikes = value["allTimeLikes"] as? Double,
-                   let allTimeDislikes = value["allTimeDislikes"] as? Double,
-                   let address = value["Address"] as? String,
-                   let rating = value["avgStars"] as? Double,
-                   let isGoing = value["isGoing"] as? [String] {
-                    let party1 = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
-                    self.party = party1
-                }
-            }
-        }
+
+        print(party.isGoing)
         
-        
-       
-       
-        
+        assignProfilePictures(commonFriends: ["2JsZnwFq2JMTPsW1y8e8tCOWAak1", "tlnDmvUjyHev57vt3vQgvDhJgjS2", "lZVESXahoAcbkrtnfyXkHTj2iiu1", "geHdnWbV6ddWVc3MI6o0reMEvKn1", "8fjA6HbFbghPA3EaGPp528Xn9PC3", "8fjA6HbFbghPA3EaGPp528Xn9PC3"])
 
         imagePickerController.delegate = self
         print(self.party)
@@ -131,7 +113,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                 self.map.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
             }
             
-            super.viewDidLoad()
+            //super.viewDidLoad()
             
         }
         
@@ -144,13 +126,68 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         map.addGestureRecognizer(mapTapGesture)
         
     }
-    
+    private func assignProfilePictures(commonFriends: [String]) {
+        let imageTags = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Update with the appropriate image view tags
+        if commonFriends.count - 10 > 0 {
+            if let plusMore = friendsView.viewWithTag(10) as? UILabel {
+                plusMore.text = "+" + String(commonFriends.count - 10)
+            }
+        }
+        else{
+            if let plusMore = friendsView.viewWithTag(10) as? UILabel {
+                plusMore.text = ""
+            }
+        }
+        for i in 0..<min(commonFriends.count, imageTags.count) {
+            let friendUID = commonFriends[i]
+            let tag = imageTags[i]
+            
+            if let profileImageView = friendsView.viewWithTag(tag) as? UIImageView {
+                // Assign profile picture to the image view
+                profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
+                profileImageView.clipsToBounds = true
+                profileImageView.contentMode = .scaleAspectFill
+                profileImageView.layer.borderWidth = 2.0
+                profileImageView.layer.borderColor = UIColor.white.cgColor
+                profileImageView.frame = CGRect(x: profileImageView.frame.origin.x, y: profileImageView.frame.origin.y, width: 39, height: 39)
+                profileImageView.isUserInteractionEnabled = true
+                            //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
+                            //profileImageView.addGestureRecognizer(tapGesture)
+                            
+                let userRef = Firestore.firestore().collection("users").document(friendUID)
+                userRef.getDocument { (document, error) in
+                    if let error = error {
+                        print("Error retrieving profile picture: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    if let document = document, document.exists {
+                        if let profilePicURL = document.data()?["profilePic"] as? String {
+                            // Assuming you have a function to retrieve the image from the URL
+                            self.loadImage(from: profilePicURL, to: profileImageView)
+                        } else {
+                            print("No profile picture found for friend with UID: \(friendUID)")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    func loadImage(from urlString: String, to imageView: UIImageView) {
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL: \(urlString)")
+            return
+        }
+        
+        imageView.kf.setImage(with: url)
+    }
     @objc func handleTap() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyboard.instantiateViewController(withIdentifier: "AppHome") as! AppHomeViewController
         newViewController.modalPresentationStyle = .fullScreen
         present(newViewController, animated: false, completion: nil)
     }
+    
     /*
     func mapThis(destinationCoord : CLLocationCoordinate2D){
         let sourceCoordinate = (locationManger.location?.coordinate)!
@@ -230,7 +267,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                         if let error = error {
                             print("Failed to update party attendance:", error)
                         } else {
-                            print("Successfully updated party attendance1.")
+                            //print("Successfully updated party attendance1.")
                         }
                     }
                 }
@@ -242,7 +279,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                         self?.userGoing = true
                         self!.checkIfUserIsGoing(party: self!.party)
 
-                        print("Successfully updated party attendance.")
+                        //print("Successfully updated party attendance.")
                     }
                 }
             }
@@ -429,14 +466,12 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
             return false
         }
         
-        print("fuck")
         print(party.name)
         let partyRef = Database.database().reference().child("Parties").child(titleText)
         
         partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
             var isUserGoing = false
             //HERES THE PROBLEM- not going into fuck again party of code
-            print("fuck again")
             if snapshot.exists() {
                 if let attendees = snapshot.value as? [String] {
                     isUserGoing = attendees.contains(uid)
@@ -449,7 +484,6 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
         
         let backgroundColor = userGoing ? greenColor : pinkColor
-        print(backgroundColor)
         self.isGoingButton.backgroundColor = backgroundColor
         let buttonText = userGoing ? "I'm Going!" : "Not going"
         // Assuming you have a button instance called 'myButton'

@@ -346,7 +346,7 @@ extension AppHomeViewController: UITableViewDataSource {
                                     print(backgroundColor)
                                     destinationVC.isGoingButton.backgroundColor = backgroundColor
                                     let buttonText = isUserGoing ? "I'm Going!" : "Not going"
-                                    destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
+                                    destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
                                     destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
 
                                     // Assuming you have a button instance called 'myButton'
@@ -376,6 +376,8 @@ extension AppHomeViewController: UITableViewDataSource {
                                    let isGoing = value["isGoing"] as? [String] {
                                 let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
                                     destinationVC.party = party
+                                    destinationVC.numPeople.text = String(party.isGoing.count) + " people attending total"
+                                    destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
 
                                
                                 }

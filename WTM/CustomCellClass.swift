@@ -70,14 +70,12 @@ class CustomCellClass: UITableViewCell {
 
 
             self.assignProfilePictures(commonFriends: commonFriends)
-
+            //print(commonFriends)
             
 
         }
 
-        //print("common friends")
-        //print(commonFriends)
-        //print(commonFriends)
+
 
     }
     
