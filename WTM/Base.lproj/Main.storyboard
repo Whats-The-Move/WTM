@@ -411,29 +411,50 @@
                                                     <action selector="imageUploadButtonTapped:" destination="yRI-s8-1wx" eventType="touchUpInside" id="NZh-cF-F3l"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o6o-qj-lcY">
+                                                <rect key="frame" x="20" y="442" width="145" height="35"/>
+                                                <color key="tintColor" red="0.84267407660000004" green="0.44431845640000001" blue="0.81477690820000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Anonymous Reviews"/>
+                                                <connections>
+                                                    <segue destination="x5c-h0-UOG" kind="show" identifier="reviewSegue" id="MIT-gr-ifu"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVg-wY-a6G">
+                                                <rect key="frame" x="182" y="442" width="145" height="35"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="145" id="qMG-pb-cmI"/>
+                                                </constraints>
+                                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Button">
+                                                    <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="baseBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="isGoingButtonClicked:" destination="yRI-s8-1wx" eventType="touchUpInside" id="EjE-bD-M0J"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="RSv-L0-Qf4" firstAttribute="top" secondItem="NNb-0Y-5af" secondAttribute="top" constant="7" id="3uw-vb-2PF"/>
                                             <constraint firstItem="nuQ-OO-QQk" firstAttribute="centerX" secondItem="mTr-QG-qAb" secondAttribute="centerX" id="8Av-mp-3Fc"/>
+                                            <constraint firstAttribute="bottom" secondItem="o6o-qj-lcY" secondAttribute="bottom" constant="288" id="CUb-Zk-3tJ"/>
                                             <constraint firstItem="mTr-QG-qAb" firstAttribute="top" secondItem="RSv-L0-Qf4" secondAttribute="bottom" constant="16" id="Fli-OE-zms"/>
                                             <constraint firstItem="RSv-L0-Qf4" firstAttribute="leading" secondItem="nuQ-OO-QQk" secondAttribute="leading" id="HIT-Fd-K2M"/>
                                             <constraint firstItem="RSv-L0-Qf4" firstAttribute="leading" secondItem="NNb-0Y-5af" secondAttribute="leading" id="WVR-uO-yev"/>
                                             <constraint firstItem="RSv-L0-Qf4" firstAttribute="trailing" secondItem="nuQ-OO-QQk" secondAttribute="trailing" id="Wut-pd-tD5"/>
                                             <constraint firstItem="RSv-L0-Qf4" firstAttribute="centerX" secondItem="NNb-0Y-5af" secondAttribute="centerX" id="avy-PL-Pja"/>
+                                            <constraint firstItem="gVg-wY-a6G" firstAttribute="leading" secondItem="o6o-qj-lcY" secondAttribute="trailing" constant="17" id="eej-cX-WNE"/>
+                                            <constraint firstAttribute="trailing" secondItem="gVg-wY-a6G" secondAttribute="trailing" constant="17" id="eyZ-XX-Yv9"/>
+                                            <constraint firstItem="o6o-qj-lcY" firstAttribute="leading" secondItem="NNb-0Y-5af" secondAttribute="leading" constant="20" id="hjT-X5-uD7"/>
                                             <constraint firstItem="nuQ-OO-QQk" firstAttribute="top" secondItem="NNb-0Y-5af" secondAttribute="top" constant="44" id="jGn-Gh-m61"/>
+                                            <constraint firstItem="o6o-qj-lcY" firstAttribute="top" secondItem="gVg-wY-a6G" secondAttribute="top" id="l5a-No-wm9"/>
                                             <constraint firstItem="mTr-QG-qAb" firstAttribute="top" secondItem="NNb-0Y-5af" secondAttribute="top" constant="69" id="nwc-uW-foF"/>
                                             <constraint firstItem="mTr-QG-qAb" firstAttribute="top" secondItem="nuQ-OO-QQk" secondAttribute="bottom" constant="15" id="rEa-zF-OWb"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o6o-qj-lcY">
-                                        <rect key="frame" x="81.666666666666671" y="279" width="180.66666666666663" height="35"/>
-                                        <color key="tintColor" red="0.84267407660000004" green="0.44431845640000001" blue="0.81477690820000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" title="Anonymous Reviews"/>
-                                        <connections>
-                                            <segue destination="x5c-h0-UOG" kind="show" identifier="reviewSegue" id="MIT-gr-ifu"/>
-                                        </connections>
-                                    </button>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cla-LQ-Uof">
                                         <rect key="frame" x="85" y="514" width="181" height="217"/>
                                         <constraints>
@@ -449,12 +470,10 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="wup-6c-uZ2" firstAttribute="centerX" secondItem="o6o-qj-lcY" secondAttribute="centerX" id="1bb-JD-JG8"/>
                                     <constraint firstItem="wup-6c-uZ2" firstAttribute="top" secondItem="ykv-1C-nQQ" secondAttribute="topMargin" id="6fj-mn-9Qi"/>
                                     <constraint firstAttribute="bottom" secondItem="cla-LQ-Uof" secondAttribute="bottom" constant="32" id="NwC-EL-nS2"/>
                                     <constraint firstItem="NNb-0Y-5af" firstAttribute="top" secondItem="ykv-1C-nQQ" secondAttribute="top" constant="-2" id="QXo-6r-3cP"/>
                                     <constraint firstAttribute="trailing" secondItem="cla-LQ-Uof" secondAttribute="trailing" constant="78" id="RB7-4y-1AM"/>
-                                    <constraint firstItem="o6o-qj-lcY" firstAttribute="leading" secondItem="ykv-1C-nQQ" secondAttribute="leading" constant="81.666666666666686" id="VGi-LH-HQ7"/>
                                     <constraint firstAttribute="bottom" secondItem="NNb-0Y-5af" secondAttribute="bottom" id="ZcV-7b-Off"/>
                                     <constraint firstItem="cla-LQ-Uof" firstAttribute="leading" secondItem="ykv-1C-nQQ" secondAttribute="leading" constant="85" id="guF-fM-9Bl"/>
                                     <constraint firstItem="wup-6c-uZ2" firstAttribute="centerX" secondItem="ykv-1C-nQQ" secondAttribute="centerX" id="mAk-3E-F97"/>
@@ -475,6 +494,7 @@
                     <connections>
                         <outlet property="borderView" destination="NNb-0Y-5af" id="CXX-DM-XH2"/>
                         <outlet property="imageUploadButton" destination="mTr-QG-qAb" id="ZUv-Kr-v48"/>
+                        <outlet property="isGoingButton" destination="gVg-wY-a6G" id="C4R-wf-Wd7"/>
                         <outlet property="map" destination="cla-LQ-Uof" id="JRA-Kp-laY"/>
                         <outlet property="popupView" destination="ykv-1C-nQQ" id="ez6-gI-tg6"/>
                         <outlet property="reviewButon" destination="o6o-qj-lcY" id="la6-cy-1wr"/>

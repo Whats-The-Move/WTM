@@ -11,60 +11,10 @@ import FirebaseAuth
 import FirebaseFirestore
 
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate {
-    func buttonClicked(for party: Party) {
-        guard let uid = Auth.auth().currentUser?.uid else {
-            print("User not authenticated.")
-            return
-        }
-        
-        let partyRef = Database.database().reference().child("Parties").child(party.name)
-        partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
-            if snapshot.exists() { //if uid is already in the list, take it out (if someone cancels their attendance to a party)
-                if var attendees = snapshot.value as? [String] {
-                    if let index = attendees.firstIndex(of: uid) {
-                        attendees.remove(at: index)
-                        partyRef.child("isGoing").setValue(attendees) { error, _ in
-                            if let error = error {
-                                print("Failed to update party attendance:", error)
-                            } else {
-                                print("Successfully updated party attendance.")
-                            }
-                        }
-                    } else { //this adds the uid to the list if they say they're going
-                        attendees.append(uid)
-                        partyRef.child("isGoing").setValue(attendees) { error, _ in
-                            if let error = error {
-                                print("Failed to update party attendance:", error)
-                            } else {
-                                print("Successfully updated party attendance.")
-                            }
-                        }
-                    }
-                }
-            } else { //if the node doesn't exist in firebase then create a node and add the uid
-                print(" creating node")
-                partyRef.child("isGoing").setValue([uid]) { error, _ in
-                    if let error = error {
-                        print("Failed to update party attendance:", error)
-                    } else {
-                        print("Successfully updated party attendance.")
-                    }
-                }
-            }
-        }
-    //reloadlist
-    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-    TabBarController.overrideUserInterfaceStyle = .dark
-    TabBarController.modalPresentationStyle = .fullScreen
-    present(TabBarController, animated: false, completion: nil)
-    }
-
-    
     
     var rank = 0
     var timer: Timer?
-    
+
     @IBOutlet weak var partyList: UITableView! {
         didSet {
             partyList.dataSource = self
@@ -257,6 +207,57 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         let indexPath = IndexPath(row: 0, section: 0)
         partyList.scrollToRow(at: indexPath, at: .top, animated: true)
     }
+    func buttonClicked(for party: Party) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("User not authenticated.")
+            return
+        }
+        
+        let partyRef = Database.database().reference().child("Parties").child(party.name)
+        partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() { //if uid is already in the list, take it out (if someone cancels their attendance to a party)
+                if var attendees = snapshot.value as? [String] {
+                    if let index = attendees.firstIndex(of: uid) {
+                        attendees.remove(at: index)
+                        partyRef.child("isGoing").setValue(attendees) { error, _ in
+                            if let error = error {
+                                print("Failed to update party attendance:", error)
+                            } else {
+                                print("Successfully updated party attendance.")
+                            }
+                        }
+                    } else { //this adds the uid to the list if they say they're going
+                        attendees.append(uid)
+                        partyRef.child("isGoing").setValue(attendees) { error, _ in
+                            if let error = error {
+                                print("Failed to update party attendance:", error)
+                            } else {
+                                print("Successfully updated party attendance.")
+                            }
+                        }
+                    }
+                }
+            } else { //if the node doesn't exist in firebase then create a node and add the uid
+                print(" creating node")
+                partyRef.child("isGoing").setValue([uid]) { error, _ in
+                    if let error = error {
+                        print("Failed to update party attendance:", error)
+                    } else {
+                        print("Successfully updated party attendance.")
+                    }
+                }
+            }
+        }
+    //reloadlist
+    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+    TabBarController.overrideUserInterfaceStyle = .dark
+    TabBarController.modalPresentationStyle = .fullScreen
+    present(TabBarController, animated: false, completion: nil)
+    }
+
+    
+    
     
     func updateDicts() {
         
@@ -321,13 +322,71 @@ extension AppHomeViewController: UITableViewDataSource {
 
         
         if segue.identifier == "popupSegue" {
+                print("going into popup")
                 let destinationVC = segue.destination as! popUpViewController
                 if let cell = sender as? UITableViewCell {
                     if let label = cell.viewWithTag(1) as? UILabel {
+                        let uid = Auth.auth().currentUser?.uid ?? ""
+      
+                        let partyRef = Database.database().reference().child("Parties").child(label.text ?? "")
+                        var isUserGoing = false
+                        partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
+                            
+                            //HERES THE PROBLEM- not going into fuck again party of code
+                            print("segue before it goes in")
+                            if snapshot.exists() {
+                                if let attendees = snapshot.value as? [String] {
+                                    isUserGoing = attendees.contains(uid)
+                                    print("is user going: \(isUserGoing)")
+                                    destinationVC.userGoing = isUserGoing
+                                    let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
+                                    let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
+                                    
+                                    let backgroundColor = isUserGoing ? greenColor : pinkColor
+                                    print(backgroundColor)
+                                    destinationVC.isGoingButton.backgroundColor = backgroundColor
+                                    let buttonText = isUserGoing ? "I'm Going!" : "Not going"
+                                    destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
+                                    destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
+
+                                    // Assuming you have a button instance called 'myButton'
+                                    destinationVC.isGoingButton.setTitle(buttonText, for: .normal)
+                                    destinationVC.isGoingButton.layer.cornerRadius = 8
+                                }
+                            }
+                        }
+
+                        
+            
+
+                        databaseRef = Database.database().reference().child("Parties").child(label.text ?? "")
+                        
+                        databaseRef?.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                            if let value = snapshot.value as? [String: Any] {
+
+                                let key = snapshot.key
+                                print("Party Key: \(key)")
+                                
+                                if let likes = value["Likes"] as? Int,
+                                   let dislikes = value["Dislikes"] as? Int,
+                                   let allTimeLikes = value["allTimeLikes"] as? Double,
+                                   let allTimeDislikes = value["allTimeDislikes"] as? Double,
+                                   let address = value["Address"] as? String,
+                                   let rating = value["avgStars"] as? Double,
+                                   let isGoing = value["isGoing"] as? [String] {
+                                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
+                                    destinationVC.party = party
+
+                               
+                                }
+                            }
+                        }
+                        
                         destinationVC.titleText = (label.text)!
                         destinationVC.likesLabel = likeDict[(label.text)!]!
                         destinationVC.dislikesLabel = dislikeDict[(label.text)!]!
-                        destinationVC.addressLabel = addressDict[(label.text)!]!                    }
+                        destinationVC.addressLabel = addressDict[(label.text)!]!
+                    }
                     
                 }
             }

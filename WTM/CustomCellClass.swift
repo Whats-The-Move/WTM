@@ -67,8 +67,7 @@ class CustomCellClass: UITableViewCell {
 
         checkFriendshipStatus(isGoing: party.isGoing) { commonFriends in
             // Handle the commonFriends array here
-            print("Common friends from the completion handler:")
-            print(commonFriends)
+
 
             self.assignProfilePictures(commonFriends: commonFriends)
 
