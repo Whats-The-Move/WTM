@@ -5,12 +5,20 @@ import Firebase
 import Kingfisher
 protocol CustomCellDelegate: AnyObject {
     func buttonClicked(for party: Party)
+    func profileClicked(for party: Party)
 }
 
 class CustomCellClass: UITableViewCell {
     weak var delegate: CustomCellDelegate?
     private var party: Party?
     
+    @objc private func profTapped(_ sender: UITapGestureRecognizer) {
+        guard let party = party else {
+            return
+        }
+        
+        delegate?.profileClicked(for: party)
+    }
 
     @IBAction func buttonClicked(_ sender: UIButton) {
         guard let party = party else {
@@ -154,18 +162,6 @@ class CustomCellClass: UITableViewCell {
         }
     }
 
-    @objc private func profTapped(_ sender: UITapGestureRecognizer) {
-        guard let profileImageView = sender.view as? UIImageView else {
-            return
-        }
-        
-        // Handle the tap event for the profile image view
-        // You can access the corresponding friend's information using the image view's tag or any other identifier
-        
-        // Example: Get friend UID using the image view's tag
-        let friendUID = "Friend UID" // Replace with your logic to get the friend's UID
-        print("Profile tapped for friend with UID: \(friendUID)")
-    }
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")

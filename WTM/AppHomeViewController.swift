@@ -12,6 +12,20 @@ import FirebaseFirestore
 
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate {
     
+    func profileClicked(for party: Party) {
+        // Create an instance of friendsGoingViewController
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let friendsGoingVC = storyboard.instantiateViewController(withIdentifier: "FriendsGoing") as! friendsGoingViewController
+        
+        // Pass the selected party object
+        friendsGoingVC.selectedParty = party
+        
+        friendsGoingVC.modalPresentationStyle = .overFullScreen
+        
+        // Present the friendsGoingVC modally
+        present(friendsGoingVC, animated: true, completion: nil)
+    }
+    
     var rank = 0
     var timer: Timer?
 

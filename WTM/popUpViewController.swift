@@ -504,6 +504,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "reviewSegue" {
             let destinationViewController = segue.destination as! reviewViewController
+            print(titleText)
             destinationViewController.titleText = titleText
         }
     }
