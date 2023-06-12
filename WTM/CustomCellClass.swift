@@ -106,7 +106,7 @@ class CustomCellClass: UITableViewCell {
         }
     }
 
-    private func assignProfilePictures(commonFriends: [String]) {
+    func assignProfilePictures(commonFriends: [String]) {
         let imageTags = [5, 6, 7, 8] // Update with the appropriate image view tags
         if commonFriends.count - 4 > 0 {
             if let plusMore = viewWithTag(10) as? UILabel {

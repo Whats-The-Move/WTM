@@ -376,7 +376,10 @@ extension AppHomeViewController: UITableViewDataSource {
                                    let isGoing = value["isGoing"] as? [String] {
                                 let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
                                     destinationVC.party = party
+                                    destinationVC.assignProfilePictures(commonFriends: party.isGoing)
+                                    
                                     destinationVC.numPeople.text = String(party.isGoing.count) + " people attending total"
+                                    destinationVC.numPeople.textColor = UIColor.black
                                     destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
 
                                

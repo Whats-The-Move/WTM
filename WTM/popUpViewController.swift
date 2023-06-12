@@ -21,7 +21,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     var dislikesLabel: Int = 0
     var addressLabel: String = ""
     var userGoing = false
-
+    var commonFriends = [String]()
     @IBOutlet weak var popupView: UIView!
     
     var databaseRef: DatabaseReference?
@@ -31,14 +31,16 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
     @IBOutlet weak var friendsView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
+    
     @IBOutlet weak var map: MKMapView!
-    @IBOutlet weak var reviewButon: UIButton!
+    
+    @IBOutlet weak var reviewButton: UIButton!
     @IBOutlet weak var isGoingButton: UIButton!
     @IBOutlet weak var numPeople: UILabel!
 
     @IBOutlet weak var imageUploadButton: UIButton!
     
-    @IBOutlet weak var borderView: UIView!
+    //@IBOutlet weak var borderView: UIView!
     var locationManger = CLLocationManager()
     let imagePickerController = UIImagePickerController()
 
@@ -47,13 +49,13 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
         print(party.isGoing)
         
-        assignProfilePictures(commonFriends: ["2JsZnwFq2JMTPsW1y8e8tCOWAak1", "tlnDmvUjyHev57vt3vQgvDhJgjS2", "lZVESXahoAcbkrtnfyXkHTj2iiu1", "geHdnWbV6ddWVc3MI6o0reMEvKn1", "8fjA6HbFbghPA3EaGPp528Xn9PC3", "8fjA6HbFbghPA3EaGPp528Xn9PC3"])
+        assignProfilePictures(commonFriends: commonFriends)
 
         imagePickerController.delegate = self
         print(self.party)
-        borderView.layer.borderWidth = 9
-        borderView.layer.borderColor = UIColor.black.cgColor
-        borderView.layer.cornerRadius = 7
+        //borderView.layer.borderWidth = 9
+        //borderView.layer.borderColor = UIColor.black.cgColor
+        //borderView.layer.cornerRadius = 7
         view.layer.cornerRadius = 10
 
         
@@ -126,7 +128,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         map.addGestureRecognizer(mapTapGesture)
         
     }
-    private func assignProfilePictures(commonFriends: [String]) {
+    func assignProfilePictures(commonFriends: [String]) {
         let imageTags = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Update with the appropriate image view tags
         if commonFriends.count - 10 > 0 {
             if let plusMore = friendsView.viewWithTag(10) as? UILabel {
