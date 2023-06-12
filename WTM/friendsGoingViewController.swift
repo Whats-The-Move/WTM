@@ -22,16 +22,6 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let blurEffect = UIBlurEffect(style: .regular)
-        let visualEffectView = UIVisualEffectView(effect: blurEffect)
-        visualEffectView.frame = view.bounds
-        view.addSubview(visualEffectView)
-        
-        let contentView = UIView(frame: view.bounds)
-        view.addSubview(contentView)
-        
-        contentView.layer.zPosition = 1
-        
         partyID = selectedParty?.name ?? ""
         print(partyID)
 
