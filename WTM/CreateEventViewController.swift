@@ -6,14 +6,18 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class CreateEventViewController: UIViewController {
+    @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var bkgdView: UIView!
     
     @IBOutlet weak var dateAndTime: UIDatePicker!
     @IBOutlet weak var location: UITextField!
     @IBOutlet weak var descriptionText: UITextView!
     
+    @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var inviteesText: UITextView!
     var selectedUsers: [User] = []
 
@@ -28,21 +32,62 @@ class CreateEventViewController: UIViewController {
     }
     override func viewDidLayoutSubviews() {
         descriptionText.isEditable = true
-        descriptionText.text = "Description/details"
+        //descriptionText.text = "Description/details"
         descriptionText.textAlignment = .left
         descriptionText.font = UIFont.systemFont(ofSize: 16)
         descriptionText.layer.cornerRadius = 8
         bkgdView.layer.cornerRadius = 8
         dateAndTime.layer.cornerRadius = 8
     }
+    @IBAction func createTapped(_ sender: Any) {
+        guard let eventTitle = eventTitle.text,
+              let location = location.text,
+              let descriptionText = descriptionText.text,
+              let inviteesText = inviteesText.text else {
+            return
+        }
+        let dateTime = dateAndTime.date
+
+        let currentUserUID = Auth.auth().currentUser?.uid ?? ""
+        let invitees = inviteesText.components(separatedBy: ",")
+        
+        // Create a reference to the "Privates" node in Firebase Realtime Database
+        let privatesRef = Database.database().reference().child("Privates")
+        
+        // Create a new child node under "Privates" and generate a unique key
+        let newEventRef = privatesRef.childByAutoId()
+        
+        // Create a dictionary with the event information
+        let eventInfo: [String: Any] = [
+            "event": eventTitle,
+            "dateTime": dateTime.timeIntervalSince1970,
+            "location": location,
+            "description": descriptionText,
+            "invitees": invitees,
+            "going": [],
+            "creator": currentUserUID
+        ]
+        
+        // Set the event information under the new child node
+        newEventRef.setValue(eventInfo) { error, _ in
+            if let error = error {
+                print("Error creating event: \(error.localizedDescription)")
+            } else {
+                print("Event created successfully!")
+                // TODO: Perform any additional actions after event creation
+            }
+        }
+    }
     @objc func inviteesTapped() {
         let inviteListVC = storyboard?.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
-           inviteListVC.didSelectUsers = { [weak self] users in
-               // Update inviteesText with the names of the selected users
-               let names = users.map { $0.name }
-               self?.inviteesText.text = names.joined(separator: ", ")
-           }
-           present(inviteListVC, animated: true, completion: nil)
+            inviteListVC.selectedUsers = selectedUsers  // Pass the selectedUsers array to InviteListViewController
+            inviteListVC.didSelectUsers = { [weak self] users in
+                // Update inviteesText with the names of the selected users
+                let names = users.map { $0.name }
+                self?.inviteesText.text = names.joined(separator: ", ")
+                self?.selectedUsers = users  // Update the selectedUsers array with the newly selected users
+            }
+            present(inviteListVC, animated: true, completion: nil)
     }
 
     /*
