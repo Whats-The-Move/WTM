@@ -15,12 +15,15 @@ class CreateEventViewController: UIViewController {
     @IBOutlet weak var descriptionText: UITextView!
     
     @IBOutlet weak var inviteesText: UITextView!
+    var selectedUsers: [User] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(inviteesTapped))
              inviteesText.addGestureRecognizer(tapGestureRecognizer)
              inviteesText.isUserInteractionEnabled = true
-
+        let selectedUserNames = selectedUsers.map { $0.name }
+           inviteesText.text = selectedUserNames.joined(separator: ", ")
         // Do any additional setup after loading the view.
     }
     override func viewDidLayoutSubviews() {
