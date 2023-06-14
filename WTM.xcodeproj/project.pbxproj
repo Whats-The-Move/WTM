@@ -34,6 +34,7 @@
 		08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */; };
 		103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */; };
 		103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D809D2A38D6610032E4D3 /* CreateEventViewController.swift */; };
+		103D80A02A38E71F0032E4D3 /* InviteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */; };
 		105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */; };
 		10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */; };
 		10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */; };
@@ -98,6 +99,7 @@
 		0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
 		103D809D2A38D6610032E4D3 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
+		103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteListViewController.swift; sourceTree = "<group>"; };
 		105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFriendsViewController.swift; sourceTree = "<group>"; };
 		10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyAcctViewController.swift; sourceTree = "<group>"; };
 		10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewController.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				08CF03C2297CB7590074A878 /* AppHomeViewController.swift */,
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
 				087FE8EB298DDA26001B17B6 /* Gif.swift */,
+				103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
 				083B618F2A1FD00400018798 /* CustomCellClass.swift */,
 				08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */,
@@ -493,6 +496,7 @@
 				088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */,
 				08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */,
 				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
+				103D80A02A38E71F0032E4D3 /* InviteListViewController.swift in Sources */,
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */,
 				087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */,
