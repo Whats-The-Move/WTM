@@ -36,18 +36,13 @@ class CreateEventViewController: UIViewController {
         dateAndTime.layer.cornerRadius = 8
     }
     @objc func inviteesTapped() {
-        let party = Party(name: "Joes", likes: 0, dislikes: 0, allTimeLikes: 0, allTimeDislikes: 0, address: "5", rating: 3, isGoing: [""])
-        // Create an instance of friendsGoingViewController
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let InviteListVC = storyboard.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
-        
-        // Pass the selected party object
-        InviteListVC.selectedParty = party
-        
-        InviteListVC.modalPresentationStyle = .overFullScreen
-        
-        // Present the friendsGoingVC modally
-        present(InviteListVC, animated: true, completion: nil)
+        let inviteListVC = storyboard?.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
+           inviteListVC.didSelectUsers = { [weak self] users in
+               // Update inviteesText with the names of the selected users
+               let names = users.map { $0.name }
+               self?.inviteesText.text = names.joined(separator: ", ")
+           }
+           present(inviteListVC, animated: true, completion: nil)
     }
 
     /*

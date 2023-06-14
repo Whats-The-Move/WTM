@@ -21,6 +21,7 @@ class InviteListViewController: UIViewController, UITableViewDelegate{
     var selectedParty: Party?
     var selectedIndexPaths: [IndexPath] = []
     var selectedUsers: [User] = []
+    var didSelectUsers: (([User]) -> Void)?
 
 
     var friends: [User] = []
@@ -51,11 +52,8 @@ class InviteListViewController: UIViewController, UITableViewDelegate{
     }
 
     @IBAction func doneButton(_ sender: Any) {
-        createEventViewController?.selectedUsers = selectedIndexPaths.compactMap { indexPath in
-            return searching ? searchFriends[indexPath.row] : friends[indexPath.row]
-        }
-        
-        self.dismiss(animated: true, completion: nil)
+        didSelectUsers?(selectedUsers)
+        dismiss(animated: true, completion: nil)
     }
     @objc func dismissViewController(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
@@ -134,23 +132,21 @@ extension InviteListViewController: UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if selectedIndexPaths.contains(indexPath) {
-            // Deselect the cell
-            if let index = selectedIndexPaths.firstIndex(of: indexPath) {
-                selectedIndexPaths.remove(at: index)
+        let selectedUser = searching ? searchFriends[indexPath.row] : friends[indexPath.row]
+        
+        if selectedUsers.contains(where: { $0.uid == selectedUser.uid }) {
+            // Deselect the cell and remove the selectedUser from the array
+            if let index = selectedUsers.firstIndex(where: { $0.uid == selectedUser.uid }) {
+                selectedUsers.remove(at: index)
             }
         } else {
-            // Select the cell
-            selectedIndexPaths.append(indexPath)
+            // Select the cell and add the selectedUser to the array
+            selectedUsers.append(selectedUser)
         }
-
+        
         tableView.reloadData()
-
-        // Get the UID of the selected user
-        let selectedUser = searching ? searchFriends[indexPath.row] : friends[indexPath.row]
-        selectedUsers.append(selectedUser)
-        let selectedUserUID = selectedUser.uid
-        print("Selected User UID: \(selectedUserUID)")
+        
+        print("Selected User UID: \(selectedUser.uid)")
     }
 
 
@@ -160,9 +156,8 @@ extension InviteListViewController: UITableViewDataSource {
 
         let user = searching ? searchFriends[indexPath.row] : friends[indexPath.row]
         cell.configure(with: user)
-
-        // Check if the cell's index path is in the selectedIndexPaths array
-        if selectedIndexPaths.contains(indexPath) {
+        
+        if selectedUsers.contains(where: { $0.uid == user.uid }) {
             cell.backgroundColor = .systemPink
         } else {
             cell.backgroundColor = .clear
@@ -170,6 +165,8 @@ extension InviteListViewController: UITableViewDataSource {
 
         return cell
     }
+
+
 }
 
 extension InviteListViewController: UISearchBarDelegate {
