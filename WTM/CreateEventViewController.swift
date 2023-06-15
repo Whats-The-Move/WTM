@@ -6,45 +6,90 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class CreateEventViewController: UIViewController {
+    @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var bkgdView: UIView!
     
     @IBOutlet weak var dateAndTime: UIDatePicker!
     @IBOutlet weak var location: UITextField!
     @IBOutlet weak var descriptionText: UITextView!
     
+    @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var inviteesText: UITextView!
+    var selectedUsers: [User] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(inviteesTapped))
              inviteesText.addGestureRecognizer(tapGestureRecognizer)
              inviteesText.isUserInteractionEnabled = true
-
+        let selectedUserNames = selectedUsers.map { $0.name }
+           inviteesText.text = selectedUserNames.joined(separator: ", ")
         // Do any additional setup after loading the view.
     }
     override func viewDidLayoutSubviews() {
         descriptionText.isEditable = true
-        descriptionText.text = "Description/details"
+        //descriptionText.text = "Description/details"
         descriptionText.textAlignment = .left
         descriptionText.font = UIFont.systemFont(ofSize: 16)
         descriptionText.layer.cornerRadius = 8
         bkgdView.layer.cornerRadius = 8
         dateAndTime.layer.cornerRadius = 8
     }
+    @IBAction func createTapped(_ sender: Any) {
+    guard let eventTitle = eventTitle.text,
+              let location = location.text,
+              let eventDescription = descriptionText.text,
+              let inviteesText = inviteesText.text else {
+            return
+        }
+        let dateTime = dateAndTime.date
+
+        let currentUserUID = Auth.auth().currentUser?.uid ?? ""
+        
+        // Get the invitee UIDs as an array
+        let inviteeUIDs = selectedUsers.map { $0.uid }
+        
+        // Create a reference to the "Privates" node in Firebase Realtime Database
+        let privatesRef = Database.database().reference().child("Privates")
+        
+        // Create a new child node under "Privates" and generate a unique key
+        let newEventRef = privatesRef.childByAutoId()
+        
+        // Create a dictionary with the event information
+        let eventInfo: [String: Any] = [
+            "event": eventTitle,
+            "dateTime": dateTime.timeIntervalSince1970,
+            "location": location,
+            "description": eventDescription,
+            "invitees": inviteeUIDs,
+            "going": [],
+            "creator": currentUserUID
+        ]
+        
+        // Set the event information under the new child node
+        newEventRef.setValue(eventInfo) { error, _ in
+            if let error = error {
+                print("Error creating event: \(error.localizedDescription)")
+            } else {
+                print("Event created successfully!")
+                // TODO: Perform any additional actions after event creation
+            }
+        }
+    }
     @objc func inviteesTapped() {
-        let party = Party(name: "Joes", likes: 0, dislikes: 0, allTimeLikes: 0, allTimeDislikes: 0, address: "5", rating: 3, isGoing: [""])
-        // Create an instance of friendsGoingViewController
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let InviteListVC = storyboard.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
-        
-        // Pass the selected party object
-        InviteListVC.selectedParty = party
-        
-        InviteListVC.modalPresentationStyle = .overFullScreen
-        
-        // Present the friendsGoingVC modally
-        present(InviteListVC, animated: true, completion: nil)
+        let inviteListVC = storyboard?.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
+            inviteListVC.selectedUsers = selectedUsers  // Pass the selectedUsers array to InviteListViewController
+            inviteListVC.didSelectUsers = { [weak self] users in
+                // Update inviteesText with the names of the selected users
+                let names = users.map { $0.name }
+                self?.inviteesText.text = names.joined(separator: ", ")
+                self?.selectedUsers = users  // Update the selectedUsers array with the newly selected users
+            }
+            present(inviteListVC, animated: true, completion: nil)
     }
 
     /*
