@@ -40,16 +40,18 @@ class CreateEventViewController: UIViewController {
         dateAndTime.layer.cornerRadius = 8
     }
     @IBAction func createTapped(_ sender: Any) {
-        guard let eventTitle = eventTitle.text,
+    guard let eventTitle = eventTitle.text,
               let location = location.text,
-              let descriptionText = descriptionText.text,
+              let eventDescription = descriptionText.text,
               let inviteesText = inviteesText.text else {
             return
         }
         let dateTime = dateAndTime.date
 
         let currentUserUID = Auth.auth().currentUser?.uid ?? ""
-        let invitees = inviteesText.components(separatedBy: ",")
+        
+        // Get the invitee UIDs as an array
+        let inviteeUIDs = selectedUsers.map { $0.uid }
         
         // Create a reference to the "Privates" node in Firebase Realtime Database
         let privatesRef = Database.database().reference().child("Privates")
@@ -62,8 +64,8 @@ class CreateEventViewController: UIViewController {
             "event": eventTitle,
             "dateTime": dateTime.timeIntervalSince1970,
             "location": location,
-            "description": descriptionText,
-            "invitees": invitees,
+            "description": eventDescription,
+            "invitees": inviteeUIDs,
             "going": [],
             "creator": currentUserUID
         ]
