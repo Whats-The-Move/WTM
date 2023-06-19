@@ -10,6 +10,7 @@ import FirebaseDatabase
 import FirebaseAuth
 import FirebaseFirestore
 
+
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate {
     
     func profileClicked(for party: Party) {
@@ -242,6 +243,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                         }
                     } else { //this adds the uid to the list if they say they're going
                         attendees.append(uid)
+                        incrementSpotCount(partyName: party.name)
+
                         partyRef.child("isGoing").setValue(attendees) { error, _ in
                             if let error = error {
                                 print("Failed to update party attendance:", error)
@@ -261,7 +264,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                     }
                 }
             }
-        }
+    }
+
     //reloadlist
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
     let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
@@ -293,6 +297,45 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     }
     
 }
+func incrementSpotCount(partyName: String) {
+    let db = Firestore.firestore()
+
+    guard let currentUserUID = Auth.auth().currentUser?.uid else {
+        return
+    }
+
+    // Reference to the user document in Firestore
+    let userDocRef = db.collection("users").document(currentUserUID)
+    userDocRef.getDocument { (document, error) in
+        if let document = document, document.exists {
+            // Check if the 'spots' field exists in the document
+            if var spots = document.data()?["spots"] as? [String: Int] {
+                // Increment the visit count for the party name
+                if let count = spots[partyName] {
+                    spots[partyName] = count + 1
+                } else {
+                    spots[partyName] = 1
+                }
+                // Update the 'spots' field in the document
+                userDocRef.updateData(["spots": spots])
+            } else {
+                // Create a new 'spots' field with the party name and visit count
+                let spots = [partyName: 1]
+                userDocRef.setData(["spots": spots], merge: true)
+            }
+        } else {
+            // Document doesn't exist, handle the error
+            print("User document does not exist.")
+        }
+    }
+}
+
+
+
+
+
+
+
 
 extension AppHomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

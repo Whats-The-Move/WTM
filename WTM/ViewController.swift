@@ -152,6 +152,9 @@ class ViewController: UIViewController {
                     "email": email,
                     "uid": uid!,
                     "images": [],
+                    "bestFriends": [],
+                    "spots": []
+                    
                     //"username": username
                 ]) { (error) in
                     if let error = error {
