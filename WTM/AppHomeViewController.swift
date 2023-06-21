@@ -10,6 +10,7 @@ import FirebaseDatabase
 import FirebaseAuth
 import FirebaseFirestore
 
+
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate {
     
     func profileClicked(for party: Party) {
@@ -242,6 +243,13 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                         }
                     } else { //this adds the uid to the list if they say they're going
                         attendees.append(uid)
+                        let customCell = CustomCellClass()
+                        customCell.checkFriendshipStatus(isGoing: attendees) { result in
+                            // Call the updateBestFriends function and pass the result as a parameter
+                            updateBestFriends(commonFriends: result)
+                        }
+                        incrementSpotCount(partyName: party.name)
+
                         partyRef.child("isGoing").setValue(attendees) { error, _ in
                             if let error = error {
                                 print("Failed to update party attendance:", error)
@@ -261,7 +269,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                     }
                 }
             }
-        }
+    }
+
     //reloadlist
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
     let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
@@ -293,6 +302,89 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     }
     
 }
+func incrementSpotCount(partyName: String) {
+    let db = Firestore.firestore()
+
+    guard let currentUserUID = Auth.auth().currentUser?.uid else {
+        return
+    }
+
+    // Reference to the user document in Firestore
+    let userDocRef = db.collection("users").document(currentUserUID)
+    userDocRef.getDocument { (document, error) in
+        if let document = document, document.exists {
+            // Check if the 'spots' field exists in the document
+            if var spots = document.data()?["spots"] as? [String: Int] {
+                // Increment the visit count for the party name
+                if let count = spots[partyName] {
+                    spots[partyName] = count + 1
+                } else {
+                    spots[partyName] = 1
+                }
+                // Update the 'spots' field in the document
+                userDocRef.updateData(["spots": spots])
+            } else {
+                // Create a new 'spots' field with the party name and visit count
+                let spots = [partyName: 1]
+                userDocRef.setData(["spots": spots], merge: true)
+            }
+        } else {
+            // Document doesn't exist, handle the error
+            print("User document does not exist.")
+        }
+    }
+}
+
+
+func updateBestFriends(commonFriends: [String]) {
+    guard let currentUserUID = Auth.auth().currentUser?.uid else {
+        return
+    }
+    
+    let usersCollection = Firestore.firestore().collection("users")
+    let userDocument = usersCollection.document(currentUserUID)
+    
+    userDocument.getDocument { (document, error) in
+        if let document = document, document.exists {
+            var bestFriends = document.data()?["bestFriends"] as? [String: Int] ?? [:]
+            
+            for friend in commonFriends {
+                if let count = bestFriends[friend] {
+                    // Increment the count if the friend already exists
+                    bestFriends[friend] = count + 1
+                } else {
+                    // Add the friend with a count of 1 if they don't exist
+                    bestFriends[friend] = 1
+                }
+            }
+            
+            // Update the "bestFriends" field in Firestore
+            userDocument.setData(["bestFriends": bestFriends], merge: true) { error in
+                if let error = error {
+                    print("Error updating best friends: \(error.localizedDescription)")
+                } else {
+                    print("Best friends updated successfully!")
+                }
+            }
+        } else if let error = error {
+            print("Error accessing user document: \(error.localizedDescription)")
+        } else {
+            // Create the "bestFriends" field if it doesn't exist
+            userDocument.setData(["bestFriends": [:]]) { error in
+                if let error = error {
+                    print("Error creating best friends field: \(error.localizedDescription)")
+                } else {
+                    print("Best friends field created successfully!")
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
 
 extension AppHomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
