@@ -175,7 +175,7 @@ class BadgesViewController: UIViewController {
                 }
             }
             if let countLabel = bestFriendsView.viewWithTag(tag + 5) as? UILabel{
-                countLabel.text = String(friendValues[tag])
+                countLabel.text = String(friendValues[tag - 1])
                 
             }
 
