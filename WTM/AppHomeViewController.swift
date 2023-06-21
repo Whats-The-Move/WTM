@@ -144,7 +144,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        print("view will appear")
         partyList.reloadData()
         super.viewWillAppear(animated)
         

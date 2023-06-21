@@ -40,6 +40,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
     @IBOutlet weak var imageUploadButton: UIButton!
     
+    @IBOutlet weak var backButton: UIButton!
     //@IBOutlet weak var borderView: UIView!
     var locationManger = CLLocationManager()
     let imagePickerController = UIImagePickerController()
@@ -48,7 +49,8 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     override func viewDidLoad() {
 
         print(party.isGoing)
-        
+        self.isModalInPresentation = true
+
         assignProfilePictures(commonFriends: commonFriends)
 
         imagePickerController.delegate = self
@@ -118,7 +120,9 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
             //super.viewDidLoad()
             
         }
-        
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissViewController))
+        swipeGesture.direction = .down
+        view.addGestureRecognizer(swipeGesture)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
         //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
@@ -241,9 +245,19 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     }
     
     @objc func dismissViewController() {
-        self.dismiss(animated: true, completion: nil)
+        print("dismissing view controller")
+        //self.dismiss(animated: true, completion: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+        TabBarController.overrideUserInterfaceStyle = .dark
+        TabBarController.modalPresentationStyle = .fullScreen
+        present(TabBarController, animated: false, completion: nil)
+        
     }
     
+    @IBAction func backButtonTapped(_ sender: Any) {
+        dismissViewController()
+    }
     @IBAction func isGoingButtonClicked(_ sender: Any) {
         guard let uid = Auth.auth().currentUser?.uid else {
             print("User not authenticated.")
