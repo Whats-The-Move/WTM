@@ -261,6 +261,12 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
                     } else {
                         attendees.append(uid)
+                        let customCell = CustomCellClass()
+                        customCell.checkFriendshipStatus(isGoing: attendees) { result in
+                            // Call the updateBestFriends function and pass the result as a parameter
+                            AppHomeViewController().updateBestFriends(commonFriends: result)
+                        }
+                        AppHomeViewController().incrementSpotCount(partyName: self?.party.name ?? "")
                         self?.userGoing = true
                         self!.checkIfUserIsGoing(party: self!.party)
 
