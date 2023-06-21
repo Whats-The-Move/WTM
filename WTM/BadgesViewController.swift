@@ -57,6 +57,15 @@ class BadgesViewController: UIViewController {
         }
         //continue viewdidload here
         // Do any additional setup after loading the view.
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
+        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGesture)
+        
+    }
+    
+    @objc func dismissViewController() {
+        self.dismiss(animated: true, completion: nil)
     }
     /*override func viewDidLayoutSubviews() {
         bestFriendsView.layer.cornerRadius = 10
