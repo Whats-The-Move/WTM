@@ -60,31 +60,16 @@ class CustomCellClass: UITableViewCell {
                 goingButton.backgroundColor = backgroundColor
                 goingButton.layer.cornerRadius = 8.0
                 goingButton.layer.masksToBounds = true
-
-               
                
             }
             goingButton.addTarget(self, action: #selector(buttonClicked(_:)), for: .touchUpInside)
-            
-            
 
-
-            // let backgroundColor = isGoing ? UIColor.green : UIColor.systemPink
-            // goingButton.backgroundColor = backgroundColor
         }
-
+        //self.assignProfilePictures(commonFriends: [])
         checkFriendshipStatus(isGoing: party.isGoing) { commonFriends in
-            // Handle the commonFriends array here
-
-
             self.assignProfilePictures(commonFriends: commonFriends)
             //print(commonFriends)
-            
-
         }
-
-
-
     }
     
     func checkFriendshipStatus(isGoing: [String], completion: @escaping ([String]) -> Void) {
@@ -105,7 +90,7 @@ class CustomCellClass: UITableViewCell {
                 }
 
                 let commonFriends = friendList.filter { isGoing.contains($0) }
-
+                print(commonFriends)
                 completion(commonFriends)
             } else {
                 print("Error: Current user document does not exist.")
@@ -116,6 +101,11 @@ class CustomCellClass: UITableViewCell {
 
     func assignProfilePictures(commonFriends: [String]) {
         let imageTags = [5, 6, 7, 8] // Update with the appropriate image view tags
+        for tag in imageTags {
+                if let profileImageView = self.viewWithTag(tag) as? UIImageView {
+                    profileImageView.isHidden = true
+                }
+            }
         if commonFriends.count - 4 > 0 {
             if let plusMore = viewWithTag(10) as? UILabel {
                 plusMore.text = "+" + String(commonFriends.count - 4) 
@@ -126,12 +116,15 @@ class CustomCellClass: UITableViewCell {
                 plusMore.text = ""
             }
         }
+        
         for i in 0..<min(commonFriends.count, imageTags.count) {
             let friendUID = commonFriends[i]
             let tag = imageTags[i]
             
             if let profileImageView = self.viewWithTag(tag) as? UIImageView {
                 // Assign profile picture to the image view
+                profileImageView.isHidden = false
+
                 profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
                 profileImageView.clipsToBounds = true
                 profileImageView.contentMode = .scaleAspectFill
