@@ -101,6 +101,11 @@ class CustomCellClass: UITableViewCell {
 
     func assignProfilePictures(commonFriends: [String]) {
         let imageTags = [5, 6, 7, 8] // Update with the appropriate image view tags
+        for tag in imageTags {
+                if let profileImageView = self.viewWithTag(tag) as? UIImageView {
+                    profileImageView.isHidden = true
+                }
+            }
         if commonFriends.count - 4 > 0 {
             if let plusMore = viewWithTag(10) as? UILabel {
                 plusMore.text = "+" + String(commonFriends.count - 4) 
@@ -111,12 +116,15 @@ class CustomCellClass: UITableViewCell {
                 plusMore.text = ""
             }
         }
+        
         for i in 0..<min(commonFriends.count, imageTags.count) {
             let friendUID = commonFriends[i]
             let tag = imageTags[i]
             
             if let profileImageView = self.viewWithTag(tag) as? UIImageView {
                 // Assign profile picture to the image view
+                profileImageView.isHidden = false
+
                 profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
                 profileImageView.clipsToBounds = true
                 profileImageView.contentMode = .scaleAspectFill
