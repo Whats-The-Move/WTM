@@ -51,7 +51,8 @@ class CreateEventViewController: UIViewController {
         let currentUserUID = Auth.auth().currentUser?.uid ?? ""
         
         // Get the invitee UIDs as an array
-        let inviteeUIDs = selectedUsers.map { $0.uid }
+        var inviteeUIDs = selectedUsers.map { $0.uid }
+        inviteeUIDs.append(currentUserUID)
         
         // Create a reference to the "Privates" node in Firebase Realtime Database
         let privatesRef = Database.database().reference().child("Privates")
@@ -66,7 +67,7 @@ class CreateEventViewController: UIViewController {
             "location": location,
             "description": eventDescription,
             "invitees": inviteeUIDs,
-            "going": [],
+            "isGoing": [currentUserUID],
             "creator": currentUserUID
         ]
         
