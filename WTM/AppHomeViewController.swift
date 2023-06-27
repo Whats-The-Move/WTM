@@ -727,7 +727,11 @@ extension AppHomeViewController: UITableViewDataSource {
                                         timeFormatter.dateFormat = "hh:mm a" // Use 'hh:mm a' for 12-hour format with AM/PM
 
                                         let formattedDate = dateFormatter.string(from: date)
-                                        let formattedTime = timeFormatter.string(from: date)
+                                        var formattedTime = timeFormatter.string(from: date)
+
+                                        if formattedTime.hasPrefix("0") {
+                                            formattedTime = String(formattedTime.dropFirst())
+                                        }
                                         
                                         let usersCollection = Firestore.firestore().collection("users")
                                         let userUID = party.creator

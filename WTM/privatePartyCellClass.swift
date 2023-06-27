@@ -47,8 +47,12 @@ class privatePartyCellClass: UITableViewCell{
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a" // Use 'hh:mm a' for 12-hour format with AM/PM
 
-        let formattedDate = dateFormatter.string(from: date)
-        let formattedTime = timeFormatter.string(from: date)
+        let formattedDate = dateFormatter.string(from: date) + ", "
+        var formattedTime = timeFormatter.string(from: date)
+        
+        if formattedTime.hasPrefix("0") {
+            formattedTime = String(formattedTime.dropFirst())
+        }
         
         if let idLabel = viewWithTag(11) as? UILabel {
             idLabel.text = party.id
