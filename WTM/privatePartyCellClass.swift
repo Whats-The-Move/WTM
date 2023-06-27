@@ -49,6 +49,12 @@ class privatePartyCellClass: UITableViewCell{
 
         let formattedDate = dateFormatter.string(from: date)
         let formattedTime = timeFormatter.string(from: date)
+        
+        if let idLabel = viewWithTag(11) as? UILabel {
+            idLabel.text = party.id
+            idLabel.adjustsFontSizeToFitWidth = true
+            idLabel.isHidden = true
+        }
 
         if let partyLabel = viewWithTag(1) as? UILabel {
             partyLabel.text = party.event
