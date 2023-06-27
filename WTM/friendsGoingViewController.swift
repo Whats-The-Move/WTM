@@ -10,6 +10,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var friendsGoingTableView: UITableView!
     
     var selectedParty: Party?
+    var selectedPrivateParty: privateParty?
 
     var partyID = ""
 
@@ -22,7 +23,11 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        partyID = selectedParty?.name ?? ""
+        if publicOrPriv {
+            partyID = selectedParty?.name ?? ""
+        } else {
+            partyID = selectedPrivateParty?.event ?? ""
+        }
         print(partyID)
 
         titleText.textColor = .white
@@ -51,74 +56,145 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
             print("Error: No user is currently signed in.")
             return
         }
-        
-        let partyRef = Database.database().reference().child("Parties").child(partyID)
-        
-        partyRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
-            guard snapshot.exists() else {
-                print("No party found.")
-                return
-            }
+        if publicOrPriv {
+            let partyRef = Database.database().reference().child("Parties").child(partyID)
             
-            guard let partyDict = snapshot.value as? [String: Any],
-                  let isGoing = partyDict["isGoing"] as? [String] else {
-                print("Error: Invalid party data.")
-                return
-            }
-            
-            let userRef = Firestore.firestore().collection("users").document(currentUserUID)
-            
-            userRef.getDocument { [weak self] (document, error) in
-                if let error = error {
-                    print("Error fetching user document: \(error.localizedDescription)")
+            partyRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                guard snapshot.exists() else {
+                    print("No party found.")
                     return
                 }
                 
-                guard let document = document, document.exists,
-                      let friendList = document.data()?["friends"] as? [String] else {
-                    print("Error: No friends list found.")
+                guard let partyDict = snapshot.value as? [String: Any],
+                      let isGoing = partyDict["isGoing"] as? [String] else {
+                    print("Error: Invalid party data.")
                     return
                 }
                 
-                let commonFriendsUIDs = friendList.filter { isGoing.contains($0) }
+                let userRef = Firestore.firestore().collection("users").document(currentUserUID)
                 
-                let dispatchGroup = DispatchGroup()
-                var commonFriends: [User] = []
-                
-                for friendUID in commonFriendsUIDs {
-                    dispatchGroup.enter()
+                userRef.getDocument { [weak self] (document, error) in
+                    if let error = error {
+                        print("Error fetching user document: \(error.localizedDescription)")
+                        return
+                    }
                     
-                    let friendRef = Firestore.firestore().collection("users").document(friendUID)
+                    guard let document = document, document.exists,
+                          let friendList = document.data()?["friends"] as? [String] else {
+                        print("Error: No friends list found.")
+                        return
+                    }
                     
-                    friendRef.getDocument { (friendDocument, friendError) in
-                        defer {
-                            dispatchGroup.leave()
-                        }
+                    let commonFriendsUIDs = friendList.filter { isGoing.contains($0) }
+                    
+                    let dispatchGroup = DispatchGroup()
+                    var commonFriends: [User] = []
+                    
+                    for friendUID in commonFriendsUIDs {
+                        dispatchGroup.enter()
                         
-                        if let friendError = friendError {
-                            print("Error fetching friend document: \(friendError.localizedDescription)")
-                            return
-                        }
+                        let friendRef = Firestore.firestore().collection("users").document(friendUID)
                         
-                        guard let friendDocument = friendDocument, friendDocument.exists,
-                              let friendData = friendDocument.data(),
-                              let email = friendData["email"] as? String,
-                              let name = friendData["name"] as? String,
-                              let username = friendData["username"] as? String,
-                              let profilePic = friendData["profilePic"] as? String else {
-                            return
+                        friendRef.getDocument { (friendDocument, friendError) in
+                            defer {
+                                dispatchGroup.leave()
+                            }
+                            
+                            if let friendError = friendError {
+                                print("Error fetching friend document: \(friendError.localizedDescription)")
+                                return
+                            }
+                            
+                            guard let friendDocument = friendDocument, friendDocument.exists,
+                                  let friendData = friendDocument.data(),
+                                  let email = friendData["email"] as? String,
+                                  let name = friendData["name"] as? String,
+                                  let username = friendData["username"] as? String,
+                                  let profilePic = friendData["profilePic"] as? String else {
+                                return
+                            }
+                            
+                            let user = User(uid: friendUID, email: email, name: name, username: username, profilePic: profilePic)
+                            commonFriends.append(user)
                         }
-                        
-                        let user = User(uid: friendUID, email: email, name: name, username: username, profilePic: profilePic)
-                        commonFriends.append(user)
+                    }
+                    
+                    dispatchGroup.notify(queue: .main) {
+                        self?.friendsGoing = commonFriends
+                        self?.friendsGoingTableView.reloadData()
                     }
                 }
+            }
+        } else {
+            let partyRef = Database.database().reference().child("Privates").child(partyID)
+            
+            partyRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                guard snapshot.exists() else {
+                    print("No party found.")
+                    return
+                }
                 
-                dispatchGroup.notify(queue: .main) {
-                    self?.friendsGoing = commonFriends
-                    self?.friendsGoingTableView.reloadData()
+                guard let partyDict = snapshot.value as? [String: Any],
+                      let isGoing = partyDict["isGoing"] as? [String] else {
+                    print("Error: Invalid party data.")
+                    return
+                }
+                
+                let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+                
+                userRef.getDocument { [weak self] (document, error) in
+                    if let error = error {
+                        print("Error fetching user document: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    guard let document = document, document.exists,
+                          let friendList = document.data()?["friends"] as? [String] else {
+                        print("Error: No friends list found.")
+                        return
+                    }
+                    
+                    let commonFriendsUIDs = friendList.filter { isGoing.contains($0) }
+                    
+                    let dispatchGroup = DispatchGroup()
+                    var commonFriends: [User] = []
+                    
+                    for friendUID in commonFriendsUIDs {
+                        dispatchGroup.enter()
+                        
+                        let friendRef = Firestore.firestore().collection("users").document(friendUID)
+                        
+                        friendRef.getDocument { (friendDocument, friendError) in
+                            defer {
+                                dispatchGroup.leave()
+                            }
+                            
+                            if let friendError = friendError {
+                                print("Error fetching friend document: \(friendError.localizedDescription)")
+                                return
+                            }
+                            
+                            guard let friendDocument = friendDocument, friendDocument.exists,
+                                  let friendData = friendDocument.data(),
+                                  let email = friendData["email"] as? String,
+                                  let name = friendData["name"] as? String,
+                                  let username = friendData["username"] as? String,
+                                  let profilePic = friendData["profilePic"] as? String else {
+                                return
+                            }
+                            
+                            let user = User(uid: friendUID, email: email, name: name, username: username, profilePic: profilePic)
+                            commonFriends.append(user)
+                        }
+                    }
+                    
+                    dispatchGroup.notify(queue: .main) {
+                        self?.friendsGoing = commonFriends
+                        self?.friendsGoingTableView.reloadData()
+                    }
                 }
             }
+
         }
     }
 
