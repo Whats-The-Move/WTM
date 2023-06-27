@@ -200,16 +200,25 @@ class ViewController: UIViewController {
         email.borderStyle = .roundedRect
 
         // Set the border color and width
-
-        email.placeholder = "email"
+        var placeholderText = "Enter School Email"
+        var emailAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.lightGray,  // Set the desired color here
+        ]
+        var attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: emailAttributes)
+        email.attributedPlaceholder = attributedPlaceholder
         email.layer.borderWidth = 2
         email.layer.borderColor = UIColor.black.cgColor
         email.frame = CGRect(x: 20,
                                   y: label.frame.origin.y + label.frame.size.height + 10,
                                   width: view.frame.size.width - 40,
                                   height: 50)
-
-        password.placeholder = "6-character min"
+        
+        placeholderText = "Enter Password (6 character min)"
+        var passAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.lightGray,  // Set the desired color here
+        ]
+        attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: passAttributes)
+        password.attributedPlaceholder = attributedPlaceholder
         password.layer.borderWidth = 2
         password.layer.borderColor = UIColor.black.cgColor
         password.isSecureTextEntry = true

@@ -44,12 +44,26 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
 
 
         imagePickerController.delegate = self
-        username.placeholder = "username"
-        name.placeholder = "name"
+        let usernamePlaceholder = "Create username"
+        let namePlaceholder = "Create display name"
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.lightGray,  // Set the desired color here
+        ]
+        let attributedUsernamePlaceholder = NSAttributedString(string: usernamePlaceholder, attributes: attributes)
+        let attributedNamePlaceholder = NSAttributedString(string: namePlaceholder, attributes: attributes)
+        
+        // Set the attributed string as the placeholder of the text field
+        username.attributedPlaceholder = attributedUsernamePlaceholder
+        name.attributedPlaceholder = attributedNamePlaceholder
+        
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
         let userRef = Firestore.firestore().collection("users").document(uid)
+        
+        userRef.updateData([
+            "profilePic":  "https://firebasestorage.googleapis.com:443/v0/b/whatsthemove-1b3f6.appspot.com/o/profilePics%2FmiI524oOPzV36XHg4pBq8cro6RN2.jpg?alt=media&token=95861ebb-a7ce-4c7d-90ff-5e017e910e40"
+        ])
         
         userRef.getDocument { (document, error) in
             if let document = document, document.exists {
