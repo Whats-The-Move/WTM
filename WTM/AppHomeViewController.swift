@@ -300,7 +300,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                             // Call the updateBestFriends function and pass the result as a parameter
                             self.updateBestFriends(commonFriends: result)
                         }
-                        self.incrementSpotCount(partyName: party.id)
                         
                         partyRef.child("isGoing").setValue(attendees) { error, _ in
                             if let error = error {
@@ -655,7 +654,135 @@ extension AppHomeViewController: UITableViewDataSource {
                     }
                 }
         } else {
+            updateDicts()
             
+            if segue.identifier == "privatePopUpSegue" {
+                    print("going into private popup")
+                    let destinationVC = segue.destination as! privatePopUpViewController
+                    if let cell = sender as? UITableViewCell {
+                        if let label = cell.viewWithTag(11) as? UILabel {
+                            let uid = Auth.auth().currentUser?.uid ?? ""
+          
+                            let partyRef = Database.database().reference().child("Privates").child(label.text ?? "")
+                            var isUserGoing = false
+                            partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
+                                
+                                //HERES THE PROBLEM- not going into fuck again party of code
+                                print("segue before it goes in")
+                                if snapshot.exists() {
+                                    if let attendees = snapshot.value as? [String] {
+                                        isUserGoing = attendees.contains(uid)
+                                        print("is user going: \(isUserGoing)")
+                                        destinationVC.userGoing = isUserGoing
+                                        let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
+                                        let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
+                                        
+                                        let backgroundColor = isUserGoing ? greenColor : pinkColor
+                                        print(backgroundColor)
+                                        destinationVC.isGoingButton.backgroundColor = backgroundColor
+                                        let buttonText = isUserGoing ? "I'm Going!" : "Not going"
+                                        destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
+                                        destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
+
+                                        // Assuming you have a button instance called 'myButton'
+                                        destinationVC.isGoingButton.setTitle(buttonText, for: .normal)
+                                        destinationVC.isGoingButton.layer.cornerRadius = 8
+                                    }
+                                }
+                            }
+
+                            
+                
+
+                            databaseRef = Database.database().reference().child("Privates").child(label.text ?? "")
+                            
+                            databaseRef?.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                                if let value = snapshot.value as? [String: Any] {
+
+                                    let key = snapshot.key
+                                    print("Party Key: \(key)")
+                                    
+                                    if let datetime = value["dateTime"] as? Int,
+                                       let location = value["location"] as? String,
+                                       let creator = value["creator"] as? String,
+                                       let description = value["description"] as? String,
+                                       let event = value["event"] as? String,
+                                       let invitees = value["invitees"] as? [String],
+                                       let isGoing = value["isGoing"] as? [String] {
+                                        let party = privateParty(id: key, creator: creator, datetime: datetime, description: description, event: event, invitees: invitees, location: location, isGoing: isGoing)
+                                        destinationVC.party = party
+                                        destinationVC.assignProfilePictures(commonFriends: party.isGoing)
+                                        
+                                        destinationVC.numPeople.text = String(party.isGoing.count) + " people attending total"
+                                        destinationVC.numPeople.textColor = UIColor.black
+                                        destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
+                                        
+                                        let timestamp: TimeInterval = TimeInterval(party.datetime) // Replace with your actual timestamp
+                                        let date = Date(timeIntervalSince1970: timestamp)
+
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "MMMM d" // Use 'MMMM d' for the date format like "June 6"
+
+                                        let timeFormatter = DateFormatter()
+                                        timeFormatter.dateFormat = "hh:mm a" // Use 'hh:mm a' for 12-hour format with AM/PM
+
+                                        let formattedDate = dateFormatter.string(from: date)
+                                        let formattedTime = timeFormatter.string(from: date)
+                                        
+                                        let usersCollection = Firestore.firestore().collection("users")
+                                        let userUID = party.creator
+                                        
+                                        usersCollection.document(userUID).getDocument { snapshot, error in
+                                            if let error = error {
+                                                print("Error fetching user document: \(error)")
+                                                return
+                                            }
+                                            
+                                            guard let document = snapshot, document.exists else {
+                                                print("User document does not exist")
+                                                return
+                                            }
+                                            
+                                            if let userName = document.data()?["name"] as? String {
+                                                destinationVC.creatorLabel.text = userName
+                                            } else {
+                                                print("User name not found in the document")
+                                            }
+                                            
+                                            if let profilePictureURL = document.data()?["profilePic"] as? String,
+                                               let url = URL(string: profilePictureURL) {
+                                                let imageView = UIImageView()
+                                                imageView.kf.setImage(with: url)
+                                                destinationVC.creatorProfilePic.image = imageView.image
+                                            } else {
+                                                print("Profile picture URL not found in the document")
+                                            }
+                                        }
+                                        
+                                        destinationVC.titleLabel.text = party.event
+                                        destinationVC.locationLabel.text = "Location: " + party.location
+                                        destinationVC.dateLabel.text = "Date: " + formattedDate
+                                        destinationVC.timeLabel.text = "Time: " + formattedTime
+                                        
+                                        let descriptionText = "Description: " + party.description
+                                        let attributedText = NSMutableAttributedString(string: descriptionText)
+
+                                        let fontSize: CGFloat = 14.0 // The desired font size for party.description
+
+                                        let range = (descriptionText as NSString).range(of: party.description)
+                                        let font = UIFont.systemFont(ofSize: fontSize)
+
+                                        attributedText.addAttribute(.font, value: font, range: range)
+
+                                        destinationVC.descriptionLabel.attributedText = attributedText
+
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                }
         }
     }
     

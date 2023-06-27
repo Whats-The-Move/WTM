@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */; };
 		083B618E2A1FCE6400018798 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 083B618D2A1FCE6400018798 /* video.png */; };
 		083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083B618F2A1FD00400018798 /* CustomCellClass.swift */; };
 		086042D129C292C900066892 /* reviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086042D029C292C900066892 /* reviewViewController.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePopUpViewController.swift; sourceTree = "<group>"; };
 		083B618D2A1FCE6400018798 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
 		083B618F2A1FD00400018798 /* CustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellClass.swift; sourceTree = "<group>"; };
 		086042D029C292C900066892 /* reviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewViewController.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */,
 				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
 				08CF03D8297D52770074A878 /* popUpViewController.swift */,
+				082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */,
 				08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */,
 				08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */,
 				08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */,
@@ -520,6 +523,7 @@
 				103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */,
 				08F92B832A2AC68500ABB873 /* pendingFriendRequestViewController.swift in Sources */,
 				10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */,
+				082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
 				08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */,
 				10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */,
