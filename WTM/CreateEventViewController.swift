@@ -80,6 +80,18 @@ class CreateEventViewController: UIViewController {
                 // TODO: Perform any additional actions after event creation
             }
         }
+        
+        self.eventTitle.text = ""
+        self.location.text = ""
+        descriptionText.text = ""
+        self.inviteesText.text = ""
+        
+        // Display a message
+        let alertController = UIAlertController(title: "Congratulations", message: "You have created an event!", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+        
     }
     @objc func inviteesTapped() {
         let inviteListVC = storyboard?.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
