@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class CreateEventViewController: UIViewController {
+class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
     @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var bkgdView: UIView!
     
@@ -23,6 +23,20 @@ class CreateEventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        eventTitle.delegate = self
+        location.delegate = self
+        descriptionText.delegate = self
+        inviteesText.delegate = self
+        
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        swipeGesture.direction = .down
+        swipeGesture.delegate = self
+        descriptionText.addGestureRecognizer(swipeGesture)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(inviteesTapped))
              inviteesText.addGestureRecognizer(tapGestureRecognizer)
              inviteesText.isUserInteractionEnabled = true
@@ -30,6 +44,53 @@ class CreateEventViewController: UIViewController {
            inviteesText.text = selectedUserNames.joined(separator: ", ")
         // Do any additional setup after loading the view.
     }
+    
+    @objc func dismissKeyboard() {
+        descriptionText.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        // Restore the original position of the view
+        UIView.animate(withDuration: 0.3) {
+            self.view.transform = .identity
+        }
+    }
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+
+        // Calculate the height of the keyboard
+        let keyboardHeight = keyboardFrame.size.height
+
+        // Check if the text field is hidden by the keyboard
+        if eventTitle.isFirstResponder || location.isFirstResponder || descriptionText.isFirstResponder ||  inviteesText.isFirstResponder {
+            let maxY = max(eventTitle.frame.maxY, location.frame.maxY, descriptionText.frame.maxY, inviteesText.frame.maxY)
+            let visibleHeight = view.frame.height - keyboardHeight
+            if maxY > visibleHeight {
+                // Adjust the view's frame to move the text field above the keyboard
+                let offsetY = maxY - visibleHeight + 10 // Add 10 for padding
+                UIView.animate(withDuration: 0.3) {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: -offsetY)
+                }
+            }
+        }
+    }
+    
     override func viewDidLayoutSubviews() {
         descriptionText.isEditable = true
         //descriptionText.text = "Description/details"

@@ -87,11 +87,71 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var userVotes = [String : Int]()
     public var rankDict = [String : Int]()
     public var ratingDict = [String : Double]()
+    public var friendsAttendingDict = [String : Int]()
     public var countNum = 34
     public var privNum = 0
+    
+    func calculateFriendsAttending() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("User not authenticated.")
+            return
+        }
+
+        let partiesRef = Database.database().reference().child("Parties")
+
+        // Retrieve the list of parties
+        partiesRef.observeSingleEvent(of: .value) { snapshot in
+            guard let partiesSnapshot = snapshot.children.allObjects as? [DataSnapshot] else {
+                print("Failed to retrieve parties.")
+                return
+            }
+
+            var friendsAttendingDict: [String: Int] = [:] // Initialize the friendsAttendingDict dictionary
+
+            for partySnapshot in partiesSnapshot {
+                let partyID = partySnapshot.key
+
+                guard let attendeesSnapshotArray = partySnapshot.childSnapshot(forPath: "isGoing").value as? [String] else {
+                    print("Failed to retrieve attendees for party: \(partyID)")
+                    continue
+                }
+
+                var friendsCount = 0
+
+                let dispatchGroup = DispatchGroup()
+
+                for attendeeID in attendeesSnapshotArray {
+                    dispatchGroup.enter()
+
+                    let userRef = Firestore.firestore().collection("users").document(currentUserID)
+
+                    userRef.getDocument { (document, error) in
+                        if let document = document, document.exists {
+                            guard let friendList = document.data()?["friends"] as? [String] else {
+                                print("Error: No friends list found.")
+                                dispatchGroup.leave()
+                                return
+                            }
+
+                            if friendList.contains(attendeeID) {
+                                friendsCount += 1
+                            }
+                        } else {
+                            print("Error: Current user document does not exist.")
+                        }
+
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+        }
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        calculateFriendsAttending()
         
         if publicOrPriv {
             segmentedController.selectedSegmentIndex = 0
@@ -148,18 +208,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                         let indexPath = IndexPath(row: 0, section: 0)
                         self?.partyList.insertRows(at: [indexPath], with: .automatic)
                         self?.countNum -= 1
-                        //if((self?.parties.count)! <= 58){
-                          //  self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                        //} else {
-                        /*
-                            self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                                self?.scrollToTop()
-                                print("scrolled to top")
-                         
-                            }
-                         */
-                        //}
                     }
                 }
             }
