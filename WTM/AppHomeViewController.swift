@@ -93,7 +93,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var userVotes = [String : Int]()
     public var rankDict = [String : Int]()
     public var ratingDict = [String : Double]()
-    public var friendsAttendingDict = [String : Int]()
     public var countNum = 34
     public var privNum = 0
     public var sortedParties: [(partyID: String, friendsCount: Int)] = []
@@ -170,7 +169,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 return
             }
 
-            var friendsAttendingDict: [String: Int] = [:] // Initialize the friendsAttendingDict dictionary
+            var friendsAttendingDict: [String: (friendsCount: Int, isGoingCount: Int)] = [:] // Initialize the friendsAttendingDict dictionary
 
             let dispatchGroup = DispatchGroup() // Create a dispatch group to wait for all queries to finish
 
@@ -209,14 +208,22 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 }
 
                 dispatchGroup.notify(queue: .main) {
-                    friendsAttendingDict[partyID] = friendsCount
+                    let isGoingCount = attendeesSnapshotArray.count
+
+                    friendsAttendingDict[partyID] = (friendsCount: friendsCount, isGoingCount: isGoingCount)
 
                     // Check if all parties have been processed
                     if friendsAttendingDict.count == partiesSnapshot.count {
-                        // Sort the parties based on the number of friends attending
+                        // Sort the parties based on the number of friends attending and the "isGoing" count
                         self.sortedParties = friendsAttendingDict
-                            .sorted(by: { $0.value > $1.value })
-                            .map { (partyID: $0.key, friendsCount: $0.value) }
+                            .sorted(by: { (entry1, entry2) -> Bool in
+                                if entry1.value.friendsCount != entry2.value.friendsCount {
+                                    return entry1.value.friendsCount > entry2.value.friendsCount
+                                } else {
+                                    return entry1.value.isGoingCount > entry2.value.isGoingCount
+                                }
+                            })
+                            .map { (partyID: $0.key, friendsCount: $0.value.friendsCount) }
 
                         self.updateUIWithSortedParties()
                     }
