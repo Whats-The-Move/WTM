@@ -10,6 +10,11 @@ import FirebaseDatabase
 import FirebaseAuth
 import FirebaseFirestore
 
+extension Party: Equatable {
+    static func == (lhs: Party, rhs: Party) -> Bool {
+        return lhs.name == rhs.name
+    }
+}
 
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate, privateCustomCellDelegate {
     
@@ -75,6 +80,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     var databaseRef: DatabaseReference?
     var userDatabaseRef: DatabaseReference?
     public var parties = [Party]()
+    public var partiesCloned = [Party]()
     public var privateParties = [privateParty]()
     public var likeDict = [String : Int]()
     public var dislikeDict = [String : Int]()
@@ -90,7 +96,65 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var friendsAttendingDict = [String : Int]()
     public var countNum = 34
     public var privNum = 0
-    
+    public var sortedParties: [(partyID: String, friendsCount: Int)] = []
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if publicOrPriv {
+            segmentedController.selectedSegmentIndex = 0
+        } else {
+            segmentedController.selectedSegmentIndex = 1
+        }
+
+        partyList.delegate = self
+        partyList.rowHeight = 100.0 // Adjust this value as needed
+        //partyList.rowHeight = UITableView.automaticDimension
+
+        let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
+        refreshButton.layer.cornerRadius = 4
+        logoutButton.layer.cornerRadius = 4
+        for recognizer in view.gestureRecognizers ?? [] {
+            if let swipeRecognizer = recognizer as? UISwipeGestureRecognizer, swipeRecognizer.direction == .down {
+                view.removeGestureRecognizer(swipeRecognizer)
+            }
+        }
+
+        gifImage.loadGif(name: "finalillini")
+        gifImage.contentMode = .scaleAspectFit
+        partyList.overrideUserInterfaceStyle = .dark
+        searchBar.overrideUserInterfaceStyle = .dark
+        refreshButton.overrideUserInterfaceStyle = .light
+        logoutButton.overrideUserInterfaceStyle = .light
+
+        partyList.reloadData()
+        
+        databaseRef = Database.database().reference().child("Parties")
+        databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
+            let key = snapshot.key
+            guard let value = snapshot.value as? [String : Any] else {return}
+            if let likes = value["Likes"] as? Int,
+               let dislikes = value["Dislikes"] as? Int,
+               let allTimeLikes = value["allTimeLikes"] as? Double,
+               let allTimeDislikes = value["allTimeDislikes"] as? Double,
+               let address = value["Address"] as? String,
+               let rating = value["avgStars"] as? Double,
+               let isGoing = value["isGoing"] as? [String] {
+                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing : isGoing)
+                self?.partiesCloned.insert(party, at: 0)
+                self?.partyArray.insert(party.name, at: 0)
+                self?.likeDict[party.name] = party.likes
+                self?.dislikeDict[party.name] = party.dislikes
+                self?.overallLikeDict[party.name] = party.allTimeLikes
+                self?.overallDislikeDict[party.name] = party.allTimeDislikes
+                self?.addressDict[party.name] = party.address
+                self?.ratingDict[party.name] = party.rating
+            }
+        }
+        
+        calculateFriendsAttending()
+    }
+
     func calculateFriendsAttending() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("User not authenticated.")
@@ -108,6 +172,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
             var friendsAttendingDict: [String: Int] = [:] // Initialize the friendsAttendingDict dictionary
 
+            let dispatchGroup = DispatchGroup() // Create a dispatch group to wait for all queries to finish
+
             for partySnapshot in partiesSnapshot {
                 let partyID = partySnapshot.key
 
@@ -117,8 +183,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 }
 
                 var friendsCount = 0
-
-                let dispatchGroup = DispatchGroup()
 
                 for attendeeID in attendeesSnapshotArray {
                     dispatchGroup.enter()
@@ -143,72 +207,49 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                         dispatchGroup.leave()
                     }
                 }
+
+                dispatchGroup.notify(queue: .main) {
+                    friendsAttendingDict[partyID] = friendsCount
+
+                    // Check if all parties have been processed
+                    if friendsAttendingDict.count == partiesSnapshot.count {
+                        // Sort the parties based on the number of friends attending
+                        self.sortedParties = friendsAttendingDict
+                            .sorted(by: { $0.value > $1.value })
+                            .map { (partyID: $0.key, friendsCount: $0.value) }
+
+                        self.updateUIWithSortedParties()
+                    }
+                }
             }
         }
     }
 
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        calculateFriendsAttending()
-        
+    func updateUIWithSortedParties() {
         if publicOrPriv {
-            segmentedController.selectedSegmentIndex = 0
-        } else {
-            segmentedController.selectedSegmentIndex = 1
-        }
-        
-        partyList.delegate = self
-
-        partyList.rowHeight = 100.0 // Adjust this value as needed
-        //partyList.rowHeight = UITableView.automaticDimension
-
-        let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
-        refreshButton.layer.cornerRadius = 4
-        logoutButton.layer.cornerRadius = 4        
-        for recognizer in view.gestureRecognizers ?? [] {
-            if let swipeRecognizer = recognizer as? UISwipeGestureRecognizer, swipeRecognizer.direction == .down {
-                view.removeGestureRecognizer(swipeRecognizer)
-            }
-        }
-        
-        gifImage.loadGif(name: "finalillini")
-        gifImage.contentMode = .scaleAspectFit
-        partyList.overrideUserInterfaceStyle = .dark
-        searchBar.overrideUserInterfaceStyle = .dark
-        refreshButton.overrideUserInterfaceStyle = .light
-        logoutButton.overrideUserInterfaceStyle = .light
-        
-        partyList.reloadData()
-        
-        if publicOrPriv {
-            databaseRef = Database.database().reference().child("Parties")
-            databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
-                let key = snapshot.key
-                guard let value = snapshot.value as? [String : Any] else {return}
-                if let likes = value["Likes"] as? Int,
-                    let dislikes = value["Dislikes"] as? Int,
-                    let allTimeLikes = value["allTimeLikes"] as? Double,
-                    let allTimeDislikes = value["allTimeDislikes"] as? Double,
-                    let address = value["Address"] as? String,
-                    let rating = value["avgStars"] as? Double,
-                    let isGoing = value["isGoing"] as? [String] {
-                    let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing : isGoing)
-                    self?.parties.insert(party, at: 0)
-                    self?.likeDict[party.name] = party.likes
-                    self?.dislikeDict[party.name] = party.dislikes
-                    self?.overallLikeDict[party.name] = party.allTimeLikes
-                    self?.overallDislikeDict[party.name] = party.allTimeDislikes
-                    self?.addressDict[party.name] = party.address
-                    self?.rankDict[party.name] = self?.countNum
-                    self?.partyArray.insert(party.name, at: 0)
-                    self?.ratingDict[party.name] = party.rating
-                    if let row = self?.parties.count {
-                        let indexPath = IndexPath(row: 0, section: 0)
-                        self?.partyList.insertRows(at: [indexPath], with: .automatic)
-                        self?.countNum -= 1
-                    }
+            for partyTuple in sortedParties.reversed() {
+                let partyID = partyTuple.partyID
+                print(partyID)
+                // Access the party information directly using the party ID
+                if let party = partiesCloned.first(where: { $0.name == partyID }) {
+                    print("hello")
+                    let likes = likeDict[partyID] ?? 0
+                    let dislikes = dislikeDict[partyID] ?? 0
+                    let allTimeLikes = overallLikeDict[partyID] ?? 0.0
+                    let allTimeDislikes = overallDislikeDict[partyID] ?? 0.0
+                    let address = addressDict[partyID] ?? ""
+                    let rating = ratingDict[partyID] ?? 0.0
+                    let isGoing = party.isGoing
+                    
+                    let party = Party(name: party.name, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
+                    
+                    self.parties.insert(party, at: 0)
+                    self.rankDict[party.name] = self.countNum
+                                                        
+                    let row = 0 // Insert at the beginning of the section
+                    let indexPath = IndexPath(row: row, section: 0)
+                    partyList.insertRows(at: [indexPath], with: .automatic)
+                    self.countNum -= 1
                 }
             }
         } else {

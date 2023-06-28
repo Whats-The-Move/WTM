@@ -77,7 +77,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         print("address: \(addressLabel)")
         titleLabel.text = titleText
         titleLabel.textColor = .black
-        
+                
         //create func that checks firebase and changes color of is going, call in the viewdidload and the button clicked
 
         let geocoder = CLGeocoder()
