@@ -51,7 +51,18 @@ class SettingsViewController: UIViewController {
         }
         let saveAction = UIAlertAction(title: "Save", style: .default) { (_) in
             if let newUsername = alertController.textFields?.first?.text {
-                self.saveName(newUsername)
+                // Perform username availability check
+                self.checkUsernameAvailability(newUsername) { (isAvailable) in
+                    if isAvailable {
+                        // Username is available, save it
+                        self.saveName(newUsername)
+                    } else {
+                        // Username is already taken, display alert
+                        let alert = UIAlertController(title: "Username is taken", message: "Please choose a different username.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
             }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -59,6 +70,30 @@ class SettingsViewController: UIViewController {
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }
+    
+    func checkUsernameAvailability(_ username: String, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        let usersCollection = db.collection("users")
+        
+        // Query Firestore to check if the username is already taken
+        usersCollection.whereField("username", isEqualTo: username).getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error checking username availability: \(error.localizedDescription)")
+                completion(false) // Assume username is not available in case of error
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No matching documents found")
+                completion(true) // Username is available if no documents are found
+                return
+            }
+            
+            // If any documents are found, the username is already taken
+            completion(documents.isEmpty)
+        }
+    }
+
     func deleteAccount() {
         // Get the currently signed-in user
         guard let currentUser = Auth.auth().currentUser else {
@@ -109,6 +144,12 @@ class SettingsViewController: UIViewController {
                         
                         // Update the friends array of the user document
                         userDocRef.updateData(["friends": FieldValue.arrayRemove([currentUser.uid])]) { error in
+                            if let error = error {
+                                print("Error updating friends array: \(error.localizedDescription)")
+                            }
+                        }
+                        
+                        userDocRef.updateData(["pendingFriendRequests" : FieldValue.arrayRemove([currentUser.uid])]) { error in
                             if let error = error {
                                 print("Error updating friends array: \(error.localizedDescription)")
                             }
