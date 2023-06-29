@@ -96,6 +96,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var countNum = 34
     public var privNum = 0
     public var sortedParties: [(partyID: String, friendsCount: Int)] = []
+    public var friendsGoing = [String : [String]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,7 +171,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             }
 
             var friendsAttendingDict: [String: (friendsCount: Int, isGoingCount: Int)] = [:] // Initialize the friendsAttendingDict dictionary
-
             let dispatchGroup = DispatchGroup() // Create a dispatch group to wait for all queries to finish
 
             for partySnapshot in partiesSnapshot {
@@ -182,6 +182,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 }
 
                 var friendsCount = 0
+                var friendsGoingArray: [String] = []
 
                 for attendeeID in attendeesSnapshotArray {
                     dispatchGroup.enter()
@@ -198,6 +199,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
                             if friendList.contains(attendeeID) {
                                 friendsCount += 1
+                                friendsGoingArray.append(attendeeID)
                             }
                         } else {
                             print("Error: Current user document does not exist.")
@@ -208,14 +210,13 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 }
 
                 dispatchGroup.notify(queue: .main) {
-                    let isGoingCount = attendeesSnapshotArray.count
-
-                    friendsAttendingDict[partyID] = (friendsCount: friendsCount, isGoingCount: isGoingCount)
+                    friendsAttendingDict[partyID] = (friendsCount: friendsCount, isGoingCount: attendeesSnapshotArray.count)
+                    self.friendsGoing[partyID] = friendsGoingArray
 
                     // Check if all parties have been processed
                     if friendsAttendingDict.count == partiesSnapshot.count {
                         // Sort the parties based on the number of friends attending and the "isGoing" count
-                        self.sortedParties = friendsAttendingDict
+                        let sortedParties = friendsAttendingDict
                             .sorted(by: { (entry1, entry2) -> Bool in
                                 if entry1.value.friendsCount != entry2.value.friendsCount {
                                     return entry1.value.friendsCount > entry2.value.friendsCount
@@ -225,12 +226,21 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                             })
                             .map { (partyID: $0.key, friendsCount: $0.value.friendsCount) }
 
+                        // Now you have the sorted parties and the friendsGoing dictionary populated
+                        // You can use them as needed for further processing or displaying data
+                        print(sortedParties)
+                        print(self.friendsGoing)
+
+                        // Update your UI with the sorted parties and friendsGoing dictionary
+                        self.sortedParties = sortedParties
+                        self.friendsGoing = self.friendsGoing
                         self.updateUIWithSortedParties()
                     }
                 }
             }
         }
     }
+
 
     func updateUIWithSortedParties() {
         if publicOrPriv {
@@ -730,7 +740,7 @@ extension AppHomeViewController: UITableViewDataSource {
                                        let isGoing = value["isGoing"] as? [String] {
                                     let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
                                         destinationVC.party = party
-                                        destinationVC.assignProfilePictures(commonFriends: party.isGoing)
+                                        destinationVC.assignProfilePictures(commonFriends: self?.friendsGoing[party.name] ?? party.isGoing)
                                         
                                         destinationVC.numPeople.text = String(party.isGoing.count) + " people attending total"
                                         destinationVC.numPeople.textColor = UIColor.black
