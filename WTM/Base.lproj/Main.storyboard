@@ -1536,9 +1536,12 @@
                                         <rect key="frame" x="15" y="17" width="138" height="138"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZLw-fj-jpI">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZLw-fj-jpI">
                                         <rect key="frame" x="314" y="244" width="51" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="51" id="73e-Di-T3T"/>
+                                            <constraint firstAttribute="height" constant="35" id="zaA-uA-Y1G"/>
+                                        </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" image="arrowshape.forward.fill" catalog="system" title="">
                                             <color key="baseForegroundColor" red="0.91591566800000002" green="0.085548634669999998" blue="0.85494592250000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -1548,9 +1551,12 @@
                                             <action selector="forwardButtonTapped:" destination="RD5-aH-ryf" eventType="touchUpInside" id="8HZ-bM-InI"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cqh-Pl-QwT">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cqh-Pl-QwT">
                                         <rect key="frame" x="25" y="244" width="51" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="5KA-jD-LXp"/>
+                                            <constraint firstAttribute="width" constant="51" id="aHp-nU-V1a"/>
+                                        </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" image="arrowshape.backward.fill" catalog="system" title="">
                                             <color key="baseForegroundColor" red="0.91591566800000002" green="0.085548634669999998" blue="0.85494592250000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -1560,10 +1566,13 @@
                                             <action selector="backButtonTapped:" destination="RD5-aH-ryf" eventType="touchUpInside" id="kB3-dP-8IY"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7DR-iT-d3h">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7DR-iT-d3h">
                                         <rect key="frame" x="66" y="244" width="258" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="258" id="QVj-c7-ZpR"/>
+                                            <constraint firstAttribute="height" constant="35" id="Tfs-op-iIj"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="1" green="0.4162067089" blue="0.95926800339999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
@@ -1599,9 +1608,16 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="7DR-iT-d3h" secondAttribute="trailing" constant="66" id="21O-iC-1Ll"/>
+                                    <constraint firstItem="2bB-9e-mCj" firstAttribute="top" secondItem="7DR-iT-d3h" secondAttribute="bottom" constant="13.33" id="Dbr-eU-BKW"/>
+                                    <constraint firstItem="2bB-9e-mCj" firstAttribute="top" secondItem="Cqh-Pl-QwT" secondAttribute="bottom" constant="13.33" id="EJw-0C-M6j"/>
                                     <constraint firstAttribute="bottom" secondItem="2bB-9e-mCj" secondAttribute="bottom" id="Qxn-AI-NvK"/>
                                     <constraint firstAttribute="trailing" secondItem="2bB-9e-mCj" secondAttribute="trailing" constant="25" id="W9H-AX-yyd"/>
+                                    <constraint firstItem="7DR-iT-d3h" firstAttribute="leading" secondItem="AUU-m8-baX" secondAttribute="leading" constant="66" id="hfn-7u-moF"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZLw-fj-jpI" secondAttribute="trailing" constant="25" id="qrP-TG-Gma"/>
+                                    <constraint firstItem="2bB-9e-mCj" firstAttribute="top" secondItem="ZLw-fj-jpI" secondAttribute="bottom" constant="13.33" id="sgI-GT-7jY"/>
                                     <constraint firstItem="2bB-9e-mCj" firstAttribute="leading" secondItem="AUU-m8-baX" secondAttribute="leading" constant="25" id="td6-bC-3yV"/>
+                                    <constraint firstItem="Cqh-Pl-QwT" firstAttribute="leading" secondItem="AUU-m8-baX" secondAttribute="leading" constant="25" id="xe3-CM-ITh"/>
                                 </constraints>
                             </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="WTM_" translatesAutoresizingMaskIntoConstraints="NO" id="AYO-6i-HCe">
