@@ -17,7 +17,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var datesWithPictures: [String] = []
     var currentDateIndex: Int = 0
     var currentImages: [String] = []
-
+    var profBool = true
     var calendar = FSCalendar()
     let imagePickerController = UIImagePickerController()
     
@@ -36,9 +36,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBOutlet weak var backButton: UIButton!
     
+    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var badgesButton: UIButton!
+    @IBOutlet weak var addFriends: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
+    
+    @IBOutlet weak var imageUploadButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //mainPicture.image = UIImage(named: "default_photo")
+
         mainPicture.isUserInteractionEnabled = true
         let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(mainPictureTapped))
         mainPicture.addGestureRecognizer(pictapGesture)
@@ -60,7 +68,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     if let data = document.data(), let username = data["username"] as? String {
                         // Access the username value
                         
-                        self.userbox.text = username
+                        self.userbox.text = "username: " + username
                     }
                 }
                 
@@ -124,6 +132,45 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
     }
     
+    @IBAction func imageUploadButtonTapped(_ sender: Any) {
+        self.profBool = false
+        let imagePickerActionSheet = UIAlertController(title: "Select Image", message: nil, preferredStyle: .actionSheet)
+               if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                   let libraryButton = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
+                       self.imagePickerController.sourceType = .photoLibrary
+                       self.present(self.imagePickerController, animated: true, completion: nil)
+                   }
+                   imagePickerActionSheet.addAction(libraryButton)
+               }
+               
+               if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                   let cameraButton = UIAlertAction(title: "Take Photo", style: .default) { (action) in
+                       CameraPermissionManager.checkCameraPermission { granted in
+                           if granted {
+                               DispatchQueue.main.async {
+                                   self.imagePickerController.sourceType = .camera
+                                   self.present(self.imagePickerController, animated: true, completion: nil)
+                               }
+                           } else {
+                               // Camera permission not granted, show an alert
+                               let alert = UIAlertController(title: "Camera Access Denied", message: "Please enable camera access in Settings to take photos.", preferredStyle: .alert)
+                               let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                               alert.addAction(okAction)
+                               self.present(alert, animated: true, completion: nil)
+                           }
+                       }
+                   }
+                   imagePickerActionSheet.addAction(cameraButton)
+               }
+               
+               let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+               imagePickerActionSheet.addAction(cancelButton)
+               
+               present(imagePickerActionSheet, animated: true, completion: nil)
+         
+    }
+   
+    
     @objc func mainPictureTapped() {
         updateMainPicture(for: dateLabel.text ?? "error")
         guard currentImages.count > 0 else {
@@ -172,18 +219,28 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        userbox.adjustsFontSizeToFitWidth = true
+        nameLabel.adjustsFontSizeToFitWidth = true
+        //nameLabel.sizeToFit()
+        //editNameImage.frame = CGRect(x: nameLabel.frame.origin.x + nameLabel.frame.size.width - nameLabel.frame.size.height, y: nameLabel.frame.origin.y, width: nameLabel.frame.size.height, height: nameLabel.frame.size.height)
+        nameLabel.layer.cornerRadius = 5
+        addFriends.layer.cornerRadius = 10
+        addFriends.setTitle("", for: .normal)
+        //addFriends.layer.borderWidth = 2.0 // Set border width
+        //addFriends.layer.borderColor = UIColor.black.cgColor // Set border color
+        addFriends.layer.cornerRadius = 5
+        badgesButton.layer.cornerRadius = 5
         profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
         profilePic.clipsToBounds = true
         profilePic.contentMode = .scaleAspectFill
-        mainPicture.layer.cornerRadius = mainPicture.frame.size.width / 2
+        //mainPicture.layer.cornerRadius = mainPicture.frame.size.width / 2
         mainPicture.clipsToBounds = true
         mainPicture.contentMode = .scaleAspectFill
         calendar.frame = CGRect(x: 50, y: dateLabel.frame.origin.y + 30, width: view.frame.size.width * 3/4, height: view.frame.size.width) // Set the desired frame for the calendar view
         calendar.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         view.addSubview(calendar)
-        bkgdView.layer.cornerRadius = 10.0
-        bkgdView.layer.masksToBounds = true
+        //bkgdView.layer.cornerRadius = 10.0
+        //bkgdView.layer.masksToBounds = true
         //backButton.setTitle("", for: .normal)
         //forwardButton.setTitle("", for: .normal)
         //dateLabel.text = "hello"
@@ -375,6 +432,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBAction func editProfileClicked(_ sender: Any) {
         
         // Check camera permission
+        self.profBool = true
         let permissionManager = CameraPermissionManager()
         CameraPermissionManager.checkCameraPermission { granted in
             if granted {
@@ -425,73 +483,173 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        var uid = ""
-        if let currentUser = Auth.auth().currentUser {
-            // User is signed in
-            uid = currentUser.uid
-            // Now you can use the `uid` variable to perform any necessary operations
-            print("User UID: \(uid)")
-        } else {
-            // No user is signed in
-            print("No user is currently signed in")
-        }
-        if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            // Update the profile picture locally
-            profilePic.image = selectedImage
+        if self.profBool{
             
-            // Upload the image to Firebase Storage
-            let storageRef = Storage.storage().reference().child("profilePics/\(String(describing: uid)).jpg")
             
-            guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
-                return
+            var uid = ""
+            if let currentUser = Auth.auth().currentUser {
+                // User is signed in
+                uid = currentUser.uid
+                // Now you can use the `uid` variable to perform any necessary operations
+                print("User UID: \(uid)")
+            } else {
+                // No user is signed in
+                print("No user is currently signed in")
             }
-            
-            storageRef.putData(imageData, metadata: nil) { (metadata, error) in
-                if let error = error {
-                    // Handle the error
-                    print("Error uploading image: \(error.localizedDescription)")
+            if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                // Update the profile picture locally
+                profilePic.image = selectedImage
+                
+                // Upload the image to Firebase Storage
+                let storageRef = Storage.storage().reference().child("profilePics/\(String(describing: uid)).jpg")
+                
+                guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
                     return
                 }
                 
-                // Once the image is uploaded, get its download URL and store it in Firestore
-                storageRef.downloadURL { (url, error) in
-                    guard let downloadURL = url else {
+                storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                    if let error = error {
                         // Handle the error
-                        print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
+                        print("Error uploading image: \(error.localizedDescription)")
                         return
                     }
                     
-                    // Store the download URL in Firestore
-                    
-                    if let currentUser = Auth.auth().currentUser {
-                        // User is signed in
-                        let uid = currentUser.uid
-                        
-                        let userRef = Firestore.firestore().collection("users").document(uid)
-                        let data: [String: Any] = [
-                            "profilePic": downloadURL.absoluteString,
-                        ]
-                        
-                        userRef.setData(data, merge: true) { error in
-                            if let error = error {
-                                // Handle the error
-                                print("Error creating Firestore document: \(error.localizedDescription)")
-                                return
-                            }
-                            
-                            // Success!
-                            print("Image uploaded and download URL stored in Firestore!")
-                            
+                    // Once the image is uploaded, get its download URL and store it in Firestore
+                    storageRef.downloadURL { (url, error) in
+                        guard let downloadURL = url else {
+                            // Handle the error
+                            print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
+                            return
                         }
-                    } else {
-                        // No user is signed in
-                        print("No user is currently signed in")
+                        
+                        // Store the download URL in Firestore
+                        
+                        if let currentUser = Auth.auth().currentUser {
+                            // User is signed in
+                            let uid = currentUser.uid
+                            
+                            let userRef = Firestore.firestore().collection("users").document(uid)
+                            let data: [String: Any] = [
+                                "profilePic": downloadURL.absoluteString,
+                            ]
+                            
+                            userRef.setData(data, merge: true) { error in
+                                if let error = error {
+                                    // Handle the error
+                                    print("Error creating Firestore document: \(error.localizedDescription)")
+                                    return
+                                }
+                                
+                                // Success!
+                                print("Image uploaded and download URL stored in Firestore!")
+                                
+                            }
+                        } else {
+                            // No user is signed in
+                            print("No user is currently signed in")
+                        }
                     }
                 }
             }
+            
+            dismiss(animated: true, completion: nil)
+        }
+        else{
+            if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                // Upload the image to Firebase Storage
+                let storageRef = Storage.storage().reference().child("partyImages/\(UUID().uuidString).jpg")
+                //"partyImages/\(UUID().uuidString).jpg"
+                guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
+                    return
+                }
+                //DispatchQueue.main.async {}
+                    
+                storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+              
+                        
+                        if let error = error {
+                            // Handle the error
+                            print("Error uploading image: \(error.localizedDescription)")
+                            return
+                        }
+                    
+                    // Once the image is uploaded, get its download URL and store it in Firestore
+                    storageRef.downloadURL { (url, error) in
+                        
+                        guard let downloadURL = url else {
+                            // Handle the error
+                            print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
+                            return
+                        }
+                        guard let uid = Auth.auth().currentUser?.uid else {
+                            print("Error: No user is currently signed in.")
+                            return
+                        }
+
+                        let userRef = Firestore.firestore().collection("users").document(uid)
+
+                        // Get the current images dictionary from Firestore (if it exists)
+                        userRef.getDocument { (document, error) in
+                            if let document = document, document.exists {
+                                // Retrieve the current images dictionary
+                                var images = document.data()?["images"] as? [String: [String]] ?? [:]
+
+                                // Add the new image URL with the current timestamp (Unix) as the key
+                                let currentTimeStamp = Int(Date().timeIntervalSince1970) - (8 * 3600) // Subtract 5 hours in seconds
+                                
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "MMM dd yyyy"
+                                let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
+                                
+                                var imageList = images[dateString] ?? []
+                                imageList.append(downloadURL.absoluteString)
+                                images[dateString] = imageList
+
+                                // Update the images field in Firestore
+                                userRef.updateData(["images": images]) { error in
+                                    if let error = error {
+                                        // Handle the error
+                                        print("Error updating Firestore document: \(error.localizedDescription)")
+                                        return
+                                    }
+                                    // Images updated successfully
+                                }
+                            } else {
+                                // Document doesn't exist, create a new document with the image URL
+                                let currentTimeStamp = Int(Date().timeIntervalSince1970) - (8 * 3600) // Subtract 12 hours in seconds
+                                
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "dd MMM yyyy"
+                                let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
+                                
+                                let images = [dateString: [downloadURL.absoluteString]]
+
+                                // Set the images field in Firestore
+                                userRef.setData(["images": images]) { error in
+                                    if let error = error {
+                                        // Handle the error
+                                        print("Error creating Firestore document: \(error.localizedDescription)")
+                                        return
+                                    }
+                                    // Images created successfully
+                                }
+                            }
+                        }
+
+                        
+                    }
+                }
+            }
+            
+            dismiss(animated: true, completion: nil)
+            picker.dismiss(animated: true, completion: nil)
+
+
+
+           
+            
         }
         
-        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func backButtonTapped(_ sender: Any) {

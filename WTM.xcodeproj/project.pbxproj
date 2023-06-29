@@ -39,6 +39,7 @@
 		103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D809D2A38D6610032E4D3 /* CreateEventViewController.swift */; };
 		103D80A02A38E71F0032E4D3 /* InviteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */; };
 		103D80A22A3E77870032E4D3 /* BadgesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D80A12A3E77870032E4D3 /* BadgesViewController.swift */; };
+		103D80A52A4BC9D10032E4D3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D80A42A4BC9D10032E4D3 /* SettingsViewController.swift */; };
 		105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */; };
 		10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */; };
 		10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */; };
@@ -109,6 +110,7 @@
 		103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteListViewController.swift; sourceTree = "<group>"; };
 		103D80A12A3E77870032E4D3 /* BadgesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgesViewController.swift; sourceTree = "<group>"; };
 		103D80A32A428B200032E4D3 /* WTMDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WTMDebug.entitlements; sourceTree = "<group>"; };
+		103D80A42A4BC9D10032E4D3 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFriendsViewController.swift; sourceTree = "<group>"; };
 		10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyAcctViewController.swift; sourceTree = "<group>"; };
 		10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewController.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
 				08D313A02A4A5CBA00FBF023 /* privateParty.swift */,
+				103D80A42A4BC9D10032E4D3 /* SettingsViewController.swift */,
 				08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */,
 				08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */,
 				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
@@ -525,6 +528,7 @@
 				10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */,
 				082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
+				103D80A52A4BC9D10032E4D3 /* SettingsViewController.swift in Sources */,
 				08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */,
 				10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
