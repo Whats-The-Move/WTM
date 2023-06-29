@@ -10,6 +10,11 @@ import FirebaseDatabase
 import FirebaseAuth
 import FirebaseFirestore
 
+extension Party: Equatable {
+    static func == (lhs: Party, rhs: Party) -> Bool {
+        return lhs.name == rhs.name
+    }
+}
 
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate, privateCustomCellDelegate {
     
@@ -75,6 +80,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     var databaseRef: DatabaseReference?
     var userDatabaseRef: DatabaseReference?
     public var parties = [Party]()
+    public var partiesCloned = [Party]()
     public var privateParties = [privateParty]()
     public var likeDict = [String : Int]()
     public var dislikeDict = [String : Int]()
@@ -89,78 +95,168 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var ratingDict = [String : Double]()
     public var countNum = 34
     public var privNum = 0
+    public var sortedParties: [(partyID: String, friendsCount: Int)] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if publicOrPriv {
             segmentedController.selectedSegmentIndex = 0
         } else {
             segmentedController.selectedSegmentIndex = 1
         }
-        
-        partyList.delegate = self
 
+        partyList.delegate = self
         partyList.rowHeight = 100.0 // Adjust this value as needed
         //partyList.rowHeight = UITableView.automaticDimension
 
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
         refreshButton.layer.cornerRadius = 4
-        logoutButton.layer.cornerRadius = 4        
+        logoutButton.layer.cornerRadius = 4
         for recognizer in view.gestureRecognizers ?? [] {
             if let swipeRecognizer = recognizer as? UISwipeGestureRecognizer, swipeRecognizer.direction == .down {
                 view.removeGestureRecognizer(swipeRecognizer)
             }
         }
-        
+
         gifImage.loadGif(name: "finalillini")
         gifImage.contentMode = .scaleAspectFit
         partyList.overrideUserInterfaceStyle = .dark
         searchBar.overrideUserInterfaceStyle = .dark
         refreshButton.overrideUserInterfaceStyle = .light
         logoutButton.overrideUserInterfaceStyle = .light
-        
+
         partyList.reloadData()
         
-        if publicOrPriv {
-            databaseRef = Database.database().reference().child("Parties")
-            databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
-                let key = snapshot.key
-                guard let value = snapshot.value as? [String : Any] else {return}
-                if let likes = value["Likes"] as? Int,
-                    let dislikes = value["Dislikes"] as? Int,
-                    let allTimeLikes = value["allTimeLikes"] as? Double,
-                    let allTimeDislikes = value["allTimeDislikes"] as? Double,
-                    let address = value["Address"] as? String,
-                    let rating = value["avgStars"] as? Double,
-                    let isGoing = value["isGoing"] as? [String] {
-                    let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing : isGoing)
-                    self?.parties.insert(party, at: 0)
-                    self?.likeDict[party.name] = party.likes
-                    self?.dislikeDict[party.name] = party.dislikes
-                    self?.overallLikeDict[party.name] = party.allTimeLikes
-                    self?.overallDislikeDict[party.name] = party.allTimeDislikes
-                    self?.addressDict[party.name] = party.address
-                    self?.rankDict[party.name] = self?.countNum
-                    self?.partyArray.insert(party.name, at: 0)
-                    self?.ratingDict[party.name] = party.rating
-                    if let row = self?.parties.count {
-                        let indexPath = IndexPath(row: 0, section: 0)
-                        self?.partyList.insertRows(at: [indexPath], with: .automatic)
-                        self?.countNum -= 1
-                        //if((self?.parties.count)! <= 58){
-                          //  self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                        //} else {
-                        /*
-                            self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                                self?.scrollToTop()
-                                print("scrolled to top")
-                         
+        databaseRef = Database.database().reference().child("Parties")
+        databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
+            let key = snapshot.key
+            guard let value = snapshot.value as? [String : Any] else {return}
+            if let likes = value["Likes"] as? Int,
+               let dislikes = value["Dislikes"] as? Int,
+               let allTimeLikes = value["allTimeLikes"] as? Double,
+               let allTimeDislikes = value["allTimeDislikes"] as? Double,
+               let address = value["Address"] as? String,
+               let rating = value["avgStars"] as? Double,
+               let isGoing = value["isGoing"] as? [String] {
+                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing : isGoing)
+                self?.partiesCloned.insert(party, at: 0)
+                self?.partyArray.insert(party.name, at: 0)
+                self?.likeDict[party.name] = party.likes
+                self?.dislikeDict[party.name] = party.dislikes
+                self?.overallLikeDict[party.name] = party.allTimeLikes
+                self?.overallDislikeDict[party.name] = party.allTimeDislikes
+                self?.addressDict[party.name] = party.address
+                self?.ratingDict[party.name] = party.rating
+            }
+        }
+        
+        calculateFriendsAttending()
+    }
+
+    func calculateFriendsAttending() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("User not authenticated.")
+            return
+        }
+
+        let partiesRef = Database.database().reference().child("Parties")
+
+        // Retrieve the list of parties
+        partiesRef.observeSingleEvent(of: .value) { snapshot in
+            guard let partiesSnapshot = snapshot.children.allObjects as? [DataSnapshot] else {
+                print("Failed to retrieve parties.")
+                return
+            }
+
+            var friendsAttendingDict: [String: (friendsCount: Int, isGoingCount: Int)] = [:] // Initialize the friendsAttendingDict dictionary
+
+            let dispatchGroup = DispatchGroup() // Create a dispatch group to wait for all queries to finish
+
+            for partySnapshot in partiesSnapshot {
+                let partyID = partySnapshot.key
+
+                guard let attendeesSnapshotArray = partySnapshot.childSnapshot(forPath: "isGoing").value as? [String] else {
+                    print("Failed to retrieve attendees for party: \(partyID)")
+                    continue
+                }
+
+                var friendsCount = 0
+
+                for attendeeID in attendeesSnapshotArray {
+                    dispatchGroup.enter()
+
+                    let userRef = Firestore.firestore().collection("users").document(currentUserID)
+
+                    userRef.getDocument { (document, error) in
+                        if let document = document, document.exists {
+                            guard let friendList = document.data()?["friends"] as? [String] else {
+                                print("Error: No friends list found.")
+                                dispatchGroup.leave()
+                                return
                             }
-                         */
-                        //}
+
+                            if friendList.contains(attendeeID) {
+                                friendsCount += 1
+                            }
+                        } else {
+                            print("Error: Current user document does not exist.")
+                        }
+
+                        dispatchGroup.leave()
                     }
+                }
+
+                dispatchGroup.notify(queue: .main) {
+                    let isGoingCount = attendeesSnapshotArray.count
+
+                    friendsAttendingDict[partyID] = (friendsCount: friendsCount, isGoingCount: isGoingCount)
+
+                    // Check if all parties have been processed
+                    if friendsAttendingDict.count == partiesSnapshot.count {
+                        // Sort the parties based on the number of friends attending and the "isGoing" count
+                        self.sortedParties = friendsAttendingDict
+                            .sorted(by: { (entry1, entry2) -> Bool in
+                                if entry1.value.friendsCount != entry2.value.friendsCount {
+                                    return entry1.value.friendsCount > entry2.value.friendsCount
+                                } else {
+                                    return entry1.value.isGoingCount > entry2.value.isGoingCount
+                                }
+                            })
+                            .map { (partyID: $0.key, friendsCount: $0.value.friendsCount) }
+
+                        self.updateUIWithSortedParties()
+                    }
+                }
+            }
+        }
+    }
+
+    func updateUIWithSortedParties() {
+        if publicOrPriv {
+            for partyTuple in sortedParties.reversed() {
+                let partyID = partyTuple.partyID
+                print(partyID)
+                // Access the party information directly using the party ID
+                if let party = partiesCloned.first(where: { $0.name == partyID }) {
+                    print("hello")
+                    let likes = likeDict[partyID] ?? 0
+                    let dislikes = dislikeDict[partyID] ?? 0
+                    let allTimeLikes = overallLikeDict[partyID] ?? 0.0
+                    let allTimeDislikes = overallDislikeDict[partyID] ?? 0.0
+                    let address = addressDict[partyID] ?? ""
+                    let rating = ratingDict[partyID] ?? 0.0
+                    let isGoing = party.isGoing
+                    
+                    let party = Party(name: party.name, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
+                    
+                    self.parties.insert(party, at: 0)
+                    self.rankDict[party.name] = self.countNum
+                                                        
+                    let row = 0 // Insert at the beginning of the section
+                    let indexPath = IndexPath(row: row, section: 0)
+                    partyList.insertRows(at: [indexPath], with: .automatic)
+                    self.countNum -= 1
                 }
             }
         } else {
