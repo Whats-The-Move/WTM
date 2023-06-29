@@ -271,6 +271,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         print(string)
         updateDateLabel(selectedDate: string)
         updateMainPicture(for: string)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            // Hide the calendar view
+            calendar.isHidden = true
+        }
     }
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let dateFormatter = DateFormatter()
