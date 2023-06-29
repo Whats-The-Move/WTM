@@ -12,16 +12,30 @@ import FirebaseFirestore
 
 class friendPopUpViewController: UIViewController{
     var titleText: String = ""
+    var nameText: String = ""
     
     @IBOutlet weak var requestFriendPopUpView: UIView!
     @IBOutlet weak var addFriendButton: UIButton!
     @IBOutlet weak var friendName: UILabel!
+    @IBOutlet weak var profilePicImage: UIImageView!
+    @IBOutlet weak var displayNameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Title text: \(titleText)")
         friendName.text = titleText
         friendName.textColor = .black
+        displayNameLabel.textColor = .black
+        displayNameLabel.text = nameText
+        
+        profilePicImage.layer.cornerRadius = profilePicImage.frame.size.width / 2
+        profilePicImage.backgroundColor = UIColor(red: 1.0, green: 0.41, blue: 0.71, alpha: 1.0)
+        profilePicImage.clipsToBounds = true
+        profilePicImage.contentMode = .scaleAspectFill
+        profilePicImage.layer.borderWidth = 2.0
+        profilePicImage.layer.borderColor = UIColor(red: 1.0, green: 0.41, blue: 0.71, alpha: 1.0).cgColor
+        profilePicImage.frame = CGRect(x: profilePicImage.frame.origin.x, y: profilePicImage.frame.origin.y, width: 64, height: 64)
+        profilePicImage.isUserInteractionEnabled = true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
         //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))

@@ -123,11 +123,40 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
             let destinationVC = segue.destination as! friendPopUpViewController
             if let cell = sender as? addFriendCustomCellClass {
                 let titleText = cell.usernameLabel.text ?? "error"
-                print("Title text to be passed: \(titleText)")
+                let nameText = cell.nameLabel.text ?? "error"
+                
+                // Retrieve the user's profile picture URL from Firestore using the username as reference
+                let db = Firestore.firestore()
+                let usersCollection = db.collection("users")
+                
+                usersCollection.whereField("username", isEqualTo: titleText).getDocuments { (snapshot, error) in
+                    guard let documents = snapshot?.documents else {
+                        print("No matching documents found")
+                        return
+                    }
+                    
+                    if let profilePicURL = documents.first?.data()["profilePic"] as? String {
+                        if let profileImageURL = URL(string: profilePicURL) {
+                            DispatchQueue.global().async {
+                                if let imageData = try? Data(contentsOf: profileImageURL) {
+                                    let profilePicture = UIImage(data: imageData)
+                                    
+                                    DispatchQueue.main.async {
+                                        destinationVC.profilePicImage.image = profilePicture
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Pass the other data to the destination view controller
                 destinationVC.titleText = titleText
+                destinationVC.nameText = nameText
             }
         }
     }
+
 
     @IBAction func backButtonPushed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
