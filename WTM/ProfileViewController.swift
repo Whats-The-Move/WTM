@@ -20,7 +20,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var profBool = true
     var calendar = FSCalendar()
     let imagePickerController = UIImagePickerController()
-    
+    let noImagesForDate = "https://firebasestorage.googleapis.com:443/v0/b/whatsthemove-1b3f6.appspot.com/o/partyImages%2FF6680144-0DFE-412B-AF1A-08153AFE1372.jpg?alt=media&token=bb0f479b-3f93-4e33-add6-eb34a36bbdd5"
+    let noImages = "https://firebasestorage.googleapis.com:443/v0/b/whatsthemove-1b3f6.appspot.com/o/partyImages%2FD23F9AEA-7F6A-4AF9-9DF8-E051A6F0F11A.jpg?alt=media&token=fa278d02-f1c0-4668-a260-873aac0dd6fc"
     let db = Firestore.firestore()
 
     @IBOutlet weak var userbox: UILabel!
@@ -207,6 +208,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                         // Print the images
                         print(self.currentImages)
                     } else {
+                        self.loadImage(from: noImagesForDate, to: mainPicture)
+
                         print("No images found for the current date")
                     }
                 } else {
@@ -361,7 +364,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 } else {
                     print("No images found")
                 }
-                
+                //SOMETHING WEIRD HAPPENING HERE, WHY ARE WE SETTING THE IMAGE AND CALLING UPDATEMAINPICTURE AFTERWARD?
                 if let selectedDate = selectedDateFormatted {
                     // Iterate through the images dictionary and find the first image under the selected date
                     for (date, imageUrls) in imagesDict {
@@ -386,7 +389,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                             return
                         }
                     }
-                    
+
                     print("No image found for the selected date")
                 }
             } else {

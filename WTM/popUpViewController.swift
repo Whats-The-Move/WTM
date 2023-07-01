@@ -373,6 +373,9 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                         print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
                         return
                     }
+                    //ADD TO FRIENDS HERE
+                    print(self.commonFriends)
+                    self.addImageURLToFriends(url?.absoluteString ?? "", commonFriends: self.commonFriends)
                     guard let uid = Auth.auth().currentUser?.uid else {
                         print("Error: No user is currently signed in.")
                         return
@@ -396,7 +399,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                             var imageList = images[dateString] ?? []
                             imageList.append(downloadURL.absoluteString)
                             images[dateString] = imageList
-
+                            
                             // Update the images field in Firestore
                             userRef.updateData(["images": images]) { error in
                                 if let error = error {
@@ -408,7 +411,8 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                             }
                         } else {
                             // Document doesn't exist, create a new document with the image URL
-                            let currentTimeStamp = Int(Date().timeIntervalSince1970) - (12 * 3600) // Subtract 12 hours in seconds
+                            //this should never be actually called, everyone should have images
+                            let currentTimeStamp = Int(Date().timeIntervalSince1970) - (5 * 3600) // Subtract 12 hours in seconds
                             
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "dd MMM yyyy"
@@ -467,7 +471,41 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         
     }
 
-   
+    func addImageURLToFriends(_ downloadURL: String, commonFriends: [String]) {
+        let db = Firestore.firestore()
+        
+        // Iterate through the commonFriends array
+        for uid in commonFriends {
+            let userRef = db.collection("users").document(uid)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    var images = document.data()?["images"] as? [String: [String]] ?? [:]
+                    
+                    let currentTimeStamp = Int(Date().timeIntervalSince1970) - (5 * 3600) // Subtract 5 hours in seconds
+                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd MMM yyyy"
+                    let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
+                    
+                    var imageList = images[dateString] ?? []
+                    imageList.append(downloadURL)
+                    images[dateString] = imageList
+                    
+                    userRef.updateData(["images": images]) { error in
+                        if let error = error {
+                            print("Error updating Firestore document: \(error.localizedDescription)")
+                        } else {
+                            print("Image URL added to user: \(uid)")
+                        }
+                    }
+                } else {
+                    print("Error retrieving user document for UID: \(uid)")
+                }
+            }
+        }
+    }
+
     @objc func handleMapTap(_ sender: UITapGestureRecognizer) {
         let geocoder = CLGeocoder()
             geocoder.geocodeAddressString(addressLabel) {
