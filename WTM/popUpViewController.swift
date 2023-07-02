@@ -473,25 +473,21 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
     func addImageURLToFriends(_ downloadURL: String, commonFriends: [String]) {
         let db = Firestore.firestore()
-        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd yyyy"
+        let dateString = dateFormatter.string(from: Date())
+
         // Iterate through the commonFriends array
         for uid in commonFriends {
             let userRef = db.collection("users").document(uid)
-            
+
             userRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    var images = document.data()?["images"] as? [String: [String]] ?? [:]
-                    
-                    let currentTimeStamp = Int(Date().timeIntervalSince1970) - (5 * 3600) // Subtract 5 hours in seconds
-                    
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd MMM yyyy"
-                    let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
-                    
-                    var imageList = images[dateString] ?? []
-                    imageList.append(downloadURL)
-                    images[dateString] = imageList
-                    
+                    var images = document.data()?["images"] as? [String: [String: String]] ?? [:]
+                    var imageDict = images[dateString] ?? [:]
+                    imageDict[downloadURL] = uid
+                    images[dateString] = imageDict
+
                     userRef.updateData(["images": images]) { error in
                         if let error = error {
                             print("Error updating Firestore document: \(error.localizedDescription)")
@@ -505,6 +501,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
             }
         }
     }
+
 
     @objc func handleMapTap(_ sender: UITapGestureRecognizer) {
         let geocoder = CLGeocoder()

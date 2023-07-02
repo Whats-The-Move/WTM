@@ -44,9 +44,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBOutlet weak var imageUploadButton: UIButton!
     
+    @IBOutlet weak var creatorPic: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         //mainPicture.image = UIImage(named: "default_photo")
+        creatorPic.layer.borderWidth = 2.0
+        creatorPic.layer.borderColor = UIColor.white.cgColor
+        creatorPic.layer.cornerRadius = min(creatorPic.frame.width, creatorPic.frame.height) / 2
+        creatorPic.contentMode = .scaleAspectFill
+        creatorPic.clipsToBounds = true
 
         mainPicture.isUserInteractionEnabled = true
         let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(mainPictureTapped))
@@ -658,7 +664,49 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         
     }
-    
+    func updateCreatorImage(for date: Date, url: String) {
+        let db = Firestore.firestore()
+        
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("Error: No user is currently signed in.")
+            return
+        }
+        
+        let userRef = db.collection("users").document(uid)
+        
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let images = document.data()?["images"] as? [String: [String: String]] ?? [:]
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM dd yyyy"
+                let dateString = dateFormatter.string(from: date)
+                
+                if let imageDict = images[dateString], let creatorUID = imageDict[url] {
+                    let creatorRef = db.collection("users").document(creatorUID)
+                    
+                    creatorRef.getDocument { (creatorDocument, creatorError) in
+                        if let creatorDocument = creatorDocument, creatorDocument.exists {
+                            if let profileURL = creatorDocument.data()?["profilePic"] as? String {
+                                // The profileURL variable now holds the value of the profile picture URL
+                                print("Profile URL: \(profileURL)")
+                                self.loadImage(from: profileURL, to: self.creatorPic)
+                            } else {
+                                print("Profile picture URL not found for the creator UID: \(creatorUID)")
+                            }
+                        } else {
+                            print("Error retrieving creator document for UID: \(creatorUID)")
+                        }
+                    }
+                } else {
+                    print("URL not found for the given date")
+                }
+            } else {
+                print("Error retrieving user document for UID: \(uid)")
+            }
+        }
+    }
+
     @IBAction func backButtonTapped(_ sender: Any) {
         if datesWithPictures.count == 0 {
             let alert = UIAlertController(title: "No Pictures Added", message: "You have no pictures added yet.", preferredStyle: .alert)
