@@ -279,7 +279,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let string = formatter.string(from: date)
         print(string)
         updateDateLabel(selectedDate: string)
-        updateMainPicture(for: string)
+        //updateMainPicture(for: string) //should comment out because updatedatelabel alr takes care of it?
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             // Hide the calendar view
             calendar.isHidden = true
@@ -354,7 +354,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 }
                 
                 // Sort the dates in descending order
-                let sortedDates = imagesDict.keys.sorted(by: >)
+
+                
+                let sortedDates = imagesDict.keys.sorted { (dateString1, dateString2) -> Bool in
+                    guard let date1 = dateFormatter.date(from: dateString1),
+                          let date2 = dateFormatter.date(from: dateString2) else {
+                        // Handle invalid date format
+                        return false
+                    }
+                    
+                    return date1 > date2
+                }
+
                 print(sortedDates)
                 self.datesWithPictures = sortedDates
                 print(self.datesWithPictures)
