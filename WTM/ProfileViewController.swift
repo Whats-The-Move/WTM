@@ -321,7 +321,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
         }
     }*/
-
     func updateDateLabel(selectedDate: String? = nil) {
         // Assuming you have an outlet for your date label
         guard let dateLabel = dateLabel else {
@@ -341,7 +340,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         userRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 // Retrieve the images dictionary from the document
-                let imagesDict = document.data()?["images"] as? [String: [String]] ?? [:]
+                let imagesDict = document.data()?["images"] as? [String: [String: Any]] ?? [:]
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMM dd yyyy"
@@ -354,8 +353,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 }
                 
                 // Sort the dates in descending order
-
-                
                 let sortedDates = imagesDict.keys.sorted { (dateString1, dateString2) -> Bool in
                     guard let date1 = dateFormatter.date(from: dateString1),
                           let date2 = dateFormatter.date(from: dateString2) else {
@@ -365,23 +362,24 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     
                     return date1 > date2
                 }
-
+                
                 print(sortedDates)
                 self.datesWithPictures = sortedDates
                 print(self.datesWithPictures)
+                
                 if let firstDate = sortedDates.first {
                     // Set the date string to the label
                     dateLabel.text = dateFormatter.string(from: dateFormatter.date(from: firstDate)!)
                     
-                    // Use the imageUrls array from the most recent date
-                    if let imageUrls = imagesDict[firstDate], let firstImageUrl = imageUrls.first {
+                    // Use the imageUrls dictionary from the most recent date
+                    if let imageUrls = imagesDict[firstDate], let firstImageUrl = imageUrls.keys.first {
                         // Set the image to your image view
                         self.loadImage(from: firstImageUrl, to: self.mainPicture)
                     }
                 } else {
                     print("No images found")
                 }
-                //SOMETHING WEIRD HAPPENING HERE, WHY ARE WE SETTING THE IMAGE AND CALLING UPDATEMAINPICTURE AFTERWARD?
+                
                 if let selectedDate = selectedDateFormatted {
                     // Iterate through the images dictionary and find the first image under the selected date
                     for (date, imageUrls) in imagesDict {
@@ -396,9 +394,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                             dateLabel.text = dateFormatter.string(from: dateFormatted)
                             self.updateMainPicture(for: dateLabel.text ?? "error")
                             
-                            // Use the imageUrls array as needed
+                            // Use the imageUrls dictionary as needed
                             // For example, you can display the first image URL in an image view
-                            if let firstImageUrl = imageUrls.first {
+                            if let firstImageUrl = imageUrls.keys.first {
                                 // Set the image to your image view
                                 self.loadImage(from: firstImageUrl, to: self.mainPicture)
                             }
@@ -406,14 +404,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                             return
                         }
                     }
-
+                    
                     print("No image found for the selected date")
                 }
             } else {
                 print("User document does not exist")
             }
         }
-
     }
 
     @objc func nameLabelTapped() {
