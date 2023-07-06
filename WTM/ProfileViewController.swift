@@ -184,46 +184,50 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             return
         }
         
-        currentDateIndex = (currentDateIndex + 1) % currentImages.count
-        loadImage(from: currentImages[currentDateIndex], to: mainPicture)
+        
     }
     
     func updateMainPicture(for date: String) {
-            print("Date: \(date)")
-            
-            guard let uid = Auth.auth().currentUser?.uid else {
+        print("Date: \(date)")
+        
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        let userRef = Firestore.firestore().collection("users").document(uid)
+        
+        userRef.getDocument { [weak self] (document, error) in
+            guard let self = self, let document = document else {
+                // Handle error or nil self
                 return
             }
-
-            let userRef = db.collection("users").document(uid)
-
-            userRef.getDocument { [weak self] (document, error) in
-                guard let self = self, let document = document else {
-                    // Handle error or nil self
-                    return
-                }
+            
+            if let imagesDict = document.data()?["images"] as? [String: [String: String]] {
+                // Get the current date in the desired format
+                let currentDate = date // Your logic to get the current date in the desired format
                 
-                if let imagesDict = document.data()?["images"] as? [String: [String]] {
-                    // Get the current date in the desired format
-                    let currentDate = date// Your logic to get the current date in the desired format
+                if let currentImagesDict = imagesDict[currentDate] {
+                    // Convert the dictionary into an array of tuples (URL, UID)
+                    let currentImages = Array(currentImagesDict.keys)
                     
-                    if let currentImages = imagesDict[currentDate] {
-                        // Update the currentImages array with the images for the current date
-                        self.currentImages = currentImages
-                        
-                        // Print the images
-                        print(self.currentImages)
-                    } else {
-                        self.loadImage(from: noImagesForDate, to: mainPicture)
-
-                        print("No images found for the current date")
-                    }
+                    // Update the currentImages array with the image URLs for the current date
+                    //self.currentImages = currentImages
+                    currentDateIndex = (currentDateIndex + 1) % currentImages.count
+                    //this needs to go into updatemainpic function?
+                    loadImage(from: currentImages[currentDateIndex], to: mainPicture)
+                    updateCreatorImage(for: dateLabel.text ?? "", url: currentImages[currentDateIndex])
+                    // Print the image URLs
+                    print(self.currentImages)
                 } else {
-                    print("No images data found")
+                    
+                    self.loadImage(from: noImagesForDate, to: mainPicture)
+                    print("No images found for the current date")
                 }
+            } else {
+                print("No images data found")
             }
-
         }
+    }
 
     
     override func viewDidLayoutSubviews() {
@@ -374,6 +378,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     // Use the imageUrls dictionary from the most recent date
                     if let imageUrls = imagesDict[firstDate], let firstImageUrl = imageUrls.keys.first {
                         // Set the image to your image view
+                        self.updateCreatorImage(for: firstDate, url: firstImageUrl)
                         self.loadImage(from: firstImageUrl, to: self.mainPicture)
                     }
                 } else {
@@ -404,7 +409,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                             return
                         }
                     }
-                    
+                    self.loadImage(from: self.noImagesForDate, to: self.mainPicture)
+                    self.creatorPic.isHidden = true
+                    dateFormatter.dateFormat = "MMM dd yyyy"
+                    let formattedDate = dateFormatter.string(from: selectedDate)
+                    dateLabel.text = formattedDate
+                    //dateLabel.text = selectedDate
                     print("No image found for the selected date")
                 }
             } else {
@@ -506,7 +516,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if self.profBool{
             
-            
+            //THIS MEANS YOU ARE EDITING PROFILE IMAGE
             var uid = ""
             if let currentUser = Auth.auth().currentUser {
                 // User is signed in
@@ -576,6 +586,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             dismiss(animated: true, completion: nil)
         }
         else{
+            //HERE YOU ARE UPLOADING FOR MAINPICTURE
             if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
                 // Upload the image to Firebase Storage
                 let storageRef = Storage.storage().reference().child("partyImages/\(UUID().uuidString).jpg")
@@ -672,7 +683,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         
     }
-    func updateCreatorImage(for date: Date, url: String) {
+    func updateCreatorImage(for date: String, url: String) {
+        self.creatorPic.isHidden = false
         let db = Firestore.firestore()
         
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -688,9 +700,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMM dd yyyy"
-                let dateString = dateFormatter.string(from: date)
                 
-                if let imageDict = images[dateString], let creatorUID = imageDict[url] {
+                if let imageDict = images[date], let creatorUID = imageDict[url] {
                     let creatorRef = db.collection("users").document(creatorUID)
                     
                     creatorRef.getDocument { (creatorDocument, creatorError) in
@@ -714,6 +725,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
         }
     }
+
 
     @IBAction func backButtonTapped(_ sender: Any) {
         if datesWithPictures.count == 0 {
