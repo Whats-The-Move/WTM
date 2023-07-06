@@ -613,6 +613,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                             print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
                             return
                         }
+                        //ADD TO FRIENDS HERE
+                        //print(self.commonFriends)
+                        //self.addImageURLToFriends(url?.absoluteString ?? "", commonFriends: self.commonFriends)
                         guard let uid = Auth.auth().currentUser?.uid else {
                             print("Error: No user is currently signed in.")
                             return
@@ -624,19 +627,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                         userRef.getDocument { (document, error) in
                             if let document = document, document.exists {
                                 // Retrieve the current images dictionary
-                                var images = document.data()?["images"] as? [String: [String]] ?? [:]
-
-                                // Add the new image URL with the current timestamp (Unix) as the key
-                                let currentTimeStamp = Int(Date().timeIntervalSince1970) - (8 * 3600) // Subtract 5 hours in seconds
+                                var images = document.data()?["images"] as? [String: [String: String]] ?? [:]
+                                
+                                // Add the new image URL with the current user's UID as the value
+                                let currentTimeStamp = Int(Date().timeIntervalSince1970) - (5 * 3600) // Subtract 5 hours in seconds
                                 
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "MMM dd yyyy"
                                 let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
                                 
-                                var imageList = images[dateString] ?? []
-                                imageList.append(downloadURL.absoluteString)
-                                images[dateString] = imageList
-
+                                var imageMap = images[dateString] ?? [:]
+                                imageMap[downloadURL.absoluteString] = uid
+                                images[dateString] = imageMap
+                                
                                 // Update the images field in Firestore
                                 userRef.updateData(["images": images]) { error in
                                     if let error = error {
@@ -648,14 +651,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                                 }
                             } else {
                                 // Document doesn't exist, create a new document with the image URL
-                                let currentTimeStamp = Int(Date().timeIntervalSince1970) - (8 * 3600) // Subtract 12 hours in seconds
+                                let currentTimeStamp = Int(Date().timeIntervalSince1970) - (5 * 3600) // Subtract 5 hours in seconds
                                 
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "dd MMM yyyy"
                                 let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(currentTimeStamp)))
                                 
-                                let images = [dateString: [downloadURL.absoluteString]]
-
+                                let imageMap: [String: String] = [downloadURL.absoluteString: uid]
+                                let images = [dateString: imageMap]
+                                
                                 // Set the images field in Firestore
                                 userRef.setData(["images": images]) { error in
                                     if let error = error {
@@ -679,6 +683,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
 
            
+            
             
         }
         
