@@ -696,7 +696,7 @@ extension AppHomeViewController: UITableViewDataSource {
                             var isUserGoing = false
                             partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
                                 
-                                //HERES THE PROBLEM- not going into fuck again party of code
+                            
                                 print("segue before it goes in")
                                 if snapshot.exists() {
                                     if let attendees = snapshot.value as? [String] {
@@ -739,14 +739,16 @@ extension AppHomeViewController: UITableViewDataSource {
                                        let rating = value["avgStars"] as? Double,
                                        let isGoing = value["isGoing"] as? [String] {
                                     let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
-                                        destinationVC.party = party
-                                        destinationVC.assignProfilePictures(commonFriends: self?.friendsGoing[party.name] ?? party.isGoing)
                                         
+                                        destinationVC.party = party
+                                        
+                                        destinationVC.assignProfilePictures(commonFriends: self?.friendsGoing[party.name] ?? party.isGoing)
+            
                                         destinationVC.numPeople.text = String(party.isGoing.count) + " people attending total"
                                         destinationVC.numPeople.textColor = UIColor.black
                                         destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
 
-                                   
+                                        destinationVC.commonFriends = self?.friendsGoing[party.name] ?? party.isGoing
                                     }
                                 }
                             }
