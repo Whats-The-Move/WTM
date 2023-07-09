@@ -50,14 +50,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         //mainPicture.image = UIImage(named: "default_photo")
         creatorPic.layer.borderWidth = 2.0
         creatorPic.layer.borderColor = UIColor.white.cgColor
-        creatorPic.layer.cornerRadius = min(creatorPic.frame.width, creatorPic.frame.height) / 2
+        creatorPic.layer.cornerRadius = min(creatorPic.frame.width, creatorPic.frame.height) / 2.01
         creatorPic.contentMode = .scaleAspectFill
         creatorPic.clipsToBounds = true
 
         mainPicture.isUserInteractionEnabled = true
         let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(mainPictureTapped))
         mainPicture.addGestureRecognizer(pictapGesture)
-        viewDidLayoutSubviews()
+        //viewDidLayoutSubviews()
         imagePickerController.delegate = self
         calendar.delegate = self // Make sure your view controller conforms to the FSCalendarDelegate protocol
         calendar.dataSource = self // Make sure your view controller conforms to the FSCalendarDataSource protocol
@@ -257,8 +257,32 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         //backButton.setTitle("", for: .normal)
         //forwardButton.setTitle("", for: .normal)
         //dateLabel.text = "hello"
+        // Assuming you have outlets for the mainPicture and creatorPic UIImageViews
+        let bkgdWidth = bkgdView.frame.size.width
+        let bkgdHeight = bkgdView.frame.size.height
+        let bkgdX = bkgdView.frame.origin.x
+        let bkgdY = bkgdView.frame.origin.y
+        backButton.frame = CGRect(x: bkgdX + 15, y: mainPicture.frame.origin.y - 45, width: 51, height: 40)
+        forwardButton.frame = CGRect(x: bkgdX + bkgdWidth - 15 - backButton.frame.size.width, y: backButton.frame.origin.y, width:  backButton.frame.size.width, height:  backButton.frame.size.height)
+        dateLabel.frame = CGRect(x: backButton.frame.origin.x + backButton.frame.size.width - 10, y: backButton.frame.origin.y, width: forwardButton.frame.origin.x - (backButton.frame.origin.x + backButton.frame.size.width) + 20, height: backButton.frame.size.height)
+        let mainPictureFrame = mainPicture.frame
 
+        let creatorPicOriginX = mainPictureFrame.origin.x + mainPictureFrame.size.width - creatorPic.frame.size.width
+        let creatorPicOriginY = mainPictureFrame.origin.y
+
+        let creatorPicFrame = CGRect(x: creatorPicOriginX, y: creatorPicOriginY, width: creatorPic.frame.size.width, height: creatorPic.frame.size.height)
+        creatorPic.frame = creatorPicFrame
+
+        /*
+        mainPicture.addSubview(creatorPic)
+        mainPicture.translatesAutoresizingMaskIntoConstraints = false
+        creatorPic.translatesAutoresizingMaskIntoConstraints = false
+        creatorPic.leadingAnchor.constraint(equalTo: mainPicture.leadingAnchor).isActive = true
+        creatorPic.trailingAnchor.constraint(equalTo: mainPicture.trailingAnchor).isActive = true
+        creatorPic.topAnchor.constraint(equalTo: mainPicture.topAnchor).isActive = true
+        creatorPic.bottomAnchor.constraint(equalTo: mainPicture.bottomAnchor).isActive = true*/
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
