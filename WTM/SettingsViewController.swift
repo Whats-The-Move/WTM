@@ -219,9 +219,11 @@ class SettingsViewController: UIViewController {
     
     @IBAction func backButtonTapped(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyboard.instantiateViewController(withIdentifier: "ProfilePage") as! ProfileViewController
-        newViewController.modalPresentationStyle = .fullScreen
-        present(newViewController, animated: false, completion: nil)
+        let tabBarController = storyboard.instantiateViewController(identifier: "TabBarController") as! UITabBarController
+        tabBarController.modalPresentationStyle = .fullScreen
+        tabBarController.selectedIndex = 1 // Set the index of the tab you want to navigate to
+        
+        self.present(tabBarController, animated: true)
     }
     
     @IBAction func addFriendsTapped(_ sender: Any) {
