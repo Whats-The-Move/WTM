@@ -195,7 +195,42 @@ class SettingsViewController: UIViewController {
             // Update the UI or perform any other necessary actions after saving the name
         }
     }
-
+    
+    @IBAction func privacyTapped(_ sender: Any) {
+        if let url = URL(string: "https://sites.google.com/view/wtmwhatsthemove/privacy-policy?authuser=0") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    @IBAction func logOutTapped(_ sender: Any) {
+        do{
+            try FirebaseAuth.Auth.auth().signOut()
+            UserDefaults.standard.set(false, forKey: "authenticated")
+            //TAKE THEM TO LOG IN SCREEN
+        }
+        catch{
+            print("error")
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "SignUpPage") as! ViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
+    }
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "ProfilePage") as! ProfileViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
+    }
+    
+    @IBAction func addFriendsTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "MyFriends") as! MyFriendsViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
+    }
+    
     /*
     // MARK: - Navigation
 

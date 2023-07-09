@@ -2177,48 +2177,119 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MKG-T5-583">
-                                <rect key="frame" x="0.0" y="78" width="390" height="83"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Delete Account">
-                                    <backgroundConfiguration key="background">
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </backgroundConfiguration>
-                                    <color key="baseForegroundColor" red="1" green="0.4162067089" blue="0.95926800339999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="deleteButtonTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="jJG-1A-zf8"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mvf-cn-496">
-                                <rect key="frame" x="0.0" y="161" width="390" height="83"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Change username">
-                                    <backgroundConfiguration key="background">
-                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </backgroundConfiguration>
-                                    <color key="baseForegroundColor" red="1" green="0.4162067089" blue="0.95926800339999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="changeUsernameTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="32p-DY-zUV"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Account Settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6r-8s-Xav">
-                                <rect key="frame" x="96" y="35" width="207" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6r-8s-Xav">
+                                <rect key="frame" x="146" y="82" width="98" height="37"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="28"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0vE-cL-vZP">
+                                <rect key="frame" x="0.0" y="157" width="390" height="301"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yYh-WW-kXO">
+                                        <rect key="frame" x="16" y="24" width="359" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="d56-Ov-S1j"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="person.badge.plus" catalog="system" title="Add Friends"/>
+                                        <connections>
+                                            <action selector="addFriendsTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="zQz-5V-R2h"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZz-O7-uD8">
+                                        <rect key="frame" x="16" y="133" width="359" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="FRj-gI-Oyf"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="pencil.and.ellipsis.rectangle" catalog="system" title="Change Username"/>
+                                        <connections>
+                                            <action selector="changeUsernameTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="joG-AP-hfM"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AHS-gw-wJ1">
+                                        <rect key="frame" x="16" y="248" width="359" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="CsE-pd-kPL"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="systemRedColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system" title="Delete Account"/>
+                                        <connections>
+                                            <action selector="deleteButtonTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="4Cb-vR-i6Z"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dRM-Eh-1iP">
+                                        <rect key="frame" x="16" y="189" width="359" height="35"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="arrowshape.turn.up.backward" catalog="system" title="Log Out"/>
+                                        <connections>
+                                            <action selector="logOutTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="JvK-Ao-Tgu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QE0-Lq-hAn">
+                                        <rect key="frame" x="16" y="79" width="359" height="35"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="lock" catalog="system" title="Privacy"/>
+                                        <connections>
+                                            <action selector="privacyTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="H5i-7n-cia"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="labelColor"/>
+                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="yYh-WW-kXO" firstAttribute="trailing" secondItem="QE0-Lq-hAn" secondAttribute="trailing" id="0Ww-Jh-9dy"/>
+                                    <constraint firstItem="bZz-O7-uD8" firstAttribute="centerY" secondItem="0vE-cL-vZP" secondAttribute="centerY" id="5N7-fP-760"/>
+                                    <constraint firstItem="yYh-WW-kXO" firstAttribute="leading" secondItem="QE0-Lq-hAn" secondAttribute="leading" id="5aN-xz-tuM"/>
+                                    <constraint firstItem="dRM-Eh-1iP" firstAttribute="top" secondItem="bZz-O7-uD8" secondAttribute="bottom" constant="21" id="7rc-Df-eI0"/>
+                                    <constraint firstItem="yYh-WW-kXO" firstAttribute="top" secondItem="0vE-cL-vZP" secondAttribute="top" constant="24" id="8hn-Bn-HVw"/>
+                                    <constraint firstItem="QE0-Lq-hAn" firstAttribute="top" secondItem="yYh-WW-kXO" secondAttribute="bottom" constant="20" id="8sF-LU-wPD"/>
+                                    <constraint firstItem="QE0-Lq-hAn" firstAttribute="leading" secondItem="bZz-O7-uD8" secondAttribute="leading" id="BPj-xD-o7j"/>
+                                    <constraint firstItem="bZz-O7-uD8" firstAttribute="top" secondItem="QE0-Lq-hAn" secondAttribute="bottom" constant="19" id="LAj-vc-Ar1"/>
+                                    <constraint firstItem="yYh-WW-kXO" firstAttribute="leading" secondItem="0vE-cL-vZP" secondAttribute="leading" constant="16" id="PSv-xj-arb"/>
+                                    <constraint firstItem="QE0-Lq-hAn" firstAttribute="trailing" secondItem="bZz-O7-uD8" secondAttribute="trailing" id="cGl-rj-U9O"/>
+                                    <constraint firstItem="bZz-O7-uD8" firstAttribute="leading" secondItem="dRM-Eh-1iP" secondAttribute="leading" id="d8z-ed-zjM"/>
+                                    <constraint firstItem="bZz-O7-uD8" firstAttribute="trailing" secondItem="dRM-Eh-1iP" secondAttribute="trailing" id="dsM-nJ-gCv"/>
+                                    <constraint firstAttribute="bottom" secondItem="AHS-gw-wJ1" secondAttribute="bottom" constant="18" id="fWi-KZ-H1t"/>
+                                    <constraint firstItem="yYh-WW-kXO" firstAttribute="centerX" secondItem="0vE-cL-vZP" secondAttribute="centerX" id="kPl-Mq-A1u"/>
+                                    <constraint firstItem="dRM-Eh-1iP" firstAttribute="trailing" secondItem="AHS-gw-wJ1" secondAttribute="trailing" id="mM5-nn-buI"/>
+                                    <constraint firstItem="dRM-Eh-1iP" firstAttribute="leading" secondItem="AHS-gw-wJ1" secondAttribute="leading" id="umo-QJ-Da9"/>
+                                    <constraint firstItem="AHS-gw-wJ1" firstAttribute="top" secondItem="dRM-Eh-1iP" secondAttribute="bottom" constant="24" id="yYe-bE-cEn"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D1h-9a-SDa">
+                                <rect key="frame" x="16" y="82" width="78" height="35"/>
+                                <color key="tintColor" red="0.84267407660000004" green="0.44431845640000001" blue="0.81477690820000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="chevron.backward" catalog="system" title="Back"/>
+                                <connections>
+                                    <action selector="backButtonTapped:" destination="tVX-Yp-Zeh" eventType="touchUpInside" id="gmw-te-V7c"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="aIA-1i-5oJ"/>
-                        <color key="backgroundColor" red="1" green="0.4162067089" blue="0.95926800339999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="D1h-9a-SDa" firstAttribute="leading" secondItem="2j4-4g-p1P" secondAttribute="leadingMargin" id="14k-dg-dTD"/>
+                            <constraint firstItem="W6r-8s-Xav" firstAttribute="centerX" secondItem="2j4-4g-p1P" secondAttribute="centerX" id="91Z-nh-8Oj"/>
+                            <constraint firstItem="0vE-cL-vZP" firstAttribute="leading" secondItem="aIA-1i-5oJ" secondAttribute="leading" id="9A2-Ha-3zX"/>
+                            <constraint firstItem="D1h-9a-SDa" firstAttribute="top" secondItem="aIA-1i-5oJ" secondAttribute="top" constant="82" id="E2y-aQ-DVc"/>
+                            <constraint firstItem="D1h-9a-SDa" firstAttribute="top" secondItem="W6r-8s-Xav" secondAttribute="top" id="Jap-rb-Gi7"/>
+                            <constraint firstItem="0vE-cL-vZP" firstAttribute="top" secondItem="D1h-9a-SDa" secondAttribute="bottom" constant="40" id="LLD-dk-Nma"/>
+                            <constraint firstItem="aIA-1i-5oJ" firstAttribute="bottom" secondItem="0vE-cL-vZP" secondAttribute="bottom" constant="295" id="O9T-p8-DEJ"/>
+                            <constraint firstItem="W6r-8s-Xav" firstAttribute="centerX" secondItem="0vE-cL-vZP" secondAttribute="centerX" id="dQR-yl-xVt"/>
+                            <constraint firstItem="0vE-cL-vZP" firstAttribute="top" secondItem="W6r-8s-Xav" secondAttribute="bottom" constant="38" id="yYl-RZ-Nfj"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="zPq-fe-Rp3"/>
                     <connections>
-                        <outlet property="deleteButton" destination="MKG-T5-583" id="NF3-tR-aiK"/>
+                        <outlet property="deleteButton" destination="AHS-gw-wJ1" id="QiG-i6-TtT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="41M-da-WsU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2722,14 +2793,18 @@
         <image name="arrow" width="106" height="106"/>
         <image name="arrowshape.backward.fill" catalog="system" width="128" height="104"/>
         <image name="arrowshape.forward.fill" catalog="system" width="128" height="104"/>
+        <image name="arrowshape.turn.up.backward" catalog="system" width="128" height="104"/>
         <image name="camera" catalog="system" width="128" height="93"/>
         <image name="camera.on.rectangle" catalog="system" width="128" height="98"/>
         <image name="camera.on.rectangle.fill" catalog="system" width="128" height="98"/>
+        <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="chevron.backward.circle.fill" catalog="system" width="128" height="123"/>
         <image name="finalillini.gif" width="1200" height="675"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
+        <image name="lock" catalog="system" width="125" height="128"/>
+        <image name="pencil.and.ellipsis.rectangle" catalog="system" width="128" height="80"/>
         <image name="person" catalog="system" width="128" height="121"/>
         <image name="person.3.sequence" catalog="system" width="128" height="60"/>
         <image name="person.3.sequence.fill" catalog="system" width="128" height="59"/>
@@ -2740,6 +2815,7 @@
         <image name="plus.app.fill" catalog="system" width="128" height="114"/>
         <image name="square.and.pencil" catalog="system" width="128" height="113"/>
         <image name="star" catalog="system" width="128" height="116"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
         <image name="trophy" catalog="system" width="128" height="128"/>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
