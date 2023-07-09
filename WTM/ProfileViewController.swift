@@ -212,15 +212,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     
                     // Update the currentImages array with the image URLs for the current date
                     //self.currentImages = currentImages
-                    currentDateIndex = (currentDateIndex + 1) % currentImages.count
+                    self.currentDateIndex = (self.currentDateIndex + 1) % currentImages.count
                     //this needs to go into updatemainpic function?
-                    loadImage(from: currentImages[currentDateIndex], to: mainPicture)
-                    updateCreatorImage(for: dateLabel.text ?? "", url: currentImages[currentDateIndex])
+                    self.loadImage(from: currentImages[self.currentDateIndex], to: self.mainPicture)
+                    self.updateCreatorImage(for: self.dateLabel.text ?? "", url: currentImages[self.currentDateIndex])
                     // Print the image URLs
                     print(self.currentImages)
                 } else {
                     
-                    self.loadImage(from: noImagesForDate, to: mainPicture)
+                    self.loadImage(from: self.noImagesForDate, to: self.mainPicture)
                     print("No images found for the current date")
                 }
             } else {

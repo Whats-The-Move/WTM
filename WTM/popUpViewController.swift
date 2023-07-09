@@ -133,52 +133,64 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         
     }
     func assignProfilePictures(commonFriends: [String]) {
-        let imageTags = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Update with the appropriate image view tags
-        if commonFriends.count - 10 > 0 {
-            if let plusMore = friendsView.viewWithTag(10) as? UILabel {
-                plusMore.text = "+" + String(commonFriends.count - 10)
-            }
-        }
-        else{
-            if let plusMore = friendsView.viewWithTag(10) as? UILabel {
-                plusMore.text = ""
-            }
-        }
-        for i in 0..<min(commonFriends.count, imageTags.count) {
-            let friendUID = commonFriends[i]
-            let tag = imageTags[i]
+            let imageTags = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Update with the appropriate image view tags
+            let numberOfImages = min(commonFriends.count, imageTags.count)
             
-            if let profileImageView = friendsView.viewWithTag(tag) as? UIImageView {
-                // Assign profile picture to the image view
-                profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-                profileImageView.clipsToBounds = true
-                profileImageView.contentMode = .scaleAspectFill
-                profileImageView.layer.borderWidth = 2.0
-                profileImageView.layer.borderColor = UIColor.white.cgColor
-                profileImageView.frame = CGRect(x: profileImageView.frame.origin.x, y: profileImageView.frame.origin.y, width: 39, height: 39)
-                profileImageView.isUserInteractionEnabled = true
-                            //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
-                            //profileImageView.addGestureRecognizer(tapGesture)
-                            
-                let userRef = Firestore.firestore().collection("users").document(friendUID)
-                userRef.getDocument { (document, error) in
-                    if let error = error {
-                        print("Error retrieving profile picture: \(error.localizedDescription)")
-                        return
+            let horizontalSpacing: CGFloat = 10 // Adjust the horizontal spacing between images
+            let verticalSpacing: CGFloat = 10 // Adjust the vertical spacing between rows
+            let imagesPerRow = 5 // Maximum number of images per row
+            
+            let totalWidth = friendsView.frame.width
+            let totalHeight = friendsView.frame.height - 45 // Subtract the top margin
+            
+            let imageWidth = (totalWidth - CGFloat((imagesPerRow - 1) * Int(horizontalSpacing))) / CGFloat(imagesPerRow)
+            let imageHeight = imageWidth
+            
+            var currentX: CGFloat = 0
+            var currentY: CGFloat = 45 // Set the initial Y position with the top margin
+            
+            for i in 0..<numberOfImages {
+                let friendUID = commonFriends[i]
+                let tag = imageTags[i]
+                
+                if let profileImageView = friendsView.viewWithTag(tag) as? UIImageView {
+                    // Assign profile picture to the image view
+                    profileImageView.clipsToBounds = true
+                    profileImageView.contentMode = .scaleAspectFill
+                    profileImageView.layer.borderWidth = 2.0
+                    profileImageView.layer.borderColor = UIColor.white.cgColor
+                    profileImageView.frame = CGRect(x: currentX, y: currentY, width: imageWidth, height: imageHeight)
+                    profileImageView.layer.cornerRadius = profileImageView.frame.width / 2 // Set corner radius to half of width
+                    
+                    // Set the next position for the next image view
+                    currentX += imageWidth + horizontalSpacing
+                    
+                    // Check if the next image view should be placed in the next row
+                    if (i + 1) % imagesPerRow == 0 {
+                        currentX = 0
+                        currentY += imageHeight + verticalSpacing
                     }
                     
-                    if let document = document, document.exists {
-                        if let profilePicURL = document.data()?["profilePic"] as? String {
-                            // Assuming you have a function to retrieve the image from the URL
-                            self.loadImage(from: profilePicURL, to: profileImageView)
-                        } else {
-                            print("No profile picture found for friend with UID: \(friendUID)")
+                    let userRef = Firestore.firestore().collection("users").document(friendUID)
+                    userRef.getDocument { (document, error) in
+                        if let error = error {
+                            print("Error retrieving profile picture: \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        if let document = document, document.exists {
+                            if let profilePicURL = document.data()?["profilePic"] as? String {
+                                // Assuming you have a function to retrieve the image from the URL
+                                self.loadImage(from: profilePicURL, to: profileImageView)
+                            } else {
+                                print("No profile picture found for friend with UID: \(friendUID)")
+                            }
                         }
                     }
                 }
             }
         }
-    }
+    
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")
