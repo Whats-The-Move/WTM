@@ -31,6 +31,7 @@ class CustomCellClass: UITableViewCell {
         self.party = party
         if let partyLabel = viewWithTag(1) as? UILabel {
             partyLabel.text = party.name
+            partyLabel.adjustsFontSizeToFitWidth = true
         }
         if let subtitleLabel = viewWithTag(2) as? UILabel {
             subtitleLabel.text = "#" + String(rankDict[party.name] ?? 0)
