@@ -32,9 +32,9 @@ class CustomCellClass: UITableViewCell {
         let partyLabel = viewWithTag(1) as? UILabel
         partyLabel?.text = party.name
         partyLabel?.adjustsFontSizeToFitWidth = true
-        //partyLabel?.translatesAutoresizingMaskIntoConstraints = false
-        //partyLabel?.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 90).isActive = true
-        //partyLabel?.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -contentView.bounds.height / 4).isActive = true
+        partyLabel?.translatesAutoresizingMaskIntoConstraints = false
+        partyLabel?.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 90).isActive = true
+        partyLabel?.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -contentView.bounds.height / 4).isActive = true
         
         
         let ratingLabel = viewWithTag(3) as? UILabel
