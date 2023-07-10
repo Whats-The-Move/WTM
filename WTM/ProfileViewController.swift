@@ -42,6 +42,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var addFriends: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
     
+    @IBOutlet weak var notificationButton: UIButton!
     @IBOutlet weak var imageUploadButton: UIButton!
     
     @IBOutlet weak var creatorPic: UIImageView!
@@ -49,6 +50,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         super.viewDidLoad()
         //mainPicture.image = UIImage(named: "default_photo")
         
+        //notificationButton.layer.borderColor = UIColor(red: 255/255, green: 192/255, blue: 203/255, alpha: 1.0).cgColor
+        //notificationButton.layer.borderWidth = 2
+        notificationButton.layer.cornerRadius = notificationButton.frame.size.width / 2
+        notificationButton.clipsToBounds = true
+        notificationButton.isHidden = true
+        notificationButton.isUserInteractionEnabled = false
 
         mainPicture.isUserInteractionEnabled = true
         let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(mainPictureTapped))
@@ -68,6 +75,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             
             userRef.getDocument { (document, error) in
                 if let document = document, document.exists {
+                    
+                    if let data = document.data(), let pendingUsers = data["pendingFriendRequests"] as? [Any], pendingUsers.count > 0 {
+                        self.notificationButton.isHidden = false
+                        self.notificationButton.setTitle("\(pendingUsers.count)", for: .normal)
+                        self.notificationButton.titleLabel?.adjustsFontSizeToFitWidth = true
+                    }
+                    
                     if let data = document.data(), let username = data["username"] as? String {
                         // Access the username value
                         
@@ -270,7 +284,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         // Add constraints for backButton
         backButton.leadingAnchor.constraint(equalTo: mainPicture.leadingAnchor).isActive = true
         backButton.topAnchor.constraint(equalTo: mainPicture.topAnchor, constant: -50).isActive = true
-        backButton.bottomAnchor.constraint(equalTo: mainPicture.topAnchor, constant: -15)
+        backButton.bottomAnchor.constraint(equalTo: mainPicture.topAnchor, constant: -15).isActive = true
         backButton.widthAnchor.constraint(equalToConstant: 51).isActive = true
         //backButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
 

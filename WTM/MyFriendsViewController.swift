@@ -159,7 +159,12 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
 
 
     @IBAction func backButtonPushed(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let tabBarController = storyboard.instantiateViewController(identifier: "TabBarController") as! UITabBarController
+        tabBarController.modalPresentationStyle = .fullScreen
+        tabBarController.selectedIndex = 1 // Set the index of the tab you want to navigate to
+        
+        self.present(tabBarController, animated: true)
     }
 }
 
@@ -192,10 +197,13 @@ extension MyFriendsViewController: UITableViewDataSource {
                     return
                 }
                 
-                if let data = snapshot?.data(), let friendEmail = data["email"] as? String {
-                    // Configure the cell with the friend's email
-                    cell.configure(with: friendEmail, index: indexPath.row)
-                    cell.delegate = self
+                if let data = snapshot?.data(), let friendName = data["name"] as? String, let friendUsername = data["username"] as? String, let friendPic = data["profilePic"] as? String {
+                    // Convert the friendPic string to a URL
+                    if let profileImageURL = URL(string: friendPic) {
+                        // Configure the cell with the friend's details
+                        cell.configure(with: friendName, username: friendUsername, profileImageURL: profileImageURL, index: indexPath.row)
+                        cell.delegate = self
+                    }
                 }
             }
             
