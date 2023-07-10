@@ -48,11 +48,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         //mainPicture.image = UIImage(named: "default_photo")
-        creatorPic.layer.borderWidth = 2.0
-        creatorPic.layer.borderColor = UIColor.white.cgColor
-        creatorPic.layer.cornerRadius = min(creatorPic.frame.width, creatorPic.frame.height) / 2.01
-        creatorPic.contentMode = .scaleAspectFill
-        creatorPic.clipsToBounds = true
+        
 
         mainPicture.isUserInteractionEnabled = true
         let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(mainPictureTapped))
@@ -258,6 +254,45 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         //forwardButton.setTitle("", for: .normal)
         //dateLabel.text = "hello"
         // Assuming you have outlets for the mainPicture and creatorPic UIImageViews
+        // Disable autoresizing mask translation into constraints for all views involved
+        let creatorWidthHeight = 50.0
+        creatorPic.layer.borderWidth = 2.0
+        creatorPic.layer.borderColor = UIColor.white.cgColor
+        creatorPic.layer.cornerRadius = CGFloat(creatorWidthHeight) / 2.01
+        creatorPic.contentMode = .scaleAspectFill
+        creatorPic.clipsToBounds = true
+        
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        forwardButton.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        creatorPic.translatesAutoresizingMaskIntoConstraints = false
+
+        // Add constraints for backButton
+        backButton.leadingAnchor.constraint(equalTo: mainPicture.leadingAnchor).isActive = true
+        backButton.topAnchor.constraint(equalTo: mainPicture.topAnchor, constant: -50).isActive = true
+        backButton.bottomAnchor.constraint(equalTo: mainPicture.topAnchor, constant: -15)
+        backButton.widthAnchor.constraint(equalToConstant: 51).isActive = true
+        //backButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+
+        // Add constraints for forwardButton
+        forwardButton.trailingAnchor.constraint(equalTo: mainPicture.trailingAnchor).isActive = true
+        forwardButton.topAnchor.constraint(equalTo: backButton.topAnchor).isActive = true
+        forwardButton.bottomAnchor.constraint(equalTo: backButton.bottomAnchor).isActive = true
+        forwardButton.widthAnchor.constraint(equalTo: backButton.widthAnchor).isActive = true
+
+        // Add constraints for dateLabel
+        dateLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: -10).isActive = true
+        dateLabel.topAnchor.constraint(equalTo: backButton.topAnchor).isActive = true
+        dateLabel.trailingAnchor.constraint(equalTo: forwardButton.leadingAnchor, constant: 10).isActive = true
+        dateLabel.bottomAnchor.constraint(equalTo: backButton.bottomAnchor).isActive = true
+
+        // Add constraints for creatorPic
+        creatorPic.trailingAnchor.constraint(equalTo: mainPicture.trailingAnchor).isActive = true
+        creatorPic.topAnchor.constraint(equalTo: mainPicture.topAnchor).isActive = true
+        creatorPic.widthAnchor.constraint(equalToConstant: creatorWidthHeight).isActive = true
+        creatorPic.heightAnchor.constraint(equalToConstant: creatorWidthHeight).isActive = true
+
+/*
         let bkgdWidth = bkgdView.frame.size.width
         let bkgdHeight = bkgdView.frame.size.height
         let bkgdX = bkgdView.frame.origin.x
@@ -271,7 +306,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let creatorPicOriginY = mainPictureFrame.origin.y
 
         let creatorPicFrame = CGRect(x: creatorPicOriginX, y: creatorPicOriginY, width: creatorPic.frame.size.width, height: creatorPic.frame.size.height)
-        creatorPic.frame = creatorPicFrame
+        creatorPic.frame = creatorPicFrame*/
 
         /*
         mainPicture.addSubview(creatorPic)
