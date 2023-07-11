@@ -23,6 +23,7 @@ public var votesLabel = 0
 public var barName = ""
 public var UID = ""
 public var publicOrPriv = true
+public var maxPeople = 0
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {

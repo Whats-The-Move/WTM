@@ -66,12 +66,18 @@ class CustomCellClass: UITableViewCell {
             if let slider = viewWithTag(12) {
                 //print("inside of inner slider")
                 slider.layer.cornerRadius = corner
-                let numGoing = party.isGoing.count
+                print(party.name)
+                print(party.isGoing.count)
+                var fillPercent = 0.0
+                fillPercent = CGFloat(party.isGoing.count) / Double(maxPeople)
+                //let numGoing = party.isGoing.count
                 slider.translatesAutoresizingMaskIntoConstraints = false
                 slider.leadingAnchor.constraint(equalTo: bkgdSlider.leadingAnchor).isActive = true
                 slider.topAnchor.constraint(equalTo: bkgdSlider.topAnchor).isActive = true
                 slider.bottomAnchor.constraint(equalTo: bkgdSlider.bottomAnchor).isActive = true
-                slider.widthAnchor.constraint(equalToConstant: 100).isActive = true
+
+                
+                slider.widthAnchor.constraint(equalTo: bkgdSlider.widthAnchor, multiplier: fillPercent).isActive = true
             }
         }
 
