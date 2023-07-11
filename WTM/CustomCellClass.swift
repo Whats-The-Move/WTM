@@ -29,15 +29,56 @@ class CustomCellClass: UITableViewCell {
 
     func configure(with party: Party, rankDict: [String: Int]) {
         self.party = party
-        if let partyLabel = viewWithTag(1) as? UILabel {
-            partyLabel.text = party.name
-            partyLabel.adjustsFontSizeToFitWidth = true
-        }
-        if let subtitleLabel = viewWithTag(2) as? UILabel {
-            subtitleLabel.text = "#" + String(rankDict[party.name] ?? 0)
-        }
-        if let ratingLabel = viewWithTag(3) as? UILabel {
-            ratingLabel.text = String(party.rating)
+        let partyLabel = viewWithTag(1) as? UILabel
+        partyLabel?.text = party.name
+        partyLabel?.adjustsFontSizeToFitWidth = true
+        partyLabel?.translatesAutoresizingMaskIntoConstraints = false
+        partyLabel?.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 90).isActive = true
+        partyLabel?.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -contentView.bounds.height / 4).isActive = true
+        
+        
+        let ratingLabel = viewWithTag(3) as? UILabel
+        ratingLabel?.text = String(party.rating)
+        //ratingLabel?.translatesAutoresizingMaskIntoConstraints = false
+        //ratingLabel?.trailingAnchor.constraint(equalTo: partyLabel?.leadingAnchor ?? contentView.leadingAnchor, constant: -15).isActive = true
+        //ratingLabel?.centerYAnchor.constraint(equalTo: partyLabel?.centerYAnchor ?? contentView.centerYAnchor, constant: -contentView.bounds.height / 4).isActive = true
+
+        /*let starPic = viewWithTag(12) as? UIImageView
+        starPic?.translatesAutoresizingMaskIntoConstraints = false
+        starPic?.centerYAnchor.constraint(equalTo: ratingLabel?.centerYAnchor ?? contentView.centerYAnchor).isActive = true
+        starPic?.centerXAnchor.constraint(equalTo: ratingLabel?.centerXAnchor ?? contentView.centerXAnchor).isActive = true
+*/
+        let subtitleLabel = viewWithTag(2) as? UILabel
+        subtitleLabel?.text = "#" + String(rankDict[party.name] ?? 0)
+        //subtitleLabel?.translatesAutoresizingMaskIntoConstraints = false
+        //subtitleLabel?.leadingAnchor.constraint(equalTo: ratingLabel?.trailingAnchor ?? contentView.leadingAnchor, constant: 20).isActive = true
+        //subtitleLabel?.centerYAnchor.constraint(equalTo: partyLabel?.centerYAnchor ?? contentView.centerYAnchor, constant: -contentView.bounds.height / 4).isActive = true
+
+            
+        
+        
+        
+        if let bkgdSlider = viewWithTag(11) {
+            //print("getting here?")
+            let corner = bkgdSlider.frame.height / 2
+            bkgdSlider.layer.cornerRadius = corner
+            
+            if let slider = viewWithTag(12) {
+                //print("inside of inner slider")
+                slider.layer.cornerRadius = corner
+                print(party.name)
+                print(party.isGoing.count)
+                var fillPercent = 0.0
+                fillPercent = CGFloat(party.isGoing.count) / Double(maxPeople)
+                //let numGoing = party.isGoing.count
+                slider.translatesAutoresizingMaskIntoConstraints = false
+                slider.leadingAnchor.constraint(equalTo: bkgdSlider.leadingAnchor).isActive = true
+                slider.topAnchor.constraint(equalTo: bkgdSlider.topAnchor).isActive = true
+                slider.bottomAnchor.constraint(equalTo: bkgdSlider.bottomAnchor).isActive = true
+
+                
+                slider.widthAnchor.constraint(equalTo: bkgdSlider.widthAnchor, multiplier: fillPercent).isActive = true
+            }
         }
 
 

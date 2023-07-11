@@ -141,6 +141,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                let rating = value["avgStars"] as? Double,
                let isGoing = value["isGoing"] as? [String] {
                 let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing : isGoing)
+                if party.isGoing.count > maxPeople {
+                    maxPeople = party.isGoing.count
+                }
                 self?.partiesCloned.insert(party, at: 0)
                 self?.partyArray.insert(party.name, at: 0)
                 self?.likeDict[party.name] = party.likes
@@ -739,6 +742,7 @@ extension AppHomeViewController: UITableViewDataSource {
                                        let rating = value["avgStars"] as? Double,
                                        let isGoing = value["isGoing"] as? [String] {
                                     let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
+                                        let widthMult = Double(party.isGoing.count) / Double(maxPeople)
                                         
                                         destinationVC.party = party
                                         
@@ -749,10 +753,14 @@ extension AppHomeViewController: UITableViewDataSource {
                                         destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
 
                                         destinationVC.commonFriends = self?.friendsGoing[party.name] ?? party.isGoing
+                                        destinationVC.slider.widthAnchor.constraint(equalTo: destinationVC.bkgdSlider.widthAnchor, multiplier: widthMult).isActive = true
+                                        
+                                        
+
                                     }
                                 }
                             }
-                            
+
                             destinationVC.titleText = (label.text)!
                             destinationVC.likesLabel = likeDict[(label.text)!]!
                             destinationVC.dislikesLabel = dislikeDict[(label.text)!]!

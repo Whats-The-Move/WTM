@@ -27,6 +27,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     var databaseRef: DatabaseReference?
     var parties = [Party]()
     var party = Party(name: "", likes: 0, dislikes: 0, allTimeLikes: 0, allTimeDislikes: 0, address: "", rating: 0, isGoing: [""])
+    var pplGoing = 0
     
 
     @IBOutlet weak var friendsView: UIView!
@@ -40,18 +41,32 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
     @IBOutlet weak var imageUploadButton: UIButton!
     
+    @IBOutlet weak var bkgdSlider: UIView!
+    @IBOutlet weak var slider: UIView!
     @IBOutlet weak var backButton: UIButton!
     //@IBOutlet weak var borderView: UIView!
     var locationManger = CLLocationManager()
     let imagePickerController = UIImagePickerController()
 
-    
-    override func viewDidLoad() {
+    override func viewDidLayoutSubviews() {
+        print("fuck")
+        print(party.isGoing.count)
+        bkgdSlider.layer.cornerRadius = bkgdSlider.frame.height / 2
+        slider.layer.cornerRadius = slider.frame.height / 2
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        slider.topAnchor.constraint(equalTo: bkgdSlider.topAnchor).isActive = true
+        slider.bottomAnchor.constraint(equalTo: bkgdSlider.bottomAnchor).isActive = true
+        slider.leadingAnchor.constraint(equalTo: bkgdSlider.leadingAnchor).isActive = true
+        //numPeople.centerXAnchor.constraint(equalTo: bkgdSlider.centerXAnchor).isActive = true
 
-        print(party.isGoing)
+    }
+    override func viewDidLoad() {
+ 
+        //numPeople.text
         self.isModalInPresentation = true
 
         assignProfilePictures(commonFriends: commonFriends)
+        
 
         imagePickerController.delegate = self
         print(self.party)
