@@ -55,27 +55,33 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
     }
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var gifImage: UIImageView!
     @IBOutlet weak var refreshButton: UIButton!
-    @IBOutlet weak var logoutButton: UIButton!
-    @IBOutlet weak var segmentedController: UISegmentedControl!
-    @IBAction func segmentedControl(_ sender: Any) {
-        if publicOrPriv == true{
-            publicOrPriv = false
-        } else {
-            publicOrPriv = true
-        }
-        
+    var partyArray = [String]()
+    var privatePartyArray = [String]()
+    var searching = false
+    @IBOutlet weak var privateButton: UIButton!
+    @IBOutlet weak var publicDot: UILabel!
+    @IBOutlet weak var privateDot: UILabel!
+    @IBOutlet weak var publicButton: UIButton!
+    var searchParty = [String]()
+    
+    @IBAction func publicButtonTapped(_ sender: Any) {
+        publicOrPriv = true
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
         TabBarController.overrideUserInterfaceStyle = .dark
         TabBarController.modalPresentationStyle = .fullScreen
         present(TabBarController, animated: false, completion: nil)
     }
-    var partyArray = [String]()
-    var privatePartyArray = [String]()
-    var searching = false
-    var searchParty = [String]()
+    
+    @IBAction func privateButtonTapped(_ sender: Any) {
+        publicOrPriv = false
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+        TabBarController.overrideUserInterfaceStyle = .dark
+        TabBarController.modalPresentationStyle = .fullScreen
+        present(TabBarController, animated: false, completion: nil)
+    }
     
     var databaseRef: DatabaseReference?
     var userDatabaseRef: DatabaseReference?
@@ -102,9 +108,15 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         super.viewDidLoad()
 
         if publicOrPriv {
-            segmentedController.selectedSegmentIndex = 0
+            publicButton.titleLabel?.textColor = .black
+            publicDot.isHidden = false
+            privateButton.titleLabel?.textColor = .lightGray
+            privateDot.isHidden = true
         } else {
-            segmentedController.selectedSegmentIndex = 1
+            publicButton.titleLabel?.textColor = .lightGray
+            publicDot.isHidden = true
+            privateButton.titleLabel?.textColor = .black
+            privateDot.isHidden = false
         }
 
         partyList.delegate = self
@@ -112,20 +124,15 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         //partyList.rowHeight = UITableView.automaticDimension
 
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
-        refreshButton.layer.cornerRadius = 4
-        logoutButton.layer.cornerRadius = 4
         for recognizer in view.gestureRecognizers ?? [] {
             if let swipeRecognizer = recognizer as? UISwipeGestureRecognizer, swipeRecognizer.direction == .down {
                 view.removeGestureRecognizer(swipeRecognizer)
             }
         }
 
-        gifImage.loadGif(name: "finalillini")
-        gifImage.contentMode = .scaleAspectFit
         partyList.overrideUserInterfaceStyle = .dark
         searchBar.overrideUserInterfaceStyle = .dark
         refreshButton.overrideUserInterfaceStyle = .light
-        logoutButton.overrideUserInterfaceStyle = .light
 
         partyList.reloadData()
         
@@ -641,6 +648,11 @@ extension AppHomeViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
 
             cell.delegate = self // Set the view controller as the delegate for the cell
+            
+            cell.layer.cornerRadius = 10
+            cell.layer.borderWidth = 1
+            cell.layer.borderColor = UIColor.white.cgColor
+            cell.backgroundColor = UIColor.black
             
             let party: Party
             if searching {
