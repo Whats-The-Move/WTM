@@ -33,7 +33,6 @@
 		08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D313A02A4A5CBA00FBF023 /* privateParty.swift */; };
 		08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F793292A4A505300679EB9 /* privatePartyCellClass.swift */; };
 		08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */; };
-		08F92B832A2AC68500ABB873 /* pendingFriendRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */; };
 		08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */; };
 		103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */; };
 		103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D809D2A38D6610032E4D3 /* CreateEventViewController.swift */; };
@@ -102,7 +101,6 @@
 		08D313A02A4A5CBA00FBF023 /* privateParty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privateParty.swift; sourceTree = "<group>"; };
 		08F793292A4A505300679EB9 /* privatePartyCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePartyCellClass.swift; sourceTree = "<group>"; };
 		08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendPopUpViewController.swift; sourceTree = "<group>"; };
-		08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pendingFriendRequestViewController.swift; sourceTree = "<group>"; };
 		08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendRequestCellClass.swift; sourceTree = "<group>"; };
 		0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
@@ -208,7 +206,6 @@
 				082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */,
 				08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */,
 				08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */,
-				08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */,
 				086042D029C292C900066892 /* reviewViewController.swift */,
 				10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */,
 				083B618D2A1FCE6400018798 /* video.png */,
@@ -524,7 +521,6 @@
 				08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */,
 				10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */,
 				103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */,
-				08F92B832A2AC68500ABB873 /* pendingFriendRequestViewController.swift in Sources */,
 				10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */,
 				082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
