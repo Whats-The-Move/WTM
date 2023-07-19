@@ -14,6 +14,7 @@
 		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
 		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
+		088BD7C22A68885A008D3EA9 /* plainProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */; };
 		088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */; };
 		08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */; };
 		08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */; };
@@ -76,6 +77,7 @@
 		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
 		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
+		088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = plainProfileViewController.swift; sourceTree = "<group>"; };
 		088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendsGoingViewController.swift; sourceTree = "<group>"; };
 		08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allFriendsPopUpViewController.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */,
 				10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */,
 				088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */,
+				088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -528,6 +531,7 @@
 				08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */,
 				10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
+				088BD7C22A68885A008D3EA9 /* plainProfileViewController.swift in Sources */,
 				08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */,
 				10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */,
 				08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */,

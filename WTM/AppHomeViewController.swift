@@ -63,7 +63,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     @IBOutlet weak var publicDot: UILabel!
     @IBOutlet weak var privateDot: UILabel!
     @IBOutlet weak var publicButton: UIButton!
+    @IBOutlet weak var profileUIImage: UIImageView!
     var searchParty = [String]()
+    
     
     @IBAction func publicButtonTapped(_ sender: Any) {
         publicOrPriv = true
@@ -106,6 +108,10 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        profileUIImage.addGestureRecognizer(tapGestureRecognizer)
+        profileUIImage.isUserInteractionEnabled = true
 
         if publicOrPriv {
             publicButton.titleLabel?.textColor = .black
@@ -163,6 +169,12 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
         
         calculateFriendsAttending()
+    }
+    
+    @objc func imageTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let badgesViewController = storyboard.instantiateViewController(withIdentifier: "plainProfile") as! plainProfileViewController
+        present(badgesViewController, animated: true, completion: nil)
     }
 
     func calculateFriendsAttending() {
@@ -667,6 +679,11 @@ extension AppHomeViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "privatePartyCell", for: indexPath) as! privatePartyCellClass
 
             cell.delegate = self // Set the view controller as the delegate for the cell
+            
+            cell.layer.cornerRadius = 10
+            cell.layer.borderWidth = 1
+            cell.layer.borderColor = UIColor.white.cgColor
+            cell.backgroundColor = UIColor.black
             
             let party: privateParty
             if searching {
