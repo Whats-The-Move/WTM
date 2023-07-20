@@ -36,14 +36,6 @@ class allFriendsPopUpViewController: UIViewController, UITableViewDelegate {
         db = Firestore.firestore()
         
         fetchFriends()
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
-        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func dismissViewController() {
-        self.dismiss(animated: true, completion: nil)
     }
     
     func fetchFriends() {
@@ -89,7 +81,11 @@ class allFriendsPopUpViewController: UIViewController, UITableViewDelegate {
             }
         }
     }
-
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
 }
 
 extension allFriendsPopUpViewController: UITableViewDataSource {
@@ -104,6 +100,15 @@ extension allFriendsPopUpViewController: UITableViewDataSource {
         cell.configure(with: user)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userSelectedVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "userSelectedViewController") as! UserSelectedViewController
+
+        let user = searching ? searchFriend[indexPath.row] : friends[indexPath.row]
+        userSelectedVC.uid = user.uid // Set the uid of the selected friend in the UserSelectedViewController
+        
+        present(userSelectedVC, animated: true, completion: nil)
     }
 }
 

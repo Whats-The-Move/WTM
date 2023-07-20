@@ -112,6 +112,11 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         profileUIImage.addGestureRecognizer(tapGestureRecognizer)
         profileUIImage.isUserInteractionEnabled = true
+        
+        publicButton.titleLabel?.textColor = .lightGray
+        privateButton.titleLabel?.textColor = .lightGray
+        publicDot.isHidden = true
+        privateDot.isHidden = true
 
         if publicOrPriv {
             publicButton.titleLabel?.textColor = .black

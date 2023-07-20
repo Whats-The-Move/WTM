@@ -159,12 +159,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
 
 
     @IBAction func backButtonPushed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let tabBarController = storyboard.instantiateViewController(identifier: "TabBarController") as! UITabBarController
-        tabBarController.modalPresentationStyle = .fullScreen
-        tabBarController.selectedIndex = 1 // Set the index of the tab you want to navigate to
-        
-        self.present(tabBarController, animated: true)
+        dismiss(animated: true)
     }
 }
 

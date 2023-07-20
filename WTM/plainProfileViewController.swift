@@ -70,35 +70,22 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         }
         let userRef = Firestore.firestore().collection("users").document(uid)
         
-        userRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let imageURLString = document.data()?["profilePic"] as? String,
-                   
-                   let imageURL = URL(string: imageURLString) {
-                    DispatchQueue.global().async {
-                        if let imageData = try? Data(contentsOf: imageURL) {
-                            DispatchQueue.main.async {
-                                let image = UIImage(data: imageData)
-                                self.profilePic.image = image
-                            }
-                        }
-                    }
-                }
-                else{
-                    let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
-                    if let backupImageURL = URL(string: backupProfile) {
-                        DispatchQueue.global().async {
-                            if let imageData = try? Data(contentsOf: backupImageURL) {
-                                DispatchQueue.main.async {
-                                    let image = UIImage(data: imageData)
-                                    self.profilePic.image = image
-                                }
-                            }
-                        }
-                    }
-                }
+        userRef.getDocument { [weak self] (document, error) in
+            guard let self = self, let document = document, document.exists else {
+                // Handle error or nil self
+                return
+            }
+
+            if let imageURLString = document.data()?["profilePic"] as? String,
+               let imageURL = URL(string: imageURLString) {
+                // Load the profile picture using Kingfisher
+                self.profilePic.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"))
             } else {
-                print("User document not found")
+                let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
+                if let backupImageURL = URL(string: backupProfile) {
+                    // Load the backup profile picture using Kingfisher
+                    self.profilePic.kf.setImage(with: backupImageURL, placeholder: UIImage(named: "placeholder_image"))
+                }
             }
         }
         let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))

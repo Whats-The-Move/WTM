@@ -7,6 +7,7 @@ import Kingfisher
 class friendsGoingViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var titleText: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var friendsGoingTableView: UITableView!
     
     var selectedParty: Party?
@@ -26,12 +27,16 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
         if publicOrPriv {
             partyID = selectedParty?.name ?? ""
         } else {
-            partyID = selectedPrivateParty?.event ?? ""
+            partyID = selectedPrivateParty?.id ?? ""
         }
         print(partyID)
 
         titleText.textColor = .white
-        titleText.text = partyID
+        if publicOrPriv {
+            titleText.text = partyID
+        } else {
+            titleText.text = selectedPrivateParty?.event
+        }
         searchBar.delegate = self
         searchBar.overrideUserInterfaceStyle = .dark
         friendsGoingTableView.register(addFriendCustomCellClass.self, forCellReuseIdentifier: "friendCell")
@@ -41,14 +46,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
 
         db = Firestore.firestore()
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
-        view.addGestureRecognizer(tapGesture)
-
         fetchFriendsGoing()
-    }
-
-    @objc func dismissViewController() {
-        self.dismiss(animated: true, completion: nil)
     }
 
     func fetchFriendsGoing() {
@@ -262,7 +260,11 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
             }
         }
     }
-
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
 }
 
 extension friendsGoingViewController: UITableViewDataSource {
@@ -277,6 +279,15 @@ extension friendsGoingViewController: UITableViewDataSource {
         cell.configure(with: user)
 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userSelectedVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "userSelectedViewController") as! UserSelectedViewController
+
+        let user = searching ? searchFriend[indexPath.row] : friendsGoing[indexPath.row]
+        userSelectedVC.uid = user.uid // Set the uid of the selected friend in the UserSelectedViewController
+        
+        present(userSelectedVC, animated: true, completion: nil)
     }
 }
 

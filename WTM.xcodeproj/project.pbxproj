@@ -15,6 +15,7 @@
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
 		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
 		088BD7C22A68885A008D3EA9 /* plainProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */; };
+		088BD7C42A68C1A5008D3EA9 /* userSelectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */; };
 		088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */; };
 		08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */; };
 		08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */; };
@@ -78,6 +79,7 @@
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
 		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
 		088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = plainProfileViewController.swift; sourceTree = "<group>"; };
+		088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = userSelectedViewController.swift; sourceTree = "<group>"; };
 		088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendsGoingViewController.swift; sourceTree = "<group>"; };
 		08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allFriendsPopUpViewController.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */,
 				088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */,
 				088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */,
+				088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -512,6 +515,7 @@
 				103D80A22A3E77870032E4D3 /* BadgesViewController.swift in Sources */,
 				105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */,
 				088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */,
+				088BD7C42A68C1A5008D3EA9 /* userSelectedViewController.swift in Sources */,
 				08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */,
 				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
 				103D80A02A38E71F0032E4D3 /* InviteListViewController.swift in Sources */,
