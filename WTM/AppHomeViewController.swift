@@ -63,6 +63,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     @IBOutlet weak var publicDot: UILabel!
     @IBOutlet weak var privateDot: UILabel!
     @IBOutlet weak var publicButton: UIButton!
+    @IBOutlet weak var friendNotification: UIButton!
     @IBOutlet weak var profileUIImage: UIImageView!
     var searchParty = [String]()
     
@@ -132,6 +133,28 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             publicDot.isHidden = true
             privateButton.titleLabel?.textColor = .black
             privateDot.isHidden = false
+        }
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { [weak self] (document, error) in
+                guard let self = self, let document = document, document.exists else {
+                    // Handle error or nil self
+                    return
+                }
+                
+                if let data = document.data(),
+                   let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
+                    // Access the username and name values
+                    if pendingFriendRequests.isEmpty{
+                        self.friendNotification.isHidden = true
+                    } else{
+                        self.friendNotification.isHidden = false
+                        self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                    }
+                }
+            }
         }
 
         partyList.delegate = self

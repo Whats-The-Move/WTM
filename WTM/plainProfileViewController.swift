@@ -19,6 +19,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     @IBOutlet weak var backButton: UIImageView!
     @IBOutlet weak var badgesButton: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var friendNotification: UIButton!
     let imagePickerController = UIImagePickerController()
     
     override func viewDidLoad() {
@@ -42,29 +43,29 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
             
-            userRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    if let data = document.data(), let username = data["username"] as? String {
-                        // Access the username value
-                        self.usernameLabel.text = username
-                    }
+            userRef.getDocument { [weak self] (document, error) in
+                guard let self = self, let document = document, document.exists else {
+                    // Handle error or nil self
+                    return
                 }
                 
+                if let data = document.data(),
+                   let username = data["username"] as? String,
+                   let name = data["name"] as? String,
+                   let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
+                    // Access the username and name values
+                    if pendingFriendRequests.isEmpty{
+                        self.friendNotification.isHidden = true
+                    } else{
+                        self.friendNotification.isHidden = false
+                        self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                    }
+                    self.usernameLabel.text = username
+                    self.nameLabel.text = name
+                }
             }
         }
 
-        if let uid = Auth.auth().currentUser?.uid {
-            let userRef = Firestore.firestore().collection("users").document(uid)
-            
-            userRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    if let data = document.data(), let name = data["name"] as? String {
-                        self.nameLabel.text = name
-                    }
-                }
-                
-            }
-        }
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
@@ -88,6 +89,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
                 }
             }
         }
+        
         let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         let tapGestureBadge = UITapGestureRecognizer(target: self, action: #selector(badgeButtonTapped))
         badgesButton.isUserInteractionEnabled = true
