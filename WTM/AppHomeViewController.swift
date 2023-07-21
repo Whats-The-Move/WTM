@@ -69,6 +69,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     
     @IBAction func publicButtonTapped(_ sender: Any) {
         publicOrPriv = true
+        privateButton.titleLabel?.textColor = .lightGray
+        privateDot.isHidden = true
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
         TabBarController.overrideUserInterfaceStyle = .dark
@@ -78,6 +80,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     
     @IBAction func privateButtonTapped(_ sender: Any) {
         publicOrPriv = false
+        publicButton.titleLabel?.textColor = .lightGray
+        publicDot.isHidden = true
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
         TabBarController.overrideUserInterfaceStyle = .dark

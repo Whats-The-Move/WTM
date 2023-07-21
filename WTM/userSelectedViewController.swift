@@ -87,6 +87,15 @@ class UserSelectedViewController: UIViewController, UITableViewDelegate, UITable
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userSelectedVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "userSelectedViewController") as! UserSelectedViewController
+
+        let user = sharedFriends[indexPath.row]
+        userSelectedVC.uid = user.uid // Set the uid of the selected friend in the UserSelectedViewController
+        
+        present(userSelectedVC, animated: true, completion: nil)
+    }
+    
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true)
     }
