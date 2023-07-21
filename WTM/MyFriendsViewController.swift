@@ -35,7 +35,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
         userList.delegate = self
         userList.dataSource = self
         userList.overrideUserInterfaceStyle = .dark
-        userList.register(addFriendCustomCellClass.self, forCellReuseIdentifier: "UserCell")
+        userList.register(requestUserCellClass.self, forCellReuseIdentifier: "UserCell")
         searchBar.overrideUserInterfaceStyle = .dark
         
         // Set up Firestore
@@ -109,54 +109,6 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
             }
         }
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == userList{
-            print("Row selected at index: \(indexPath.row)")
-            let selectedCell = userList.cellForRow(at: indexPath)
-            performSegue(withIdentifier: "friendPopUpSegue", sender: selectedCell)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "friendPopUpSegue" {
-            let destinationVC = segue.destination as! friendPopUpViewController
-            if let cell = sender as? addFriendCustomCellClass {
-                let titleText = cell.usernameLabel.text ?? "error"
-                let nameText = cell.nameLabel.text ?? "error"
-                
-                // Retrieve the user's profile picture URL from Firestore using the username as reference
-                let db = Firestore.firestore()
-                let usersCollection = db.collection("users")
-                
-                usersCollection.whereField("username", isEqualTo: titleText).getDocuments { (snapshot, error) in
-                    guard let documents = snapshot?.documents else {
-                        print("No matching documents found")
-                        return
-                    }
-                    
-                    if let profilePicURL = documents.first?.data()["profilePic"] as? String {
-                        if let profileImageURL = URL(string: profilePicURL) {
-                            DispatchQueue.global().async {
-                                if let imageData = try? Data(contentsOf: profileImageURL) {
-                                    let profilePicture = UIImage(data: imageData)
-                                    
-                                    DispatchQueue.main.async {
-                                        destinationVC.profilePicImage.image = profilePicture
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                // Pass the other data to the destination view controller
-                destinationVC.titleText = titleText
-                destinationVC.nameText = nameText
-            }
-        }
-    }
-
 
     @IBAction func backButtonPushed(_ sender: Any) {
         dismiss(animated: true)
@@ -174,7 +126,7 @@ extension MyFriendsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == userList{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! addFriendCustomCellClass
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! requestUserCellClass
             
             let user = searching ? searchUser[indexPath.row] : users[indexPath.row]
             cell.configure(with: user)
