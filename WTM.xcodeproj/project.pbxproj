@@ -14,6 +14,8 @@
 		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
 		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
+		088BD7C22A68885A008D3EA9 /* plainProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */; };
+		088BD7C42A68C1A5008D3EA9 /* userSelectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */; };
 		088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */; };
 		08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */; };
 		08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */; };
@@ -33,7 +35,6 @@
 		08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D313A02A4A5CBA00FBF023 /* privateParty.swift */; };
 		08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F793292A4A505300679EB9 /* privatePartyCellClass.swift */; };
 		08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */; };
-		08F92B832A2AC68500ABB873 /* pendingFriendRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */; };
 		08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */; };
 		103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */; };
 		103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103D809D2A38D6610032E4D3 /* CreateEventViewController.swift */; };
@@ -77,6 +78,8 @@
 		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
 		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
+		088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = plainProfileViewController.swift; sourceTree = "<group>"; };
+		088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = userSelectedViewController.swift; sourceTree = "<group>"; };
 		088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendsGoingViewController.swift; sourceTree = "<group>"; };
 		08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allFriendsPopUpViewController.swift; sourceTree = "<group>"; };
@@ -102,7 +105,6 @@
 		08D313A02A4A5CBA00FBF023 /* privateParty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privateParty.swift; sourceTree = "<group>"; };
 		08F793292A4A505300679EB9 /* privatePartyCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePartyCellClass.swift; sourceTree = "<group>"; };
 		08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendPopUpViewController.swift; sourceTree = "<group>"; };
-		08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pendingFriendRequestViewController.swift; sourceTree = "<group>"; };
 		08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendRequestCellClass.swift; sourceTree = "<group>"; };
 		0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
@@ -208,13 +210,14 @@
 				082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */,
 				08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */,
 				08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */,
-				08F92B822A2AC68500ABB873 /* pendingFriendRequestViewController.swift */,
 				086042D029C292C900066892 /* reviewViewController.swift */,
 				10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */,
 				083B618D2A1FCE6400018798 /* video.png */,
 				10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */,
 				10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */,
 				088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */,
+				088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */,
+				088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -512,6 +515,7 @@
 				103D80A22A3E77870032E4D3 /* BadgesViewController.swift in Sources */,
 				105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */,
 				088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */,
+				088BD7C42A68C1A5008D3EA9 /* userSelectedViewController.swift in Sources */,
 				08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */,
 				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
 				103D80A02A38E71F0032E4D3 /* InviteListViewController.swift in Sources */,
@@ -524,7 +528,6 @@
 				08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */,
 				10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */,
 				103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */,
-				08F92B832A2AC68500ABB873 /* pendingFriendRequestViewController.swift in Sources */,
 				10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */,
 				082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
@@ -532,6 +535,7 @@
 				08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */,
 				10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
+				088BD7C22A68885A008D3EA9 /* plainProfileViewController.swift in Sources */,
 				08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */,
 				10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */,
 				08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */,

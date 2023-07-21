@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 protocol FriendRequestCellDelegate: AnyObject {
     func didTapAcceptButton(at index: Int)
@@ -10,10 +11,26 @@ class FriendRequestCellClass: UITableViewCell {
     weak var delegate: FriendRequestCellDelegate?
     private var cellIndex: Int = 0
     
+    private let profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        // Set any other properties for your profile image view
+        return imageView
+    }()
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = UIColor.white
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    
+    private let usernameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = UIColor.white
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -40,7 +57,9 @@ class FriendRequestCellClass: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        contentView.addSubview(profileImageView)
         contentView.addSubview(nameLabel)
+        contentView.addSubview(usernameLabel)
         contentView.addSubview(acceptButton)
         contentView.addSubview(denyButton)
         
@@ -55,13 +74,19 @@ class FriendRequestCellClass: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        let imageSize: CGFloat = contentView.bounds.height - 10
+        profileImageView.frame = CGRect(x: 10, y: 5, width: imageSize, height: imageSize)
+        profileImageView.layer.cornerRadius = imageSize / 2
+        profileImageView.clipsToBounds = true
+        
         let buttonWidth: CGFloat = 60
         let buttonHeight: CGFloat = 30
-        let padding: CGFloat = 20
+        let padding: CGFloat = 10
         
-        nameLabel.frame = CGRect(x: padding, y: contentView.bounds.midY - 15, width: contentView.bounds.width - (3 * padding) - (2 * buttonWidth), height: 30)
-        acceptButton.frame = CGRect(x: contentView.bounds.width - (2 * padding) - (2 * buttonWidth), y: contentView.bounds.midY - (buttonHeight / 2), width: buttonWidth, height: buttonHeight)
-        denyButton.frame = CGRect(x: contentView.bounds.width - padding - buttonWidth, y: contentView.bounds.midY - (buttonHeight / 2), width: buttonWidth, height: buttonHeight)
+        nameLabel.frame = CGRect(x: profileImageView.frame.maxX + padding, y: 5, width: contentView.bounds.width - (3 * padding) - (2 * buttonWidth) - imageSize, height: 20)
+        usernameLabel.frame = CGRect(x: profileImageView.frame.maxX + padding, y: 25, width: contentView.bounds.width - (3 * padding) - (2 * buttonWidth) - imageSize, height: 15)
+        acceptButton.frame = CGRect(x: contentView.bounds.width - (2 * padding) - (2 * buttonWidth), y: contentView.bounds.height - buttonHeight - 5, width: buttonWidth, height: buttonHeight)
+        denyButton.frame = CGRect(x: contentView.bounds.width - padding - buttonWidth, y: contentView.bounds.height - buttonHeight - 5, width: buttonWidth, height: buttonHeight)
     }
     
     @objc private func acceptButtonTapped() {
@@ -72,8 +97,12 @@ class FriendRequestCellClass: UITableViewCell {
         delegate?.didTapDenyButton(at: cellIndex)
     }
     
-    func configure(with name: String, index: Int) {
+    func configure(with name: String, username: String, profileImageURL: URL?, index: Int) {
         nameLabel.text = name
+        usernameLabel.text = username
         cellIndex = index
+        
+        // Load the profile image using Kingfisher
+        profileImageView.kf.setImage(with: profileImageURL)
     }
 }

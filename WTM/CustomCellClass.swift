@@ -69,7 +69,7 @@ class CustomCellClass: UITableViewCell {
                 print(party.name)
                 print(party.isGoing.count)
                 var fillPercent = 0.0
-                fillPercent = CGFloat(party.isGoing.count) / Double(maxPeople)
+                fillPercent = CGFloat(party.isGoing.count) / Double(maxPeople) - 0.000001
                 //let numGoing = party.isGoing.count
                 slider.translatesAutoresizingMaskIntoConstraints = false
                 slider.leadingAnchor.constraint(equalTo: bkgdSlider.leadingAnchor).isActive = true
