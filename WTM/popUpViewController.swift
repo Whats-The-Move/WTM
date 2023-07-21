@@ -15,7 +15,7 @@ import Firebase
 import AVFoundation
 
 class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    
+    var rating = 0.0
     var titleText: String = ""
     var likesLabel: Int = 0
     var dislikesLabel: Int = 0
@@ -63,13 +63,14 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     override func viewDidLoad() {
  
         //numPeople.text
-        self.isModalInPresentation = true
+        //self.isModalInPresentation = true
 
-        assignProfilePictures(commonFriends: commonFriends)
+        //assignProfilePictures(commonFriends: commonFriends)
         
 
         imagePickerController.delegate = self
         print(self.party)
+        print(self.rating)
         //borderView.layer.borderWidth = 9
         //borderView.layer.borderColor = UIColor.black.cgColor
         //borderView.layer.cornerRadius = 7
@@ -86,12 +87,14 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         map.overrideUserInterfaceStyle = .dark
         map.delegate = self
         
-        popupView.layer.cornerRadius = 8
+        //popupView.layer.cornerRadius = 8
         print("titleText: \(titleText)")
         print("likes: \(likesLabel)")
         print("address: \(addressLabel)")
+        print(self.rating)
+
         titleLabel.text = titleText
-        titleLabel.textColor = .black
+        //titleLabel.textColor = .black
                 
         //create func that checks firebase and changes color of is going, call in the viewdidload and the button clicked
 
@@ -133,8 +136,30 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
             }
             
             //super.viewDidLoad()
+            let grayStackView = self.createStarStackViewGray()
+            let stackView = self.createStarStackView()
+
+            self.view.addSubview(grayStackView)
+            self.view.addSubview(stackView)
+
+            // Set stack view constraints
+            stackView.translatesAutoresizingMaskIntoConstraints = false
+            grayStackView.translatesAutoresizingMaskIntoConstraints = false
+
             
+            let distanceBetweenLabels = self.titleLabel.bottomAnchor.constraint(equalTo: self.numPeople.topAnchor, constant: 0)
+            let centerYConstraint = stackView.centerYAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: distanceBetweenLabels.constant / 2 + 30)
+            let centerYConstraintGray = grayStackView.centerYAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: distanceBetweenLabels.constant / 2 + 30)
+            
+            NSLayoutConstraint.activate([
+                stackView.leadingAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -((30 * 5 + 8 * 4) / 2)),
+                centerYConstraint,
+                centerYConstraintGray,
+                grayStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
+            ])
+
         }
+        
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissViewController))
         swipeGesture.direction = .down
         view.addGestureRecognizer(swipeGesture)
@@ -147,6 +172,7 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         map.addGestureRecognizer(mapTapGesture)
         
     }
+    /*
     func assignProfilePictures(commonFriends: [String]) {
             let imageTags = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Update with the appropriate image view tags
             let numberOfImages = min(commonFriends.count, imageTags.count)
@@ -205,7 +231,61 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
                 }
             }
         }
+    */
+
     
+    func createStarStackViewGray() -> UIStackView {
+        // Create a horizontal stack view
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+       
+        // Create star image
+        let starImage = UIImage(systemName: "star.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) // Replace "star" with the name of your star image in the asset catalog
+
+        // Add five star image views to the stack view
+        for _ in 1...5 {
+            let starView = createStarImageView(image: starImage)
+            stackView.addArrangedSubview(starView)
+        }
+
+        return stackView
+    }
+    func createStarStackView() -> UIStackView {
+        // Create a horizontal stack view
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+
+        // Create star image
+        let starImage = UIImage(named: "pink_star_WTM") // Replace "star" with the name of your star image in the asset catalog
+        let roundedRating = Int(round(rating))
+
+        // Add five star image views to the stack view
+        for _ in 1...roundedRating {
+            let starView = createStarImageView(image: starImage)
+            stackView.addArrangedSubview(starView)
+        }
+
+        return stackView
+    }
+
+    func createStarImageView(image: UIImage?) -> UIImageView {
+        // Create UIImageView to represent a star
+        let starImageView = UIImageView(image: image)
+        starImageView.contentMode = .scaleAspectFit
+        
+        // Set star view size (adjust this as needed)
+        let starSize: CGFloat = 30
+        starImageView.widthAnchor.constraint(equalToConstant: starSize).isActive = true
+        starImageView.heightAnchor.constraint(equalToConstant: starSize).isActive = true
+
+        return starImageView
+    }
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")
@@ -286,6 +366,8 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         dismissViewController()
     }
     @IBAction func isGoingButtonClicked(_ sender: Any) {
+        print(self.rating)
+
         guard let uid = Auth.auth().currentUser?.uid else {
             print("User not authenticated.")
             return
@@ -572,10 +654,11 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
             //completion(isUserGoing)
         let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
         let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
+        let grayColor = UIColor(red: 128.0/255, green: 128.0/255, blue: 128.0/255, alpha: 0.5)
         
-        let backgroundColor = userGoing ? greenColor : pinkColor
+        let backgroundColor = userGoing ? greenColor : grayColor
         self.isGoingButton.backgroundColor = backgroundColor
-        let buttonText = userGoing ? "I'm Going!" : "Not going"
+        let buttonText = userGoing ? "Attending!" : "Not attending"
         // Assuming you have a button instance called 'myButton'
         isGoingButton.setTitle(buttonText, for: .normal)
 

@@ -147,222 +147,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C85905EF-2E0D-4F70-8D29-950C586C1A18"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WTM/popUpViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
-            landmarkName = "popUpViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "C85905EF-2E0D-4F70-8D29-950C586C1A18 - 6dc5c86fff409af0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.reviewButon.getter : Swift.Optional&lt;__C.UIButton&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "88">
-               </Location>
-               <Location
-                  uuid = "C85905EF-2E0D-4F70-8D29-950C586C1A18 - 2f6848321ea952fc"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.reviewButon.setter : Swift.Optional&lt;__C.UIButton&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "108">
-               </Location>
-               <Location
-                  uuid = "C85905EF-2E0D-4F70-8D29-950C586C1A18 - c47278125470380f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.reviewButon.modify : Swift.Optional&lt;__C.UIButton&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "C85905EF-2E0D-4F70-8D29-950C586C1A18 - d3c78ce71f36180a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.reviewButon.modify : Swift.Optional&lt;__C.UIButton&gt; with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "28">
-               </Location>
-               <Location
-                  uuid = "C85905EF-2E0D-4F70-8D29-950C586C1A18 - 68e95cd54812b2e5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; WTM.popUpViewController"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "908">
-               </Location>
-               <Location
-                  uuid = "C85905EF-2E0D-4F70-8D29-950C586C1A18 - ee477f13c01d093b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;WTM.popUpViewController&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "884">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0F31E36C-E362-4D27-B3B4-77FB64B3AB4A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WTM/popUpViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "popUpViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "0F31E36C-E362-4D27-B3B4-77FB64B3AB4A - 90da182132aff20a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.numPeople.getter : Swift.Optional&lt;__C.UILabel&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "88">
-               </Location>
-               <Location
-                  uuid = "0F31E36C-E362-4D27-B3B4-77FB64B3AB4A - 2247743c2d7eab7e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.numPeople.setter : Swift.Optional&lt;__C.UILabel&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "108">
-               </Location>
-               <Location
-                  uuid = "0F31E36C-E362-4D27-B3B4-77FB64B3AB4A - 17686b0169da684d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.numPeople.modify : Swift.Optional&lt;__C.UILabel&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "0F31E36C-E362-4D27-B3B4-77FB64B3AB4A - 24c03f2ba809986e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.numPeople.modify : Swift.Optional&lt;__C.UILabel&gt; with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "28">
-               </Location>
-               <Location
-                  uuid = "0F31E36C-E362-4D27-B3B4-77FB64B3AB4A - 68e95cd54812b2a3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; WTM.popUpViewController"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "988">
-               </Location>
-               <Location
-                  uuid = "0F31E36C-E362-4D27-B3B4-77FB64B3AB4A - ee477f13c01d097d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.popUpViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;WTM.popUpViewController&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/popUpViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "964">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "83D22BB8-F723-4436-8C18-A44D9FC2FA07"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -590,6 +374,22 @@
                   offsetFromSymbolStart = "300">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DEB1232D-B6B4-4932-9EDB-09B764FC0A4D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WTM/popUpViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "333"
+            endingLineNumber = "333"
+            landmarkName = "popUpViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
