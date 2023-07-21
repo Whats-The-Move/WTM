@@ -22,6 +22,30 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     @IBOutlet weak var friendNotification: UIButton!
     let imagePickerController = UIImagePickerController()
     
+    override func viewDidAppear(_ animated: Bool) {
+        if let uid = Auth.auth().currentUser?.uid {
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { [weak self] (document, error) in
+                guard let self = self, let document = document, document.exists else {
+                    // Handle error or nil self
+                    return
+                }
+                
+                if let data = document.data(),
+                   let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
+                    // Access the username and name values
+                    if pendingFriendRequests.isEmpty{
+                        self.friendNotification.isHidden = true
+                    } else{
+                        self.friendNotification.isHidden = false
+                        self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                    }
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

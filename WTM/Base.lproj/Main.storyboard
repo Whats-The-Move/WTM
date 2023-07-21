@@ -203,9 +203,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pink_star_WTM" translatesAutoresizingMaskIntoConstraints="NO" id="VG2-Kp-ojo">
-
                                                     <rect key="frame" x="31" y="8.6666666666666679" width="39" height="33.333333333333329"/>
-
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgw-ae-U4m">
                                                     <rect key="frame" x="42" y="16" width="24" height="20.666666666666671"/>
@@ -455,7 +453,6 @@
                                                 <constraint firstItem="hmd-dz-w7f" firstAttribute="leading" secondItem="G9M-8R-zJd" secondAttribute="trailing" constant="24" id="zak-cI-YZr"/>
                                             </constraints>
                                         </tableViewCellContentView>
-
                                         <color key="backgroundColor" systemColor="labelColor"/>
                                         <connections>
                                             <segue destination="rC3-Lr-I3U" kind="show" identifier="privatePopUpSegue" id="kRE-8o-jNX"/>
@@ -1015,7 +1012,7 @@
             <objects>
                 <viewController id="rC3-Lr-I3U" customClass="privatePopUpViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1Yh-Ys-Tek">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9z2-N1-qop">
@@ -1103,10 +1100,10 @@
                                                 </constraints>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="7" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nms-4b-j91">
-                                                <rect key="frame" x="68" y="100" width="47" height="57"/>
+                                                <rect key="frame" x="68" y="100" width="47" height="128"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="8" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hel-HJ-cFl">
-                                                <rect key="frame" x="130" y="99" width="47" height="59"/>
+                                                <rect key="frame" x="130" y="99" width="47" height="130"/>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="9" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BnK-ss-TCD">
                                                 <rect key="frame" x="191" y="100.33333333333331" width="47" height="47"/>
@@ -1124,7 +1121,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="6" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ex0-mx-eid">
-                                                <rect key="frame" x="8" y="100" width="47" height="57"/>
+                                                <rect key="frame" x="8" y="100" width="47" height="128"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemGray4Color"/>
@@ -2394,7 +2391,7 @@
         <!--Plain Profile View Controller-->
         <scene sceneID="x5w-bZ-CU0">
             <objects>
-                <viewController storyboardIdentifier="plainProfile" id="rRF-pa-RY0" customClass="plainProfileViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="plainProfile" modalPresentationStyle="fullScreen" id="rRF-pa-RY0" customClass="plainProfileViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QYH-pN-R4b">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2638,8 +2635,8 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="my friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rW-NN-dyq">
-                                <rect key="frame" x="125" y="53" width="141" height="39"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="my friends" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rW-NN-dyq">
+                                <rect key="frame" x="0.0" y="53" width="390" height="39"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="30"/>
                                 <color key="textColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
@@ -2670,7 +2667,7 @@
                             <constraint firstItem="Mca-Ou-3m9" firstAttribute="leading" secondItem="gLl-fG-jSr" secondAttribute="leading" id="igh-nZ-W28"/>
                             <constraint firstItem="Mca-Ou-3m9" firstAttribute="leading" secondItem="fkT-ar-5em" secondAttribute="leading" id="k9i-kg-t9g"/>
                             <constraint firstItem="gLl-fG-jSr" firstAttribute="bottom" secondItem="TGi-Ba-R1f" secondAttribute="bottom" id="zha-gY-dQT"/>
-                            <constraint firstItem="2rW-NN-dyq" firstAttribute="leading" secondItem="TGi-Ba-R1f" secondAttribute="leading" constant="125" id="zqP-67-KQv"/>
+                            <constraint firstItem="2rW-NN-dyq" firstAttribute="leading" secondItem="TGi-Ba-R1f" secondAttribute="leading" id="zqP-67-KQv"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6aI-fk-Ohh"/>
@@ -3101,7 +3098,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="GAb-m4-rqd"/>
-        <segue reference="AMW-4w-VvX"/>
+        <segue reference="A31-YU-FqS"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="WTM_" width="409" height="101"/>
@@ -3115,7 +3112,6 @@
         <image name="camera.on.rectangle.fill" catalog="system" width="128" height="98"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="chevron.backward.circle" catalog="system" width="128" height="123"/>
-        <image name="chevron.backward.circle.fill" catalog="system" width="128" height="123"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
