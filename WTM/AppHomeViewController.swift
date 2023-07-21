@@ -752,6 +752,9 @@ extension AppHomeViewController: UITableViewDataSource {
             if segue.identifier == "popupSegue" {
                     print("going into popup")
                     let destinationVC = segue.destination as! popUpViewController
+                //destinationVC.isModalInPresentation = true
+                //destinationVC.modalPresentationStyle = .fullScreen
+
                     if let cell = sender as? UITableViewCell {
                         if let label = cell.viewWithTag(1) as? UILabel {
                             let uid = Auth.auth().currentUser?.uid ?? ""
@@ -774,12 +777,14 @@ extension AppHomeViewController: UITableViewDataSource {
                                         print(backgroundColor)
                                         destinationVC.isGoingButton.backgroundColor = backgroundColor
                                         let buttonText = isUserGoing ? "I'm Going!" : "Not going"
-                                        destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
+                                        //destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
                                         destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
 
                                         // Assuming you have a button instance called 'myButton'
                                         destinationVC.isGoingButton.setTitle(buttonText, for: .normal)
+                                        destinationVC.isGoingButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
                                         destinationVC.isGoingButton.layer.cornerRadius = 8
+
                                     }
                                 }
                             }
@@ -807,11 +812,12 @@ extension AppHomeViewController: UITableViewDataSource {
                                         
                                         destinationVC.party = party
                                         
-                                        destinationVC.assignProfilePictures(commonFriends: self?.friendsGoing[party.name] ?? party.isGoing)
+                                        //destinationVC.assignProfilePictures(commonFriends: self?.friendsGoing[party.name] ?? party.isGoing)
             
-                                        destinationVC.numPeople.text = String(party.isGoing.count) + " people attending total"
-                                        destinationVC.numPeople.textColor = UIColor.black
-                                        destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
+                                        destinationVC.numPeople.text = String(party.isGoing.count) + " people attending"
+                                        destinationVC.rating = self?.ratingDict[party.name] ?? 0.0
+                                        //destinationVC.numPeople.textColor = UIColor.black
+                                        //destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
 
                                         destinationVC.commonFriends = self?.friendsGoing[party.name] ?? party.isGoing
                                         destinationVC.slider.widthAnchor.constraint(equalTo: destinationVC.bkgdSlider.widthAnchor, multiplier: widthMult).isActive = true
@@ -822,7 +828,7 @@ extension AppHomeViewController: UITableViewDataSource {
                                 }
                             }
 
-                            destinationVC.titleText = (label.text)!
+                            destinationVC.titleText = (label.text?.lowercased())!
                             destinationVC.likesLabel = likeDict[(label.text)!]!
                             destinationVC.dislikesLabel = dislikeDict[(label.text)!]!
                             destinationVC.addressLabel = addressDict[(label.text)!]!
@@ -858,7 +864,7 @@ extension AppHomeViewController: UITableViewDataSource {
                                         print(backgroundColor)
                                         destinationVC.isGoingButton.backgroundColor = backgroundColor
                                         let buttonText = isUserGoing ? "I'm Going!" : "Not going"
-                                        destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
+                                        //destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
                                         destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
 
                                         // Assuming you have a button instance called 'myButton'
@@ -890,9 +896,9 @@ extension AppHomeViewController: UITableViewDataSource {
                                         destinationVC.party = party
                                         destinationVC.assignProfilePictures(commonFriends: party.isGoing)
                                         
-                                        destinationVC.numPeople.text = String(party.isGoing.count) + " people attending total"
-                                        destinationVC.numPeople.textColor = UIColor.black
-                                        destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
+                                        destinationVC.numPeople.text = String(party.isGoing.count) + " partygoers tonight"
+                                        //destinationVC.numPeople.textColor = UIColor.black
+                                        //destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
                                         
                                         let timestamp: TimeInterval = TimeInterval(party.datetime) // Replace with your actual timestamp
                                         let date = Date(timeIntervalSince1970: timestamp)
