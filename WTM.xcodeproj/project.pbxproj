@@ -83,6 +83,7 @@
 		088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = userSelectedViewController.swift; sourceTree = "<group>"; };
 		088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendsGoingViewController.swift; sourceTree = "<group>"; };
 		08B8A5312A6AF6830082B8E6 /*  requestUserCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " requestUserCellClass.swift"; sourceTree = "<group>"; };
+		08B8A5332A6C77460082B8E6 /* WTM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WTM.entitlements; sourceTree = "<group>"; };
 		08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allFriendsPopUpViewController.swift; sourceTree = "<group>"; };
 		08CF038F297CB6030074A878 /* WTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,6 +186,7 @@
 		08CF0391297CB6030074A878 /* WTM */ = {
 			isa = PBXGroup;
 			children = (
+				08B8A5332A6C77460082B8E6 /* WTM.entitlements */,
 				103D80A32A428B200032E4D3 /* WTMDebug.entitlements */,
 				08CF03C4297CC1D50074A878 /* GoogleService-Info.plist */,
 				08CF0392297CB6030074A878 /* AppDelegate.swift */,
@@ -748,6 +750,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = WTM/WTM.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 022520232;
 				DEVELOPMENT_TEAM = Q5KHT58ZCF;

@@ -75,13 +75,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 
         return true
     }
+    
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        messaging.token{token, _ in
-            guard let token = token else{
-                return
-            }
-            print("token: " + token)
+        guard let token = fcmToken else {
+            return
         }
+        print("FCM Registration Token: \(token)")
+        // You can store the FCM token in user defaults or send it to your server for further processing.
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+            // Customize how the notification should be presented when the app is in the foreground.
+            // For example, you can show an alert, play a sound, or set the badge number.
+            completionHandler([.alert, .sound, .badge])
+        }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+            // Handle the notification data and perform appropriate actions.
+            // For example, you can open a specific screen in your app based on the notification data.
+
+            // Get the notification payload data
+            let userInfo = response.notification.request.content.userInfo
+
+            // Process the data as needed
+            // For example, you can extract information from userInfo dictionary and navigate to a specific screen.
+
+            // Call the completion handler after handling the notification
+            completionHandler()
+        }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // This method is called when the app successfully registers for remote notifications.
+        // You can send the device token to your server if needed.
+
+        // Convert the device token to a string representation (hexadecimal format)
+        let tokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+
+        // Print the device token for testing
+        print("Device Token: \(tokenString)")
+
+        // Pass the device token to Firebase Cloud Messaging
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // This method is called when there is an error in registering for remote notifications.
+        // Handle the error as needed.
+        print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
 
     // MARK: UISceneSession Lifecycle
