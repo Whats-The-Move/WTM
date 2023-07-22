@@ -1,10 +1,3 @@
-//
-//  BadgesViewController.swift
-//  WTM
-//
-//  Created by Aman Shah on 6/17/23.
-//
-
 import UIKit
 import Firebase
 import FirebaseAuth
@@ -12,17 +5,21 @@ import Kingfisher
 
 class BadgesViewController: UIViewController {
 
-    @IBOutlet weak var bkgdView: UIView!
-    @IBOutlet weak var bestFriendsView: UIView!
-    @IBOutlet weak var favSpotView: UIView!
-    @IBOutlet weak var fratView: UIView!
-    
-    @IBOutlet weak var bestFriendsLabel: UILabel!
-    
+    @IBOutlet weak var friendName1: UILabel!
+    @IBOutlet weak var friendPic1: UIImageView!
+    @IBOutlet weak var friendName2: UILabel!
+    @IBOutlet weak var friendPic2: UIImageView!
+    @IBOutlet weak var friendName3: UILabel!
+    @IBOutlet weak var friendPic3: UIImageView!
+    @IBOutlet weak var friendName4: UILabel!
+    @IBOutlet weak var friendPic4: UIImageView!
+    @IBOutlet weak var friendName5: UILabel!
+    @IBOutlet weak var friendPic5: UIImageView!
     @IBOutlet weak var favSpotLabel: UILabel!
-    @IBOutlet weak var favSpotHeader: UILabel!
-    @IBOutlet weak var fratPic: UIImageView!
     
+    @IBAction func backButtonTapped(_ sender: Any) {
+        dismiss(animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,63 +47,20 @@ class BadgesViewController: UIViewController {
 
                 // Call the assignProfilePictures function with the sortedFriendsKeys array
                 print("going to assign now")
-                self.assignProfilePictures(commonFriends: sortedFriendsKeys, friendValues: sortedFriends.map { $0.value })
+                self.assignProfilePictures(commonFriends: sortedFriendsKeys)
             } else {
                 print("bestFriends field not found or is not a dictionary")
             }
         }
-        //continue viewdidload here
-        // Do any additional setup after loading the view.
-        
+ 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
-        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
-        
     }
     
     @objc func dismissViewController() {
         self.dismiss(animated: true, completion: nil)
     }
-    /*override func viewDidLayoutSubviews() {
-        bestFriendsView.layer.cornerRadius = 10
-        favSpotView.layer.cornerRadius = 10
-        fratView.layer.cornerRadius = 10
-        fratPic.layer.cornerRadius = fratPic.frame.width / 2
-        favSpotLabel.layer.cornerRadius = 10
-        bestFriendsLabel.layer.cornerRadius = 10
-        favSpotHeader.layer.cornerRadius = 10
-
-        
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        
-        let frameWidth = 299.0
-        let frameHeight = screenHeight * (2/3) - 100
-        
-        let frameX = (screenWidth - frameWidth) / 2
-        let frameY = screenHeight / 4
-        
-        bkgdView.frame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
-        let headerHeight: CGFloat = 60.0
-        let spacing: CGFloat = 15.0
-        let horizontalPadding: CGFloat = 15.0
-        
-        let stackView = UIStackView(arrangedSubviews: [bestFriendsView, favSpotView, fratView])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = spacing
-        
-        // Calculate the frame for the stack view
-        let stackViewWidth = bkgdView.bounds.width - (horizontalPadding * 2)
-        let stackViewHeight = bkgdView.bounds.height - headerHeight - (spacing * 2)
-        let stackViewX = bkgdView.bounds.origin.x + horizontalPadding
-        let stackViewY = headerHeight + spacing
-        
-        stackView.frame = CGRect(x: stackViewX, y: stackViewY, width: stackViewWidth, height: stackViewHeight)
-        
-        bkgdView.addSubview(stackView)
-    }*/
+    
     func findMostVisitedParty() {
         let currentUserUID = Auth.auth().currentUser?.uid ?? ""
         
@@ -139,65 +93,79 @@ class BadgesViewController: UIViewController {
             }
         }
     }
-    func assignProfilePictures(commonFriends: [String], friendValues: [Int]) {
-        let imageTags = [1,2,3,4,5] // Update with the appropriate image view tags
+    
+    func assignProfilePictures(commonFriends: [String]) {
+        let imageViews = [friendPic1, friendPic2, friendPic3, friendPic4, friendPic5]
         
-        for i in 0..<min(commonFriends.count, imageTags.count) {
-            let friendUID = commonFriends[i]
-            let tag = imageTags[i]
-            
-            if let profileImageView = bestFriendsView.viewWithTag(tag) as? UIImageView {
-                // Assign profile picture to the image view
-                profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-                profileImageView.clipsToBounds = true
-                profileImageView.contentMode = .scaleAspectFill
-                profileImageView.layer.borderWidth = 2.0
-                let pinkColor = UIColor(red: 255/255, green: 106/255, blue: 245/255, alpha: 1.0)
-                profileImageView.layer.borderColor = pinkColor.cgColor
-                profileImageView.frame = CGRect(x: profileImageView.frame.origin.x, y: profileImageView.frame.origin.y, width: 50, height: 50)
+        for (index, friendUID) in commonFriends.prefix(imageViews.count).enumerated() {
+            let imageView = imageViews[index]
+            imageView?.layer.cornerRadius = 40
+            imageView?.clipsToBounds = true
+            imageView?.contentMode = .scaleAspectFill
+            imageView?.layer.borderWidth = 2.0
+            let pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+            imageView?.layer.borderColor = pinkColor.cgColor
+            imageView?.frame = CGRect(x: imageView?.frame.origin.x ?? 0.0, y: imageView?.frame.origin.y ?? 0.0, width: 50, height: 50)
 
-                            
-                let userRef = Firestore.firestore().collection("users").document(friendUID)
-                userRef.getDocument { (document, error) in
-                    if let error = error {
-                        print("Error retrieving profile picture: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    if let document = document, document.exists {
-                        if let profilePicURL = document.data()?["profilePic"] as? String {
-                            // Assuming you have a function to retrieve the image from the URL
-                            self.loadImage(from: profilePicURL, to: profileImageView)
-                        } else {
-                            print("No profile picture found for friend with UID: \(friendUID)")
-                        }
+            let userRef = Firestore.firestore().collection("users").document(friendUID)
+            userRef.getDocument { (document, error) in
+                if let error = error {
+                    print("Error retrieving profile picture: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let document = document, document.exists {
+                    if let profilePicURL = document.data()?["profilePic"] as? String {
+                        // Assuming you have a function to retrieve the image from the URL
+                        self.loadImage(from: profilePicURL, to: imageView)
+                    } else {
+                        print("No profile picture found for friend with UID: \(friendUID)")
                     }
                 }
             }
-            if let countLabel = bestFriendsView.viewWithTag(tag + 5) as? UILabel{
-                countLabel.text = String(friendValues[tag - 1])
-                
+            
+            fetchUserName(for: friendUID) { name in
+                let labelIndex = index + 1 // Assuming the labels are ordered similarly to the image views
+                let friendNameLabel = self.friendNameLabel(for: labelIndex)
+                friendNameLabel?.text = name ?? "Unknown" // Set the name or a default value if not found
             }
-
         }
     }
-
-    func loadImage(from urlString: String, to imageView: UIImageView) {
+    
+    func loadImage(from urlString: String, to imageView: UIImageView?) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")
             return
         }
         
-        imageView.kf.setImage(with: url)
+        imageView?.kf.setImage(with: url)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func fetchUserName(for uid: String, completion: @escaping (String?) -> Void) {
+        let userRef = Firestore.firestore().collection("users").document(uid)
+        userRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error retrieving user data: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            if let document = document, let name = document.data()?["name"] as? String {
+                completion(name)
+            } else {
+                completion(nil)
+            }
+        }
     }
-    */
-
+    
+    private func friendNameLabel(for index: Int) -> UILabel? {
+        switch index {
+        case 1: return friendName1
+        case 2: return friendName2
+        case 3: return friendName3
+        case 4: return friendName4
+        case 5: return friendName5
+        default: return nil
+        }
+    }
 }
