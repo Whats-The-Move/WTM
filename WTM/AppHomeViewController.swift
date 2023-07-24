@@ -775,7 +775,7 @@ extension AppHomeViewController: UITableViewDataSource {
             
             if segue.identifier == "popupSegue" {
                     print("going into popup")
-                    let destinationVC = segue.destination as! popUpViewController
+                    let destinationVC = segue.destination as! PublicPopUpViewController
                 //destinationVC.isModalInPresentation = true
                 //destinationVC.modalPresentationStyle = .fullScreen
 
@@ -796,18 +796,17 @@ extension AppHomeViewController: UITableViewDataSource {
                                         destinationVC.userGoing = isUserGoing
                                         let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
                                         let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
-                                        
-                                        let backgroundColor = isUserGoing ? greenColor : pinkColor
+                                        let grayColor = UIColor(red: 128.0/255, green: 128.0/255, blue: 128.0/255, alpha: 0.5)
+                                        let backgroundColor = isUserGoing ? greenColor : grayColor
                                         print(backgroundColor)
                                         destinationVC.isGoingButton.backgroundColor = backgroundColor
-                                        let buttonText = isUserGoing ? "I'm Going!" : "Not going"
+                                        let buttonText = isUserGoing ? "Attending!" : "Not attending"
                                         //destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
                                         destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
 
                                         // Assuming you have a button instance called 'myButton'
                                         destinationVC.isGoingButton.setTitle(buttonText, for: .normal)
-                                        destinationVC.isGoingButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-                                        destinationVC.isGoingButton.layer.cornerRadius = 8
+
 
                                     }
                                 }
@@ -844,7 +843,7 @@ extension AppHomeViewController: UITableViewDataSource {
                                         //destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
 
                                         destinationVC.commonFriends = self?.friendsGoing[party.name] ?? party.isGoing
-                                        destinationVC.slider.widthAnchor.constraint(equalTo: destinationVC.bkgdSlider.widthAnchor, multiplier: widthMult).isActive = true
+                                        //destinationVC.slider.widthAnchor.constraint(equalTo: destinationVC.bkgdSlider.widthAnchor, multiplier: widthMult).isActive = true
                                         
                                         
 

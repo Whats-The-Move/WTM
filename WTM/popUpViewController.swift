@@ -29,8 +29,11 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
     var party = Party(name: "", likes: 0, dislikes: 0, allTimeLikes: 0, allTimeDislikes: 0, address: "", rating: 0, isGoing: [""])
     var pplGoing = 0
     
+    
+    var bkgdSlider: UIView!
 
-    @IBOutlet weak var friendsView: UIView!
+
+    @IBOutlet weak var bkgdView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var map: MKMapView!
@@ -41,25 +44,25 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
 
     @IBOutlet weak var imageUploadButton: UIButton!
     
-    @IBOutlet weak var bkgdSlider: UIView!
+    //@IBOutlet weak var bkgdSlider: UIView!
     @IBOutlet weak var slider: UIView!
     @IBOutlet weak var backButton: UIButton!
     //@IBOutlet weak var borderView: UIView!
     var locationManger = CLLocationManager()
     let imagePickerController = UIImagePickerController()
 
-    override func viewDidLayoutSubviews() {
+    /*override func viewDidLayoutSubviews() {
         print("fuck")
         print(party.isGoing.count)
-        bkgdSlider.layer.cornerRadius = bkgdSlider.frame.height / 2
-        slider.layer.cornerRadius = slider.frame.height / 2
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.topAnchor.constraint(equalTo: bkgdSlider.topAnchor).isActive = true
-        slider.bottomAnchor.constraint(equalTo: bkgdSlider.bottomAnchor).isActive = true
-        slider.leadingAnchor.constraint(equalTo: bkgdSlider.leadingAnchor).isActive = true
+        //bkgdSlider.layer.cornerRadius = bkgdSlider.frame.height / 2
+        //slider.layer.cornerRadius = slider.frame.height / 2
+        //slider.translatesAutoresizingMaskIntoConstraints = false
+        //slider.topAnchor.constraint(equalTo: bkgdSlider.topAnchor).isActive = true
+        //slider.bottomAnchor.constraint(equalTo: bkgdSlider.bottomAnchor).isActive = true
+        //slider.leadingAnchor.constraint(equalTo: bkgdSlider.leadingAnchor).isActive = true
         //numPeople.centerXAnchor.constraint(equalTo: bkgdSlider.centerXAnchor).isActive = true
 
-    }
+    }*/
     override func viewDidLoad() {
  
         //numPeople.text
@@ -76,7 +79,15 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         //borderView.layer.cornerRadius = 7
         view.layer.cornerRadius = 10
 
-        
+        bkgdSlider = UIView()
+       
+        bkgdSlider.backgroundColor = .gray
+
+        // Add the bkgdSlider to the main view
+        view.addSubview(bkgdSlider)
+
+        // Set the constraints for the bkgdSlider
+
         locationManger.delegate = self
         locationManger.requestAlwaysAuthorization()
         locationManger.requestWhenInUseAuthorization()
@@ -150,12 +161,27 @@ class popUpViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
             let distanceBetweenLabels = self.titleLabel.bottomAnchor.constraint(equalTo: self.numPeople.topAnchor, constant: 0)
             let centerYConstraint = stackView.centerYAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: distanceBetweenLabels.constant / 2 + 30)
             let centerYConstraintGray = grayStackView.centerYAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: distanceBetweenLabels.constant / 2 + 30)
-            
+            self.bkgdView.translatesAutoresizingMaskIntoConstraints = false
+            self.bkgdSlider.translatesAutoresizingMaskIntoConstraints = false
+            self.isGoingButton.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 stackView.leadingAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -((30 * 5 + 8 * 4) / 2)),
                 centerYConstraint,
                 centerYConstraintGray,
-                grayStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
+                grayStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+                self.bkgdSlider.topAnchor.constraint(equalTo: self.bkgdView.topAnchor),
+                self.bkgdSlider.leadingAnchor.constraint(equalTo: self.bkgdView.leadingAnchor),
+                self.bkgdSlider.widthAnchor.constraint(equalTo: self.bkgdView.widthAnchor),
+                self.bkgdSlider.bottomAnchor.constraint(equalTo: self.isGoingButton.topAnchor),
+                self.bkgdSlider.heightAnchor.constraint(equalToConstant: 60),
+                self.isGoingButton.topAnchor.constraint(equalTo: self.bkgdSlider.bottomAnchor),
+                self.isGoingButton.leadingAnchor.constraint(equalTo: self.bkgdSlider.leadingAnchor),
+                self.isGoingButton.trailingAnchor.constraint(equalTo: self.bkgdSlider.trailingAnchor),
+                self.isGoingButton.heightAnchor.constraint(equalToConstant: 50),
+                self.bkgdView.topAnchor.constraint(equalTo: self.numPeople.bottomAnchor, constant: 30),
+                self.bkgdView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                self.bkgdView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                self.bkgdView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
 
         }
