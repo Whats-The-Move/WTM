@@ -113,7 +113,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        //partyList.sectionHeaderHeight = 8 // 8px vertical spacing between cells
+        partyList.separatorStyle = .none
+
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         profileUIImage.addGestureRecognizer(tapGestureRecognizer)
         profileUIImage.isUserInteractionEnabled = true
@@ -342,8 +344,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                     self.rankDict[party.name] = self.countNum
                                                         
                     let row = 0 // Insert at the beginning of the section
-                    let indexPath = IndexPath(row: row, section: 0)
-                    partyList.insertRows(at: [indexPath], with: .automatic)
+                    let indexPath = IndexPath(row: 0, section: row)
+                    partyList.insertSections([indexPath.section], with: .automatic)
                     self.countNum -= 1
                 }
             }
@@ -697,7 +699,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
 
 extension AppHomeViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         if publicOrPriv == true {
             if searching {
                 return searchParty.count
@@ -710,7 +714,18 @@ extension AppHomeViewController: UITableViewDataSource {
             return privateParties.count
         }
     }
-    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 8.0
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.clear
+        return headerView
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if publicOrPriv == true {
             let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
@@ -720,13 +735,13 @@ extension AppHomeViewController: UITableViewDataSource {
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 1
             cell.layer.borderColor = UIColor.white.cgColor
-            cell.backgroundColor = UIColor.black
+            cell.backgroundColor = UIColor.white
             
             let party: Party
             if searching {
-                party = parties.first { $0.name == searchParty[indexPath.row] }!
+                party = parties.first { $0.name == searchParty[indexPath.section] }!
             } else {
-                party = parties[indexPath.row]
+                party = parties[indexPath.section]
             }
             
             cell.configure(with: party, rankDict: rankDict)
@@ -739,7 +754,7 @@ extension AppHomeViewController: UITableViewDataSource {
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 1
             cell.layer.borderColor = UIColor.white.cgColor
-            cell.backgroundColor = UIColor.black
+            cell.backgroundColor = UIColor.white
             
             let party: privateParty
             if searching {
@@ -752,6 +767,7 @@ extension AppHomeViewController: UITableViewDataSource {
             return cell
         }
     }
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if publicOrPriv == true {
