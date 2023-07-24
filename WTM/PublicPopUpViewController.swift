@@ -14,7 +14,15 @@ import FirebaseStorage
 import Firebase
 import AVFoundation
 
-class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UINavigationControllerDelegate {
+class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
+
+    
+
+    struct Reviews {
+        var reviewText: String?
+        var rating: Int
+        var date: Double
+    }
     var rating = 0.0
     var titleText: String = "Joes"
     var likesLabel: Int = 0
@@ -27,6 +35,9 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
     var party = Party(name: "", likes: 0, dislikes: 0, allTimeLikes: 0, allTimeDislikes: 0, address: "", rating: 0, isGoing: [""])
     var pplGoing = 0
     var locationManger = CLLocationManager()
+    var reviews: [Reviews] = []
+    var avg = 0.0
+
 
     
     
@@ -38,6 +49,8 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
     var isGoingButton: UIButton! // New button
     var reviewLabel: UILabel! // New label
     var backButton: UIButton! // New button
+    var tableView: UITableView!
+
 
 
 
@@ -55,6 +68,10 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
             setupIsGoingButton()
             setupReviewLabel()
             setupBackButton()
+            setupTableView()
+            tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: "ReviewCell")
+            loadReviews()
+
 
 
 
@@ -223,6 +240,28 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
                 backButton.heightAnchor.constraint(equalToConstant: 50)
             ])
         }
+        func setupTableView() {
+            tableView = UITableView()
+            tableView.translatesAutoresizingMaskIntoConstraints = false
+            tableView.delegate = self
+            tableView.dataSource = self
+            tableView.backgroundColor = .clear
+            bkgdView.addSubview(tableView)
+
+            NSLayoutConstraint.activate([
+                // Set top anchor of table view to bottom of reviewLabel
+                tableView.topAnchor.constraint(equalTo: reviewLabel.bottomAnchor),
+
+                // Set left anchor of table view to left anchor of bkgdView
+                tableView.leadingAnchor.constraint(equalTo: bkgdView.leadingAnchor),
+
+                // Set right anchor of table view to right anchor of bkgdView
+                tableView.trailingAnchor.constraint(equalTo: bkgdView.trailingAnchor),
+
+                // Set bottom anchor of table view to bottom anchor of bkgdView
+                tableView.bottomAnchor.constraint(equalTo: bkgdView.bottomAnchor),
+            ])
+        }
         @objc func backButtonTapped() {
                // Function to be called when the back button is tapped
                // Add your desired actions here
@@ -371,6 +410,72 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
 
             return starImageView
         }
+        func loadReviews(){
+            databaseRef = Database.database().reference().child("Parties").child(titleText).child("Reviews")
+            databaseRef?.observeSingleEvent(of: .value, with: { (snapshot) in
+                var totalRating = 0
+                var reviewCount = 0
+                for child in snapshot.children {
+                        if let childSnapshot = child as? DataSnapshot,
+                           let reviewDict = childSnapshot.value as? [String:Any]{
+                            print(reviewDict)
+                            let comment = reviewDict["comment"] as? String
+                           let date = reviewDict["date"] as? Double
+                           let rating = reviewDict["rating"] as? Int
+                            let review = Reviews(reviewText: comment, rating: rating ?? 5, date: date ?? 1682310604178)
+                            if let rating = reviewDict["rating"] as? Int {
+                                totalRating += rating
+                                reviewCount += 1
+                            }
+                            self.reviews.insert(review, at: 0)
+                        }
+                }
+                
+                if reviewCount != 0 {
+                    self.avg = Double(totalRating) / Double(reviewCount)
+                    
+                }
+
+                
+                    self.avg = round(self.avg * 10) / 10.0
+                    self.databaseRef = Database.database().reference().child("Parties").child(self.titleText)
+                    self.databaseRef?.child("avgStars").setValue(self.avg)
+                print("self.avg is " + String(self.avg))
+               //self.avgStars.text = String(self.avg)
+                
+                
+
+                
+                self.tableView.reloadData()
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+        }
+        
+        
+
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            // Return the number of rows in your table view
+            return reviews.count
+        }
+        func timeAgoString(from timestamp: Double) -> String {
+            let date = Date(timeIntervalSince1970: (timestamp - 1000)/1000 )
+            let formatter = RelativeDateTimeFormatter()
+            formatter.unitsStyle = .full
+            formatter.dateTimeStyle = .numeric
+            return formatter.localizedString(for: date, relativeTo: Date())
+        }
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = ReviewTableViewCell(style: .default, reuseIdentifier: "ReviewCell")
+
+            // Assuming you have a review object containing the necessary data
+            let review = reviews[indexPath.row]
+            
+            // Configure the cell with review data
+            cell.configure(comment: review.reviewText ?? "", date: review.date, rating: review.rating)
+
+            return cell
+        }
 
     /*
     // MARK: - Navigation
@@ -383,3 +488,5 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
     */
 
 }
+
+
