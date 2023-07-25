@@ -110,9 +110,21 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var privNum = 0
     public var sortedParties: [(partyID: String, friendsCount: Int)] = []
     public var friendsGoing = [String : [String]]()
+    public var transImage = UIImage()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Create a transparent UIImage with the desired size
+        let imageSize = CGSize(width: 39, height: 39) // Replace with your desired size
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
+        let transparentColor = UIColor.clear
+        transparentColor.setFill()
+        UIRectFill(CGRect(origin: .zero, size: imageSize))
+        transImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        UIGraphicsEndImageContext()
+
+        // Set the transparent image to the UIImageView
+
         //partyList.sectionHeaderHeight = 8 // 8px vertical spacing between cells
         partyList.separatorStyle = .none
 

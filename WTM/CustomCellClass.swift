@@ -11,6 +11,8 @@ protocol CustomCellDelegate: AnyObject {
 class CustomCellClass: UITableViewCell {
     weak var delegate: CustomCellDelegate?
     private var party: Party?
+    private var profileImageViews: [UIImageView] = []
+
     
     @objc private func profTapped(_ sender: UITapGestureRecognizer) {
         guard let party = party else {
@@ -142,113 +144,130 @@ class CustomCellClass: UITableViewCell {
     }
 
     func assignProfilePictures(commonFriends: [String]) {
-        let imageViewsStack = UIStackView()
-        imageViewsStack.axis = .horizontal
-        imageViewsStack.alignment = .fill
-        imageViewsStack.distribution = .fill
-        imageViewsStack.spacing = -10 // Adjust the spacing between image views as needed
+            let imageViewsStack = UIStackView()
+            imageViewsStack.axis = .horizontal
+            imageViewsStack.alignment = .fill
+            imageViewsStack.distribution = .fill
+            imageViewsStack.spacing = -10 // Adjust the spacing between image views as needed
+            let maxImageCount = 4 // Maximum number of profile pictures to show
 
-        let maxImageCount = 4 // Maximum number of profile pictures to show
-        let imageTagOffset = 100 // Adjust this offset as needed to avoid conflicts with other view tags
+            // Remove existing profile image views from the stack view and clear the array
+            for profileImageView in profileImageViews {
+                imageViewsStack.removeArrangedSubview(profileImageView)
+                profileImageView.removeFromSuperview()
+            }
+            profileImageViews.removeAll()
 
-        for i in 0..<min(commonFriends.count, maxImageCount) {
-            let friendUID = commonFriends[i]
-            let profileImageView = UIImageView()
+            // Create 4 image views and add them to the stack view
+            for _ in 0..<maxImageCount {
+                let profileImageView = UIImageView()
+                profileImageViews.append(profileImageView)
 
-            // Assign properties to the profile image view
-            
-            profileImageView.layer.cornerRadius = 39.0 / 2
-            profileImageView.clipsToBounds = true
-            profileImageView.contentMode = .scaleAspectFill
-            profileImageView.layer.borderWidth = 2.0
-            profileImageView.layer.borderColor = UIColor.white.cgColor
-            profileImageView.isUserInteractionEnabled = true
-            profileImageView.frame = CGRect(x: 0, y: 0, width: 39, height: 39)
-            
-            // Set constraints to maintain aspect ratio
-            profileImageView.translatesAutoresizingMaskIntoConstraints = false
-            profileImageView.widthAnchor.constraint(equalToConstant: 39).isActive = true
-            profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
-            profileImageView.addGestureRecognizer(tapGesture)
+                // Set up properties and constraints for the profileImageView (same as before)
+                profileImageView.layer.cornerRadius = 39.0 / 2
+                profileImageView.clipsToBounds = true
+                profileImageView.contentMode = .scaleAspectFill
+                profileImageView.layer.borderWidth = 2.0
+                profileImageView.layer.borderColor = UIColor.white.cgColor
+                profileImageView.isUserInteractionEnabled = true
+                profileImageView.frame = CGRect(x: 0, y: 0, width: 39, height: 39)
+                profileImageView.translatesAutoresizingMaskIntoConstraints = false
+                profileImageView.widthAnchor.constraint(equalToConstant: 39).isActive = true
+                profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
+                profileImageView.addGestureRecognizer(tapGesture)
 
-            // Add the profile image view to the stack view
-            imageViewsStack.addArrangedSubview(profileImageView)
+                // Add the profile image view to the stack view
+                imageViewsStack.addArrangedSubview(profileImageView)
+            }
 
-            // Load the profile picture asynchronously
-            let userRef = Firestore.firestore().collection("users").document(friendUID)
-            userRef.getDocument { (document, error) in
-                if let error = error {
-                    print("Error retrieving profile picture: \(error.localizedDescription)")
-                    return
+            // Assign profile pictures to the image views
+            for i in 0..<commonFriends.count {
+                if i >= maxImageCount {
+                    break // Break out of the loop if we have filled all 4 image views
                 }
 
-                if let document = document, document.exists {
-                    if let profilePicURL = document.data()?["profilePic"] as? String {
-                        // Assuming you have a function to retrieve the image from the URL
-                        self.loadImage(from: profilePicURL, to: profileImageView)
-                    } else {
-                        print("No profile picture found for friend with UID: \(friendUID)")
+                let friendUID = commonFriends[i]
+                let profileImageView = profileImageViews[i]
+
+                // Load the profile picture from commonFriends
+                let userRef = Firestore.firestore().collection("users").document(friendUID)
+                userRef.getDocument { (document, error) in
+                    if let error = error {
+                        print("Error retrieving profile picture: \(error.localizedDescription)")
+                        return
+                    }
+
+                    if let document = document, document.exists {
+                        if let profilePicURL = document.data()?["profilePic"] as? String {
+                            // Assuming you have a function to retrieve the image from the URL
+                            self.loadImage(from: profilePicURL, to: profileImageView)
+                        } else {
+                            print("No profile picture found for friend with UID: \(friendUID)")
+                            profileImageView.image = AppHomeViewController().transImage
+                            profileImageView.layer.borderWidth = 0
+                        }
                     }
                 }
             }
-        }
 
-        // Hide all image views before updating the stack view
-        for tag in imageTagOffset..<(imageTagOffset + maxImageCount) {
-            if let profileImageView = self.viewWithTag(tag) as? UIImageView {
-                profileImageView.isHidden = true
+            // Hide the remaining image views with transparent image
+            for i in min(commonFriends.count, 4)..<maxImageCount {
+                profileImageViews[i].image = AppHomeViewController().transImage
+                profileImageViews[i].layer.borderWidth = 0
+            }
+
+            // Rest of your existing code...
+            // ...
+
+            // Update the stack view with the arranged profile image views
+            let stackViewSuperview = contentView // Replace this with the superview of your desired location for the stack view
+            imageViewsStack.translatesAutoresizingMaskIntoConstraints = false
+            stackViewSuperview.addSubview(imageViewsStack)
+
+            // Add constraints to position the stack view (bottom right corner of the cell)
+            let circles = 4//min(commonFriends.count, 4)
+            NSLayoutConstraint.activate([
+                imageViewsStack.leadingAnchor.constraint(equalTo: stackViewSuperview.trailingAnchor, constant: -180), // Adjust the right margin as needed
+                imageViewsStack.bottomAnchor.constraint(equalTo: stackViewSuperview.bottomAnchor, constant: -8), // Adjust the bottom margin as needed
+                imageViewsStack.widthAnchor.constraint(equalToConstant: CGFloat(circles) * 39.0 - CGFloat(circles - 1) * 10.0), // Adjust the width of the stack view based on the number of image views and the spacing
+                imageViewsStack.heightAnchor.constraint(equalToConstant: 39.0)
+            ])
+
+            // Show the appropriate number of image views in the stack view
+            /*for i in 0..<min(commonFriends.count, maxImageCount) {
+                print("adding profile")
+                if let profileImageView = imageViewsStack.arrangedSubviews[i] as? UIImageView {
+                    profileImageView.isHidden = false
+                }
+            }*/
+
+            // If there are more than 4 common friends, show the "plus more" label
+            // Create the plusMoreLabel
+            let plusMoreLabel = UILabel()
+            plusMoreLabel.font = UIFont(name: "Futura-Medium", size: 15)
+            plusMoreLabel.textColor = .black
+            plusMoreLabel.translatesAutoresizingMaskIntoConstraints = false
+
+            // Add the plusMoreLabel to the cell's contentView
+            contentView.addSubview(plusMoreLabel)
+
+            // Set up constraints for the plusMoreLabel
+            NSLayoutConstraint.activate([
+                plusMoreLabel.leadingAnchor.constraint(equalTo: imageViewsStack.trailingAnchor, constant: 8),
+                plusMoreLabel.topAnchor.constraint(equalTo: imageViewsStack.topAnchor),
+                plusMoreLabel.bottomAnchor.constraint(equalTo: imageViewsStack.bottomAnchor),
+                // Optionally, you can add a width constraint for the label if needed:
+                // plusMoreLabel.widthAnchor.constraint(equalToConstant: 100)
+            ])
+
+            // Update the plusMoreLabel text based on commonFriends count and maxImageCount
+            if commonFriends.count > maxImageCount {
+                plusMoreLabel.text = "+" + String(commonFriends.count - maxImageCount)
+            } else {
+                plusMoreLabel.text = ""
             }
         }
-
-        // Update the stack view with the arranged profile image views
-        let stackViewSuperview = contentView // Replace this with the superview of your desired location for the stack view
-        imageViewsStack.translatesAutoresizingMaskIntoConstraints = false
-        stackViewSuperview.addSubview(imageViewsStack)
-
-        // Add constraints to position the stack view (bottom right corner of the cell)
-        let circles = min(commonFriends.count, 4)
-        NSLayoutConstraint.activate([
-            imageViewsStack.leadingAnchor.constraint(equalTo: stackViewSuperview.trailingAnchor, constant: -180), // Adjust the right margin as needed
-            imageViewsStack.bottomAnchor.constraint(equalTo: stackViewSuperview.bottomAnchor, constant: -8), // Adjust the bottom margin as needed
-            imageViewsStack.widthAnchor.constraint(equalToConstant: CGFloat(circles) * 39.0 - CGFloat(circles - 1) * 10.0), // Adjust the width of the stack view based on the number of image views and the spacing
-            imageViewsStack.heightAnchor.constraint(equalToConstant: 39.0)
-        ])
-
-        // Show the appropriate number of image views in the stack view
-        for i in 0..<min(commonFriends.count, maxImageCount) {
-            if let profileImageView = imageViewsStack.arrangedSubviews[i] as? UIImageView {
-                profileImageView.isHidden = false
-            }
-        }
-
-        // If there are more than 4 common friends, show the "plus more" label
-        // Create the plusMoreLabel
-        let plusMoreLabel = UILabel()
-        plusMoreLabel.font = UIFont(name: "Futura-Medium", size: 15)
-        plusMoreLabel.textColor = .black
-        plusMoreLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        // Add the plusMoreLabel to the cell's contentView
-        contentView.addSubview(plusMoreLabel)
-
-        // Set up constraints for the plusMoreLabel
-        NSLayoutConstraint.activate([
-            plusMoreLabel.leadingAnchor.constraint(equalTo: imageViewsStack.trailingAnchor, constant: 8),
-            plusMoreLabel.topAnchor.constraint(equalTo: imageViewsStack.topAnchor),
-            plusMoreLabel.bottomAnchor.constraint(equalTo: imageViewsStack.bottomAnchor),
-            // Optionally, you can add a width constraint for the label if needed:
-            // plusMoreLabel.widthAnchor.constraint(equalToConstant: 100)
-        ])
-
-        // Update the plusMoreLabel text based on commonFriends count and maxImageCount
-        if commonFriends.count > maxImageCount {
-            plusMoreLabel.text = "+" + String(commonFriends.count - maxImageCount)
-        } else {
-            plusMoreLabel.text = ""
-        }
-    
-    }
 
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
