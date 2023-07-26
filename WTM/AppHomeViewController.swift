@@ -59,36 +59,13 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     var partyArray = [String]()
     var privatePartyArray = [String]()
     var searching = false
-    @IBOutlet weak var privateButton: UIButton!
-    @IBOutlet weak var publicDot: UILabel!
-    @IBOutlet weak var privateDot: UILabel!
-    @IBOutlet weak var publicButton: UIButton!
+
     @IBOutlet weak var friendNotification: UIButton!
     @IBOutlet weak var profileUIImage: UIImageView!
     var searchParty = [String]()
     
     
-    @IBAction func publicButtonTapped(_ sender: Any) {
-        publicOrPriv = true
-        privateButton.titleLabel?.textColor = .lightGray
-        privateDot.isHidden = true
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-        TabBarController.overrideUserInterfaceStyle = .dark
-        TabBarController.modalPresentationStyle = .fullScreen
-        present(TabBarController, animated: false, completion: nil)
-    }
-    
-    @IBAction func privateButtonTapped(_ sender: Any) {
-        publicOrPriv = false
-        publicButton.titleLabel?.textColor = .lightGray
-        publicDot.isHidden = true
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-        TabBarController.overrideUserInterfaceStyle = .dark
-        TabBarController.modalPresentationStyle = .fullScreen
-        present(TabBarController, animated: false, completion: nil)
-    }
+
     
     var databaseRef: DatabaseReference?
     var userDatabaseRef: DatabaseReference?
@@ -132,22 +109,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         profileUIImage.addGestureRecognizer(tapGestureRecognizer)
         profileUIImage.isUserInteractionEnabled = true
         
-        publicButton.titleLabel?.textColor = .lightGray
-        privateButton.titleLabel?.textColor = .lightGray
-        publicDot.isHidden = true
-        privateDot.isHidden = true
 
-        if publicOrPriv {
-            publicButton.titleLabel?.textColor = .black
-            publicDot.isHidden = false
-            privateButton.titleLabel?.textColor = .lightGray
-            privateDot.isHidden = true
-        } else {
-            publicButton.titleLabel?.textColor = .lightGray
-            publicDot.isHidden = true
-            privateButton.titleLabel?.textColor = .black
-            privateDot.isHidden = false
-        }
+
+
         
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
@@ -730,7 +694,7 @@ extension AppHomeViewController: UITableViewDataSource {
         return 1
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 8.0
+        return 0.00000000000000000000000001
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
