@@ -59,36 +59,13 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     var partyArray = [String]()
     var privatePartyArray = [String]()
     var searching = false
-    @IBOutlet weak var privateButton: UIButton!
-    @IBOutlet weak var publicDot: UILabel!
-    @IBOutlet weak var privateDot: UILabel!
-    @IBOutlet weak var publicButton: UIButton!
+
     @IBOutlet weak var friendNotification: UIButton!
     @IBOutlet weak var profileUIImage: UIImageView!
     var searchParty = [String]()
     
     
-    @IBAction func publicButtonTapped(_ sender: Any) {
-        publicOrPriv = true
-        privateButton.titleLabel?.textColor = .lightGray
-        privateDot.isHidden = true
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-        TabBarController.overrideUserInterfaceStyle = .dark
-        TabBarController.modalPresentationStyle = .fullScreen
-        present(TabBarController, animated: false, completion: nil)
-    }
-    
-    @IBAction func privateButtonTapped(_ sender: Any) {
-        publicOrPriv = false
-        publicButton.titleLabel?.textColor = .lightGray
-        publicDot.isHidden = true
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-        TabBarController.overrideUserInterfaceStyle = .dark
-        TabBarController.modalPresentationStyle = .fullScreen
-        present(TabBarController, animated: false, completion: nil)
-    }
+
     
     var databaseRef: DatabaseReference?
     var userDatabaseRef: DatabaseReference?
@@ -110,30 +87,31 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var privNum = 0
     public var sortedParties: [(partyID: String, friendsCount: Int)] = []
     public var friendsGoing = [String : [String]]()
+    public var transImage = UIImage()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        // Create a transparent UIImage with the desired size
+        let imageSize = CGSize(width: 39, height: 39) // Replace with your desired size
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
+        let transparentColor = UIColor.clear
+        transparentColor.setFill()
+        UIRectFill(CGRect(origin: .zero, size: imageSize))
+        transImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        UIGraphicsEndImageContext()
+
+        // Set the transparent image to the UIImageView
+
+        //partyList.sectionHeaderHeight = 8 // 8px vertical spacing between cells
+        partyList.separatorStyle = .none
+
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         profileUIImage.addGestureRecognizer(tapGestureRecognizer)
         profileUIImage.isUserInteractionEnabled = true
         
-        publicButton.titleLabel?.textColor = .lightGray
-        privateButton.titleLabel?.textColor = .lightGray
-        publicDot.isHidden = true
-        privateDot.isHidden = true
 
-        if publicOrPriv {
-            publicButton.titleLabel?.textColor = .black
-            publicDot.isHidden = false
-            privateButton.titleLabel?.textColor = .lightGray
-            privateDot.isHidden = true
-        } else {
-            publicButton.titleLabel?.textColor = .lightGray
-            publicDot.isHidden = true
-            privateButton.titleLabel?.textColor = .black
-            privateDot.isHidden = false
-        }
+
+
         
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
@@ -342,8 +320,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                     self.rankDict[party.name] = self.countNum
                                                         
                     let row = 0 // Insert at the beginning of the section
-                    let indexPath = IndexPath(row: row, section: 0)
-                    partyList.insertRows(at: [indexPath], with: .automatic)
+                    let indexPath = IndexPath(row: 0, section: row)
+                    partyList.insertSections([indexPath.section], with: .automatic)
                     self.countNum -= 1
                 }
             }
@@ -697,7 +675,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
 
 extension AppHomeViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         if publicOrPriv == true {
             if searching {
                 return searchParty.count
@@ -710,7 +690,18 @@ extension AppHomeViewController: UITableViewDataSource {
             return privateParties.count
         }
     }
-    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0.00000000000000000000000001
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.clear
+        return headerView
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if publicOrPriv == true {
             let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
@@ -720,13 +711,13 @@ extension AppHomeViewController: UITableViewDataSource {
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 1
             cell.layer.borderColor = UIColor.white.cgColor
-            cell.backgroundColor = UIColor.black
+            cell.backgroundColor = UIColor.white
             
             let party: Party
             if searching {
-                party = parties.first { $0.name == searchParty[indexPath.row] }!
+                party = parties.first { $0.name == searchParty[indexPath.section] }!
             } else {
-                party = parties[indexPath.row]
+                party = parties[indexPath.section]
             }
             
             cell.configure(with: party, rankDict: rankDict)
@@ -739,7 +730,7 @@ extension AppHomeViewController: UITableViewDataSource {
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 1
             cell.layer.borderColor = UIColor.white.cgColor
-            cell.backgroundColor = UIColor.black
+            cell.backgroundColor = UIColor.white
             
             let party: privateParty
             if searching {
@@ -752,6 +743,7 @@ extension AppHomeViewController: UITableViewDataSource {
             return cell
         }
     }
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if publicOrPriv == true {
