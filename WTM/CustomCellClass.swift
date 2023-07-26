@@ -17,6 +17,9 @@ class CustomCellClass: UITableViewCell {
     var barImageView = UIImageView()
     var partyLabel = UILabel()
     var partyGoersLabel = UILabel()
+    var isGoingButton = UIImageView()
+    var gradientLayer = CAGradientLayer()
+
     
     @objc private func profTapped(_ sender: UITapGestureRecognizer) {
         guard let party = party else {
@@ -34,6 +37,7 @@ class CustomCellClass: UITableViewCell {
     }
 
     func configure(with party: Party, rankDict: [String: Int]) {
+        
         createImageView(party: party)
         self.party = party
         
@@ -103,38 +107,87 @@ class CustomCellClass: UITableViewCell {
         }
 
 */
-        if let goingButton = viewWithTag(4) as? UIButton {
-            var isGoingBool = false
-            checkIfUserIsGoing(party: party) { isUserGoing in
-                //print("isUserGoing: \(isUserGoing)")
-                // Use the value of isUserGoing to update the button's appearance or perform any other action
-                isGoingBool = isUserGoing
-                if let titleLabel = goingButton.titleLabel {
-                    let label = isGoingBool ? "I'm Going!" : "Not going"
-                    titleLabel.text = label
-                    titleLabel.textColor = UIColor.white
-                    titleLabel.font = UIFont.boldSystemFont(ofSize: 11.0)
-                }
-                let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
-                let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
-
-                let backgroundColor = isGoingBool ? greenColor : pinkColor
-                //print(backgroundColor)
-                goingButton.backgroundColor = backgroundColor
-                goingButton.layer.cornerRadius = 8.0
-                goingButton.layer.masksToBounds = true
-               
-            }
-            goingButton.addTarget(self, action: #selector(buttonClicked(_:)), for: .touchUpInside)
-
-        }
+        setupIsGoing(party: party)
+        
         //self.assignProfilePictures(commonFriends: [])
         checkFriendshipStatus(isGoing: party.isGoing) { commonFriends in
             self.assignProfilePictures(commonFriends: commonFriends)
             //print(commonFriends)
         }
     }
-    
+    func setupIsGoingColor(isGoing: Bool) {
+        if isGoing {
+            let pinkColor1 = UIColor(red: 231.0/255.0, green: 19.0/255.0, blue: 238.0/255.0, alpha: 1.0)
+            var pinkColor2 = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 100.0/255.0, alpha: 1.0)
+            
+
+            gradientLayer.colors = [pinkColor2.cgColor, pinkColor1.cgColor]
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.2)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            gradientLayer.frame = contentView.bounds
+
+            // Remove any previous gradient layer to avoid adding multiple layers
+            if let sublayers = contentView.layer.sublayers {
+                for layer in sublayers {
+                    if layer is CAGradientLayer {
+                        layer.removeFromSuperlayer()
+                        print("removing layer")
+                    }
+                }
+            }
+
+            contentView.layer.insertSublayer(gradientLayer, at: 0)
+        } else {
+            let whiteColor = UIColor.white
+            contentView.backgroundColor = whiteColor
+            
+            // Remove any previous gradient layer to avoid adding multiple layers
+            if let sublayers = contentView.layer.sublayers {
+                for layer in sublayers {
+                    if layer is CAGradientLayer {
+                        layer.removeFromSuperlayer()
+                    }
+                }
+            }
+        }
+    }
+
+    func setupIsGoing(party: Party) {
+        // Create an image view for the isGoing button (party emoji)
+        isGoingButton.image = UIImage(named: "partyemoji")
+        isGoingButton.contentMode = .scaleAspectFit
+        isGoingButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(isGoingButton)
+        isGoingButton.layer.shadowColor = UIColor.black.cgColor // Shadow color
+        isGoingButton.layer.shadowOpacity = 0.7 // Shadow opacity (0.0 to 1.0)
+        isGoingButton.layer.shadowRadius = 4.0 // Shadow blur radius
+        isGoingButton.layer.shadowOffset = CGSize(width: 5.0, height: 5.0) // Shadow offset (x, y)
+        isGoingButton.layer.masksToBounds = false
+
+        // Set up constraints for the isGoing button (party emoji) image view
+        NSLayoutConstraint.activate([
+            isGoingButton.leadingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -70),
+            isGoingButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
+            isGoingButton.widthAnchor.constraint(equalToConstant: 60),
+            isGoingButton.heightAnchor.constraint(equalTo: isGoingButton.widthAnchor)
+        ])
+
+        // Update the isGoing button (party emoji) image view's alpha based on isGoingBool
+        var isGoingBool = false
+        checkIfUserIsGoing(party: party) { isUserGoing in
+            isGoingBool = isUserGoing
+            self.isGoingButton.alpha = isGoingBool ? 1.0 : 0.2
+            //let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0)
+            
+            self.setupIsGoingColor(isGoing: isGoingBool)
+        }
+
+        // Add tap gesture recognizer to the isGoing button (party emoji) image view
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(buttonClicked(_:)))
+        isGoingButton.isUserInteractionEnabled = true
+        isGoingButton.addGestureRecognizer(tapGesture)    }
+
     func checkFriendshipStatus(isGoing: [String], completion: @escaping ([String]) -> Void) {
         guard let currentUserUID = Auth.auth().currentUser?.uid else {
             print("Error: No user is currently signed in.")
@@ -186,7 +239,7 @@ class CustomCellClass: UITableViewCell {
                 profileImageView.layer.cornerRadius = 35.0 / 2
                 profileImageView.clipsToBounds = true
                 profileImageView.contentMode = .scaleAspectFill
-                profileImageView.layer.borderWidth = 2.0
+                profileImageView.layer.borderWidth = 1.0
                 profileImageView.layer.borderColor = UIColor.black.cgColor
                 profileImageView.isUserInteractionEnabled = true
                 profileImageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
@@ -380,4 +433,27 @@ class CustomCellClass: UITableViewCell {
 
 
 
+}
+extension UIColor {
+    static func gradientColor(from startColor: UIColor, to endColor: UIColor, size: CGSize) -> UIColor {
+        UIGraphicsBeginImageContext(size)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return startColor
+        }
+
+        let colors = [startColor.cgColor, endColor.cgColor]
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let colorLocations: [CGFloat] = [0.0, 1.0]
+
+        if let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: colorLocations) {
+            let startPoint = CGPoint.zero
+            let endPoint = CGPoint(x: size.width, y: size.height)
+            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: [])
+        }
+
+        let gradientImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return UIColor(patternImage: gradientImage ?? UIImage())
+    }
 }

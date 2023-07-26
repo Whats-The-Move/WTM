@@ -128,10 +128,9 @@
                                     <outlet property="delegate" destination="M1m-Q3-HIT" id="bie-Zp-1xp"/>
                                 </connections>
                             </searchBar>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profileIcon" translatesAutoresizingMaskIntoConstraints="NO" id="kzk-HV-dSR">
-                                <rect key="frame" x="322" y="51" width="52" height="44"/>
-                                <color key="backgroundColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="kzk-HV-dSR">
+                                <rect key="frame" x="322" y="52.000000000000007" width="52" height="42.666666666666664"/>
+                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OlS-8c-7Ec">
                                 <rect key="frame" x="16" y="208" width="358" height="553"/>
@@ -144,23 +143,6 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fbm-ow-ydN" id="T3M-V2-tB2">
                                             <rect key="frame" x="0.0" y="0.0" width="358" height="97"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" tag="4" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="peI-1Q-D9z">
-                                                    <rect key="frame" x="283" y="12" width="75" height="74"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="75" id="2IT-eb-uJK"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="filled" title="Yeah, I'll Be There">
-                                                        <color key="baseBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </buttonConfiguration>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="peI-1Q-D9z" firstAttribute="bottom" secondItem="T3M-V2-tB2" secondAttribute="bottomMargin" id="Mrb-D1-D3L"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="peI-1Q-D9z" secondAttribute="trailing" constant="-20" id="R84-u5-NXh"/>
-                                                <constraint firstItem="peI-1Q-D9z" firstAttribute="centerY" secondItem="T3M-V2-tB2" secondAttribute="centerY" id="hTu-yl-XpX"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
@@ -1821,7 +1803,7 @@
                                                 <color key="backgroundColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.90613035495050387" green="0.075746459653333056" blue="0.93140411376953125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="If5-Oo-8oQ">
                                         <rect key="frame" x="0.0" y="25" width="390" height="56"/>
@@ -2893,10 +2875,10 @@
         <image name="person.3.sequence" catalog="system" width="128" height="60"/>
         <image name="person.3.sequence.fill" catalog="system" width="128" height="59"/>
         <image name="person.badge.plus" catalog="system" width="128" height="125"/>
+        <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="plus.app" catalog="system" width="128" height="114"/>
         <image name="plus.app.fill" catalog="system" width="128" height="114"/>
-        <image name="profileIcon" width="512" height="512"/>
         <image name="square.and.pencil" catalog="system" width="128" height="113"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="trash" catalog="system" width="117" height="128"/>

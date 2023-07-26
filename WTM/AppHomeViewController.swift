@@ -709,9 +709,11 @@ extension AppHomeViewController: UITableViewDataSource {
             cell.delegate = self // Set the view controller as the delegate for the cell
             
             cell.layer.cornerRadius = 10
-            cell.layer.borderWidth = 1
+            cell.layer.borderWidth = 2
+            let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0).cgColor
             cell.layer.borderColor = UIColor.white.cgColor
             cell.backgroundColor = UIColor.white
+
             
             let party: Party
             if searching {
