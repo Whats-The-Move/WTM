@@ -10,15 +10,16 @@ protocol CustomCellDelegate: AnyObject {
 
 class CustomCellClass: UITableViewCell {
     weak var delegate: CustomCellDelegate?
-    private var party: Party?
-    private var profileImageViews: [UIImageView] = []
-    private var plusMoreLabel = UILabel()
+    var party: Party?
+    var profileImageViews: [UIImageView] = []
+    var plusMoreLabel = UILabel()
     private var defaultImageURL = "https://firebasestorage.googleapis.com/v0/b/whatsthemove-1b3f6.appspot.com/o/barProfilePics%2FkamsOutside.jpeg?alt=media&token=ca5e9c08-65bd-4998-9b87-48ea81b78b52"
     var barImageView = UIImageView()
     var partyLabel = UILabel()
     var partyGoersLabel = UILabel()
     var isGoingButton = UIImageView()
     var gradientLayer = CAGradientLayer()
+    var imageViewsStack = UIStackView()
 
     
     @objc private func profTapped(_ sender: UITapGestureRecognizer) {
@@ -37,8 +38,15 @@ class CustomCellClass: UITableViewCell {
     }
 
     func configure(with party: Party, rankDict: [String: Int]) {
-        
+
+
         createImageView(party: party)
+        NSLayoutConstraint.activate([
+            barImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            barImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            barImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            barImageView.widthAnchor.constraint(equalTo: barImageView.heightAnchor),
+        ])
         self.party = party
         
         contentView.addSubview(partyLabel)
@@ -107,25 +115,33 @@ class CustomCellClass: UITableViewCell {
         }
 
 */
-        setupIsGoing(party: party)
+        setupIsGoing(party: party, first: false)
         
         //self.assignProfilePictures(commonFriends: [])
         checkFriendshipStatus(isGoing: party.isGoing) { commonFriends in
-            self.assignProfilePictures(commonFriends: commonFriends)
+            self.assignProfilePictures(commonFriends: commonFriends, first: false)
             //print(commonFriends)
         }
     }
-    func setupIsGoingColor(isGoing: Bool) {
+    func setupIsGoingColor(isGoing: Bool, first: Bool) {
         if isGoing {
             let pinkColor1 = UIColor(red: 231.0/255.0, green: 19.0/255.0, blue: 238.0/255.0, alpha: 1.0)
             var pinkColor2 = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 100.0/255.0, alpha: 1.0)
             
-
+            
             gradientLayer.colors = [pinkColor2.cgColor, pinkColor1.cgColor]
-            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.2)
-            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-            gradientLayer.frame = contentView.bounds
-
+            if !first {
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.2)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+                
+            }
+            else{
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.7)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            }
+        gradientLayer.frame = contentView.bounds
+        gradientLayer.cornerRadius = 10
+    
             // Remove any previous gradient layer to avoid adding multiple layers
             if let sublayers = contentView.layer.sublayers {
                 for layer in sublayers {
@@ -152,7 +168,7 @@ class CustomCellClass: UITableViewCell {
         }
     }
 
-    func setupIsGoing(party: Party) {
+    func setupIsGoing(party: Party, first: Bool) {
         // Create an image view for the isGoing button (party emoji)
         isGoingButton.image = UIImage(named: "partyemoji")
         isGoingButton.contentMode = .scaleAspectFit
@@ -166,7 +182,7 @@ class CustomCellClass: UITableViewCell {
 
         // Set up constraints for the isGoing button (party emoji) image view
         NSLayoutConstraint.activate([
-            isGoingButton.leadingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -70),
+            isGoingButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             isGoingButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
             isGoingButton.widthAnchor.constraint(equalToConstant: 60),
             isGoingButton.heightAnchor.constraint(equalTo: isGoingButton.widthAnchor)
@@ -179,7 +195,7 @@ class CustomCellClass: UITableViewCell {
             self.isGoingButton.alpha = isGoingBool ? 1.0 : 0.2
             //let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0)
             
-            self.setupIsGoingColor(isGoing: isGoingBool)
+            self.setupIsGoingColor(isGoing: isGoingBool, first: first)
         }
 
         // Add tap gesture recognizer to the isGoing button (party emoji) image view
@@ -215,8 +231,8 @@ class CustomCellClass: UITableViewCell {
         }
     }
 
-    func assignProfilePictures(commonFriends: [String]) {
-            let imageViewsStack = UIStackView()
+    func assignProfilePictures(commonFriends: [String], first: Bool) {
+            
             imageViewsStack.axis = .horizontal
             imageViewsStack.alignment = .fill
             imageViewsStack.distribution = .fill
@@ -299,24 +315,23 @@ class CustomCellClass: UITableViewCell {
 
             // Add constraints to position the stack view (bottom right corner of the cell)
             let circles = 4//min(commonFriends.count, 4)
-            NSLayoutConstraint.activate([
-                imageViewsStack.leadingAnchor.constraint(equalTo: barImageView.trailingAnchor, constant: 8), // Adjust the right margin as needed
-                imageViewsStack.bottomAnchor.constraint(equalTo: stackViewSuperview.bottomAnchor, constant: -8), // Adjust the bottom margin as needed
-                imageViewsStack.widthAnchor.constraint(equalToConstant: CGFloat(circles) * 35.0 - CGFloat(circles - 1) * 10.0), // Adjust the width of the stack view based on the number of image views and the spacing
-                imageViewsStack.heightAnchor.constraint(equalToConstant: 35.0)
-            ])
+            if !first{
+                NSLayoutConstraint.activate([
+                    imageViewsStack.leadingAnchor.constraint(equalTo: barImageView.trailingAnchor, constant: 8), // Adjust the right margin as needed
+                    imageViewsStack.bottomAnchor.constraint(equalTo: stackViewSuperview.bottomAnchor, constant: -8), // Adjust the bottom margin as needed
+                    imageViewsStack.widthAnchor.constraint(equalToConstant: CGFloat(circles) * 35.0 - CGFloat(circles - 1) * 10.0), // Adjust the width of the stack view based on the number of image views and the spacing
+                    imageViewsStack.heightAnchor.constraint(equalToConstant: 35.0)
+                ])
+            }
+            else{
+                NSLayoutConstraint.activate([
+                    imageViewsStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5), // Adjust the right margin as needed
+                    imageViewsStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8), // Adjust the bottom margin as needed
+                    imageViewsStack.widthAnchor.constraint(equalToConstant: CGFloat(circles) * 35.0 - CGFloat(circles - 1) * 10.0), // Adjust the width of the stack view based on the number of image views and the spacing
+                    imageViewsStack.heightAnchor.constraint(equalToConstant: 35.0)
+                ])
+            }
 
-            // Show the appropriate number of image views in the stack view
-            /*for i in 0..<min(commonFriends.count, maxImageCount) {
-                print("adding profile")
-                if let profileImageView = imageViewsStack.arrangedSubviews[i] as? UIImageView {
-                    profileImageView.isHidden = false
-                }
-            }*/
-
-            // If there are more than 4 common friends, show the "plus more" label
-            // Create the plusMoreLabel
-            //let plusMoreLabel = UILabel()
             plusMoreLabel.font = UIFont(name: "Futura-Medium", size: 15)
             plusMoreLabel.textColor = .black
             plusMoreLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -339,6 +354,7 @@ class CustomCellClass: UITableViewCell {
             } else {
                 plusMoreLabel.text = ""
             }
+        contentView.layer.cornerRadius = 10
         }
     func createImageView(party: Party) -> UIImageView {
 
@@ -346,12 +362,7 @@ class CustomCellClass: UITableViewCell {
         contentView.addSubview(barImageView)
 
         // Add constraints
-        NSLayoutConstraint.activate([
-            barImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            barImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            barImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            barImageView.widthAnchor.constraint(equalTo: barImageView.heightAnchor),
-        ])
+
 
         // Apply rounded edges
         barImageView.layer.cornerRadius = 8.0
@@ -434,26 +445,57 @@ class CustomCellClass: UITableViewCell {
 
 
 }
-extension UIColor {
-    static func gradientColor(from startColor: UIColor, to endColor: UIColor, size: CGSize) -> UIColor {
-        UIGraphicsBeginImageContext(size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return startColor
-        }
-
-        let colors = [startColor.cgColor, endColor.cgColor]
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let colorLocations: [CGFloat] = [0.0, 1.0]
-
-        if let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: colorLocations) {
-            let startPoint = CGPoint.zero
-            let endPoint = CGPoint(x: size.width, y: size.height)
-            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: [])
-        }
-
-        let gradientImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
+class FirstCustomCellClass: CustomCellClass {
+    // Additional functionality and properties specific to the first cell
+    func configureFirst(with party: Party, rankDict: [String: Int]) {
         
-        return UIColor(patternImage: gradientImage ?? UIImage())
+        createImageView(party: party)
+        self.party = party
+        
+        contentView.addSubview(partyLabel)
+
+        partyLabel.text = party.name
+        //partyLabel.adjustsFontSizeToFitWidth = true
+        partyLabel.translatesAutoresizingMaskIntoConstraints = false
+        //partyLabel.leadingAnchor.constraint(equalTo: barImageView.trailingAnchor, constant: 10).isActive = true
+        //partyLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10).isActive = true
+        partyLabel.font = UIFont(name: "Futura-Medium", size: 20)
+        partyLabel.textColor = .black
+
+
+
+            
+
+        partyGoersLabel.font = UIFont(name: "Futura-MediumItalic", size: 13)
+        partyGoersLabel.textColor = .black
+        partyGoersLabel.translatesAutoresizingMaskIntoConstraints = false
+        partyGoersLabel.text = "\(party.isGoing.count) partygoers"
+
+        contentView.addSubview(partyGoersLabel)
+
+
+        setupIsGoing(party: party, first: true)
+        
+        checkFriendshipStatus(isGoing: party.isGoing) { commonFriends in
+            self.assignProfilePictures(commonFriends: commonFriends, first: true)
+            //print(commonFriends)
+            
+
+        }
+        NSLayoutConstraint.activate([
+            barImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            barImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            barImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            barImageView.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 25),
+            partyGoersLabel.topAnchor.constraint(equalTo: barImageView.bottomAnchor, constant: 5),
+            partyGoersLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            partyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            partyLabel.topAnchor.constraint(equalTo: partyGoersLabel.bottomAnchor, constant: 5),
+            //imageViewsStack.topAnchor.constraint(equalTo: partyGoersLabel.bottomAnchor, constant: 5),
+            //imageViewsStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            isGoingButton.trailingAnchor.constraint(equalTo:contentView.trailingAnchor, constant: -15),
+            isGoingButton.centerYAnchor.constraint(equalTo:barImageView.bottomAnchor, constant: 50)
+        ])
     }
 }
+

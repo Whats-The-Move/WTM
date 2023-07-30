@@ -52,6 +52,16 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     @IBOutlet weak var partyList: UITableView! {
         didSet {
             partyList.dataSource = self
+            partyList.delegate = self
+            partyList.register(FirstCustomCellClass.self, forCellReuseIdentifier: "firstPartyCell")
+            partyList.register(CustomCellClass.self, forCellReuseIdentifier: "partyCell")
+            // Add left and right margins of 16 points each
+            let leftMargin: CGFloat = 16
+            let rightMargin: CGFloat = 16
+
+            // Set the content inset to add the margins
+            //partyList.contentInset = UIEdgeInsets(top: 0, left: leftMargin, bottom: 0, right: rightMargin)
+
         }
     }
     @IBOutlet weak var searchBar: UISearchBar!
@@ -104,6 +114,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
         //partyList.sectionHeaderHeight = 8 // 8px vertical spacing between cells
         partyList.separatorStyle = .none
+        //let paddingWidth: CGFloat = 10.0
+        //partyList.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: paddingWidth)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         profileUIImage.addGestureRecognizer(tapGestureRecognizer)
@@ -135,9 +147,10 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             }
         }
 
-        partyList.delegate = self
         partyList.rowHeight = 100.0 // Adjust this value as needed
         //partyList.rowHeight = UITableView.automaticDimension
+
+
 
         let user_address1 = UserDefaults.standard.string(forKey: "user_address") ?? "user"
         for recognizer in view.gestureRecognizers ?? [] {
@@ -150,7 +163,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         searchBar.overrideUserInterfaceStyle = .dark
         refreshButton.overrideUserInterfaceStyle = .light
 
-        partyList.reloadData()
+        //partyList.reloadData()
         
         databaseRef = Database.database().reference().child("Parties")
         databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
@@ -177,7 +190,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 self?.ratingDict[party.name] = party.rating
             }
         }
-        
+
         calculateFriendsAttending()
     }
     
@@ -323,8 +336,11 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                     let indexPath = IndexPath(row: 0, section: row)
                     partyList.insertSections([indexPath.section], with: .automatic)
                     self.countNum -= 1
+
                 }
             }
+            self.partyList.reloadData()
+
         } else {
             let uid = Auth.auth().currentUser?.uid
             databaseRef = Database.database().reference().child("Privates")
@@ -681,13 +697,15 @@ extension AppHomeViewController: UITableViewDataSource {
         if publicOrPriv == true {
             if searching {
                 return searchParty.count
+            } else {
+                return parties.count
             }
-            return parties.count
         } else {
             if searching {
                 return searchParty.count
+            } else {
+                return privateParties.count
             }
-            return privateParties.count
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -703,11 +721,16 @@ extension AppHomeViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if publicOrPriv == true {
+
+
+        if indexPath.section != 0{
+            
+            print("mmmmmm")
+            print(indexPath.section)
             let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
 
             cell.delegate = self // Set the view controller as the delegate for the cell
-            
+            cell.contentView.layoutMargins = .init(top: 0.0, left: 23.5, bottom: 0.0, right: 23.5)
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 2
             let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0).cgColor
@@ -719,32 +742,60 @@ extension AppHomeViewController: UITableViewDataSource {
             if searching {
                 party = parties.first { $0.name == searchParty[indexPath.section] }!
             } else {
+                print("bbbbbbb")
+                print(indexPath.section)
                 party = parties[indexPath.section]
             }
             
             cell.configure(with: party, rankDict: rankDict)
             return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "privatePartyCell", for: indexPath) as! privatePartyCellClass
 
-            cell.delegate = self // Set the view controller as the delegate for the cell
             
+        } else{
+
+            print("nnnnnnnn")
+            print(indexPath.section)
+
+            // Dequeue the first cell prototype
+            let cell = tableView.dequeueReusableCell(withIdentifier: "firstPartyCell", for: indexPath) as! FirstCustomCellClass
+            
+            cell.delegate = self // Set the view controller as the delegate for the cell
             cell.layer.cornerRadius = 10
-            cell.layer.borderWidth = 1
+            cell.layer.borderWidth = 2
+            let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0).cgColor
             cell.layer.borderColor = UIColor.white.cgColor
             cell.backgroundColor = UIColor.white
+            // Configure the first cell with the desired layout
+            // ...
             
-            let party: privateParty
+            
+            let party: Party
             if searching {
-                party = privateParties.first { $0.event == searchParty[indexPath.row] }!
+                party = parties.first { $0.name == searchParty[indexPath.section] }!
             } else {
-                party = privateParties[indexPath.row]
+                print("pppppp")
+                print(indexPath.section)
+
+                party = parties[indexPath.section]
+                print(party.name)
             }
             
-            cell.configure(with: party)
+            cell.configureFirst(with: party, rankDict: rankDict)
             return cell
         }
+        
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // Check if it's the first cell
+        if indexPath.section == 0 {
+            // Return the desired height for the first cell
+            return 250 // Change this value to the height you want for the first cell
+        } else {
+            // Return the default height for other cells
+            return partyList.rowHeight // Change this value to the default height for other cells
+        }
+    }
+
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
