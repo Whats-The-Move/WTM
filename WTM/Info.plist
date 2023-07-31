@@ -98,39 +98,5 @@
 
 
 
-googleService-info:
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>CLIENT_ID</key>
-	<string>260887709098-ttt843uacmlb82bao1t8cn8hun38b67e.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.260887709098-ttt843uacmlb82bao1t8cn8hun38b67e</string>
-	<key>API_KEY</key>
-	<string>AIzaSyD5x4zNUSqJI9JfnTKxxgIlK89Cspbd7qs</string>
-	<key>GCM_SENDER_ID</key>
-	<string>260887709098</string>
-	<key>PLIST_VERSION</key>
-	<string>1</string>
-	<key>BUNDLE_ID</key>
-	<string>com.whatsthemove.wtm.WTM</string>
-	<key>PROJECT_ID</key>
-	<string>whatsthemove-4a5b3</string>
-	<key>STORAGE_BUCKET</key>
-	<string>whatsthemove-4a5b3.appspot.com</string>
-	<key>IS_ADS_ENABLED</key>
-	<false/>
-	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
-	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
-	<key>IS_GCM_ENABLED</key>
-	<true/>
-	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
-	<key>GOOGLE_APP_ID</key>
-	<string>1:260887709098:ios:4d89ea50ae321bff2557d3</string>
-</dict>
-</plist>
+
 
