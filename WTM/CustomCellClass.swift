@@ -22,6 +22,10 @@ class CustomCellClass: UITableViewCell {
     var imageViewsStack = UIStackView()
     var numLabel = UILabel()
     var plusMoreBkgd = UIView()
+    var tagLabel = UILabel()
+    var tagBackgroundView = UIView()
+
+
 
 
 
@@ -129,6 +133,38 @@ class CustomCellClass: UITableViewCell {
             //print(commonFriends)
         }
     }
+    func addTagLabel(to cell: UITableViewCell) {
+        //still work in progress- tag shows but not forward enough
+        tagLabel.text = "Hot"
+        tagLabel.textColor = .black
+        tagLabel.font = UIFont.systemFont(ofSize: 15)
+        tagLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        tagBackgroundView.backgroundColor = UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 1.0)
+        tagBackgroundView.layer.cornerRadius = 4
+        tagBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+
+        // Add the tagBackgroundView to the cell's contentView
+        cell.contentView.addSubview(tagBackgroundView)
+
+        // Add the tagLabel to the tagBackgroundView
+        tagBackgroundView.addSubview(tagLabel)
+
+        // Set up constraints for the tagBackgroundView (adjust as needed)
+        NSLayoutConstraint.activate([
+            tagBackgroundView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: 3),
+            tagBackgroundView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: -3),
+            tagBackgroundView.widthAnchor.constraint(equalToConstant: 35),
+            tagBackgroundView.heightAnchor.constraint(equalToConstant: 35)
+        ])
+
+        // Set up constraints for the tagLabel to center it within the tagBackgroundView
+        NSLayoutConstraint.activate([
+            tagLabel.centerXAnchor.constraint(equalTo: tagBackgroundView.centerXAnchor),
+            tagLabel.centerYAnchor.constraint(equalTo: tagBackgroundView.centerYAnchor)
+        ])
+    }
+
     func addSectionNumberLabel(to cell: UITableViewCell, at indexPath: IndexPath) {
         let sectionNumber = indexPath.section + 1
 
@@ -154,14 +190,30 @@ class CustomCellClass: UITableViewCell {
         backgroundView.addSubview(numLabel)
 
         // Add constraints for the background view and number label (adjust as needed)
+        var size = 25.0
+        if sectionNumber == 1 {
+            size = 32.0
+            numLabel.font = UIFont.systemFont(ofSize: 17.0) // Adjust the font size as needed
+
+        }
+        numLabel.adjustsFontSizeToFitWidth = true
+        
+        // Assuming "view" is the UIView to which you want to add the drop shadow
+        backgroundView.layer.shadowColor = UIColor.black.cgColor // Shadow color
+        backgroundView.layer.shadowOpacity = 0.5 // Shadow opacity (0.0 to 1.0)
+        backgroundView.layer.shadowOffset = CGSize(width: 2, height: 2) // Shadow offset (x, y)
+        backgroundView.layer.shadowRadius = 4 // Shadow blur radius
+        backgroundView.layer.masksToBounds = false // Important: This allows the shadow to be visible beyond the bounds of the view
+
         NSLayoutConstraint.activate([
             backgroundView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 0),
             backgroundView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 0),
-            backgroundView.widthAnchor.constraint(equalToConstant: 30),
-            backgroundView.heightAnchor.constraint(equalToConstant: 30),
+            backgroundView.widthAnchor.constraint(equalToConstant: size),
+            backgroundView.heightAnchor.constraint(equalToConstant: size),
 
             numLabel.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
-            numLabel.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor)
+            numLabel.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
+            numLabel.widthAnchor.constraint(equalTo: backgroundView.widthAnchor, constant: -2)
         ])
     }
 
@@ -388,6 +440,9 @@ class CustomCellClass: UITableViewCell {
         plusMoreBkgd.layer.cornerRadius = 17.5 // Half of 35px
         plusMoreBkgd.layer.borderWidth = 1
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
+        plusMoreBkgd.addGestureRecognizer(tapGesture)
+        
         contentView.addSubview(plusMoreBkgd)
 
         // Set up constraints for the circular background view
@@ -543,7 +598,8 @@ class FirstCustomCellClass: CustomCellClass {
 
 
         setupIsGoing(party: party, first: true)
-        
+        //addTagLabel(to: self)
+
         checkFriendshipStatus(isGoing: party.isGoing) { commonFriends in
             self.assignProfilePictures(commonFriends: commonFriends, first: true)
             //print(commonFriends)
