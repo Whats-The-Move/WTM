@@ -742,12 +742,13 @@ extension AppHomeViewController: UITableViewDataSource {
             if searching {
                 party = parties.first { $0.name == searchParty[indexPath.section] }!
             } else {
+                
                 print("bbbbbbb")
                 print(indexPath.section)
                 party = parties[indexPath.section]
             }
             
-            cell.configure(with: party, rankDict: rankDict)
+            cell.configure(with: party, rankDict: rankDict, at: indexPath)
             return cell
 
             
@@ -780,7 +781,7 @@ extension AppHomeViewController: UITableViewDataSource {
                 print(party.name)
             }
             
-            cell.configureFirst(with: party, rankDict: rankDict)
+            cell.configureFirst(with: party, rankDict: rankDict, at: indexPath)
             return cell
         }
         
