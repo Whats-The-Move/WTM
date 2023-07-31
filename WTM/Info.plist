@@ -4,10 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow WTM access to camera for capturing photos</string>
 	<key>CFBundleDisplayName</key>
-	<string>What&apos;s the Move?</string>
+	<string>What's the Move?</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -19,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -27,16 +25,22 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.418731414813-vuhfskm6kqkqbfg6kqjnp1fcbqobu3bj</string>
+				<string>com.googleusercontent.apps.260887709098-ttt843uacmlb82bao1t8cn8hun38b67e</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>FirebaseMessagingAutoInitEnabled</key>
+	<true/>
 	<key>GIDClientID</key>
-	<string>418731414813-vuhfskm6kqkqbfg6kqjnp1fcbqobu3bj.apps.googleusercontent.com</string>
+	<string>260887709098-ttt843uacmlb82bao1t8cn8hun38b67e.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow WTM access to camera for capturing photos</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We use your location to let you know how to get to the best party!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -62,6 +66,12 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -85,3 +95,42 @@
 	</array>
 </dict>
 </plist>
+
+
+
+googleService-info:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>260887709098-ttt843uacmlb82bao1t8cn8hun38b67e.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.260887709098-ttt843uacmlb82bao1t8cn8hun38b67e</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD5x4zNUSqJI9JfnTKxxgIlK89Cspbd7qs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>260887709098</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.whatsthemove.wtm.WTM</string>
+	<key>PROJECT_ID</key>
+	<string>whatsthemove-4a5b3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>whatsthemove-4a5b3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:260887709098:ios:4d89ea50ae321bff2557d3</string>
+</dict>
+</plist>
+
