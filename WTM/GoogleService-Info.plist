@@ -3,32 +3,32 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>418731414813-vuhfskm6kqkqbfg6kqjnp1fcbqobu3bj.apps.googleusercontent.com</string>
+	<string>260887709098-ttt843uacmlb82bao1t8cn8hun38b67e.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.418731414813-vuhfskm6kqkqbfg6kqjnp1fcbqobu3bj</string>
+	<string>com.googleusercontent.apps.260887709098-ttt843uacmlb82bao1t8cn8hun38b67e</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC-eq2Ja6CyTSM0A1_dquJDkeo5HFw2nJM</string>
+	<string>AIzaSyD5x4zNUSqJI9JfnTKxxgIlK89Cspbd7qs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>418731414813</string>
+	<string>260887709098</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>wtm.WTM</string>
+	<string>com.whatsthemove.wtm.WTM</string>
 	<key>PROJECT_ID</key>
-	<string>whatsthemove-1b3f6</string>
+	<string>whatsthemove-4a5b3</string>
 	<key>STORAGE_BUCKET</key>
-	<string>whatsthemove-1b3f6.appspot.com</string>
+	<string>whatsthemove-4a5b3.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:418731414813:ios:aa8ff60025d343c6b03df4</string>
+	<string>1:260887709098:ios:4d89ea50ae321bff2557d3</string>
 </dict>
 </plist>
