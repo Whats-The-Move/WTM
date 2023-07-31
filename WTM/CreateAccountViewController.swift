@@ -10,6 +10,7 @@ import FirebaseDatabase
 import FirebaseAuth
 import Firebase
 import FirebaseStorage
+import FirebaseMessaging
 
 class CreateAccountViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
@@ -38,11 +39,6 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         name.textColor = .black
         username.textColor = .black
         username.autocapitalizationType = .none
-
-
-
-
-
         imagePickerController.delegate = self
         let usernamePlaceholder = "Create username"
         let namePlaceholder = "Create display name"
@@ -288,17 +284,11 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         }
         
         dismiss(animated: true, completion: nil)
-        /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyboard.instantiateViewController(withIdentifier: "CreateAccount") as! ViewController
-        newViewController.modalPresentationStyle = .fullScreen
-        present(newViewController, animated: false, completion: nil)*/
     }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-
     func checkUsernameAvailability(username: String, completion: @escaping (Bool, Error?) -> Void) {
         let db = Firestore.firestore()
         let usersCollection = db.collection("users")
@@ -323,7 +313,6 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             completion(!isTaken, nil)
         }
     }
-
     @IBAction func doneTapped(_ sender: Any) {
         //check for empty feilds
         //todo: username cant have spaces, uppercases, can't be used by anyone, must have pfp
@@ -339,7 +328,6 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             })
             return
         }
-        
         //check for spaces
         if username.contains(" ") {
             print("Username contains spaces")
@@ -348,10 +336,8 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             present(alert, animated: true, completion: nil)
             return
         }
-        
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
-            
             userRef.getDocument { (document, error) in
                 if let document = document, document.exists {
                     if let data = document.data(), data["profilePic"] != nil {
@@ -374,14 +360,12 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             }
         }
         //just checked if pfp was submitted ^^^
-        
         checkUsernameAvailability(username: username) { isAvailable, error in
             if let error = error {
                 // Handle the error
                 print("Error checking username availability: \(error.localizedDescription)")
                 return
             }
-            
             if isAvailable {
                 // Username is available
                 print("Username is available")
@@ -393,16 +377,13 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
                     let data: [String: Any] = [
                         "username": username ,
                         "name": name
-                        
                     ]
-                    
                     userRef.setData(data, merge: true) { error in
                         if let error = error {
                             // Handle the error
                             print("Error creating Firestore document: \(error.localizedDescription)")
                             return
                         }
-                        
                         // Success!
                         print("added username and name")
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -423,11 +404,5 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
                 return // Exit the entire function
             }
         }
-        
-        
-
     }
-    
-    
-    
 }

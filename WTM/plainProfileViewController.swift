@@ -22,30 +22,6 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     @IBOutlet weak var friendNotification: UIButton!
     let imagePickerController = UIImagePickerController()
     
-    override func viewDidAppear(_ animated: Bool) {
-        if let uid = Auth.auth().currentUser?.uid {
-            let userRef = Firestore.firestore().collection("users").document(uid)
-            
-            userRef.getDocument { [weak self] (document, error) in
-                guard let self = self, let document = document, document.exists else {
-                    // Handle error or nil self
-                    return
-                }
-                
-                if let data = document.data(),
-                   let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
-                    // Access the username and name values
-                    if pendingFriendRequests.isEmpty{
-                        self.friendNotification.isHidden = true
-                    } else{
-                        self.friendNotification.isHidden = false
-                        self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
-                    }
-                }
-            }
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -70,12 +46,28 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             userRef.getDocument { [weak self] (document, error) in
                 guard let self = self, let document = document, document.exists else {
                     // Handle error or nil self
+                    print("doesnt exist")
                     return
                 }
                 
+                if let uid = Auth.auth().currentUser?.uid {
+                    let userRef = Firestore.firestore().collection("users").document(uid)
+                    
+                    userRef.getDocument { (document, error) in
+                        if let document = document, document.exists {
+                            if let data = document.data(), let username = data["username"] as? String,
+                               let data = document.data(), let name = data["name"] as? String {
+                                // Access the username value
+                                self.nameLabel.text = name
+                                self.usernameLabel.text = username
+                            }
+                        }
+                        
+                    }
+                }
+
+                
                 if let data = document.data(),
-                   let username = data["username"] as? String,
-                   let name = data["name"] as? String,
                    let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
                     // Access the username and name values
                     if pendingFriendRequests.isEmpty{
@@ -84,8 +76,8 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
                         self.friendNotification.isHidden = false
                         self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
                     }
-                    self.usernameLabel.text = username
-                    self.nameLabel.text = name
+                } else {
+                    self.friendNotification.isHidden = true
                 }
             }
         }
@@ -120,6 +112,32 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         badgesButton.addGestureRecognizer(tapGestureBadge)
         backButton.isUserInteractionEnabled = true
         backButton.addGestureRecognizer(tapGestureBack)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if let uid = Auth.auth().currentUser?.uid {
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { [weak self] (document, error) in
+                guard let self = self, let document = document, document.exists else {
+                    // Handle error or nil self
+                    return
+                }
+                
+                if let data = document.data(),
+                   let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
+                    // Access the username and name values
+                    if pendingFriendRequests.isEmpty{
+                        self.friendNotification.isHidden = true
+                    } else{
+                        self.friendNotification.isHidden = false
+                        self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                    }
+                } else {
+                    self.friendNotification.isHidden = true
+                }
+            }
+        }
     }
     
     @IBAction func badgeButtonTapped(_ sender: Any) {

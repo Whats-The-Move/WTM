@@ -49,6 +49,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         super.viewDidLoad()
         //mainPicture.image = UIImage(named: "default_photo")
         
+        print(Auth.auth().currentUser?.uid)
 
         mainPicture.isUserInteractionEnabled = true
         let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(mainPictureTapped))

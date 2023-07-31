@@ -18,6 +18,7 @@
 		088BD7C42A68C1A5008D3EA9 /* userSelectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */; };
 		088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */; };
 		08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8A5312A6AF6830082B8E6 /*  requestUserCellClass.swift */; };
+		08B8A5372A72BB440082B8E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08B8A5362A72BB440082B8E6 /* GoogleService-Info.plist */; };
 		08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */; };
 		08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */; };
 		08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0392297CB6030074A878 /* AppDelegate.swift */; };
@@ -29,7 +30,6 @@
 		08CF03AA297CB6040074A878 /* WTMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03A9297CB6040074A878 /* WTMTests.swift */; };
 		08CF03B5297CB6040074A878 /* WTMUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03B4297CB6040074A878 /* WTMUITests.swift */; };
 		08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C2297CB7590074A878 /* AppHomeViewController.swift */; };
-		08CF03C5297CC1D50074A878 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08CF03C4297CC1D50074A878 /* GoogleService-Info.plist */; };
 		08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */; };
 		08CF03C9297CEFAB0074A878 /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C8297CEFAB0074A878 /* Party.swift */; };
 		08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03D8297D52770074A878 /* popUpViewController.swift */; };
@@ -51,9 +51,9 @@
 		10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */; };
 		10B5002B2A268214004FAC97 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
-		87B3A25C22BDABC5E151EB54 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */; };
-		C52C8394DE2F30A11A45F653 /* Pods_WTMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */; };
-		FE3C2AA2ABD043C2057B7DA4 /* Pods_WTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB76CBAFD2F98C545E9E5097 /* Pods_WTM.framework */; };
+		1411292AC27485DEEBB18704 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */; };
+		C28997F43908C609CAC77D5D /* Pods_WTM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB70697B68A301D48E74854F /* Pods_WTM.framework */; };
+		CC58C8F6F1CE322828BC6204 /* Pods_WTMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9F75958A7F33A1981B4B4E /* Pods_WTMTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +86,7 @@
 		088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendsGoingViewController.swift; sourceTree = "<group>"; };
 		08B8A5312A6AF6830082B8E6 /*  requestUserCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " requestUserCellClass.swift"; sourceTree = "<group>"; };
 		08B8A5332A6C77460082B8E6 /* WTM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WTM.entitlements; sourceTree = "<group>"; };
+		08B8A5362A72BB440082B8E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allFriendsPopUpViewController.swift; sourceTree = "<group>"; };
 		08CF038F297CB6030074A878 /* WTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,7 +104,6 @@
 		08CF03B4297CB6040074A878 /* WTMUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WTMUITests.swift; sourceTree = "<group>"; };
 		08CF03B6297CB6040074A878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		08CF03C2297CB7590074A878 /* AppHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHomeViewController.swift; sourceTree = "<group>"; };
-		08CF03C4297CC1D50074A878 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingPageViewController.swift; sourceTree = "<group>"; };
 		08CF03C8297CEFAB0074A878 /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
 		08CF03D8297D52770074A878 /* popUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
@@ -111,7 +111,6 @@
 		08F793292A4A505300679EB9 /* privatePartyCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePartyCellClass.swift; sourceTree = "<group>"; };
 		08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendPopUpViewController.swift; sourceTree = "<group>"; };
 		08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendRequestCellClass.swift; sourceTree = "<group>"; };
-		0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		103D80992A2E9B1F0032E4D3 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
 		103D809D2A38D6610032E4D3 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteListViewController.swift; sourceTree = "<group>"; };
@@ -127,14 +126,15 @@
 		10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.release.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.release.xcconfig"; sourceTree = "<group>"; };
-		48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.release.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.release.xcconfig"; sourceTree = "<group>"; };
-		548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ABB5FD54F81C7C12C4B542F6 /* Pods-WTMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTMTests.release.xcconfig"; path = "Target Support Files/Pods-WTMTests/Pods-WTMTests.release.xcconfig"; sourceTree = "<group>"; };
-		DBAE5B692D580334EE3F0C4B /* Pods-WTM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.debug.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.debug.xcconfig"; sourceTree = "<group>"; };
-		EB76CBAFD2F98C545E9E5097 /* Pods_WTM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F26F7EB5623DC7A2D20A66A9 /* Pods-WTMTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTMTests.debug.xcconfig"; path = "Target Support Files/Pods-WTMTests/Pods-WTMTests.debug.xcconfig"; sourceTree = "<group>"; };
-		FBC5672E6DD8D826665DDC20 /* Pods-WTM-WTMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.debug.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		688593DA5ADD902DEE2F6D8B /* Pods-WTM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.release.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.release.xcconfig"; sourceTree = "<group>"; };
+		8B5050A14298E62D09E33D14 /* Pods-WTM-WTMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.debug.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		8E86DF8EDEA6CF11AA8FBC99 /* Pods-WTM-WTMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM-WTMUITests.release.xcconfig"; path = "Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests.release.xcconfig"; sourceTree = "<group>"; };
+		BA9F75958A7F33A1981B4B4E /* Pods_WTMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC9394A86EFD59FE33E905CE /* Pods-WTMTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTMTests.debug.xcconfig"; path = "Target Support Files/Pods-WTMTests/Pods-WTMTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BE4AFA8D0E48F45156CB173D /* Pods-WTMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTMTests.release.xcconfig"; path = "Target Support Files/Pods-WTMTests/Pods-WTMTests.release.xcconfig"; sourceTree = "<group>"; };
+		F6106A7B33096B295AD87639 /* Pods-WTM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WTM.debug.xcconfig"; path = "Target Support Files/Pods-WTM/Pods-WTM.debug.xcconfig"; sourceTree = "<group>"; };
+		FB70697B68A301D48E74854F /* Pods_WTM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE3C2AA2ABD043C2057B7DA4 /* Pods_WTM.framework in Frameworks */,
+				C28997F43908C609CAC77D5D /* Pods_WTM.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C52C8394DE2F30A11A45F653 /* Pods_WTMTests.framework in Frameworks */,
+				CC58C8F6F1CE322828BC6204 /* Pods_WTMTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				87B3A25C22BDABC5E151EB54 /* Pods_WTM_WTMUITests.framework in Frameworks */,
+				1411292AC27485DEEBB18704 /* Pods_WTM_WTMUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +173,7 @@
 				08CF03B3297CB6040074A878 /* WTMUITests */,
 				08CF0390297CB6030074A878 /* Products */,
 				0FF5A9EE156DFEC342E41766 /* Pods */,
-				C2F3D44BD2ACE906CA082C5E /* Frameworks */,
+				710769FA42C21EDF6B5629E3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -192,7 +192,7 @@
 			children = (
 				08B8A5332A6C77460082B8E6 /* WTM.entitlements */,
 				103D80A32A428B200032E4D3 /* WTMDebug.entitlements */,
-				08CF03C4297CC1D50074A878 /* GoogleService-Info.plist */,
+				08B8A5362A72BB440082B8E6 /* GoogleService-Info.plist */,
 				08CF0392297CB6030074A878 /* AppDelegate.swift */,
 				08CF0394297CB6030074A878 /* SceneDelegate.swift */,
 				10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */,
@@ -260,22 +260,22 @@
 		0FF5A9EE156DFEC342E41766 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DBAE5B692D580334EE3F0C4B /* Pods-WTM.debug.xcconfig */,
-				48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */,
-				FBC5672E6DD8D826665DDC20 /* Pods-WTM-WTMUITests.debug.xcconfig */,
-				32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */,
-				F26F7EB5623DC7A2D20A66A9 /* Pods-WTMTests.debug.xcconfig */,
-				ABB5FD54F81C7C12C4B542F6 /* Pods-WTMTests.release.xcconfig */,
+				F6106A7B33096B295AD87639 /* Pods-WTM.debug.xcconfig */,
+				688593DA5ADD902DEE2F6D8B /* Pods-WTM.release.xcconfig */,
+				8B5050A14298E62D09E33D14 /* Pods-WTM-WTMUITests.debug.xcconfig */,
+				8E86DF8EDEA6CF11AA8FBC99 /* Pods-WTM-WTMUITests.release.xcconfig */,
+				BC9394A86EFD59FE33E905CE /* Pods-WTMTests.debug.xcconfig */,
+				BE4AFA8D0E48F45156CB173D /* Pods-WTMTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		C2F3D44BD2ACE906CA082C5E /* Frameworks */ = {
+		710769FA42C21EDF6B5629E3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EB76CBAFD2F98C545E9E5097 /* Pods_WTM.framework */,
-				0F4E453FF968C60362AA98C6 /* Pods_WTM_WTMUITests.framework */,
-				548F2C3461B87AFED4E0B58C /* Pods_WTMTests.framework */,
+				FB70697B68A301D48E74854F /* Pods_WTM.framework */,
+				438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */,
+				BA9F75958A7F33A1981B4B4E /* Pods_WTMTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -287,11 +287,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08CF03B9297CB6040074A878 /* Build configuration list for PBXNativeTarget "WTM" */;
 			buildPhases = (
-				6245B178149A170F7CDB39D8 /* [CP] Check Pods Manifest.lock */,
+				F653A4F2B9DD6B3A362E81B3 /* [CP] Check Pods Manifest.lock */,
 				08CF038B297CB6030074A878 /* Sources */,
 				08CF038C297CB6030074A878 /* Frameworks */,
 				08CF038D297CB6030074A878 /* Resources */,
-				2116F83C8ED513DA3C8D06D4 /* [CP] Embed Pods Frameworks */,
+				A0BDDDB1864C31B71BB29F91 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -306,7 +306,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08CF03BC297CB6040074A878 /* Build configuration list for PBXNativeTarget "WTMTests" */;
 			buildPhases = (
-				2CE1906F94BE91ED212933B4 /* [CP] Check Pods Manifest.lock */,
+				9BFEB7242B68F3FBEE8368E7 /* [CP] Check Pods Manifest.lock */,
 				08CF03A1297CB6040074A878 /* Sources */,
 				08CF03A2297CB6040074A878 /* Frameworks */,
 				08CF03A3297CB6040074A878 /* Resources */,
@@ -325,11 +325,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08CF03BF297CB6040074A878 /* Build configuration list for PBXNativeTarget "WTMUITests" */;
 			buildPhases = (
-				6DF4FEDE019617E2C2C3D2AF /* [CP] Check Pods Manifest.lock */,
+				BA45B8F913B4C72A26903062 /* [CP] Check Pods Manifest.lock */,
 				08CF03AC297CB6040074A878 /* Sources */,
 				08CF03AD297CB6040074A878 /* Frameworks */,
 				08CF03AE297CB6040074A878 /* Resources */,
-				1E8CF6F9746D083A14274EE9 /* [CP] Embed Pods Frameworks */,
+				F5D6EA83BEBC7FEAF1854D66 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -388,13 +388,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08CF03C5297CC1D50074A878 /* GoogleService-Info.plist in Resources */,
 				08CF039F297CB6040074A878 /* LaunchScreen.storyboard in Resources */,
 				087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */,
 				083B618E2A1FCE6400018798 /* video.png in Resources */,
 				08CF039C297CB6040074A878 /* Assets.xcassets in Resources */,
 				08CF039A297CB6030074A878 /* Main.storyboard in Resources */,
 				087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */,
+				08B8A5372A72BB440082B8E6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,41 +415,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1E8CF6F9746D083A14274EE9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2116F83C8ED513DA3C8D06D4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2CE1906F94BE91ED212933B4 /* [CP] Check Pods Manifest.lock */ = {
+		9BFEB7242B68F3FBEE8368E7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -471,29 +437,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6245B178149A170F7CDB39D8 /* [CP] Check Pods Manifest.lock */ = {
+		A0BDDDB1864C31B71BB29F91 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-WTM-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WTM/Pods-WTM-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6DF4FEDE019617E2C2C3D2AF /* [CP] Check Pods Manifest.lock */ = {
+		BA45B8F913B4C72A26903062 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -509,6 +470,45 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-WTM-WTMUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F5D6EA83BEBC7FEAF1854D66 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WTM-WTMUITests/Pods-WTM-WTMUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F653A4F2B9DD6B3A362E81B3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WTM-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -729,7 +729,7 @@
 		};
 		08CF03BA297CB6040074A878 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DBAE5B692D580334EE3F0C4B /* Pods-WTM.debug.xcconfig */;
+			baseConfigurationReference = F6106A7B33096B295AD87639 /* Pods-WTM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -754,7 +754,7 @@
 		};
 		08CF03BB297CB6040074A878 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 48660420D4DA0C41DB15EA58 /* Pods-WTM.release.xcconfig */;
+			baseConfigurationReference = 688593DA5ADD902DEE2F6D8B /* Pods-WTM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -779,7 +779,7 @@
 		};
 		08CF03BD297CB6040074A878 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F26F7EB5623DC7A2D20A66A9 /* Pods-WTMTests.debug.xcconfig */;
+			baseConfigurationReference = BC9394A86EFD59FE33E905CE /* Pods-WTMTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -803,7 +803,7 @@
 		};
 		08CF03BE297CB6040074A878 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ABB5FD54F81C7C12C4B542F6 /* Pods-WTMTests.release.xcconfig */;
+			baseConfigurationReference = BE4AFA8D0E48F45156CB173D /* Pods-WTMTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -827,7 +827,7 @@
 		};
 		08CF03C0297CB6040074A878 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FBC5672E6DD8D826665DDC20 /* Pods-WTM-WTMUITests.debug.xcconfig */;
+			baseConfigurationReference = 8B5050A14298E62D09E33D14 /* Pods-WTM-WTMUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -849,7 +849,7 @@
 		};
 		08CF03C1297CB6040074A878 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 32DC09BC52837CC5C5C2E9AB /* Pods-WTM-WTMUITests.release.xcconfig */;
+			baseConfigurationReference = 8E86DF8EDEA6CF11AA8FBC99 /* Pods-WTM-WTMUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

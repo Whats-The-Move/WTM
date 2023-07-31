@@ -7,7 +7,7 @@
 //AMAN'S FIRST TEST COMMIT
 import UIKit
 import Firebase
-
+import FirebaseFirestore
 import FirebaseAuth
 import GoogleSignIn
 import FirebaseCore
@@ -34,13 +34,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {success, _ in
-            guard success else{
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, _ in
+            guard success else {
                 return
             }
-            
-            print("success")
+            print("Notification authorization granted.")
+            DispatchQueue.main.async {
+                application.registerForRemoteNotifications()
+            }
         }
+        // Check if the app has a registered device token for remote notifications
+        if let token = application.currentUserNotificationSettings?.types {
+            print("Device has registered for remote notifications.")
+        } else {
+            print("Device has not registered for remote notifications.")
+        }
+        
         application.registerForRemoteNotifications()
         UID = UserDefaults.standard.string(forKey: "UID") ?? ""
         barName = UserDefaults.standard.string(forKey: "barName") ?? ""
@@ -76,18 +85,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         return true
     }
     
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        guard let token = fcmToken else {
-            return
-        }
-        print("FCM Registration Token: \(token)")
-        // You can store the FCM token in user defaults or send it to your server for further processing.
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        print("FCM token has been refreshed: \(fcmToken)")
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        // This method is called when the app successfully registers for FCM notifications.
+        // Store the FCM token in Firestore
+        print("Received FCM token:", fcmToken ?? "No token available")
+        
+        if let fcmToken = fcmToken, let currentUser = Auth.auth().currentUser {
+            let uid = currentUser.uid
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            let data: [String: Any] = [
+                "fcmToken": fcmToken,
+            ]
+            userRef.setData(data, merge: true) { error in
+                if let error = error {
+                    // Handle the error
+                    print("Error storing FCM token in Firestore: \(error.localizedDescription)")
+                } else {
+                    // Success!
+                    print("FCM token stored in Firestore.")
+                }
+            }
+        }
+    }
+
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async
+        -> UNNotificationPresentationOptions{
             // Customize how the notification should be presented when the app is in the foreground.
             // For example, you can show an alert, play a sound, or set the badge number.
-            completionHandler([.alert, .sound, .badge])
+            return[[.alert, .sound, .badge]]
         }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
