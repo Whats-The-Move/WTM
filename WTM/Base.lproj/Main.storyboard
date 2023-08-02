@@ -122,18 +122,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" text="" translatesAutoresizingMaskIntoConstraints="NO" id="ny7-WR-ZZK">
-                                <rect key="frame" x="7" y="109" width="320" height="56"/>
+                                <rect key="frame" x="7" y="110" width="377" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="M1m-Q3-HIT" id="bie-Zp-1xp"/>
                                 </connections>
                             </searchBar>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="kzk-HV-dSR">
-                                <rect key="frame" x="322" y="52.000000000000007" width="52" height="42.666666666666664"/>
-                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="322" y="52.000000000000007" width="52" height="43.666666666666664"/>
+                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OlS-8c-7Ec">
-                                <rect key="frame" x="10" y="165" width="370" height="596"/>
+                                <rect key="frame" x="10" y="166" width="370" height="595"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -300,33 +300,17 @@
                                     <segue destination="UOj-3c-4gn" kind="show" id="AMW-4w-VvX"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xhv-Dt-ZAd">
-                                <rect key="frame" x="339" y="124" width="49" height="26"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="49" id="8c3-qJ-W61"/>
-                                </constraints>
-                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal">
-                                    <color key="titleColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                    <imageReference key="image" image="arrow.clockwise.circle" catalog="system" symbolScale="large"/>
-                                </state>
-                                <connections>
-                                    <action selector="refreshButtonTapped:" destination="M1m-Q3-HIT" eventType="touchUpInside" id="RwJ-PM-cwL"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Champaign, IL " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aIt-Bt-B8h">
-                                <rect key="frame" x="63" y="38" width="234" height="70"/>
+                                <rect key="frame" x="63" y="38" width="234" height="71"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="26"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="illinoisLogo" translatesAutoresizingMaskIntoConstraints="NO" id="c6T-sD-sqC">
-                                <rect key="frame" x="21" y="60" width="19" height="26"/>
+                                <rect key="frame" x="21" y="54" width="34" height="39"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="26" id="Lvc-Cl-Fwq"/>
-                                    <constraint firstAttribute="width" constant="19" id="wPe-sd-vZK"/>
+                                    <constraint firstAttribute="height" constant="39" id="Lvc-Cl-Fwq"/>
+                                    <constraint firstAttribute="width" constant="34" id="wPe-sd-vZK"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -341,19 +325,17 @@
                             <constraint firstItem="kSK-fm-DMN" firstAttribute="trailing" secondItem="OPQ-RV-cyj" secondAttribute="trailingMargin" id="AzY-vZ-gKL"/>
                             <constraint firstItem="OlS-8c-7Ec" firstAttribute="leading" secondItem="OPQ-RV-cyj" secondAttribute="leadingMargin" constant="-6" id="BGf-js-ntt"/>
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="trailing" secondItem="OlS-8c-7Ec" secondAttribute="trailing" constant="-6" id="Cb4-eI-JxF"/>
-                            <constraint firstItem="c6T-sD-sqC" firstAttribute="top" secondItem="h7n-Zv-bqp" secondAttribute="top" constant="13" id="EKe-Ho-91Y"/>
-                            <constraint firstItem="aIt-Bt-B8h" firstAttribute="leading" secondItem="c6T-sD-sqC" secondAttribute="trailing" constant="23" id="HQp-aG-Qwy"/>
-                            <constraint firstItem="xhv-Dt-ZAd" firstAttribute="top" secondItem="kzk-HV-dSR" secondAttribute="bottom" constant="29" id="RDo-BJ-4vK"/>
+                            <constraint firstItem="c6T-sD-sqC" firstAttribute="top" secondItem="h7n-Zv-bqp" secondAttribute="top" constant="7" id="EKe-Ho-91Y"/>
+                            <constraint firstItem="aIt-Bt-B8h" firstAttribute="leading" secondItem="c6T-sD-sqC" secondAttribute="trailing" constant="8" id="HQp-aG-Qwy"/>
+                            <constraint firstItem="OlS-8c-7Ec" firstAttribute="top" secondItem="ny7-WR-ZZK" secondAttribute="bottom" id="Xhj-su-4OS"/>
                             <constraint firstItem="OlS-8c-7Ec" firstAttribute="bottom" secondItem="h7n-Zv-bqp" secondAttribute="bottom" id="ZUK-gi-yQd"/>
+                            <constraint firstItem="ny7-WR-ZZK" firstAttribute="trailing" secondItem="kzk-HV-dSR" secondAttribute="trailing" constant="10" id="ZbW-WE-r0P"/>
                             <constraint firstItem="aIt-Bt-B8h" firstAttribute="centerY" secondItem="kzk-HV-dSR" secondAttribute="centerY" id="dlT-oZ-rP6"/>
                             <constraint firstItem="ny7-WR-ZZK" firstAttribute="top" secondItem="aIt-Bt-B8h" secondAttribute="bottom" constant="1" id="eTa-ix-Bf1"/>
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="trailing" secondItem="kSK-fm-DMN" secondAttribute="trailing" id="f8p-mq-FXb"/>
                             <constraint firstItem="c6T-sD-sqC" firstAttribute="centerY" secondItem="aIt-Bt-B8h" secondAttribute="centerY" id="lGi-C8-SPv"/>
                             <constraint firstItem="ny7-WR-ZZK" firstAttribute="top" secondItem="kzk-HV-dSR" secondAttribute="bottom" constant="14" id="lR2-xF-Nfs"/>
-                            <constraint firstItem="h7n-Zv-bqp" firstAttribute="trailing" secondItem="xhv-Dt-ZAd" secondAttribute="trailing" constant="2" id="q3E-Ao-5hB"/>
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="top" secondItem="kSK-fm-DMN" secondAttribute="top" id="vi5-12-fbh"/>
-                            <constraint firstItem="OlS-8c-7Ec" firstAttribute="top" secondItem="xhv-Dt-ZAd" secondAttribute="bottom" constant="15" id="w1T-Sc-18R"/>
-                            <constraint firstItem="xhv-Dt-ZAd" firstAttribute="leading" secondItem="ny7-WR-ZZK" secondAttribute="trailing" constant="12" id="zmq-K2-80t"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" springLoaded="YES" id="SoS-hN-paD">
@@ -376,7 +358,6 @@
                         <outlet property="friendNotification" destination="kSK-fm-DMN" id="FGM-nf-8WB"/>
                         <outlet property="partyList" destination="OlS-8c-7Ec" id="DgP-Ol-4qW"/>
                         <outlet property="profileUIImage" destination="kzk-HV-dSR" id="hn2-nH-sg2"/>
-                        <outlet property="refreshButton" destination="xhv-Dt-ZAd" id="jDR-8D-f5t"/>
                         <outlet property="searchBar" destination="ny7-WR-ZZK" id="dZG-dm-aTn"/>
                     </connections>
                 </viewController>
@@ -2857,7 +2838,6 @@
     <resources>
         <image name="WTM_" width="409" height="101"/>
         <image name="arrow" width="106" height="106"/>
-        <image name="arrow.clockwise.circle" catalog="system" width="128" height="123"/>
         <image name="arrowshape.backward.fill" catalog="system" width="128" height="104"/>
         <image name="arrowshape.forward.fill" catalog="system" width="128" height="104"/>
         <image name="arrowshape.turn.up.backward" catalog="system" width="128" height="104"/>

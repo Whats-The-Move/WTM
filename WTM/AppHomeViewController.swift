@@ -17,7 +17,6 @@ extension Party: Equatable {
 }
 
 class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate, privateCustomCellDelegate {
-    
     func profileClicked(for party: Party) {
         // Create an instance of friendsGoingViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -65,7 +64,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
     }
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var refreshButton: UIButton!
     var partyArray = [String]()
     var privatePartyArray = [String]()
     var searching = false
@@ -98,9 +96,11 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var sortedParties: [(partyID: String, friendsCount: Int)] = []
     public var friendsGoing = [String : [String]]()
     public var transImage = UIImage()
+    private let refreshControl = UIRefreshControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupPullToRefresh()
         // Create a transparent UIImage with the desired size
         let imageSize = CGSize(width: 39, height: 39) // Replace with your desired size
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
@@ -161,7 +161,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
         partyList.overrideUserInterfaceStyle = .dark
         searchBar.overrideUserInterfaceStyle = .dark
-        refreshButton.overrideUserInterfaceStyle = .light
 
         //partyList.reloadData()
         
@@ -192,6 +191,32 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
 
         calculateFriendsAttending()
+    }
+    
+    private func setupPullToRefresh() {
+        // Set the target for the refresh control
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+
+        // Set the tint color of the refresh control to hot pink (RGB: 255, 22, 148)
+        refreshControl.tintColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+
+        // Add the refresh control to the table view
+        partyList.addSubview(refreshControl)
+    }
+
+    @objc private func refreshData(_ sender: Any) {
+        // Add a delay of 5 milliseconds before refreshing the page
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            // Replace the below lines with your actual refresh logic
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+            TabBarController.overrideUserInterfaceStyle = .dark
+            TabBarController.modalPresentationStyle = .fullScreen
+            self.present(TabBarController, animated: false, completion: nil)
+
+            // End the refreshing animation
+            self.refreshControl.endRefreshing()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -378,55 +403,22 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         super.viewWillAppear(animated)
         
     }
-        /*
-        databaseRef = Database.database().reference().child("Parties")
-        databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
-            let key = snapshot.key
-            guard let value = snapshot.value as? [String : Any] else {return}
-            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String {
-                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address)
-                self?.parties.append(party)
-                self?.likeDict[party.name] = party.likes
-                self?.dislikeDict[party.name] = party.dislikes
-                self?.overallLikeDict[party.name] = party.allTimeLikes
-                self?.overallDislikeDict[party.name] = party.allTimeDislikes
-                self?.addressDict[party.name] = party.address
-                self?.partyArray.append(party.name)
-                if let row = self?.parties.count {
-                    let indexPath = IndexPath(row: row - 1, section: 0)
-                    self?.partyList.insertRows(at: [indexPath], with: .automatic)
-                    //if((self?.parties.count)! <= 58){
-                      //  self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                    //} else {
-                        self?.partyList.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                            self?.scrollToTop()
-                            print("scrolled to top")
-                        }
-                    //}
-                }
-            }
-        }
-        partyList.reloadData()
-         
-    }*/
-   
     
-    @IBAction func refreshButtonTapped(_ sender: Any) {
-        /*
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyboard.instantiateViewController(withIdentifier: "AppHome") as! AppHomeViewController
-        newViewController.modalPresentationStyle = .fullScreen
-        present(newViewController, animated: false, completion: nil)
-        */
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-        TabBarController.overrideUserInterfaceStyle = .dark
-        TabBarController.modalPresentationStyle = .fullScreen
-        present(TabBarController, animated: false, completion: nil)
-        
-    }
+//    @IBAction func refreshButtonTapped(_ sender: Any) {
+//        /*
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let newViewController = storyboard.instantiateViewController(withIdentifier: "AppHome") as! AppHomeViewController
+//        newViewController.modalPresentationStyle = .fullScreen
+//        present(newViewController, animated: false, completion: nil)
+//        */
+//
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let TabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+//        TabBarController.overrideUserInterfaceStyle = .dark
+//        TabBarController.modalPresentationStyle = .fullScreen
+//        present(TabBarController, animated: false, completion: nil)
+//
+//    }
     
 
     @IBAction func logOutButtonTapped(_ sender: Any) {

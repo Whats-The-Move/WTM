@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>What's the Move?</string>
+	<string>What&apos;s the Move?</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -92,6 +92,16 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.whatsthemove.wtm.WTM.fetch</string>
+		<string>com.whatsthemove.wtm.WTM.remote-notification
+com.whatsthemove.wtm.WTM.remote-notification
+</string>
+		<string>com.whatsthemove.wtm.WTM.processing
+com.whatsthemove.wtm.WTM.remote-notification
+</string>
 	</array>
 </dict>
 </plist>

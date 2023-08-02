@@ -14,9 +14,9 @@
             filePath = "WTM/AppHomeViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
-            landmarkName = "viewWillAppear(_:)"
+            startingLineNumber = "385"
+            endingLineNumber = "385"
+            landmarkName = "updateUIWithSortedParties()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,10 +30,10 @@
             filePath = "WTM/AppHomeViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "AppHomeViewController"
-            landmarkType = "3">
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "partyList"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
