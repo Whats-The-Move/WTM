@@ -146,9 +146,6 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <edgeInsets key="layoutMargins" top="0.0" left="18" bottom="0.0" right="18"/>
-                                        <connections>
-                                            <segue destination="fpx-OV-3UW" kind="show" identifier="popupSegue" id="eJf-T3-Yic"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="privatePartyCell" rowHeight="97" id="brq-PD-b9c" customClass="privatePartyCellClass" customModule="WTM" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="147" width="370" height="97"/>
@@ -363,7 +360,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vA5-xb-TPz" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2681.5384615384614" y="54.739336492890992"/>
+            <point key="canvasLocation" x="2682" y="55"/>
         </scene>
         <!--Pictures View Controller-->
         <scene sceneID="vAt-Ca-lUZ">
@@ -1843,7 +1840,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kfk-Tw-ZvL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3573.8461538461538" y="54.739336492890992"/>
+            <point key="canvasLocation" x="3534" y="55"/>
         </scene>
         <!--Create Account View Controller-->
         <scene sceneID="wPd-jR-Ug9">

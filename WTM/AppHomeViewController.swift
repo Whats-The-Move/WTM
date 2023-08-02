@@ -143,6 +143,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                         self.friendNotification.isHidden = false
                         self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
                     }
+                } else {
+                    self.friendNotification.isHidden = true
                 }
             }
         }
@@ -789,14 +791,6 @@ extension AppHomeViewController: UITableViewDataSource {
         }
     }
 
-
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if publicOrPriv == true {
-            let selectedParty = parties[indexPath.row]
-            performSegue(withIdentifier: "popupSegue", sender: selectedParty)
-        }
-    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -804,99 +798,99 @@ extension AppHomeViewController: UITableViewDataSource {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if publicOrPriv {
-            updateDicts()
-            let date = NSDate()
-            let cal = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
-            var newDate : NSDate?
-            cal.range(of: .day, start: &newDate, interval: nil, for: date as Date)
-
-            
-            if segue.identifier == "popupSegue" {
-                    print("going into popup")
-                    let destinationVC = segue.destination as! PublicPopUpViewController
-                //destinationVC.isModalInPresentation = true
-                //destinationVC.modalPresentationStyle = .fullScreen
-
-                    if let cell = sender as? UITableViewCell {
-                        if let label = cell.viewWithTag(1) as? UILabel {
-                            let uid = Auth.auth().currentUser?.uid ?? ""
-          
-                            let partyRef = Database.database().reference().child("Parties").child(label.text ?? "")
-                            var isUserGoing = false
-                            partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
-                                
-                            
-                                print("segue before it goes in")
-                                if snapshot.exists() {
-                                    if let attendees = snapshot.value as? [String] {
-                                        isUserGoing = attendees.contains(uid)
-                                        print("is user going: \(isUserGoing)")
-                                        destinationVC.userGoing = isUserGoing
-                                        let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
-                                        let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
-                                        let grayColor = UIColor(red: 128.0/255, green: 128.0/255, blue: 128.0/255, alpha: 0.5)
-                                        let backgroundColor = isUserGoing ? greenColor : grayColor
-                                        print(backgroundColor)
-                                        destinationVC.isGoingButton.backgroundColor = backgroundColor
-                                        let buttonText = isUserGoing ? "Attending!" : "Not attending"
-                                        //destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
-                                        destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
-
-                                        // Assuming you have a button instance called 'myButton'
-                                        destinationVC.isGoingButton.setTitle(buttonText, for: .normal)
-
-
-                                    }
-                                }
-                            }
-
-                            
-                
-
-                            databaseRef = Database.database().reference().child("Parties").child(label.text ?? "")
-                            
-                            databaseRef?.observeSingleEvent(of: .value) { [weak self] (snapshot) in
-                                if let value = snapshot.value as? [String: Any] {
-
-                                    let key = snapshot.key
-                                    print("Party Key: \(key)")
-                                    
-                                    if let likes = value["Likes"] as? Int,
-                                       let dislikes = value["Dislikes"] as? Int,
-                                       let allTimeLikes = value["allTimeLikes"] as? Double,
-                                       let allTimeDislikes = value["allTimeDislikes"] as? Double,
-                                       let address = value["Address"] as? String,
-                                       let rating = value["avgStars"] as? Double,
-                                       let isGoing = value["isGoing"] as? [String] {
-                                    let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
-                                        let widthMult = Double(party.isGoing.count) / Double(maxPeople)
-                                        
-                                        destinationVC.party = party
-                                        
-                                        //destinationVC.assignProfilePictures(commonFriends: self?.friendsGoing[party.name] ?? party.isGoing)
-            
-                                        destinationVC.numPeople.text = String(party.isGoing.count) + " people attending"
-                                        destinationVC.rating = self?.ratingDict[party.name] ?? 0.0
-                                        //destinationVC.numPeople.textColor = UIColor.black
-                                        //destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
-
-                                        destinationVC.commonFriends = self?.friendsGoing[party.name] ?? party.isGoing
-                                        //destinationVC.slider.widthAnchor.constraint(equalTo: destinationVC.bkgdSlider.widthAnchor, multiplier: widthMult).isActive = true
-                                        
-                                        
-
-                                    }
-                                }
-                            }
-
-                            destinationVC.titleText = (label.text?.lowercased())!
-                            destinationVC.likesLabel = likeDict[(label.text)!]!
-                            destinationVC.dislikesLabel = dislikeDict[(label.text)!]!
-                            destinationVC.addressLabel = addressDict[(label.text)!]!
-                        }
-                        
-                    }
-                }
+//            updateDicts()
+//            let date = NSDate()
+//            let cal = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+//            var newDate : NSDate?
+//            cal.range(of: .day, start: &newDate, interval: nil, for: date as Date)
+//
+//
+//            if segue.identifier == "popupSegue" {
+//                    print("going into popup")
+//                    let destinationVC = segue.destination as! PublicPopUpViewController
+//                //destinationVC.isModalInPresentation = true
+//                //destinationVC.modalPresentationStyle = .fullScreen
+//
+//                    if let cell = sender as? UITableViewCell {
+//                        if let label = cell.viewWithTag(1) as? UILabel {
+//                            let uid = Auth.auth().currentUser?.uid ?? ""
+//
+//                            let partyRef = Database.database().reference().child("Parties").child(label.text ?? "")
+//                            var isUserGoing = false
+//                            partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
+//
+//
+//                                print("segue before it goes in")
+//                                if snapshot.exists() {
+//                                    if let attendees = snapshot.value as? [String] {
+//                                        isUserGoing = attendees.contains(uid)
+//                                        print("is user going: \(isUserGoing)")
+//                                        destinationVC.userGoing = isUserGoing
+//                                        let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
+//                                        let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
+//                                        let grayColor = UIColor(red: 128.0/255, green: 128.0/255, blue: 128.0/255, alpha: 0.5)
+//                                        let backgroundColor = isUserGoing ? greenColor : grayColor
+//                                        print(backgroundColor)
+//                                        destinationVC.isGoingButton.backgroundColor = backgroundColor
+//                                        let buttonText = isUserGoing ? "Attending!" : "Not attending"
+//                                        //destinationVC.isGoingButton.titleLabel?.font = UIFont.systemFont(ofSize: 20.0)
+//                                        destinationVC.isGoingButton.setTitleColor(UIColor.white, for: .normal)
+//
+//                                        // Assuming you have a button instance called 'myButton'
+//                                        destinationVC.isGoingButton.setTitle(buttonText, for: .normal)
+//
+//
+//                                    }
+//                                }
+//                            }
+//
+//
+//
+//
+//                            databaseRef = Database.database().reference().child("Parties").child(label.text ?? "")
+//
+//                            databaseRef?.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+//                                if let value = snapshot.value as? [String: Any] {
+//
+//                                    let key = snapshot.key
+//                                    print("Party Key: \(key)")
+//
+//                                    if let likes = value["Likes"] as? Int,
+//                                       let dislikes = value["Dislikes"] as? Int,
+//                                       let allTimeLikes = value["allTimeLikes"] as? Double,
+//                                       let allTimeDislikes = value["allTimeDislikes"] as? Double,
+//                                       let address = value["Address"] as? String,
+//                                       let rating = value["avgStars"] as? Double,
+//                                       let isGoing = value["isGoing"] as? [String] {
+//                                    let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
+//                                        let widthMult = Double(party.isGoing.count) / Double(maxPeople)
+//
+//                                        destinationVC.party = party
+//
+//                                        //destinationVC.assignProfilePictures(commonFriends: self?.friendsGoing[party.name] ?? party.isGoing)
+//
+//                                        destinationVC.numPeople.text = String(party.isGoing.count) + " people attending"
+//                                        destinationVC.rating = self?.ratingDict[party.name] ?? 0.0
+//                                        //destinationVC.numPeople.textColor = UIColor.black
+//                                        //destinationVC.numPeople.font = UIFont.systemFont(ofSize: 15.0)
+//
+//                                        destinationVC.commonFriends = self?.friendsGoing[party.name] ?? party.isGoing
+//                                        //destinationVC.slider.widthAnchor.constraint(equalTo: destinationVC.bkgdSlider.widthAnchor, multiplier: widthMult).isActive = true
+//
+//
+//
+//                                    }
+//                                }
+//                            }
+//
+//                            destinationVC.titleText = (label.text?.lowercased())!
+//                            destinationVC.likesLabel = likeDict[(label.text)!]!
+//                            destinationVC.dislikesLabel = dislikeDict[(label.text)!]!
+//                            destinationVC.addressLabel = addressDict[(label.text)!]!
+//                        }
+//
+//                    }
+//                }
         } else {
             updateDicts()
             
