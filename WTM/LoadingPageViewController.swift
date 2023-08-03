@@ -13,9 +13,9 @@ class LoadingPageViewController: UIViewController {
         super.viewDidLoad()
         if launchedBefore && authenticated {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let tabBarController = storyboard.instantiateViewController(identifier: "TabBarController")
-            tabBarController.modalPresentationStyle = .overFullScreen
-            self.present(tabBarController, animated: true)
+            let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+            appHomeVC.modalPresentationStyle = .overFullScreen
+            self.present(appHomeVC, animated: true)
 
         } else {
             UserDefaults.standard.set(true, forKey: "launchedBefore")
