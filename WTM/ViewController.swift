@@ -32,9 +32,9 @@ class ViewController: UIViewController {
             UserDefaults.standard.set(FirebaseAuth.Auth.auth().currentUser?.email, forKey: "user_address")
             UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(identifier: "TabBarController")
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true)
+            let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+            appHomeVC.modalPresentationStyle = .overFullScreen
+            self.present(appHomeVC, animated: true)
 
 
         }
@@ -43,9 +43,9 @@ class ViewController: UIViewController {
             print("USER IS IN")
 
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(identifier: "TabBarController")
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true)
+            let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+            appHomeVC.modalPresentationStyle = .overFullScreen
+            self.present(appHomeVC, animated: true)
 
         }
         email.textColor = .black

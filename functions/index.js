@@ -7,8 +7,8 @@ admin.initializeApp();
 
 const updateIsGoingField = async () => {
   try {
-    const databaseRef = admin.database().ref('Parties');
-    const snapshot = await databaseRef.once('value');
+    const databaseRef = admin.database().ref("Parties");
+    const snapshot = await databaseRef.once("value");
 
     // Update the isGoing field for each child in the Parties node
     snapshot.forEach((childSnapshot) => {
@@ -19,12 +19,12 @@ const updateIsGoingField = async () => {
       isGoingArray.push("vSAYcrlFT1faX9Z4KrX8waB4vdA2");
       isGoingArray.push("vSAYcrlFT1faX9Z4KrX8waB4vdA2");
 
-      childRef.update({ isGoing: isGoingArray });
+      childRef.update({isGoing: isGoingArray});
     });
 
-    console.log('isGoing field updated successfully.');
+    console.log("isGoing field updated successfully.");
   } catch (error) {
-    console.error('Error updating isGoing field:', error);
+    console.error("Error updating isGoing field:", error);
   }
 };
 
@@ -37,3 +37,56 @@ exports.dailyUpdateIsGoing = functions.pubsub
       await updateIsGoingField();
       return null;
     });
+
+const sendFriendRequestNotification = async (recipientFcmToken, senderName) => {
+  const message = {
+    notification: {
+      title: "New Friend Request",
+      body: `${senderName} has sent you a friend request!`,
+    },
+    token: recipientFcmToken,
+  };
+
+  try {
+    await admin.messaging().send(message);
+    console.log("Friend request notification sent successfully.");
+  } catch (error) {
+    console.error("Error sending friend request notification:", error);
+  }
+};
+
+exports.sendFriendRequestNotification = functions.firestore
+    .document("users/{userId}")
+    .onUpdate(async (change, context) => {
+      const {before, after} = change;
+      const beforeRequests = before.data().pendingFriendRequests || [];
+      const afterRequests = after.data().pendingFriendRequests || [];
+
+      // Check if there's a new friend request
+      if (afterRequests.length > beforeRequests.length) {
+        // Get the recipient's FCM token
+        const recipientUid = context.params.userId;
+        const recipientSnap = await admin
+            .firestore()
+            .collection("users")
+            .doc(recipientUid)
+            .get();
+        const recipientFcmToken = recipientSnap.data().fcmToken;
+
+        // Get the sender's name
+        const newRequestUid = afterRequests.find((uid) =>
+          !beforeRequests.includes(uid));
+        const senderSnap = await admin
+            .firestore()
+            .collection("users")
+            .doc(newRequestUid)
+            .get();
+        const senderName = senderSnap.data().name;
+
+        // Send the push notification with sender's name
+        await sendFriendRequestNotification(recipientFcmToken, senderName);
+      }
+
+      return null;
+    });
+
