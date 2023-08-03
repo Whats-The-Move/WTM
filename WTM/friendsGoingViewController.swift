@@ -12,7 +12,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
     
     var selectedParty: Party?
     var selectedPrivateParty: privateParty?
-
+    var showAll = false
     var partyID = ""
 
     var friendsGoing: [User] = []
@@ -46,7 +46,88 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
 
         db = Firestore.firestore()
 
-        fetchFriendsGoing()
+        if showAll{
+            fetchIsGoing(partyID: partyID)
+        }
+        else{
+            fetchFriendsGoing()
+        }
+    }
+    func fetchIsGoing(partyID: String) {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("Error: No user is currently signed in.")
+            return
+        }
+  
+        let partyRef = Database.database().reference().child("Parties").child(partyID)
+        
+        partyRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+            guard snapshot.exists() else {
+                print("No party found.")
+                return
+            }
+            
+            guard let partyDict = snapshot.value as? [String: Any],
+                  let isGoing = partyDict["isGoing"] as? [String] else {
+                print("Error: Invalid party data.")
+                return
+            }
+            
+            let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+            
+            userRef.getDocument { [weak self] (document, error) in
+                if let error = error {
+                    print("Error fetching user document: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let document = document, document.exists,
+                      let friendList = document.data()?["friends"] as? [String] else {
+                    print("Error: No friends list found.")
+                    return
+                }
+                
+                let commonFriendsUIDs = isGoing
+                
+                let dispatchGroup = DispatchGroup()
+                var commonFriends: [User] = []
+                
+                for friendUID in commonFriendsUIDs {
+                    dispatchGroup.enter()
+                    
+                    let friendRef = Firestore.firestore().collection("users").document(friendUID)
+                    
+                    friendRef.getDocument { (friendDocument, friendError) in
+                        defer {
+                            dispatchGroup.leave()
+                        }
+                        
+                        if let friendError = friendError {
+                            print("Error fetching friend document: \(friendError.localizedDescription)")
+                            return
+                        }
+                        
+                        guard let friendDocument = friendDocument, friendDocument.exists,
+                              let friendData = friendDocument.data(),
+                              let email = friendData["email"] as? String,
+                              let name = friendData["name"] as? String,
+                              let username = friendData["username"] as? String,
+                              let profilePic = friendData["profilePic"] as? String else {
+                            return
+                        }
+                        
+                        let user = User(uid: friendUID, email: email, name: name, username: username, profilePic: profilePic)
+                        commonFriends.append(user)
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    self?.friendsGoing = commonFriends
+                    self?.friendsGoingTableView.reloadData()
+                }
+            }
+        
+        }
     }
 
     func fetchFriendsGoing() {
@@ -123,7 +204,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
                     }
                 }
             }
-        } else {
+        } else {/*
             let partyRef = Database.database().reference().child("Privates").child(partyID)
             
             partyRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
@@ -191,7 +272,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
                         self?.friendsGoingTableView.reloadData()
                     }
                 }
-            }
+            }*/
 
         }
     }

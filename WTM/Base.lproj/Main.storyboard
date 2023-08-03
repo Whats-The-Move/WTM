@@ -123,6 +123,8 @@
                         <subviews>
                             <searchBar contentMode="redraw" text="" translatesAutoresizingMaskIntoConstraints="NO" id="ny7-WR-ZZK">
                                 <rect key="frame" x="7" y="109" width="320" height="56"/>
+                                <color key="tintColor" red="0.93140411379999999" green="0.1367700872" blue="0.81589100400000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <offsetWrapper key="searchFieldBackgroundPositionAdjustment" horizontal="0.0" vertical="0.0"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="M1m-Q3-HIT" id="bie-Zp-1xp"/>
@@ -1862,7 +1864,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kfk-Tw-ZvL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3573.8461538461538" y="54.739336492890992"/>
+            <point key="canvasLocation" x="3514" y="-18"/>
         </scene>
         <!--Create Account View Controller-->
         <scene sceneID="wPd-jR-Ug9">

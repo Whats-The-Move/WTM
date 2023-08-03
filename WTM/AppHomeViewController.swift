@@ -800,10 +800,11 @@ extension AppHomeViewController: UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if publicOrPriv == true {
+        return
+        /*if publicOrPriv == true {
             let selectedParty = parties[indexPath.row]
             performSegue(withIdentifier: "popupSegue", sender: selectedParty)
-        }
+        }*/
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
