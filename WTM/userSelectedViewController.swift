@@ -30,44 +30,53 @@ class UserSelectedViewController: UIViewController, UITableViewDelegate, UITable
                 return
             }
 
-            if let imageURLString = document.data()?["profilePic"] as? String,
-               let name = document.data()?["name"] as? String,
-               let username = document.data()?["username"] as? String,
-               let spots = document.data()?["spots"] as? [String: Int] { // Retrieve the spots map from Firestore
-
-                // Update the UI elements on the main thread
-                DispatchQueue.main.async {
-                    self.nameLabel.text = name
-                    self.usernameLabel.text = username
-
-                    if let imageURL = URL(string: imageURLString) {
-                        DispatchQueue.global().async {
-                            if let imageData = try? Data(contentsOf: imageURL) {
-                                DispatchQueue.main.async {
-                                    let image = UIImage(data: imageData)
-                                    self.profilePic.image = image
-                                }
+            if let imageURLString = document.data()?["profilePic"] as? String {
+                if let imageURL = URL(string: imageURLString) {
+                    DispatchQueue.global().async {
+                        if let imageData = try? Data(contentsOf: imageURL) {
+                            DispatchQueue.main.async {
+                                let image = UIImage(data: imageData)
+                                self.profilePic.image = image
                             }
                         }
                     }
-
-                    // Get the party with the largest occurrence (maximum value) from the spots map
-                    if let maxSpot = spots.max(by: { $0.value < $1.value }) {
-                        self.favSpotLabel.text = "Favorite Spot: \(maxSpot.key)"
-                    } else {
-                        self.favSpotLabel.text = "No favorite spot found"
-                    }
                 }
+            } else {
+                // Handle the case where the profilePic data is empty or nonexistent
+                self.profilePic.image = UIImage(named: "default_profile_pic") // Set a default profile picture
+            }
 
-                // Fetch the friends for the current user and the selected user
-                self.fetchCurrentUserFriends { currentUserFriends in
-                    self.fetchSelectedUserFriends { selectedUserFriends in
-                        // Find the shared friends between the current user and the selected user
-                        let sharedFriends = currentUserFriends.filter { selectedUserFriends.contains($0.uid) }
-                        // Set the sharedFriends array
-                        self.sharedFriends = sharedFriends
-                        self.sharedFriendTable.reloadData()
-                    }
+            if let name = document.data()?["name"] as? String {
+                self.nameLabel.text = name
+            } else {
+                // Handle the case where the name data is empty or nonexistent
+                self.nameLabel.text = "Name not available"
+            }
+
+            if let username = document.data()?["username"] as? String {
+                self.usernameLabel.text = username
+            } else {
+                // Handle the case where the username data is empty or nonexistent
+                self.usernameLabel.text = "Username not available"
+            }
+
+            if let spots = document.data()?["spots"] as? [String: Int] {
+                // Get the party with the largest occurrence (maximum value) from the spots map
+                if let maxSpot = spots.max(by: { $0.value < $1.value }) {
+                    self.favSpotLabel.text = "Favorite Spot: \(maxSpot.key)"
+                } else {
+                    self.favSpotLabel.text = "No favorite spot found"
+                }
+            }
+
+            // Fetch the friends for the current user and the selected user
+            self.fetchCurrentUserFriends { currentUserFriends in
+                self.fetchSelectedUserFriends { selectedUserFriends in
+                    // Find the shared friends between the current user and the selected user
+                    let sharedFriends = currentUserFriends.filter { selectedUserFriends.contains($0.uid) }
+                    // Set the sharedFriends array
+                    self.sharedFriends = sharedFriends
+                    self.sharedFriendTable.reloadData()
                 }
             }
         }

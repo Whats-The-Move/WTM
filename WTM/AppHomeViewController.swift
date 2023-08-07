@@ -495,9 +495,10 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
         //reloadlist
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
-        appHomeVC.modalPresentationStyle = .overFullScreen
-        self.present(appHomeVC, animated: true)
+        let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+        AppHomeVC.overrideUserInterfaceStyle = .dark
+        AppHomeVC.modalPresentationStyle = .fullScreen
+        self.present(AppHomeVC, animated: false, completion: nil)
     }
     
     func buttonClicked(for party: Party) {
@@ -551,9 +552,10 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
     //reloadlist
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
-    appHomeVC.modalPresentationStyle = .overFullScreen
-    self.present(appHomeVC, animated: true)
+    let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+    AppHomeVC.overrideUserInterfaceStyle = .dark
+    AppHomeVC.modalPresentationStyle = .fullScreen
+    self.present(AppHomeVC, animated: false, completion: nil)
     }
 
     

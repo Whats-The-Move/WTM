@@ -111,9 +111,9 @@ class ViewController: UIViewController {
                 }
                  return }
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let vc = storyboard.instantiateViewController(identifier: "TabBarController")
-                        vc.modalPresentationStyle = .overFullScreen
-            self?.present(vc, animated: true)
+            let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+            appHomeVC.modalPresentationStyle = .overFullScreen
+            self?.present(appHomeVC, animated: true)
         })
 
 
