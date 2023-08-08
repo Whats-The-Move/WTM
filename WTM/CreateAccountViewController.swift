@@ -387,7 +387,7 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
                         // Success!
                         print("added username and name")
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+                        let appHomeVC = storyboard.instantiateViewController(identifier: "createAddFriend")
                         appHomeVC.modalPresentationStyle = .overFullScreen
                         self.present(appHomeVC, animated: true)
                     }

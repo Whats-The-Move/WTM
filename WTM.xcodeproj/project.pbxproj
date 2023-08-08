@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0806DF552A813FA8001D04BD /* createAccountAddFriendViewController.swift */; };
 		082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */; };
 		083B618E2A1FCE6400018798 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 083B618D2A1FCE6400018798 /* video.png */; };
 		083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083B618F2A1FD00400018798 /* CustomCellClass.swift */; };
@@ -74,6 +75,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0806DF552A813FA8001D04BD /* createAccountAddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createAccountAddFriendViewController.swift; sourceTree = "<group>"; };
 		082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePopUpViewController.swift; sourceTree = "<group>"; };
 		083B618D2A1FCE6400018798 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
 		083B618F2A1FD00400018798 /* CustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellClass.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */,
 				088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */,
 				088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */,
+				0806DF552A813FA8001D04BD /* createAccountAddFriendViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -552,6 +555,7 @@
 				10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */,
 				08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */,
 				08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */,
+				0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,
