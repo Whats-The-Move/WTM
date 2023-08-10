@@ -14,8 +14,8 @@
             filePath = "WTM/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -390,6 +390,114 @@
             endingLineNumber = "359"
             landmarkName = "popUpViewController"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WTM/AppHomeViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "AppHomeViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE - 4df829bed139c0d7"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WTM.AppHomeViewController.searchParty.getter : Swift.Array&lt;Swift.String&gt;"
+                  moduleName = "WTM"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/AppHomeViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "88">
+               </Location>
+               <Location
+                  uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE - 9fa8a8274f6768c3"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WTM.AppHomeViewController.searchParty.setter : Swift.Array&lt;Swift.String&gt;"
+                  moduleName = "WTM"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/AppHomeViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "112">
+               </Location>
+               <Location
+                  uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE - b70f4dfcac919ed2"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WTM.AppHomeViewController.searchParty.modify : Swift.Array&lt;Swift.String&gt;"
+                  moduleName = "WTM"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/AppHomeViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE - 9855d3807b77a285"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WTM.AppHomeViewController.searchParty.modify : Swift.Array&lt;Swift.String&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "WTM"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/AppHomeViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE - 3bc5b5940573be1a"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WTM.AppHomeViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; WTM.AppHomeViewController"
+                  moduleName = "WTM"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/AppHomeViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "692">
+               </Location>
+               <Location
+                  uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE - 652ca1b86ce23a89"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WTM.AppHomeViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;WTM.AppHomeViewController&gt;"
+                  moduleName = "WTM"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/AppHomeViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "668">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -118,7 +118,7 @@
             <objects>
                 <viewController storyboardIdentifier="AppHome" useStoryboardIdentifierAsRestorationIdentifier="YES" id="M1m-Q3-HIT" customClass="AppHomeViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OPQ-RV-cyj">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" text="" translatesAutoresizingMaskIntoConstraints="NO" id="ny7-WR-ZZK">
@@ -133,7 +133,7 @@
                                 <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OlS-8c-7Ec">
-                                <rect key="frame" x="10" y="166" width="370" height="644"/>
+                                <rect key="frame" x="10" y="166" width="370" height="595"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -298,7 +298,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Champaign, IL " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aIt-Bt-B8h">
-                                <rect key="frame" x="63" y="38" width="234" height="71"/>
+                                <rect key="frame" x="63" y="38" width="184" height="71"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="26"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -310,14 +310,24 @@
                                     <constraint firstAttribute="width" constant="34" id="wPe-sd-vZK"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UsN-MX-RZF">
+                                <rect key="frame" x="242" y="56" width="48" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system"/>
+                                <connections>
+                                    <action selector="dropdownButtonTapped:" destination="M1m-Q3-HIT" eventType="touchUpInside" id="D0F-cU-nc9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="h7n-Zv-bqp"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="kzk-HV-dSR" firstAttribute="leading" secondItem="aIt-Bt-B8h" secondAttribute="trailing" constant="25" id="3st-eF-go0"/>
+                            <constraint firstItem="kzk-HV-dSR" firstAttribute="leading" secondItem="aIt-Bt-B8h" secondAttribute="trailing" constant="75" id="3st-eF-go0"/>
                             <constraint firstItem="c6T-sD-sqC" firstAttribute="leading" secondItem="h7n-Zv-bqp" secondAttribute="leading" constant="21" id="82T-h8-4Z7"/>
                             <constraint firstItem="ny7-WR-ZZK" firstAttribute="leading" secondItem="h7n-Zv-bqp" secondAttribute="leading" constant="7" id="8Gc-3N-xqe"/>
-                            <constraint firstItem="kSK-fm-DMN" firstAttribute="leading" secondItem="aIt-Bt-B8h" secondAttribute="trailing" constant="59" id="9mw-IR-DpC"/>
+                            <constraint firstItem="kSK-fm-DMN" firstAttribute="leading" secondItem="aIt-Bt-B8h" secondAttribute="trailing" constant="109" id="9mw-IR-DpC"/>
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="top" secondItem="h7n-Zv-bqp" secondAttribute="top" constant="4" id="AzW-zO-6uq"/>
                             <constraint firstItem="kSK-fm-DMN" firstAttribute="trailing" secondItem="OPQ-RV-cyj" secondAttribute="trailingMargin" id="AzY-vZ-gKL"/>
                             <constraint firstItem="OlS-8c-7Ec" firstAttribute="leading" secondItem="OPQ-RV-cyj" secondAttribute="leadingMargin" constant="-6" id="BGf-js-ntt"/>
@@ -353,6 +363,8 @@
                     </tabBarItem>
                     <connections>
                         <outlet property="friendNotification" destination="kSK-fm-DMN" id="FGM-nf-8WB"/>
+                        <outlet property="locationLabel" destination="aIt-Bt-B8h" id="R3B-hs-QvG"/>
+                        <outlet property="locationPicture" destination="c6T-sD-sqC" id="imf-M6-d1z"/>
                         <outlet property="partyList" destination="OlS-8c-7Ec" id="DgP-Ol-4qW"/>
                         <outlet property="profileUIImage" destination="kzk-HV-dSR" id="hn2-nH-sg2"/>
                         <outlet property="searchBar" destination="ny7-WR-ZZK" id="dZG-dm-aTn"/>
@@ -360,7 +372,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vA5-xb-TPz" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2682" y="55"/>
+            <point key="canvasLocation" x="2681.5384615384614" y="54.739336492890992"/>
         </scene>
         <!--Pictures View Controller-->
         <scene sceneID="vAt-Ca-lUZ">
@@ -1332,6 +1344,7 @@
                     <connections>
                         <segue destination="RD5-aH-ryf" kind="relationship" relationship="viewControllers" id="r7w-xU-Gqi"/>
                         <segue destination="KFj-Ki-J9l" kind="relationship" relationship="viewControllers" id="rG1-kY-O2b"/>
+                        <segue destination="M1m-Q3-HIT" kind="relationship" relationship="viewControllers" id="7fv-8A-rol"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UPN-kv-oKl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2890,8 +2903,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="GAb-m4-rqd"/>
-        <segue reference="A31-YU-FqS"/>
+        <segue reference="dFA-sR-yYn"/>
+        <segue reference="AMW-4w-VvX"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="WTM_" width="409" height="101"/>
@@ -2905,6 +2918,7 @@
         <image name="camera.on.rectangle.fill" catalog="system" width="128" height="98"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="chevron.backward.circle" catalog="system" width="128" height="123"/>
+        <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
