@@ -111,6 +111,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         //print(locationOptions)
 
         setupPullToRefresh()
+        setDB()
+
         setupDropdownView()
         dropdownView.isHidden = true
         if let locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
@@ -129,7 +131,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         transImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
         UIGraphicsEndImageContext()
         // Set the transparent image to the UIImageView
-
+        dropdownLabel.textColor = .black
         //partyList.sectionHeaderHeight = 8 // 8px vertical spacing between cells
         partyList.separatorStyle = .none
         //let paddingWidth: CGFloat = 10.0
@@ -213,7 +215,15 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         calculateFriendsAttending()
     }
     func setDB (){
-        
+        if var locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
+
+            if locationOptions[0] == "Champaign, IL" {
+                dbName = "Parties"
+            }
+            else{
+                dbName = "ChicagoParties"
+            }
+        }
     }
     func setupDropdownView() {
         // Create and style dropdownView
@@ -305,8 +315,19 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
 
         dropdownView.isHidden = true
-        partyList.reloadData()
+        //partyList.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            // Replace the below lines with your actual refresh logic
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+            AppHomeVC.overrideUserInterfaceStyle = .dark
+            AppHomeVC.modalPresentationStyle = .fullScreen
+            self.present(AppHomeVC, animated: false, completion: nil)
+
+            // End the refreshing animation
+            self.refreshControl.endRefreshing()
         }
+    }
     
     @IBAction func dropdownButtonTapped(_ sender: Any) {
         dropdownView.isHidden = !dropdownView.isHidden
