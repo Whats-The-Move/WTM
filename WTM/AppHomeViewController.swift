@@ -47,6 +47,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     
     var rank = 0
     var timer: Timer?
+    var dbName = "Parties"
+    let defaults = UserDefaults.standard
 
     @IBOutlet weak var partyList: UITableView! {
         didSet {
@@ -70,9 +72,15 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
     @IBOutlet weak var friendNotification: UIButton!
     @IBOutlet weak var profileUIImage: UIImageView!
+    @IBOutlet var locationLabel: UILabel!
+    
+    @IBOutlet var locationPicture: UIImageView!
+    
     var searchParty = [String]()
-    
-    
+
+    var dropdownView: UIView!
+    var collegeImage: UIImageView!
+    var dropdownLabel: UILabel!
 
     
     var databaseRef: DatabaseReference?
@@ -100,7 +108,20 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //print(locationOptions)
+
         setupPullToRefresh()
+        setDB()
+
+        setupDropdownView()
+        dropdownView.isHidden = true
+        if let locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
+            locationLabel.text = locationOptions[0]
+        }
+        if let pictureOptions = defaults.array(forKey: "PictureOptionsKey") as? [String] {
+            locationPicture.image = UIImage(named: pictureOptions[0])
+
+        }
         // Create a transparent UIImage with the desired size
         let imageSize = CGSize(width: 39, height: 39) // Replace with your desired size
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
@@ -109,9 +130,8 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         UIRectFill(CGRect(origin: .zero, size: imageSize))
         transImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
         UIGraphicsEndImageContext()
-
         // Set the transparent image to the UIImageView
-
+        dropdownLabel.textColor = .black
         //partyList.sectionHeaderHeight = 8 // 8px vertical spacing between cells
         partyList.separatorStyle = .none
         //let paddingWidth: CGFloat = 10.0
@@ -166,7 +186,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
         //partyList.reloadData()
         
-        databaseRef = Database.database().reference().child("Parties")
+        databaseRef = Database.database().reference().child(dbName)
         databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}
@@ -193,6 +213,124 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
 
         calculateFriendsAttending()
+    }
+    func setDB (){
+        if var locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
+
+            if locationOptions[0] == "Champaign, IL" {
+                dbName = "Parties"
+            }
+            else{
+                dbName = "ChicagoParties"
+            }
+        }
+    }
+    func setupDropdownView() {
+        // Create and style dropdownView
+        dropdownView = UIView()
+        let cornerRadius: CGFloat = 10.0 // Adjust this value as needed
+        dropdownView.layer.cornerRadius = cornerRadius
+        dropdownView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        dropdownView.clipsToBounds = true
+        
+        dropdownView.backgroundColor = UIColor.white
+        dropdownView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(dropdownView)
+        
+        // Create and style collegeImage
+        collegeImage = UIImageView(image: UIImage(named: "chicago_flag"))
+        collegeImage.translatesAutoresizingMaskIntoConstraints = false
+        dropdownView.addSubview(collegeImage)
+        
+        // Create and style dropdownLabel
+        dropdownLabel = UILabel()
+        //print(locationOptions)
+        if let locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
+            dropdownLabel.text = locationOptions[1]
+            
+
+        }
+        if let pictureOptions = defaults.array(forKey: "PictureOptionsKey") as? [String] {
+            collegeImage.image = UIImage(named: pictureOptions[1])
+
+
+        }
+
+        dropdownLabel.font = UIFont(name: "Future Medium", size: 35)
+        //dropdownLabel.textColor = .black
+        dropdownLabel.translatesAutoresizingMaskIntoConstraints = false
+        dropdownView.addSubview(dropdownLabel)
+        
+        // Set up constraints
+        NSLayoutConstraint.activate([
+            dropdownView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor),
+            dropdownView.heightAnchor.constraint(equalToConstant: 50),
+            dropdownView.leadingAnchor.constraint(equalTo: locationPicture.leadingAnchor),
+            dropdownView.trailingAnchor.constraint(equalTo: locationLabel.trailingAnchor),
+            
+            collegeImage.leadingAnchor.constraint(equalTo: dropdownView.leadingAnchor, constant: 10),
+            collegeImage.centerYAnchor.constraint(equalTo: dropdownView.centerYAnchor),
+            collegeImage.widthAnchor.constraint(equalToConstant: 20),
+            collegeImage.heightAnchor.constraint(equalToConstant: 20),
+            
+            dropdownLabel.leadingAnchor.constraint(equalTo: collegeImage.trailingAnchor, constant: 10),
+            dropdownLabel.centerYAnchor.constraint(equalTo: dropdownView.centerYAnchor)
+        ])
+        
+        // Add tap gesture recognizer to dropdownView
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dropdownViewTapped))
+        dropdownView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dropdownViewTapped() {
+        // Toggle locationIndex
+        if var locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
+            locationLabel.text = locationOptions[1]
+            dropdownLabel.text = locationOptions[0]
+
+            if locationOptions[0] == "Champaign, IL" {
+                dbName = "Parties"
+            }
+            else{
+                dbName = "ChicagoParties"
+            }
+            locationOptions.reverse()
+            defaults.set(locationOptions, forKey: "LocationOptionsKey")
+
+
+        }
+        if var pictureOptions = defaults.array(forKey: "PictureOptionsKey") as? [String] {
+            locationPicture.image = UIImage(named: pictureOptions[1])
+            collegeImage.image = UIImage(named: pictureOptions[0])
+
+            pictureOptions.reverse()
+            defaults.set(pictureOptions, forKey: "PictureOptionsKey")
+
+
+        }
+        //print(locationOptions)
+        //print(locationOptions)
+        //setupDropdownView()
+
+
+
+        dropdownView.isHidden = true
+        //partyList.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            // Replace the below lines with your actual refresh logic
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+            AppHomeVC.overrideUserInterfaceStyle = .dark
+            AppHomeVC.modalPresentationStyle = .fullScreen
+            self.present(AppHomeVC, animated: false, completion: nil)
+
+            // End the refreshing animation
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    @IBAction func dropdownButtonTapped(_ sender: Any) {
+        dropdownView.isHidden = !dropdownView.isHidden
     }
     
     private func setupPullToRefresh() {
@@ -257,7 +395,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             return
         }
 
-        let partiesRef = Database.database().reference().child("Parties")
+        let partiesRef = Database.database().reference().child(dbName)
 
         // Retrieve the list of parties
         partiesRef.observeSingleEvent(of: .value) { snapshot in
@@ -507,7 +645,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             return
         }
         
-        let partyRef = Database.database().reference().child("Parties").child(party.name)
+        let partyRef = Database.database().reference().child(dbName).child(party.name)
         partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
             if snapshot.exists() { //if uid is already in the list, take it out (if someone cancels their attendance to a party)
                 if var attendees = snapshot.value as? [String] {
@@ -563,7 +701,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     
     func updateDicts() {
         
-        databaseRef = Database.database().reference().child("Parties")
+        databaseRef = Database.database().reference().child(dbName)
         databaseRef?.observe(.childAdded){ [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}

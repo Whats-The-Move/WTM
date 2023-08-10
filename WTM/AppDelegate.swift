@@ -43,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 application.registerForRemoteNotifications()
             }
         }
+
         // Check if the app has a registered device token for remote notifications
         if let token = application.currentUserNotificationSettings?.types {
             print("Device has registered for remote notifications.")
@@ -59,7 +60,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         user_address = UserDefaults.standard.string(forKey: "user_address") ?? "user"
         votesLabel = UserDefaults.standard.integer(forKey: "votesLabel")
         currentDate = UserDefaults.standard.string(forKey: "currentDate") ?? ""
-
+        
+        let defaults = UserDefaults.standard
+        var key = "LocationOptionsKey"
+        
+        if defaults.object(forKey: key) == nil {
+            let defaultLocationOptions = ["Champaign, IL", "Chicago, IL"]
+            defaults.set(defaultLocationOptions, forKey: key)
+        }
+        key = "PictureOptionsKey"
+        
+        if defaults.object(forKey: key) == nil {
+            let defaultPictureOptions = ["illinoisLogo", "chicago_flag"]
+            defaults.set(defaultPictureOptions, forKey: key)
+        }
+        
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         let newDate = dateFormatter.string(from: Date())
