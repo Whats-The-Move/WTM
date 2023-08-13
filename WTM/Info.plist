@@ -2,10 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.whatsthemove.wtm.WTM.fetch</string>
+		<string>com.whatsthemove.wtm.WTM.remote-notification
+com.whatsthemove.wtm.WTM.remote-notification
+</string>
+		<string>com.whatsthemove.wtm.WTM.processing
+com.whatsthemove.wtm.WTM.remote-notification
+</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>What&apos;s the Move?</string>
+	<string>What's the Move?</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,6 +49,8 @@
 	<string>260887709098-ttt843uacmlb82bao1t8cn8hun38b67e.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCalendarsUsageDescription</key>
+	<string>The app needs access to the calendar to display events</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow WTM access to camera for capturing photos</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -92,16 +104,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>com.whatsthemove.wtm.WTM.fetch</string>
-		<string>com.whatsthemove.wtm.WTM.remote-notification
-com.whatsthemove.wtm.WTM.remote-notification
-</string>
-		<string>com.whatsthemove.wtm.WTM.processing
-com.whatsthemove.wtm.WTM.remote-notification
-</string>
 	</array>
 </dict>
 </plist>

@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "387"
             endingLineNumber = "387"
-            landmarkName = "updateUIWithSortedParties()"
+            landmarkName = "imageTapped()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
