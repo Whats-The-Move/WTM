@@ -27,7 +27,7 @@ class allFriendsPopUpViewController: UIViewController, UITableViewDelegate {
         super.viewDidLoad()
         titleText.textColor = .white
         searchBar.delegate = self
-        friendsTableView.register(addFriendCustomCellClass.self, forCellReuseIdentifier: "friendCell")
+        friendsTableView.register(removeFriendCustomCellClass.self, forCellReuseIdentifier: "friendCell")
         friendsTableView.delegate = self
         friendsTableView.dataSource = self
         friendsTableView.overrideUserInterfaceStyle = .dark
@@ -94,10 +94,20 @@ extension allFriendsPopUpViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as! addFriendCustomCellClass
+        let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as! removeFriendCustomCellClass
         
         let user = searching ? searchFriend[indexPath.row] : friends[indexPath.row]
         cell.configure(with: user)
+        
+        cell.friendRemoved = { [weak self] in
+            // Remove the friend from your data source array
+            self?.friends.remove(at: indexPath.row)
+            
+            // Update the table view with the new data
+            DispatchQueue.main.async {
+                tableView.reloadData()
+            }
+        }
         
         return cell
     }

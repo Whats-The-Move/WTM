@@ -18,6 +18,7 @@
 		086042D129C292C900066892 /* reviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086042D029C292C900066892 /* reviewViewController.swift */; };
 		086E2E3F2A88160300BC7D85 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E3E2A88160300BC7D85 /* Event.swift */; };
 		086E2E412A88163C00BC7D85 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E402A88163C00BC7D85 /* EventCell.swift */; };
+		086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E422A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift */; };
 		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
 		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
@@ -92,6 +93,7 @@
 		086042D029C292C900066892 /* reviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewViewController.swift; sourceTree = "<group>"; };
 		086E2E3E2A88160300BC7D85 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		086E2E402A88163C00BC7D85 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		086E2E422A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = removeFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
 		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				08D313A02A4A5CBA00FBF023 /* privateParty.swift */,
 				103D80A42A4BC9D10032E4D3 /* SettingsViewController.swift */,
 				08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */,
+				086E2E422A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift */,
 				08B8A5312A6AF6830082B8E6 /*  requestUserCellClass.swift */,
 				08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */,
 				08CF03C6297CD7850074A878 /* LoadingPageViewController.swift */,
@@ -584,6 +587,7 @@
 				086E2E412A88163C00BC7D85 /* EventCell.swift in Sources */,
 				08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */,
 				0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */,
+				086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,

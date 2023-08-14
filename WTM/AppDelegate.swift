@@ -24,6 +24,7 @@ public var barName = ""
 public var UID = ""
 public var publicOrPriv = true
 public var maxPeople = 0
+public var dbName = "Parties"
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {

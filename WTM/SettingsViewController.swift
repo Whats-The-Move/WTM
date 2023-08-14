@@ -171,8 +171,7 @@ class SettingsViewController: UIViewController {
                 }
             }
         }
-    }
-
+    }    
 
     func saveName(_ username: String) {
         guard let uid = Auth.auth().currentUser?.uid else {

@@ -440,6 +440,85 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             }
         }
     }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            
+            //THIS MEANS YOU ARE EDITING PROFILE IMAGE
+            var uid = ""
+            if let currentUser = Auth.auth().currentUser {
+                // User is signed in
+                uid = currentUser.uid
+                // Now you can use the `uid` variable to perform any necessary operations
+                print("User UID: \(uid)")
+            } else {
+                // No user is signed in
+                print("No user is currently signed in")
+            }
+            if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                // Update the profile picture locally
+                profilePic.image = selectedImage
+                
+                // Upload the image to Firebase Storage
+                let storageRef = Storage.storage().reference().child("profilePics/\(String(describing: uid)).jpg")
+                
+                guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
+                    return
+                }
+                
+                storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                    if let error = error {
+                        // Handle the error
+                        print("Error uploading image: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    // Once the image is uploaded, get its download URL and store it in Firestore
+                    storageRef.downloadURL { (url, error) in
+                        guard let downloadURL = url else {
+                            // Handle the error
+                            print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
+                            return
+                        }
+                        
+                        // Store the download URL in Firestore
+                        
+                        if let currentUser = Auth.auth().currentUser {
+                            // User is signed in
+                            let uid = currentUser.uid
+                            
+                            let userRef = Firestore.firestore().collection("users").document(uid)
+                            let data: [String: Any] = [
+                                "profilePic": downloadURL.absoluteString,
+                            ]
+                            
+                            userRef.setData(data, merge: true) { error in
+                                if let error = error {
+                                    // Handle the error
+                                    print("Error creating Firestore document: \(error.localizedDescription)")
+                                    return
+                                }
+                                
+                                // Success!
+                                print("Image uploaded and download URL stored in Firestore!")
+                                
+                            }
+                        } else {
+                            // No user is signed in
+                            print("No user is currently signed in")
+                        }
+                    }
+                }
+            }
+            
+            dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func myFriendsButtonClicked(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "allFriends") as! allFriendsPopUpViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        present(newViewController, animated: false, completion: nil)
+    }
 
     /*
     // MARK: - Navigation
