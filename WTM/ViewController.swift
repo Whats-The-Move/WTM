@@ -32,7 +32,7 @@ class ViewController: UIViewController {
             UserDefaults.standard.set(FirebaseAuth.Auth.auth().currentUser?.email, forKey: "user_address")
             UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+            let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
             appHomeVC.modalPresentationStyle = .overFullScreen
             self.present(appHomeVC, animated: true)
 
@@ -43,7 +43,7 @@ class ViewController: UIViewController {
             print("USER IS IN")
 
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+            let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
             appHomeVC.modalPresentationStyle = .overFullScreen
             self.present(appHomeVC, animated: true)
 
@@ -111,7 +111,7 @@ class ViewController: UIViewController {
                 }
                  return }
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+            let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
             appHomeVC.modalPresentationStyle = .overFullScreen
             self?.present(appHomeVC, animated: true)
         })

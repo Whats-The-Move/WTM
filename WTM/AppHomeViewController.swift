@@ -384,7 +384,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     
     @objc func imageTapped() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let badgesViewController = storyboard.instantiateViewController(withIdentifier: "plainProfile") as! plainProfileViewController
+        let badgesViewController = storyboard.instantiateViewController(withIdentifier: "MyFriends") as! MyFriendsViewController
         present(badgesViewController, animated: true, completion: nil)
     }
 

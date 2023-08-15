@@ -16,7 +16,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     @IBOutlet weak var nameLabel: UILabel!
     var profBool = true
     @IBOutlet weak var profilePic: UIImageView!
-    @IBOutlet weak var backButton: UIImageView!
+    //@IBOutlet weak var backButton: UIImageView!
     @IBOutlet weak var badgesButton: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var friendNotification: UIButton!
@@ -106,12 +106,12 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             }
         }
         
-        let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
+        //let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         let tapGestureBadge = UITapGestureRecognizer(target: self, action: #selector(badgeButtonTapped))
         badgesButton.isUserInteractionEnabled = true
         badgesButton.addGestureRecognizer(tapGestureBadge)
-        backButton.isUserInteractionEnabled = true
-        backButton.addGestureRecognizer(tapGestureBack)
+//        backButton.isUserInteractionEnabled = true
+//        backButton.addGestureRecognizer(tapGestureBack)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -146,9 +146,9 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         present(badgesViewController, animated: true, completion: nil)
     }
     
-    @IBAction func backButtonTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
+//    @IBAction func backButtonTapped(_ sender: Any) {
+//        dismiss(animated: true, completion: nil)
+//    }
     
     @IBAction func nameLabelTapped(_ sender: Any) {
         let alertController = UIAlertController(title: "Edit Name", message: nil, preferredStyle: .alert)
