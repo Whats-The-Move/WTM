@@ -276,7 +276,7 @@ extension friendsGoingViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as! addFriendCustomCellClass
 
         let user = searching ? searchFriend[indexPath.row] : friendsGoing[indexPath.row]
-        cell.configure(with: user)
+        cell.configure(with: user, hasDeleteButton: false)
 
         return cell
     }

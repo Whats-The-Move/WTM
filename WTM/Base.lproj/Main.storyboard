@@ -2444,7 +2444,7 @@
         <!--All Friends Pop Up View Controller-->
         <scene sceneID="SZU-d2-EAq">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="7Wv-13-eni" customClass="allFriendsPopUpViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="allFriendsPopUp" modalPresentationStyle="fullScreen" id="7Wv-13-eni" customClass="allFriendsPopUpViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fkT-ar-5em">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2903,7 +2903,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="dFA-sR-yYn"/>
+        <segue reference="GAb-m4-rqd"/>
         <segue reference="AMW-4w-VvX"/>
     </inferredMetricsTieBreakers>
     <resources>

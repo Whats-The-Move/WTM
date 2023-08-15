@@ -155,7 +155,7 @@ extension InviteListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as! addFriendCustomCellClass
 
         let user = searching ? searchFriends[indexPath.row] : friends[indexPath.row]
-        cell.configure(with: user)
+        cell.configure(with: user, hasDeleteButton: false)
         
         if selectedUsers.contains(where: { $0.uid == user.uid }) {
             cell.backgroundColor = .systemPink

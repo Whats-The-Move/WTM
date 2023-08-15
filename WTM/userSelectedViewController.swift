@@ -91,7 +91,7 @@ class UserSelectedViewController: UIViewController, UITableViewDelegate, UITable
 
         // Load data for each friend and set the cell's properties
         let user = sharedFriends[indexPath.row]
-        cell.configure(with: user) // Use User data to configure the cell
+        cell.configure(with: user, hasDeleteButton: false) // Use User data to configure the cell
 
         return cell
     }

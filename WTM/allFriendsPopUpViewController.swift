@@ -10,7 +10,45 @@ import FirebaseFirestore
 import FirebaseAuth
 import Kingfisher
 
-class allFriendsPopUpViewController: UIViewController, UITableViewDelegate {
+class allFriendsPopUpViewController: UIViewController, UITableViewDelegate, AddFriendCellDelegate {
+    func showAlertForDeletion(from cell: UITableViewCell) {
+        let alert = UIAlertController(title: "Confirm Deletion",
+                                      message: "Are you sure you want to remove \(deleteUsername) from your friends?",
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+            // Handle deletion here
+            self.deleteFriendAction()
+            print("Friend deleted")
+            self.dismiss(animated: true) {
+                // Dismissal completion block
+                self.presentingViewController?.dismiss(animated: false, completion: nil)
+
+            }
+
+            //doesn't work, need to reload the whole page
+
+            //self.friendsTableView.reloadData()
+            
+
+            /*
+            guard let indexPath = self.friendsTableView.indexPath(for: cell) else {
+                return
+            }
+            //BAZIGLY NUMBER OF ROWS IS GETTING THROWN OFF- NEED TO SOMEHOW JUST RELOAD TABLE DATA MAYBE
+            
+            self.friendsTableView.beginUpdates()
+            self.friendsTableView.deleteRows(at: [indexPath], with: .fade)
+            self.friendsTableView.endUpdates()*/
+        }))
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        present(alert, animated: true, completion: nil)
+    }
+    
+
+
     
     
     @IBOutlet weak var titleText: UILabel!
@@ -85,7 +123,45 @@ class allFriendsPopUpViewController: UIViewController, UITableViewDelegate {
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true)
     }
-    
+    func deleteFriendAction (){
+
+        let currentUsername = deleteUsername
+        
+        // Get a reference to the Firestore database
+        let db = Firestore.firestore()
+        
+        // Find the user with the given username
+        db.collection("users").whereField("username", isEqualTo: currentUsername).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting user documents: \(error)")
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents, !documents.isEmpty else {
+                print("No user found with the given username.")
+                return
+            }
+            let userDocument = documents.first
+            let uid = userDocument?.documentID
+
+            if let currentUserUID = Auth.auth().currentUser?.uid {
+
+                let currentUserDocRef = db.collection("users").document(currentUserUID)
+
+                // Remove the UID from the current user's friends field
+                currentUserDocRef.updateData(["friends": FieldValue.arrayRemove([uid])]) { error in
+                    if let error = error {
+                        print("Error removing friend from current user's friends: \(error)")
+                    } else {
+                        print("Friend removed successfully.")
+                    }
+                }
+            } else {
+                print("Unable to remove friend. Either user document not found or current user not authenticated.")
+            }
+
+        }
+    }
 }
 
 extension allFriendsPopUpViewController: UITableViewDataSource {
@@ -94,10 +170,12 @@ extension allFriendsPopUpViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as! addFriendCustomCellClass
-        
+        cell.delegate = self
+
         let user = searching ? searchFriend[indexPath.row] : friends[indexPath.row]
-        cell.configure(with: user)
+        cell.configure(with: user, hasDeleteButton: true)
         
         return cell
     }
