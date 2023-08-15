@@ -47,7 +47,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     
     var rank = 0
     var timer: Timer?
-    var dbName = "Parties"
     let defaults = UserDefaults.standard
 
     @IBOutlet weak var partyList: UITableView! {
@@ -686,14 +685,13 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                     }
                 }
             }
-    }
-
-    //reloadlist
-    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
-    AppHomeVC.overrideUserInterfaceStyle = .dark
-    AppHomeVC.modalPresentationStyle = .fullScreen
-    self.present(AppHomeVC, animated: false, completion: nil)
+            //reloadlist
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+            AppHomeVC.overrideUserInterfaceStyle = .dark
+            AppHomeVC.modalPresentationStyle = .fullScreen
+            self.present(AppHomeVC, animated: false, completion: nil)
+        }
     }
 
     

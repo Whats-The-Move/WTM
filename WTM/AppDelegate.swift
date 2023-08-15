@@ -25,6 +25,8 @@ public var UID = ""
 public var publicOrPriv = true
 public var maxPeople = 0
 public var deleteUsername = ""
+public var dbName = "Parties"
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {

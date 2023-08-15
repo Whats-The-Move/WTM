@@ -42,6 +42,7 @@ class CustomCellClass: UITableViewCell {
         guard let party = party else {
             return
         }
+        
         delegate?.buttonClicked(for: party)
     }
 
@@ -490,7 +491,7 @@ class CustomCellClass: UITableViewCell {
 
         // Get the imageURL from Firebase
         print(party.name)
-        let database = Database.database().reference().child("Parties").child(party.name )
+        let database = Database.database().reference().child(dbName).child(party.name )
         database.observeSingleEvent(of: .value) { snapshot, error in
             if let error = error {
                 print("Error fetching imageURL from Firebase:")
@@ -541,7 +542,7 @@ class CustomCellClass: UITableViewCell {
             return
         }
         
-        let partyRef = Database.database().reference().child("Parties").child(party.name)
+        let partyRef = Database.database().reference().child(dbName).child(party.name)
         
         partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
             var isUserGoing = false

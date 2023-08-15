@@ -16,7 +16,6 @@ class LoadingPageViewController: UIViewController {
             let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
             appHomeVC.modalPresentationStyle = .overFullScreen
             self.present(appHomeVC, animated: true)
-
         } else {
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
