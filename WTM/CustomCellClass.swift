@@ -92,7 +92,7 @@ class CustomCellClass: UITableViewCell {
         partyGoersLabel.font = UIFont(name: "Futura-MediumItalic", size: 13)
         partyGoersLabel.textColor = .black
         partyGoersLabel.translatesAutoresizingMaskIntoConstraints = false
-        partyGoersLabel.text = "\(party.isGoing.count) partygoers"
+        partyGoersLabel.text = "\(party.isGoing.count - 2) partygoers"
 
         contentView.addSubview(partyGoersLabel)
 

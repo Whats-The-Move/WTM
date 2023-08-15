@@ -80,7 +80,7 @@ class createAccountAddFriendViewController: UIViewController, UITableViewDelegat
     
     @IBAction func nextButtonPushed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let appHomeVC = storyboard.instantiateViewController(identifier: "AppHome")
+        let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
         appHomeVC.modalPresentationStyle = .overFullScreen
         self.present(appHomeVC, animated: true)
     }

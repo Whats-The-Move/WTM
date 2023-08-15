@@ -318,7 +318,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             // Replace the below lines with your actual refresh logic
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "TabBarController")
             AppHomeVC.overrideUserInterfaceStyle = .dark
             AppHomeVC.modalPresentationStyle = .fullScreen
             self.present(AppHomeVC, animated: false, completion: nil)
@@ -348,7 +348,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             // Replace the below lines with your actual refresh logic
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "TabBarController")
             AppHomeVC.overrideUserInterfaceStyle = .dark
             AppHomeVC.modalPresentationStyle = .fullScreen
             self.present(AppHomeVC, animated: false, completion: nil)
@@ -632,7 +632,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
         //reloadlist
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+        let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "TabBarController")
         AppHomeVC.overrideUserInterfaceStyle = .dark
         AppHomeVC.modalPresentationStyle = .fullScreen
         self.present(AppHomeVC, animated: false, completion: nil)
@@ -687,7 +687,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             }
             //reloadlist
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "AppHome")
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "TabBarController")
             AppHomeVC.overrideUserInterfaceStyle = .dark
             AppHomeVC.modalPresentationStyle = .fullScreen
             self.present(AppHomeVC, animated: false, completion: nil)

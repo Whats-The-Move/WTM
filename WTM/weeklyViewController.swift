@@ -55,6 +55,17 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.itemSize = CGSize(width: width, height: height)
+        
+        let screen = UIScreen.main.bounds
+        
+        if screen.size.width > 400 { // iPhone 14 Pro Max
+            flowLayout.minimumInteritemSpacing = 10
+        } else if screen.size.width < 400 { // iPhone 14
+            flowLayout.minimumInteritemSpacing = 2
+        } else {
+            // Set a default value here if needed
+            flowLayout.minimumInteritemSpacing = 4
+        }
     }
     
     func setWeekView()
