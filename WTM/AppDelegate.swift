@@ -11,7 +11,6 @@ import FirebaseFirestore
 import FirebaseAuth
 import GoogleSignIn
 import FirebaseCore
-import FirebaseMessaging
 import UserNotifications
 
 public var partyAccount = false
@@ -27,13 +26,12 @@ public var maxPeople = 0
 public var dbName = "Parties"
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, _ in
             guard success else {
@@ -101,34 +99,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
                 
         return true
     }
-    
-    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        print("FCM token has been refreshed: \(fcmToken)")
-    }
-    
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        // This method is called when the app successfully registers for FCM notifications.
-        // Store the FCM token in Firestore
-        print("Received FCM token:", fcmToken ?? "No token available")
-        
-        if let fcmToken = fcmToken, let currentUser = Auth.auth().currentUser {
-            let uid = currentUser.uid
-            let userRef = Firestore.firestore().collection("users").document(uid)
-            let data: [String: Any] = [
-                "fcmToken": fcmToken,
-            ]
-            userRef.setData(data, merge: true) { error in
-                if let error = error {
-                    // Handle the error
-                    print("Error storing FCM token in Firestore: \(error.localizedDescription)")
-                } else {
-                    // Success!
-                    print("FCM token stored in Firestore.")
-                }
-            }
-        }
-    }
-
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async
         -> UNNotificationPresentationOptions{

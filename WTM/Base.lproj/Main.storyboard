@@ -55,7 +55,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="2Aj-wo-qOW"/>
-                                    <constraint firstAttribute="width" constant="79" id="3Eq-8U-NH2"/>
+                                    <constraint firstAttribute="width" constant="127" id="3Eq-8U-NH2"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -69,8 +69,8 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Email invalid or account already exists" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cuv-vy-Eyk">
-                                <rect key="frame" x="52" y="615" width="287" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Password must be longer than 6 characters" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cuv-vy-Eyk">
+                                <rect key="frame" x="52" y="583" width="287" height="60"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -85,7 +85,7 @@
                             <constraint firstItem="ZWb-Vx-0hQ" firstAttribute="top" secondItem="bvm-dF-kTd" secondAttribute="bottom" constant="8" id="N3f-p0-6vF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ZWb-Vx-0hQ" secondAttribute="trailing" constant="67" id="N4j-XZ-pqp"/>
                             <constraint firstItem="zzI-d0-ouM" firstAttribute="top" secondItem="ZWb-Vx-0hQ" secondAttribute="bottom" constant="33" id="Nwd-nd-4yr"/>
-                            <constraint firstItem="cuv-vy-Eyk" firstAttribute="top" secondItem="HMX-7H-Cqa" secondAttribute="bottom" constant="21" id="Pdm-Ic-TNp"/>
+                            <constraint firstItem="cuv-vy-Eyk" firstAttribute="top" secondItem="HMX-7H-Cqa" secondAttribute="bottom" constant="63" id="Pdm-Ic-TNp"/>
                             <constraint firstItem="bvm-dF-kTd" firstAttribute="centerX" secondItem="RIh-C4-0Md" secondAttribute="centerX" id="Rga-6Q-Flc"/>
                             <constraint firstItem="cuv-vy-Eyk" firstAttribute="trailing" secondItem="RIh-C4-0Md" secondAttribute="trailing" id="Wq9-an-VEo"/>
                             <constraint firstItem="Oqh-ea-6hn" firstAttribute="leading" secondItem="ZWb-Vx-0hQ" secondAttribute="leading" id="WtC-1U-feO"/>
@@ -93,7 +93,7 @@
                             <constraint firstItem="HMX-7H-Cqa" firstAttribute="bottom" secondItem="zzI-d0-ouM" secondAttribute="bottom" id="YB0-hf-3JB"/>
                             <constraint firstItem="RIh-C4-0Md" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="73" id="boU-SW-So1"/>
                             <constraint firstItem="bvm-dF-kTd" firstAttribute="top" secondItem="Oqh-ea-6hn" secondAttribute="bottom" constant="3" id="dbg-Y7-Cge"/>
-                            <constraint firstItem="zzI-d0-ouM" firstAttribute="leading" secondItem="HMX-7H-Cqa" secondAttribute="trailing" constant="67" id="ex5-ah-9MR"/>
+                            <constraint firstItem="zzI-d0-ouM" firstAttribute="leading" secondItem="HMX-7H-Cqa" secondAttribute="trailing" constant="19" id="ex5-ah-9MR"/>
                             <constraint firstItem="Oqh-ea-6hn" firstAttribute="centerX" secondItem="bvm-dF-kTd" secondAttribute="centerX" id="hBm-v8-U9j"/>
                             <constraint firstItem="Oqh-ea-6hn" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="11" id="hJc-2J-BDm"/>
                             <constraint firstItem="ZWb-Vx-0hQ" firstAttribute="leading" secondItem="HMX-7H-Cqa" secondAttribute="leading" id="iI7-cc-3nF"/>

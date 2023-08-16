@@ -156,6 +156,7 @@ class ViewController: UIViewController {
                     "images": [],
                     "bestFriends": [],
                     "friends": [],
+                    "fcmToken": "",
                     "pendingFriendRequests": [],
                     "spots": []
                     

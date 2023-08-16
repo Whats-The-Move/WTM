@@ -276,7 +276,27 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     
     @IBAction func logOutButtonTapped(_ sender: Any) {
         do{
+            
+            // Remove FCM token from Firestore
+            if let currentUser = Auth.auth().currentUser {
+                print(currentUser.uid)
+                let uid = currentUser.uid
+                let userRef = Firestore.firestore().collection("users").document(uid)
+                let data: [String: Any] = [
+                    "fcmToken": "null"
+                ]
+                
+                userRef.updateData(data) { error in
+                    if let error = error {
+                        print("Error removing FCM token from Firestore: \(error.localizedDescription)")
+                    } else {
+                        print("FCM token removed from Firestore.")
+                    }
+                }
+            }
+            
             try FirebaseAuth.Auth.auth().signOut()
+            
             UserDefaults.standard.set(false, forKey: "authenticated")
             //TAKE THEM TO LOG IN SCREEN
         }
