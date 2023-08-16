@@ -92,7 +92,11 @@ class CustomCellClass: UITableViewCell {
         partyGoersLabel.font = UIFont(name: "Futura-MediumItalic", size: 13)
         partyGoersLabel.textColor = .black
         partyGoersLabel.translatesAutoresizingMaskIntoConstraints = false
+        if party.isGoing.count == 3 {
+            partyGoersLabel.text = "\(party.isGoing.count - 2) partygoer"
+        }
         partyGoersLabel.text = "\(party.isGoing.count - 2) partygoers"
+
 
         contentView.addSubview(partyGoersLabel)
 
@@ -593,8 +597,10 @@ class FirstCustomCellClass: CustomCellClass {
         partyGoersLabel.font = UIFont(name: "Futura-MediumItalic", size: 13)
         partyGoersLabel.textColor = .black
         partyGoersLabel.translatesAutoresizingMaskIntoConstraints = false
-        partyGoersLabel.text = "\(party.isGoing.count) partygoers"
-
+        if party.isGoing.count == 3 {
+            partyGoersLabel.text = "\(party.isGoing.count - 2) partygoer"
+        }
+        partyGoersLabel.text = "\(party.isGoing.count - 2) partygoers"
         contentView.addSubview(partyGoersLabel)
 
 
