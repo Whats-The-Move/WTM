@@ -25,7 +25,15 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupShowPasswordButton()
+        setupConstraints()
+        email.layer.cornerRadius = 8
+        password.layer.cornerRadius = 8
+        email.clipsToBounds = true
+        password.clipsToBounds = true
+        label.adjustsFontSizeToFitWidth = true
         
+
         if FirebaseAuth.Auth.auth().currentUser != nil {
             //TAKE PAST LOGIN SCREEN TO HOME SCREEN
             print("USER IS IN")
@@ -120,6 +128,30 @@ class ViewController: UIViewController {
 
 
     }
+    private func setupShowPasswordButton() {
+        let showPasswordButton = UIButton(type: .custom)
+        showPasswordButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        showPasswordButton.tintColor = .black
+        showPasswordButton.translatesAutoresizingMaskIntoConstraints = false
+        showPasswordButton.addTarget(self, action: #selector(showPassword), for: .touchUpInside)
+        view.addSubview(showPasswordButton)
+        
+        NSLayoutConstraint.activate([
+            showPasswordButton.widthAnchor.constraint(equalToConstant: 20),
+            showPasswordButton.heightAnchor.constraint(equalToConstant: 20),
+            showPasswordButton.centerYAnchor.constraint(equalTo: password.centerYAnchor),
+            showPasswordButton.trailingAnchor.constraint(equalTo: password.trailingAnchor, constant: -10)
+        ])
+    }
+    
+    // Function to toggle the visibility of the password text field
+    @objc private func showPassword() {
+        password.isSecureTextEntry = !password.isSecureTextEntry
+    }
+    
+    // Your other methods and code
+
+
     
     func showCreateAccount(email: String, password: String){
         let alert = UIAlertController(title: "Create Account", message: "Would you like to create an account?", preferredStyle: .alert)
@@ -153,11 +185,11 @@ class ViewController: UIViewController {
                 usersCollection.document(uid!).setData([
                     "email": email,
                     "uid": uid!,
-                    "images": [],
-                    "bestFriends": [],
-                    "friends": [],
-                    "pendingFriendRequests": [],
-                    "spots": []
+                    "images": [String](),
+                    "bestFriends": [String](),
+                    "friends": [String](),
+                    "pendingFriendRequests": [String](),
+                    "spots": [String]()
                     
                     //"username": username
                 ]) { (error) in
@@ -198,10 +230,41 @@ class ViewController: UIViewController {
         }))
         present(alert, animated: true)
     }
+    private func setupConstraints() {
+            // Constraints for the email text field
+            email.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                email.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40),
+                email.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -70),
+                email.heightAnchor.constraint(equalToConstant: 50)
+            ])
+            
+            // Constraints for the password text field
+            password.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                password.leadingAnchor.constraint(equalTo: email.leadingAnchor),
+                password.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
+                password.widthAnchor.constraint(equalTo: email.widthAnchor, constant: -60),
+                password.heightAnchor.constraint(equalToConstant: 50)
+            ])
+            
+            // Constraints for the show password button
+            button.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                button.trailingAnchor.constraint(equalTo: email.trailingAnchor),
+                button.centerYAnchor.constraint(equalTo: password.centerYAnchor),
+                button.widthAnchor.constraint(equalToConstant: 50),
+                button.heightAnchor.constraint(equalToConstant: 50)
+            ])
+        }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         emailInvalid.isHidden = true
         email.borderStyle = .roundedRect
+        password.borderStyle = .roundedRect  // Add this line
+
+
 
         // Set the border color and width
         var placeholderText = "Enter School Email"
@@ -212,12 +275,9 @@ class ViewController: UIViewController {
         email.attributedPlaceholder = attributedPlaceholder
         email.layer.borderWidth = 2
         email.layer.borderColor = UIColor.black.cgColor
-        email.frame = CGRect(x: 20,
-                                  y: label.frame.origin.y + label.frame.size.height + 10,
-                                  width: view.frame.size.width - 40,
-                                  height: 50)
+       // email.frame = CGRect(x: 20,y: label.frame.origin.y + label.frame.size.height + 10, width: view.frame.size.width - 40, height: 50)
         
-        placeholderText = "Enter Password (6 character min)"
+        placeholderText = " Enter Password (6 character min)"
         var passAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.lightGray,  // Set the desired color here
         ]
@@ -226,8 +286,8 @@ class ViewController: UIViewController {
         password.layer.borderWidth = 2
         password.layer.borderColor = UIColor.black.cgColor
         password.isSecureTextEntry = true
-        password.frame = CGRect(x: 20, y: email.frame.origin.y + email.frame.size.height + 10, width: view.frame.size.width - 100, height: 50)
-        button.frame = CGRect(x: -70 + view.frame.size.width, y: password.frame.origin.y, width: 50, height: 50)
+        //password.frame = CGRect(x: 20, y: email.frame.origin.y + email.frame.size.height + 10, width: view.frame.size.width - 100, height: 50)
+        //button.frame = CGRect(x: -70 + view.frame.size.width, y: password.frame.origin.y, width: 50, height: 50)
 
 
 
