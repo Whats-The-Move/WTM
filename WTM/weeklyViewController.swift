@@ -176,19 +176,21 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
         print("numberofsections")
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! EventCell
-        print("cellforrowat")
 
-        return selectedDateEvents.isEmpty ? 1 : selectedDateEvents.count
-    }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         
 
         let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
-
+        cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! EventCell
+        
+        let event = selectedDateEvents[indexPath.section]
+        if let eventCell = cell as? EventCell {
+            eventCell.placeLabel.text = event.place
+            eventCell.nameLabel.text = event.name
+            eventCell.timeLabel.text = event.time
+           /*
         if selectedDateEvents.isEmpty {
             // Display the "No events for today" cell
             cell = tableView.dequeueReusableCell(withIdentifier: "noEventsCell", for: indexPath) as! NoEventsCell
@@ -201,7 +203,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
                 eventCell.placeLabel.text = event.place
                 eventCell.nameLabel.text = event.name
                 eventCell.timeLabel.text = event.time
-            }
+            }*/
         }
 
         return cell
