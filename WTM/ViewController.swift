@@ -225,12 +225,12 @@ class ViewController: UIViewController {
                 usersCollection.document(uid!).setData([
                     "email": email,
                     "uid": uid!,
-                    "images": [String](),
-                    "bestFriends": [String](),
-                    "friends": [String](),
-                    "pendingFriendRequests": [String](),
-                    "spots": [String]()
-                    
+                    "images": [],
+                    "bestFriends": [],
+                    "friends": [],
+                    "fcmToken": "",
+                    "pendingFriendRequests": [],
+                    "spots": []
                     //"username": username
                 ]) { (error) in
                     if let error = error {
