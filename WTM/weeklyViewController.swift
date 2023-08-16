@@ -7,7 +7,8 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
-    
+    var noDealsLabel: UILabel!
+
     var selectedDate = Date()
     var totalSquares = [Date]()
     
@@ -18,9 +19,13 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
         setCellsView()
         setWeekView()
         fetchEventData()
+        setupNoDealsLabel()
+        print("viewdidload")
     }
     
     func fetchEventData() {
+        print("fetchevent")
+
         let ref = Database.database().reference().child("Events")
         ref.observe(.childAdded) { [weak self] (snapshot) in
             let dateKey = snapshot.key
@@ -46,8 +51,31 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
             }
 
             self?.tableView.reloadData()
+
         }
     }
+    func setupNoDealsLabel() {
+        noDealsLabel = UILabel()
+        noDealsLabel.text = "No drink deals today :("
+        noDealsLabel.textColor = UIColor.gray
+        noDealsLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
+        noDealsLabel.textAlignment = .center
+        noDealsLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(noDealsLabel)
+
+        NSLayoutConstraint.activate([
+            noDealsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noDealsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        noDealsLabel.isHidden = true
+    }
+
+
+
+
+
+
+
     
     func setCellsView() {
         let width = (collectionView.frame.size.width - 2) / 8
@@ -92,6 +120,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print("collectionviewcellforitemat")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calCell", for: indexPath) as! calendarCell
             
         let date = totalSquares[indexPath.item]
@@ -138,12 +167,26 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func numberOfSections(in tableView: UITableView) -> Int {
         let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
+
+        if let label = noDealsLabel {
+            print("nodealslabel exists")
+            label.isHidden = !selectedDateEvents.isEmpty
+        }
+        return selectedDateEvents.count
+        print("numberofsections")
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! EventCell
+        print("cellforrowat")
+
         return selectedDateEvents.isEmpty ? 1 : selectedDateEvents.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         
+
         let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
 
         if selectedDateEvents.isEmpty {
