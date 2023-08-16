@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var emailInvalid: UILabel!
     
+    @IBOutlet weak var forgotPasswordButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         setupShowPasswordButton()
@@ -127,6 +128,45 @@ class ViewController: UIViewController {
         })
 
 
+    }
+    
+    @IBAction func forgotPasswordTapped(_ sender: Any) {
+        let alertController = UIAlertController(title: "Reset Password", message: "Enter your email to receive a password reset link.", preferredStyle: .alert)
+
+        alertController.addTextField { textField in
+            textField.placeholder = "Email"
+        }
+
+        let resetAction = UIAlertAction(title: "Reset", style: .default) { _ in
+            guard let email = alertController.textFields?.first?.text, !email.isEmpty else {
+                return
+            }
+
+            Auth.auth().sendPasswordReset(withEmail: email) { error in
+                if let error = error {
+                    print("Error sending password reset email: \(error)")
+                    let failureAlert = UIAlertController(title: "Error", message: "This email may not be a user or invalid", preferredStyle: .alert)
+                    let okayAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                    failureAlert.addAction(okayAction)
+                    self.present(failureAlert, animated: true, completion: nil)
+                    // Handle error and show appropriate message to the user
+                } else {
+                    print("Password reset email sent successfully")
+                    let successAlert = UIAlertController(title: "Success", message: "Check your email for reset instructions.", preferredStyle: .alert)
+                    let okayAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                    successAlert.addAction(okayAction)
+                    self.present(successAlert, animated: true, completion: nil)
+                    // Show a success message to the user
+                }
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        alertController.addAction(resetAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
     }
     private func setupShowPasswordButton() {
         let showPasswordButton = UIButton(type: .custom)
@@ -257,6 +297,13 @@ class ViewController: UIViewController {
                 button.widthAnchor.constraint(equalToConstant: 50),
                 button.heightAnchor.constraint(equalToConstant: 50)
             ])
+            forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                forgotPasswordButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
+                forgotPasswordButton.leadingAnchor.constraint(equalTo: email.leadingAnchor),
+                forgotPasswordButton.trailingAnchor.constraint(equalTo: email.trailingAnchor)
+            ])
         }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -277,7 +324,7 @@ class ViewController: UIViewController {
         email.layer.borderColor = UIColor.black.cgColor
        // email.frame = CGRect(x: 20,y: label.frame.origin.y + label.frame.size.height + 10, width: view.frame.size.width - 40, height: 50)
         
-        placeholderText = " Enter Password (6 character min)"
+        placeholderText = "Enter Password (6 character min)"
         var passAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.lightGray,  // Set the desired color here
         ]
