@@ -138,19 +138,27 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func numberOfSections(in tableView: UITableView) -> Int {
         let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
-        return selectedDateEvents.count
+        return selectedDateEvents.isEmpty ? 1 : selectedDateEvents.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! EventCell
-
+        let cell: UITableViewCell
+        
         let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
 
-        if indexPath.section < selectedDateEvents.count {
+        if selectedDateEvents.isEmpty {
+            // Display the "No events for today" cell
+            cell = tableView.dequeueReusableCell(withIdentifier: "noEventsCell", for: indexPath) as! NoEventsCell
+        } else {
+            // Display the regular event cell
+            cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! EventCell
+            
             let event = selectedDateEvents[indexPath.section]
-            cell.placeLabel.text = event.place
-            cell.nameLabel.text = event.name
-            cell.timeLabel.text = event.time
+            if let eventCell = cell as? EventCell {
+                eventCell.placeLabel.text = event.place
+                eventCell.nameLabel.text = event.name
+                eventCell.timeLabel.text = event.time
+            }
         }
 
         return cell

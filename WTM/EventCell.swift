@@ -69,3 +69,38 @@ class EventCell: UITableViewCell {
         timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 }
+
+class NoEventsCell: UITableViewCell {
+    let messageLabel = UILabel()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupSubviews()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupSubviews()
+    }
+
+    private func setupSubviews() {
+        messageLabel.textColor = .white
+        messageLabel.text = "No events for today" // Set the message here
+        contentView.addSubview(messageLabel)
+        contentView.layer.cornerRadius = 10
+        contentView.layer.borderWidth = 1
+        contentView.layer.borderColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1).cgColor
+        contentView.clipsToBounds = true
+
+        // Message Label
+        messageLabel.font = UIFont(name: "Futura", size: 16)
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            messageLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            messageLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+
+        // Set content compression resistance priority
+        messageLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+}
