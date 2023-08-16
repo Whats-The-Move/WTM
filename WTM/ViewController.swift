@@ -31,6 +31,7 @@ class ViewController: UIViewController {
         password.layer.cornerRadius = 8
         email.clipsToBounds = true
         password.clipsToBounds = true
+        label.adjustsFontSizeToFitWidth = true
         
 
         if FirebaseAuth.Auth.auth().currentUser != nil {
@@ -276,7 +277,7 @@ class ViewController: UIViewController {
         email.layer.borderColor = UIColor.black.cgColor
        // email.frame = CGRect(x: 20,y: label.frame.origin.y + label.frame.size.height + 10, width: view.frame.size.width - 40, height: 50)
         
-        placeholderText = "Enter Password (6 character min)"
+        placeholderText = " Enter Password (6 character min)"
         var passAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.lightGray,  // Set the desired color here
         ]
