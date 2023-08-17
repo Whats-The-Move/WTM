@@ -90,3 +90,59 @@ exports.sendFriendRequestNotification = functions.firestore
       return null;
     });
 
+const sendPartyNotification = async (recipientFcmToken, partyName) => {
+  const message = {
+    notification: {
+      title: "Alert",
+      body: `Many of your friends are going to ${partyName} tonight!`,
+    },
+    token: recipientFcmToken,
+  };
+
+  try {
+    await admin.messaging().send(message);
+    console.log("Party notification sent successfully.");
+  } catch (error) {
+    console.error("Error sending party notification:", error);
+  }
+};
+
+exports.sendPartyNotification = functions.database
+    .ref("Parties/{partyName}/isGoing")
+    .onUpdate(async (change, context) => {
+      const beforeIsGoing = change.before.val() || [];
+      const afterIsGoing = change.after.val() || [];
+
+      // Define the required number of friends for the notification
+      const requiredFriends = 5;
+
+      // Check if the number of friends going is exactly 5
+      if (afterIsGoing.length === requiredFriends &&
+        beforeIsGoing.length < requiredFriends) {
+        const partyIsGoingUids = new Set(afterIsGoing);
+
+        // Get the current user's UID from the context
+        const currentUserUid = context.auth.uid;
+
+        // Get the user's friends list from Firestore
+        const userSnapshot = await admin.firestore().collection("users")
+            .doc(currentUserUid).get();
+        const friendsList = userSnapshot.data().friends || [];
+
+        // Find the common friends who are going to the party
+        const commonFriends =
+        friendsList.filter((friendUid) => partyIsGoingUids.has(friendUid));
+
+        // Check if exactly 5 common friends are going
+        if (commonFriends.length === requiredFriends) {
+          // Get the recipient's FCM token
+          const recipientFcmToken = userSnapshot.data().fcmToken;
+
+          // Send the party notification with party name
+          await sendPartyNotification(recipientFcmToken,
+              context.params.partyName);
+        }
+      }
+
+      return null;
+    });
