@@ -346,6 +346,9 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         // Delete the user account from Firebase Authentication
         currentUser.delete { error in
             if let error = error {
+                let alert = UIAlertController(title: "Log Out and Log Back In", message: "Log out then log back in again to confirm your account deletion.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 print("Error deleting user account: \(error.localizedDescription)")
                 return
             }

@@ -3,6 +3,8 @@ import UIKit
 import FirebaseAuth
 import Firebase
 import Kingfisher
+import MapKit
+
 protocol CustomCellDelegate: AnyObject {
     func buttonClicked(for party: Party)
     func profileClicked(for party: Party)
@@ -24,11 +26,6 @@ class CustomCellClass: UITableViewCell {
     var plusMoreBkgd = UIView()
     var tagLabel = UILabel()
     var tagBackgroundView = UIView()
-
-
-
-
-
     
     @objc private func profTapped(_ sender: UITapGestureRecognizer) {
         guard let party = party else {
@@ -61,6 +58,10 @@ class CustomCellClass: UITableViewCell {
         self.party = party
         
         contentView.addSubview(partyLabel)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap))
+        barImageView.addGestureRecognizer(tapGesture)
+        barImageView.isUserInteractionEnabled = true
 
         partyLabel.text = party.name
         //partyLabel.adjustsFontSizeToFitWidth = true
@@ -86,8 +87,6 @@ class CustomCellClass: UITableViewCell {
         //subtitleLabel?.translatesAutoresizingMaskIntoConstraints = false
         //subtitleLabel?.leadingAnchor.constraint(equalTo: ratingLabel?.trailingAnchor ?? contentView.leadingAnchor, constant: 20).isActive = true
         //subtitleLabel?.centerYAnchor.constraint(equalTo: partyLabel?.centerYAnchor ?? contentView.centerYAnchor, constant: -contentView.bounds.height / 4).isActive = true
-
-            
 
         partyGoersLabel.font = UIFont(name: "Futura-MediumItalic", size: 13)
         partyGoersLabel.textColor = .black
@@ -168,6 +167,25 @@ class CustomCellClass: UITableViewCell {
             tagLabel.centerXAnchor.constraint(equalTo: tagBackgroundView.centerXAnchor),
             tagLabel.centerYAnchor.constraint(equalTo: tagBackgroundView.centerYAnchor)
         ])
+    }
+    
+    @objc public func handleMapTap() {
+        guard let address = party?.address, let titleText = party?.name else {
+            return
+        }
+
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            let placemark = placemarks?.first
+            let lat = placemark?.location?.coordinate.latitude ?? 0.0
+            let lon = placemark?.location?.coordinate.longitude ?? 0.0
+
+            let destinationPlaceMark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
+            let destinationItem = MKMapItem(placemark: destinationPlaceMark)
+            destinationItem.name = titleText
+
+            destinationItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking])
+        }
     }
 
     func addSectionNumberLabel(to cell: UITableViewCell, at indexPath: IndexPath) {
@@ -590,8 +608,9 @@ class FirstCustomCellClass: CustomCellClass {
         partyLabel.font = UIFont(name: "Futura-Medium", size: 20)
         partyLabel.textColor = .black
 
-
-
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap))
+        barImageView.addGestureRecognizer(tapGesture)
+        barImageView.isUserInteractionEnabled = true
             
 
         partyGoersLabel.font = UIFont(name: "Futura-MediumItalic", size: 13)
