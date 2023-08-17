@@ -19,45 +19,7 @@ extension Party: Equatable {
     }
 }
 
-class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate, privateCustomCellDelegate, MessagingDelegate, CLLocationManagerDelegate {
-    func registerForRemoteNotifications() {
-        // Request user authorization for notifications
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, _ in
-            guard success else {
-                return
-            }
-            print("Notification authorization granted.")
-            DispatchQueue.main.async {
-                UIApplication.shared.registerForRemoteNotifications()
-            }
-        }
-        
-        // Register for FCM token
-        Messaging.messaging().delegate = self
-        UIApplication.shared.registerForRemoteNotifications()
-    }
-        
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        // Handle FCM token registration here
-        print("Received FCM token:", fcmToken ?? "No token available")
-        
-        if let fcmToken = fcmToken, let currentUser = Auth.auth().currentUser {
-            let uid = currentUser.uid
-            let userRef = Firestore.firestore().collection("users").document(uid)
-            let data: [String: Any] = [
-                "fcmToken": fcmToken,
-            ]
-            userRef.setData(data, merge: true) { error in
-                if let error = error {
-                    // Handle the error
-                    print("Error storing FCM token in Firestore: \(error.localizedDescription)")
-                } else {
-                    // Success!
-                    print("FCM token stored in Firestore.")
-                }
-            }
-        }
-    }
+class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate, privateCustomCellDelegate, CLLocationManagerDelegate {
     
     func profileClicked(for party: Party) {
         // Create an instance of friendsGoingViewController
@@ -150,7 +112,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerForRemoteNotifications()
         //print(locationOptions)
         
         locationManger.delegate = self

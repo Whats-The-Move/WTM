@@ -91,6 +91,8 @@
                         <outlet property="emailInvalid" destination="cuv-vy-Eyk" id="dqN-yL-QNk"/>
                         <outlet property="forgotPasswordButton" destination="1vq-2g-yub" id="Gnd-6f-5PY"/>
                         <outlet property="label" destination="bvm-dF-kTd" id="UpZ-RO-057"/>
+                        <outlet property="logo" destination="Oqh-ea-6hn" id="Okt-hI-Qs5"/>
+                        <outlet property="mottoLabel" destination="RIh-C4-0Md" id="Fok-wh-hOV"/>
                         <outlet property="password" destination="ZWb-Vx-0hQ" id="xM3-xx-MGh"/>
                     </connections>
                 </viewController>
@@ -2058,12 +2060,12 @@
         <scene sceneID="kfo-UG-5xZ">
             <objects>
                 <viewController id="fon-aW-EWW" customClass="friendPopUpViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="ErD-1o-ZhB">
+                    <view key="view" contentMode="scaleToFill" id="ErD-1o-ZhB">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8KQ-i7-YBj">
-                                <rect key="frame" x="16" y="310" width="358" height="128"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8KQ-i7-YBj">
+                                <rect key="frame" x="16" y="313" width="358" height="73"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yvD-sh-R0t">
                                         <rect key="frame" x="129" y="45" width="221" height="22"/>
