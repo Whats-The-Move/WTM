@@ -32,7 +32,7 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
     var commonFriends = [String]()    
     var databaseRef: DatabaseReference?
     var parties = [Party]()
-    var party = Party(name: "", likes: 0, dislikes: 0, allTimeLikes: 0, allTimeDislikes: 0, address: "", rating: 0, isGoing: [""])
+    var party = Party(name: "", address: "", rating: 0, isGoing: [""])
     var pplGoing = 0
     var locationManger = CLLocationManager()
     var reviews: [Reviews] = []
