@@ -110,37 +110,38 @@ const sendPartyNotification = async (recipientFcmToken, partyName) => {
 exports.sendPartyNotification = functions.database
     .ref("Parties/{partyName}/isGoing")
     .onUpdate(async (change, context) => {
-      const beforeIsGoing = change.before.val() || [];
       const afterIsGoing = change.after.val() || [];
+      const partyIsGoingUids = new Set(afterIsGoing);
 
       // Define the required number of friends for the notification
       const requiredFriends = 5;
 
-      // Check if the number of friends going is exactly 5
-      if (afterIsGoing.length === requiredFriends &&
-        beforeIsGoing.length < requiredFriends) {
-        const partyIsGoingUids = new Set(afterIsGoing);
+      // Get the current party name from the context
+      const partyName = context.params.partyName;
 
-        // Get the current user's UID from the context
-        const currentUserUid = context.auth.uid;
+      // Get a reference to the "users" collection in Firestore
+      const usersCollection = admin.firestore().collection("users");
 
-        // Get the user's friends list from Firestore
-        const userSnapshot = await admin.firestore().collection("users")
-            .doc(currentUserUid).get();
-        const friendsList = userSnapshot.data().friends || [];
+      // Query all users to check for common friends attending the party
+      const usersSnapshot = await usersCollection.get();
+
+      // Iterate through each user
+      for (const userDoc of usersSnapshot.docs) {
+        const userData = userDoc.data();
+        const friendsList = userData.friends || [];
 
         // Find the common friends who are going to the party
         const commonFriends =
-        friendsList.filter((friendUid) => partyIsGoingUids.has(friendUid));
+          friendsList.filter((friendUid) =>
+            partyIsGoingUids.has(friendUid));
 
         // Check if exactly 5 common friends are going
         if (commonFriends.length === requiredFriends) {
           // Get the recipient's FCM token
-          const recipientFcmToken = userSnapshot.data().fcmToken;
+          const recipientFcmToken = userData.fcmToken;
 
           // Send the party notification with party name
-          await sendPartyNotification(recipientFcmToken,
-              context.params.partyName);
+          await sendPartyNotification(recipientFcmToken, partyName);
         }
       }
 
