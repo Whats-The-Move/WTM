@@ -30,15 +30,16 @@ class UserSelectedViewController: UIViewController, UITableViewDelegate, UITable
                 return
             }
 
-            if let imageURLString = document.data()?["profilePic"] as? String {
-                if let imageURL = URL(string: imageURLString) {
-                    DispatchQueue.global().async {
-                        if let imageData = try? Data(contentsOf: imageURL) {
-                            DispatchQueue.main.async {
-                                let image = UIImage(data: imageData)
-                                self.profilePic.image = image
-                            }
-                        }
+            if let imageURLString = document.data()?["profilePic"] as? String,
+               let imageURL = URL(string: imageURLString) {
+                
+                // Use Kingfisher to load and display the profile image
+                self.profilePic.kf.setImage(with: imageURL, placeholder: UIImage(named: "default_profile_pic"), options: nil, progressBlock: nil) { result in
+                    switch result {
+                    case .success(let value):
+                        print("Image downloaded: \(value.image)")
+                    case .failure(let error):
+                        print("Error downloading image: \(error)")
                     }
                 }
             } else {

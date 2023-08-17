@@ -147,3 +147,75 @@ exports.sendPartyNotification = functions.database
 
       return null;
     });
+
+const sendIndPartyNotification =
+async (recipientFcmToken, notificationMessage) => {
+  const message = {
+    notification: {
+      title: notificationMessage,
+      body: `Join them!`,
+    },
+    token: recipientFcmToken,
+  };
+
+  try {
+    await admin.messaging().send(message);
+    console.log("Party notification sent successfully.");
+  } catch (error) {
+    console.error("Error sending party notification:", error);
+  }
+};
+
+exports.indSendPartyNotification = functions.database
+    .ref("Parties/{partyName}/isGoing")
+    .onUpdate(async (change, context) => {
+      const beforeIsGoing = change.before.val() || [];
+      const afterIsGoing = change.after.val() || [];
+
+      // Find the added UID in the isGoing list
+      const addedUid = afterIsGoing.find((uid) => !beforeIsGoing.includes(uid));
+
+      if (!addedUid) {
+        // No new UID added to isGoing
+        return null;
+      }
+
+      // Get the current party name from the context
+      const partyName = context.params.partyName;
+
+      // Get a reference to the "users" collection in Firestore
+      const usersCollection = admin.firestore().collection("users");
+
+      // Query all users to find those who have the added UID as a friend
+      const usersSnapshot = await usersCollection.get();
+
+      // Iterate through each user
+      for (const userDoc of usersSnapshot.docs) {
+        const userData = userDoc.data();
+        const friendsList = userData.friends || [];
+
+        // Check if the added UID is a friend of the user
+        if (friendsList.includes(addedUid)) {
+          // Get the recipient's FCM token
+          const recipientFcmToken = userData.fcmToken;
+
+          // Get the name of the friend who is attending the party
+          const friendSnap = await admin
+              .firestore()
+              .collection("users")
+              .doc(addedUid)
+              .get();
+          const friendName = friendSnap.data().name;
+
+          // Send the party notification with party name
+          const notificationMessage =
+           `${friendName} is going to ${partyName} tonight!`;
+          await
+          sendIndPartyNotification(recipientFcmToken, notificationMessage);
+
+          console.log(`Party notification sent to ${userData.name}`);
+        }
+      }
+
+      return null;
+    });
