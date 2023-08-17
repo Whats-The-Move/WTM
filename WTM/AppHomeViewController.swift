@@ -199,23 +199,15 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         databaseRef?.queryOrdered(byChild: "Likes").observe(.childAdded) { [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}
-            if let likes = value["Likes"] as? Int,
-               let dislikes = value["Dislikes"] as? Int,
-               let allTimeLikes = value["allTimeLikes"] as? Double,
-               let allTimeDislikes = value["allTimeDislikes"] as? Double,
-               let address = value["Address"] as? String,
+            if let address = value["Address"] as? String,
                let rating = value["avgStars"] as? Double,
                let isGoing = value["isGoing"] as? [String] {
-                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing : isGoing)
+                let party = Party(name: key, address: address, rating: rating, isGoing : isGoing)
                 if party.isGoing.count > maxPeople {
                     maxPeople = party.isGoing.count
                 }
                 self?.partiesCloned.insert(party, at: 0)
                 self?.partyArray.insert(party.name, at: 0)
-                self?.likeDict[party.name] = party.likes
-                self?.dislikeDict[party.name] = party.dislikes
-                self?.overallLikeDict[party.name] = party.allTimeLikes
-                self?.overallDislikeDict[party.name] = party.allTimeDislikes
                 self?.addressDict[party.name] = party.address
                 self?.ratingDict[party.name] = party.rating
             }
@@ -501,7 +493,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                     let rating = ratingDict[partyID] ?? 0.0
                     let isGoing = party.isGoing
                     
-                    let party = Party(name: party.name, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
+                    let party = Party(name: party.name, address: address, rating: rating, isGoing: isGoing)
                     
                     self.parties.insert(party, at: 0)
                     self.rankDict[party.name] = self.countNum
@@ -713,12 +705,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         databaseRef?.observe(.childAdded){ [weak self] (snapshot) in
             let key = snapshot.key
             guard let value = snapshot.value as? [String : Any] else {return}
-            if let likes = value["Likes"] as? Int, let dislikes = value["Dislikes"] as? Int, let allTimeLikes = value["allTimeLikes"] as? Double, let allTimeDislikes = value["allTimeDislikes"] as? Double, let address = value["Address"] as? String, let rating = value["avgStars"] as? Double, let isGoing = value["isGoing"] as? [String] {
-                let party = Party(name: key, likes: likes, dislikes: dislikes, allTimeLikes: allTimeLikes, allTimeDislikes: allTimeDislikes, address: address, rating: rating, isGoing: isGoing)
-                    self?.likeDict[party.name] = party.likes
-                    self?.dislikeDict[party.name] = party.dislikes
-                    self?.overallLikeDict[party.name] = party.allTimeLikes
-                    self?.overallDislikeDict[party.name] = party.allTimeDislikes
+            if let address = value["Address"] as? String, let rating = value["avgStars"] as? Double, let isGoing = value["isGoing"] as? [String] {
+                let party = Party(name: key, address: address, rating: rating, isGoing: isGoing)
+                    
                     self?.addressDict[party.name] = party.address
                     self?.ratingDict[party.name] = party.rating
             }

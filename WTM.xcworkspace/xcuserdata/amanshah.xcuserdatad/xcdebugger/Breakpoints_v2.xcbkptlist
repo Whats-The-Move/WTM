@@ -404,8 +404,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "75"
             endingLineNumber = "75"
-            landmarkName = "profileClicked(for:)"
-            landmarkType = "7">
+            landmarkName = "AppHomeViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "A98DD3C5-DFBC-4561-BED1-B3331A2F2EFE - 4df829bed139c0d7"
