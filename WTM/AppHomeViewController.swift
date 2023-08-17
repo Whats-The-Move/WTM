@@ -11,6 +11,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseMessaging
 import Firebase
+import CoreLocation
 
 extension Party: Equatable {
     static func == (lhs: Party, rhs: Party) -> Bool {
@@ -18,7 +19,7 @@ extension Party: Equatable {
     }
 }
 
-class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate, privateCustomCellDelegate, MessagingDelegate {
+class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDelegate, privateCustomCellDelegate, MessagingDelegate, CLLocationManagerDelegate {
     func registerForRemoteNotifications() {
         // Request user authorization for notifications
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, _ in
@@ -145,11 +146,17 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     public var friendsGoing = [String : [String]]()
     public var transImage = UIImage()
     private let refreshControl = UIRefreshControl()
+    var locationManger = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         registerForRemoteNotifications()
         //print(locationOptions)
+        
+        locationManger.delegate = self
+        locationManger.requestAlwaysAuthorization()
+        locationManger.requestWhenInUseAuthorization()
+        locationManger.startUpdatingLocation()
 
         setupPullToRefresh()
         setDB()
@@ -1243,5 +1250,66 @@ extension AppHomeViewController: UISearchBarDelegate {
         searching = false
         searchBar.text = ""
         partyList.reloadData()
+    }
+}
+
+extension AppHomeViewController {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // Get the most recent location
+        guard let userLocation = locations.last?.coordinate else { return }
+        
+        // Iterate through party addresses and check if user's location matches any address
+        for (partyName, address) in addressDict {
+            getLocation(from: address) { partyLocation in
+                // Create CLLocation objects for user and party locations
+                let userCLLocation = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+                let partyCLLocation = CLLocation(latitude: partyLocation.latitude, longitude: partyLocation.longitude)
+                
+                // Calculate distance between user and party
+                let distance = userCLLocation.distance(from: partyCLLocation)
+                
+                // Assuming that the party location is within a certain radius of the user's location (adjust this threshold as needed)
+                let thresholdDistance: CLLocationDistance = 100 // 1000 meters
+                if distance <= thresholdDistance {
+                    // The user is near the party at the given address
+                    print("User is near party:", partyName)
+                    
+                    // Add the user's UID to the party's isGoing array
+                    if let currentUserUID = Auth.auth().currentUser?.uid {
+                        let partyRef = self.databaseRef?.child(partyName)
+                        
+                        partyRef?.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                            if var partyDetails = snapshot.value as? [String: Any], var isGoing = partyDetails["isGoing"] as? [String] {
+                                if !isGoing.contains(currentUserUID) {
+                                    isGoing.append(currentUserUID)
+                                    partyDetails["isGoing"] = isGoing
+                                    
+                                    // Update the party's isGoing array in the Realtime Database
+                                    partyRef?.setValue(partyDetails) { error, _ in
+                                        if let error = error {
+                                            print("Error updating party's isGoing array:", error.localizedDescription)
+                                        } else {
+                                            print("User added to party's isGoing array.")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getLocation(from address: String, completion: @escaping (CLLocationCoordinate2D) -> Void) {
+        // Convert address to coordinates using geocoding
+        let geocoder = CLGeocoder()
+        
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            if let placemark = placemarks?.first, let location = placemark.location {
+                let partyLocation = location.coordinate
+                completion(partyLocation)
+            }
+        }
     }
 }
