@@ -19,13 +19,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var password: UITextField!
     
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var logo: UIImageView!
     @IBOutlet weak var label: UILabel!
     
+    @IBOutlet weak var mottoLabel: UILabel!
     @IBOutlet weak var emailInvalid: UILabel!
     
     @IBOutlet weak var forgotPasswordButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
+        KeyboardManager.shared.enableTapToDismiss()
         setupShowPasswordButton()
         setupConstraints()
         email.layer.cornerRadius = 8
@@ -120,6 +123,24 @@ class ViewController: UIViewController {
                   }
                 }
                  return }
+            
+            if let currentUser = Auth.auth().currentUser {
+                print(currentUser.uid)
+                let uid = currentUser.uid
+                let userRef = Firestore.firestore().collection("users").document(uid)
+                let data: [String: Any] = [
+                    "fcmToken": userFcmToken
+                ]
+                
+                userRef.updateData(data) { error in
+                    if let error = error {
+                        print("Error removing FCM token from Firestore: \(error.localizedDescription)")
+                    } else {
+                        print("FCM token removed from Firestore.")
+                    }
+                }
+            }
+            
             UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
@@ -228,7 +249,7 @@ class ViewController: UIViewController {
                     "images": [],
                     "bestFriends": [],
                     "friends": [],
-                    "fcmToken": "",
+                    "fcmToken": userFcmToken,
                     "pendingFriendRequests": [],
                     "spots": []
                     //"username": username
@@ -271,40 +292,77 @@ class ViewController: UIViewController {
         present(alert, animated: true)
     }
     private func setupConstraints() {
-            // Constraints for the email text field
-            email.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                email.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40),
-                email.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -70),
-                email.heightAnchor.constraint(equalToConstant: 50)
-            ])
-            
-            // Constraints for the password text field
-            password.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                password.leadingAnchor.constraint(equalTo: email.leadingAnchor),
-                password.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
-                password.widthAnchor.constraint(equalTo: email.widthAnchor, constant: -60),
-                password.heightAnchor.constraint(equalToConstant: 50)
-            ])
-            
-            // Constraints for the show password button
-            button.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                button.trailingAnchor.constraint(equalTo: email.trailingAnchor),
-                button.centerYAnchor.constraint(equalTo: password.centerYAnchor),
-                button.widthAnchor.constraint(equalToConstant: 50),
-                button.heightAnchor.constraint(equalToConstant: 50)
-            ])
-            forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                forgotPasswordButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
-                forgotPasswordButton.leadingAnchor.constraint(equalTo: email.leadingAnchor),
-                forgotPasswordButton.trailingAnchor.constraint(equalTo: email.trailingAnchor)
-            ])
-        }
+        // Logo at the top
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            logo.widthAnchor.constraint(equalToConstant: 240),
+            logo.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        
+        // Label below the logo
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 100)
+        ])
+        
+        // Email text field
+        email.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 20),
+            email.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -70),
+            email.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        // Password text field
+        password.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            password.leadingAnchor.constraint(equalTo: email.leadingAnchor),
+            password.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
+            password.widthAnchor.constraint(equalTo: email.widthAnchor, constant: -60),
+            password.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        // Show password button
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: email.trailingAnchor),
+            button.centerYAnchor.constraint(equalTo: password.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 50),
+            button.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        // Forgot password button
+        forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            forgotPasswordButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
+            forgotPasswordButton.leadingAnchor.constraint(equalTo: email.leadingAnchor),
+            forgotPasswordButton.trailingAnchor.constraint(equalTo: email.trailingAnchor)
+        ])
+        
+        // Email invalid label
+        emailInvalid.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            emailInvalid.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emailInvalid.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20)
+        ])
+        
+        // Motto at the bottom
+        mottoLabel.translatesAutoresizingMaskIntoConstraints = false
+        mottoLabel.numberOfLines = 2
+        mottoLabel.lineBreakMode = .byWordWrapping
+        NSLayoutConstraint.activate([
+            mottoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mottoLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            mottoLabel.widthAnchor.constraint(equalToConstant: 260),
+            mottoLabel.heightAnchor.constraint(equalToConstant: 160)
+        ])
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         emailInvalid.isHidden = true
@@ -389,6 +447,41 @@ class ViewController: UIViewController {
     }*/
     
     
+}
+
+class KeyboardManager {
+    static let shared = KeyboardManager()
+
+    private var tapGesture: UITapGestureRecognizer!
+    
+    private init() {
+        // Initialize tap gesture recognizer to dismiss keyboard when tapping outside of text fields
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tapGesture.cancelsTouchesInView = false
+        tapGesture.isEnabled = false
+        UIApplication.shared.keyWindow?.addGestureRecognizer(tapGesture)
+        
+        // Observe keyboard show/hide notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // Call this method to enable keyboard dismissal on tap outside of text fields
+    func enableTapToDismiss() {
+        tapGesture.isEnabled = true
+    }
+    
+    @objc private func handleTap() {
+        UIApplication.shared.keyWindow?.endEditing(true)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        tapGesture.isEnabled = true
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        tapGesture.isEnabled = false
+    }
 }
 
      

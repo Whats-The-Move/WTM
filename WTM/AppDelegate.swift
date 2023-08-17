@@ -12,6 +12,7 @@ import FirebaseAuth
 import GoogleSignIn
 import FirebaseCore
 import UserNotifications
+import FirebaseMessaging
 
 public var partyAccount = false
 public var launchedBefore = false
@@ -24,14 +25,16 @@ public var UID = ""
 public var publicOrPriv = true
 public var maxPeople = 0
 public var dbName = "Parties"
+public var userFcmToken = ""
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, _ in
             guard success else {
@@ -139,6 +142,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // This method is called when there is an error in registering for remote notifications.
         // Handle the error as needed.
         print("Failed to register for remote notifications: \(error.localizedDescription)")
+    }
+    
+    func registerForRemoteNotifications() {
+        // Request user authorization for notifications
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, _ in
+            guard success else {
+                return
+            }
+            print("Notification authorization granted.")
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
+        
+        UIApplication.shared.registerForRemoteNotifications()
+    }
+        
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        // Handle FCM token registration here
+        print("Received FCM token:", fcmToken ?? "No token available")
+        userFcmToken = fcmToken ?? ""
+        
+        if let fcmToken = fcmToken, let currentUser = Auth.auth().currentUser {
+            let uid = currentUser.uid
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            let data: [String: Any] = [
+                "fcmToken": fcmToken,
+            ]
+            userRef.setData(data, merge: true) { error in
+                if let error = error {
+                    // Handle the error
+                    print("Error storing FCM token in Firestore: \(error.localizedDescription)")
+                } else {
+                    // Success!
+                    print("FCM token stored in Firestore.")
+                }
+            }
+        }
     }
 
     // MARK: UISceneSession Lifecycle
