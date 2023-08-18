@@ -513,24 +513,7 @@ class CustomCellClass: UITableViewCell {
 
         // Get the imageURL from Firebase
         print(party.name)
-        let database = Database.database().reference().child(dbName).child(party.name )
-        database.observeSingleEvent(of: .value) { snapshot, error in
-            if let error = error {
-                print("Error fetching imageURL from Firebase:")
-
-                self.loadImage(from: self.defaultImageURL, to: self.barImageView)
-                return
-            }
-
-            if let value = snapshot.value as? [String: Any],
-               let imageURL = value["profileURL"] as? String {
-                print("INSIDE PROFILE URL")
-                self.loadImage(from: imageURL, to: self.barImageView)
-            } else {
-                print("couldn't find profile url")
-                self.loadImage(from: self.defaultImageURL, to: self.barImageView)
-            }
-        }
+        barImageView.image = UIImage(named: party.name)
 
         return barImageView
     }
