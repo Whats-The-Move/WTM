@@ -485,10 +485,6 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 // Access the party information directly using the party ID
                 if let party = partiesCloned.first(where: { $0.name == partyID }) {
                     print("hello")
-                    let likes = likeDict[partyID] ?? 0
-                    let dislikes = dislikeDict[partyID] ?? 0
-                    let allTimeLikes = overallLikeDict[partyID] ?? 0.0
-                    let allTimeDislikes = overallDislikeDict[partyID] ?? 0.0
                     let address = addressDict[partyID] ?? ""
                     let rating = ratingDict[partyID] ?? 0.0
                     let isGoing = party.isGoing

@@ -60,32 +60,35 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         userRef.updateData([
             "profilePic":  "https://firebasestorage.googleapis.com:443/v0/b/whatsthemove-1b3f6.appspot.com/o/profilePics%2FmiI524oOPzV36XHg4pBq8cro6RN2.jpg?alt=media&token=95861ebb-a7ce-4c7d-90ff-5e017e910e40"
         ])
-        
+
         userRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 print("doc exists")
                 if let imageURLString = document.data()?["profilePic"] as? String,
-                   
                    let imageURL = URL(string: imageURLString) {
                     print(imageURLString)
-                    DispatchQueue.global().async {
-                        if let imageData = try? Data(contentsOf: imageURL) {
-                            DispatchQueue.main.async {
-                                let image = UIImage(data: imageData)
-                                self.profilePic.image = image
-                            }
+                    
+                    let placeholderImage = UIImage(named: "placeholder") // Replace "placeholder" with your default placeholder image name
+                    
+                    self.profilePic.kf.setImage(with: imageURL, placeholder: placeholderImage) { result in
+                        switch result {
+                        case .success(let value):
+                            print("Image downloaded: \(value.source.url?.absoluteString ?? "")")
+                        case .failure(let error):
+                            print("Image download failed: \(error.localizedDescription)")
                         }
                     }
-                }
-                else{
+                } else {
                     let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
                     if let backupImageURL = URL(string: backupProfile) {
-                        DispatchQueue.global().async {
-                            if let imageData = try? Data(contentsOf: backupImageURL) {
-                                DispatchQueue.main.async {
-                                    let image = UIImage(data: imageData)
-                                    self.profilePic.image = image
-                                }
+                        let placeholderImage = UIImage(named: "placeholder") // Replace "placeholder" with your default placeholder image name
+                        
+                        self.profilePic.kf.setImage(with: backupImageURL, placeholder: placeholderImage) { result in
+                            switch result {
+                            case .success(let value):
+                                print("Backup image downloaded: \(value.source.url?.absoluteString ?? "")")
+                            case .failure(let error):
+                                print("Backup image download failed: \(error.localizedDescription)")
                             }
                         }
                     }
@@ -94,8 +97,6 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
                 print("User document not found")
             }
         }
-
-
         // Do any additional setup after loading the view.
     }
     override func viewDidLayoutSubviews() {
@@ -193,13 +194,15 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             // No user is signed in
             print("No user is currently signed in")
         }
+        
         if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             // Upload the image to Firebase Storage
             let storageRef = Storage.storage().reference().child("profilePics/\(String(describing: uid)).jpg")
-            //"partyImages/\(UUID().uuidString).jpg"
+            
             guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
                 return
             }
+            
             storageRef.putData(imageData, metadata: nil) { (metadata, error) in
                 if let error = error {
                     // Handle the error
@@ -216,15 +219,13 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
                     }
                     
                     // Store the download URL in Firestore
-                    
                     if let currentUser = Auth.auth().currentUser {
                         // User is signed in
                         let uid = currentUser.uid
                         
                         let userRef = Firestore.firestore().collection("users").document(uid)
                         let data: [String: Any] = [
-                            "profilePic": downloadURL.absoluteString,
-                            
+                            "profilePic": downloadURL.absoluteString
                         ]
                         
                         userRef.setData(data, merge: true) { error in
@@ -236,55 +237,23 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
                             
                             // Success!
                             print("Image uploaded and download URL stored in Firestore!")
-                            //update profilePic here
-                            let userRef = Firestore.firestore().collection("users").document(uid)
                             
-                            userRef.getDocument { (document, error) in
-                                if let document = document, document.exists {
-                                    print("doc exists")
-                                    if let imageURLString = document.data()?["profilePic"] as? String,
-                                       
-                                       let imageURL = URL(string: imageURLString) {
-                                        print(imageURLString)
-                                        DispatchQueue.global().async {
-                                            if let imageData = try? Data(contentsOf: imageURL) {
-                                                DispatchQueue.main.async {
-                                                    let image = UIImage(data: imageData)
-                                                    self.profilePic.image = image
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else{
-                                        let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
-                                        if let backupImageURL = URL(string: backupProfile) {
-                                            DispatchQueue.global().async {
-                                                if let imageData = try? Data(contentsOf: backupImageURL) {
-                                                    DispatchQueue.main.async {
-                                                        let image = UIImage(data: imageData)
-                                                        self.profilePic.image = image
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    print("User document not found")
-                                }
+                            // Use Kingfisher to load and display the updated profile image
+                            if let imageURL = URL(string: downloadURL.absoluteString) {
+                                self.profilePic.kf.setImage(with: imageURL)
                             }
-                            
                         }
                     } else {
                         // No user is signed in
                         print("No user is currently signed in")
                     }
-                    
                 }
             }
         }
         
         dismiss(animated: true, completion: nil)
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
