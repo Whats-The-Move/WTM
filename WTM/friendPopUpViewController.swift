@@ -22,6 +22,7 @@ class friendPopUpViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        KeyboardManager.shared.enableTapToDismiss()
         print("Title text: \(titleText)")
         friendName.text = titleText
         friendName.textColor = .black

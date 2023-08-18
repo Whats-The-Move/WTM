@@ -11,6 +11,15 @@ struct User {
     let profilePic: String
 }
 
+struct MutualUser {
+    let uid: String
+    let email: String
+    let name: String
+    let username: String
+    let profilePic: String
+    let friends: [String]
+}
+
 class MyFriendsViewController: UIViewController, UITableViewDelegate {
     var users: [User] = []
     var allUsers: [User] = []
@@ -19,6 +28,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
     var pendingFriends: [String] = []
     var friends: [String] = []
     var db: Firestore!
+    public var friendOfFriendDict = [String: [String]]()
 
     @IBOutlet weak var pendingFriendList: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -27,6 +37,7 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        KeyboardManager.shared.enableTapToDismiss()
         pendingFriendList.delegate = self
         pendingFriendList.dataSource = self
         pendingFriendList.overrideUserInterfaceStyle = .dark
@@ -48,7 +59,58 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
     func fetchUsers() {
         let db = Firestore.firestore()
         let usersCollection = db.collection("users")
+        
+        // Fetch the current user's friends
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            return
+        }
 
+        usersCollection.document(currentUserUID).getDocument { [weak self] (snapshot, error) in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error getting current user: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = snapshot?.data(), let currentUserFriends = data["friends"] as? [String] else {
+                return
+            }
+            
+            self.friends = currentUserFriends
+            
+            // Populate the friendOfFriendDict with friends of friends
+            self.friendOfFriendDict = [:]
+            for friendUID in currentUserFriends {
+                usersCollection.document(friendUID).getDocument { (snapshot, error) in
+                    if let error = error {
+                        print("Error fetching friend's data: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    guard let data = snapshot?.data(), let friendFriends = data["friends"] as? [String] else {
+                        return
+                    }
+                    
+                    // Update the friendOfFriendDict
+                    for friendOfFriendUID in friendFriends {
+                        if friendOfFriendUID != currentUserUID && !currentUserFriends.contains(friendOfFriendUID) {
+                            self.friendOfFriendDict[friendOfFriendUID, default: []].append(friendUID)
+                        }
+                    }
+                    
+                    // After populating the dictionary, fetch all users and display friends of friends
+                    self.fetchAllUsersAndDisplayFriendsOfFriends()
+                }
+            }
+        }
+    }
+
+    func fetchAllUsersAndDisplayFriendsOfFriends() {
+        let db = Firestore.firestore()
+        let usersCollection = db.collection("users")
+        
+        // Fetch all users
         usersCollection.getDocuments { [weak self] (snapshot, error) in
             guard let self = self else { return }
 
@@ -71,14 +133,44 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
                 let profilePic = data["profilePic"] as? String
                 return User(uid: uid, email: email ?? "N/A", name: name ?? "N/A", username: username ?? "N/A", profilePic: profilePic ?? "")
             }
-
+            
             // Filter out users who are in pendingFriendRequests or friends array
             let myUid = Auth.auth().currentUser?.uid
             self.allUsers = allUsers.filter { user in
                 !self.pendingFriends.contains(user.uid) && !self.friends.contains(user.uid) && user.uid != myUid && user.username != "N/A"
             }
+            
+            // Apply search if active
+            if self.searching, let searchText = self.searchBar.text, !searchText.isEmpty {
+                self.allUsers = self.allUsers.filter { user in
+                    user.name.lowercased().contains(searchText.lowercased())
+                }
+            }
+            
+            // Calculate the occurrence count of each friend of friend
+            var friendOfFriendCounts: [String: Int] = [:]
+            for (friendOfFriendUID, friendsInCommon) in self.friendOfFriendDict {
+                let commonFriendsCount = Set(friendsInCommon).intersection(self.friends).count
+                friendOfFriendCounts[friendOfFriendUID] = commonFriendsCount
+            }
 
-            self.users = self.allUsers
+            // Sort friends of friends based on occurrence count
+            let sortedFriendOfFriends = friendOfFriendCounts.sorted { $0.value > $1.value }.map { $0.key }
+            
+            // Separate friend of friend users and remaining users
+            var friendOfFriendUsers: [User] = []
+            var remainingUsers: [User] = []
+
+            for user in self.allUsers {
+                if sortedFriendOfFriends.contains(user.uid) {
+                    friendOfFriendUsers.append(user)
+                } else {
+                    remainingUsers.append(user)
+                }
+            }
+            
+            // Combine friends of friends and remaining users
+            self.users = friendOfFriendUsers + remainingUsers
             self.userList.reloadData()
         }
     }

@@ -113,7 +113,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     override func viewDidLoad() {
         super.viewDidLoad()
         //print(locationOptions)
-        
+        KeyboardManager.shared.enableTapToDismiss()
         locationManger.delegate = self
         locationManger.requestAlwaysAuthorization()
         locationManger.requestWhenInUseAuthorization()

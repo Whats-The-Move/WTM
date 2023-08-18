@@ -25,6 +25,7 @@ class allFriendsPopUpViewController: UIViewController, UITableViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        KeyboardManager.shared.enableTapToDismiss()
         titleText.textColor = .white
         searchBar.delegate = self
         friendsTableView.register(removeFriendCustomCellClass.self, forCellReuseIdentifier: "friendCell")

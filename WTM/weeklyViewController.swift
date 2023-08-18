@@ -29,12 +29,16 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
         let ref = Database.database().reference().child("Events")
         ref.observe(.childAdded) { [weak self] (snapshot) in
             let dateKey = snapshot.key
+            print(dateKey)
             guard let placeDict = snapshot.value as? [String: Any] else { return }
 
             for (eventPlaceName, placeInfo) in placeDict {
+                print("Event Place Name:", eventPlaceName)
+                print("Place Info:", placeInfo)
                 guard let eventInfo = placeInfo as? [String: Any],
                       let eventName = eventInfo["Event Name"] as? String,
                       let eventTime = eventInfo["Time"] as? String else {
+                        print("didnt work")
                           continue
                       }
 
