@@ -4,64 +4,192 @@
 //
 //  Created by Aman Shah on 4/5/23.
 //
-
 import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseStorage
 
-class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
- 
-    @IBOutlet weak var partyName: UITextField!
-    @IBOutlet weak var venueAddress: UITextField!
-    @IBOutlet weak var personName: UITextField!
-    @IBOutlet weak var contactEmail: UITextField!
-    @IBOutlet weak var uploadLabel: UILabel!
-    @IBOutlet weak var certificateUpload: UIButton!
-    @IBOutlet weak var success: UILabel!
+class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    @IBOutlet weak var borderView: UIView!
+    var partyName: UITextField!
+    
+    var personName: UITextField!
+    
+    var contactEmail: UITextField!
+    
+    var venueAddress: UITextField!
+    
+    var uploadLabel: UILabel!
+    
+    var certificateUpload: UIButton!
+    
+    var success: UILabel!
+    
+    var borderView: UIView!
+    
     let imagePickerController = UIImagePickerController()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewDidLayoutSubviews()
+        setupPartyName()
+
+
         
+        setupVenueAddress()
+        setupPersonName()
+        setupContactEmail()
+        setupUploadLabel()
+        setupCertificateUploadButton()
+        setupSuccess()
+        success.isHidden = true
         imagePickerController.delegate = self
+        certificateUpload.addTarget(self, action: #selector(certificateUploadTapped), for: .touchUpInside)
 
-
-
-        // Do any additional setup after loading the view.
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        borderView.layer.cornerRadius = 6
-        borderView.layer.borderWidth = 8
-        borderView.layer.borderColor = UIColor.black.cgColor
-        view.layer.cornerRadius = 10
+    
+
+    func setupPartyName() {
+        partyName = UITextField()
+        partyName.borderStyle = .roundedRect
+        partyName.clipsToBounds = true
 
         partyName.placeholder = "Name of Frat/Bar/Party"
-        personName.placeholder = "Name of Person who is point of contact"
-        contactEmail.placeholder = "Email address of primary contact"
-        venueAddress.placeholder = "Address of Frat/Bar/Party"
-        uploadLabel.text = "Upon submission, upload photo proof that you are a legitimate Bar/Frat/Club (business registration, liquor license, etc). Don't waste our fucking time with genitalia (balls, tits, etc)"
-        uploadLabel.numberOfLines = 0
-        uploadLabel.lineBreakMode = .byWordWrapping
-        uploadLabel.textAlignment = .center
-        success.isHidden = true
-        success.frame = CGRect(x: 20,
-                                  y: certificateUpload.frame.origin.y + certificateUpload.frame.size.height + 10,
-                                  width: view.frame.size.width - 40,
-                                  height: 50)
-        partyName.frame = CGRect(x: 20,
-                                  y: certificateUpload.frame.origin.y + certificateUpload.frame.size.height ,
-                                  width: view.frame.size.width - 40,
-                                  height: 50)
-        
-       
+        partyName.backgroundColor = .white // Set background color to white
+        partyName.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        partyName.layer.cornerRadius = 10 // Add rounded corners
+        partyName.layer.borderWidth = 1.0 // Add border
+        partyName.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        partyName.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(partyName)
+
+        NSLayoutConstraint.activate([
+            partyName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            partyName.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
+            partyName.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
+            partyName.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+        ])
     }
 
-    @IBAction func certificateUploadTapped(_ sender: Any) {
+    func setupVenueAddress() {
+        venueAddress = UITextField()
+        venueAddress.borderStyle = .roundedRect
+        venueAddress.clipsToBounds = true
+
+        venueAddress.placeholder = "Address of Frat/Bar/Party"
+        venueAddress.backgroundColor = .white // Set background color to white
+        venueAddress.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        venueAddress.layer.cornerRadius = 10 // Add rounded corners
+        venueAddress.layer.borderWidth = 1.0 // Add border
+        venueAddress.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        venueAddress.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(venueAddress)
+
+        NSLayoutConstraint.activate([
+            venueAddress.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            venueAddress.topAnchor.constraint(equalTo: partyName.bottomAnchor, constant: 20),
+            venueAddress.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
+            venueAddress.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+        ])
+    }
+
+    func setupPersonName() {
+        personName = UITextField()
+        personName.borderStyle = .roundedRect
+        personName.clipsToBounds = true
+
+        personName.placeholder = "Name of Person who is point of contact"
+        personName.backgroundColor = .white // Set background color to white
+        personName.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        personName.layer.cornerRadius = 10 // Add rounded corners
+        personName.layer.borderWidth = 1.0 // Add border
+        personName.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        personName.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(personName)
+
+        NSLayoutConstraint.activate([
+            personName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            personName.topAnchor.constraint(equalTo: venueAddress.bottomAnchor, constant: 20),
+            personName.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
+            personName.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+        ])
+    }
+
+    func setupContactEmail() {
+        contactEmail = UITextField()
+        contactEmail.borderStyle = .roundedRect
+        contactEmail.clipsToBounds = true
+        contactEmail.placeholder = "Email address of primary contact"
+        contactEmail.backgroundColor = .white // Set background color to white
+        contactEmail.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+
+        contactEmail.layer.cornerRadius = 10 // Add rounded corners
+        contactEmail.layer.borderWidth = 1.0 // Add border
+
+        contactEmail.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        contactEmail.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(contactEmail)
+
+        NSLayoutConstraint.activate([
+            contactEmail.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            contactEmail.topAnchor.constraint(equalTo: personName.bottomAnchor, constant: 20),
+            contactEmail.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
+            contactEmail.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+        ])
+    }
+    func setupUploadLabel() {
+        uploadLabel = UILabel()
+        uploadLabel.text = "Upon clicking submit below, you'll have to submit proof that you are a registered organization (liquor license, frat registration, etc.)"
+        uploadLabel.textColor = .black // Set text color to black
+        uploadLabel.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        uploadLabel.numberOfLines = 0 // Allow multiple lines for long text
+        uploadLabel.textAlignment = .center // Center-align the text
+        uploadLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(uploadLabel)
+
+        NSLayoutConstraint.activate([
+            uploadLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            uploadLabel.topAnchor.constraint(equalTo: contactEmail.bottomAnchor, constant: 20), // 20px below contactEmail
+            uploadLabel.widthAnchor.constraint(equalToConstant: 300), // 20px below contactEmail
+
+        ])
+    }
+
+
+    func setupCertificateUploadButton() {
+        certificateUpload = UIButton()
+
+        certificateUpload.setTitle("Upload and Submit", for: .normal)
+        certificateUpload.setTitleColor(.white, for: .normal) // Set text color to white
+
+        certificateUpload.backgroundColor = .black // Set background fill color to white
+        certificateUpload.layer.cornerRadius = 10 // Add rounded corners
+        certificateUpload.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(certificateUpload)
+
+        NSLayoutConstraint.activate([
+            certificateUpload.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            certificateUpload.topAnchor.constraint(equalTo: uploadLabel.bottomAnchor, constant: 20),
+            certificateUpload.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
+            certificateUpload.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+        ])
+    }
+    
+    func setupSuccess() {
+        success = UILabel()
+        success.text = "Application submitted successfully"
+        success.textColor = .black // Set text color to black
+        success.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        success.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(success)
+
+        NSLayoutConstraint.activate([
+            success.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            success.topAnchor.constraint(equalTo: certificateUpload.bottomAnchor, constant: 20), // 20px under certificateUpload button
+        ])
+    }
+
+
+  @objc func certificateUploadTapped(_ sender: Any) {
         guard let partyName = partyName.text, !partyName.isEmpty,
                 let personName = personName.text, !personName.isEmpty,
                 let contactEmail = contactEmail.text, !contactEmail.isEmpty,

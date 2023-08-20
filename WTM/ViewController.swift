@@ -348,7 +348,7 @@ class ViewController: UIViewController {
         emailInvalid.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             emailInvalid.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emailInvalid.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20)
+            emailInvalid.bottomAnchor.constraint(equalTo: mottoLabel.topAnchor, constant: -20)
         ])
         
         // Motto at the bottom
