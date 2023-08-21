@@ -22,9 +22,6 @@ const updateIsGoingField = async () => {
       childRef.update({isGoing: isGoingArray});
     });
 
-    console.log("isGoing field updated successfully.");
-    
-    
     const databaseRef1 = admin.database().ref("BerkeleyParties");
     const snapshot1 = await databaseRef1.once("value");
 
@@ -108,31 +105,95 @@ exports.sendFriendRequestNotification = functions.firestore
       return null;
     });
 
-const sendPartyNotification = async (recipientFcmToken, partyName) => {
-  const message = {
-    notification: {
-      title: "Alert",
-      body: `Many of your friends are going to ${partyName} tonight!`,
-    },
-    token: recipientFcmToken,
+// const sendPartyNotification = async (recipientFcmToken, partyName) => {
+//   const message = {
+//     notification: {
+//       title: "Alert",
+//       body: `Many of your friends are going to ${partyName} tonight!`,
+//     },
+//     token: recipientFcmToken,
+//   };
+
+//   try {
+//     await admin.messaging().send(message);
+//     console.log("Party notification sent successfully.");
+//   } catch (error) {
+//     console.error("Error sending party notification:", error);
+//   }
+// };
+
+// exports.sendPartyNotification = functions.database
+//     .ref("Parties/{partyName}/isGoing")
+//     .onUpdate(async (change, context) => {
+//       const afterIsGoing = change.after.val() || [];
+//       const partyIsGoingUids = new Set(afterIsGoing);
+
+//       // Define the required number of friends for the notification
+//       const requiredFriends = 5;
+
+//       // Get the current party name from the context
+//       const partyName = context.params.partyName;
+
+//       // Get a reference to the "users" collection in Firestore
+//       const usersCollection = admin.firestore().collection("users");
+
+//       // Query all users to check for common friends attending the party
+//       const usersSnapshot = await usersCollection.get();
+
+//       // Iterate through each user
+//       for (const userDoc of usersSnapshot.docs) {
+//         const userData = userDoc.data();
+//         const friendsList = userData.friends || [];
+
+//         // Find the common friends who are going to the party
+//         const commonFriends =
+//           friendsList.filter((friendUid) =>
+//             partyIsGoingUids.has(friendUid));
+
+//         // Check if exactly 5 common friends are going
+//         if (commonFriends.length === requiredFriends) {
+//           // Get the recipient's FCM token
+//           const recipientFcmToken = userData.fcmToken;
+
+//           // Send the party notification with party name
+//           await sendPartyNotification(recipientFcmToken, partyName);
+//         }
+//       }
+
+//       return null;
+//     });
+
+const sendIndPartyNotification =
+  async (recipientFcmToken, notificationMessage) => {
+    const message = {
+      notification: {
+        title: notificationMessage,
+        body: "Join them!",
+      },
+      token: recipientFcmToken,
+    };
+
+    try {
+      await admin.messaging().send(message);
+      console.log("Party notification sent successfully.");
+    } catch (error) {
+      console.error("Error sending party notification:", error);
+    }
   };
 
-  try {
-    await admin.messaging().send(message);
-    console.log("Party notification sent successfully.");
-  } catch (error) {
-    console.error("Error sending party notification:", error);
-  }
-};
-
-exports.sendPartyNotification = functions.database
+exports.indSendPartyNotification = functions.database
     .ref("Parties/{partyName}/isGoing")
     .onUpdate(async (change, context) => {
+      const beforeIsGoing = change.before.val() || [];
       const afterIsGoing = change.after.val() || [];
-      const partyIsGoingUids = new Set(afterIsGoing);
 
-      // Define the required number of friends for the notification
-      const requiredFriends = 5;
+      // Find the added UID in the isGoing list
+      const addedUid = afterIsGoing.find((uid) => !beforeIsGoing.includes(uid));
+
+      if (!addedUid) {
+        // No new UID added to isGoing
+        return null;
+      }
 
       // Get the current party name from the context
       const partyName = context.params.partyName;
@@ -140,7 +201,7 @@ exports.sendPartyNotification = functions.database
       // Get a reference to the "users" collection in Firestore
       const usersCollection = admin.firestore().collection("users");
 
-      // Query all users to check for common friends attending the party
+      // Query all users to find those who have the added UID as a friend
       const usersSnapshot = await usersCollection.get();
 
       // Iterate through each user
@@ -148,20 +209,27 @@ exports.sendPartyNotification = functions.database
         const userData = userDoc.data();
         const friendsList = userData.friends || [];
 
-        // Find the common friends who are going to the party
-        const commonFriends =
-          friendsList.filter((friendUid) =>
-            partyIsGoingUids.has(friendUid));
-
-        // Check if exactly 5 common friends are going
-        if (commonFriends.length === requiredFriends) {
+        // Check if the added UID is a friend of the user
+        if (friendsList.includes(addedUid)) {
           // Get the recipient's FCM token
           const recipientFcmToken = userData.fcmToken;
 
+          // Get the name of the friend who is attending the party
+          const friendSnap = await admin
+              .firestore()
+              .collection("users")
+              .doc(addedUid)
+              .get();
+          const friendName = friendSnap.data().name;
+
           // Send the party notification with party name
-          await sendPartyNotification(recipientFcmToken, partyName);
+          const notificationMessage =
+           `${friendName} is going to ${partyName} tonight! Join them!`;
+          await
+          sendIndPartyNotification(recipientFcmToken, notificationMessage);
+
+          console.log(`Party notification sent to ${userData.name}`);
         }
       }
-
       return null;
     });
