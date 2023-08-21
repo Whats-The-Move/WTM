@@ -103,6 +103,9 @@ class MyFriendsViewController: UIViewController, UITableViewDelegate {
                     self.fetchAllUsersAndDisplayFriendsOfFriends()
                 }
             }
+            if currentUserFriends.isEmpty {
+                self.fetchAllUsersAndDisplayFriendsOfFriends()
+            }
         }
     }
 
