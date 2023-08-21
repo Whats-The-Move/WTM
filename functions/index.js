@@ -23,6 +23,24 @@ const updateIsGoingField = async () => {
     });
 
     console.log("isGoing field updated successfully.");
+    
+    
+    const databaseRef1 = admin.database().ref("BerkeleyParties");
+    const snapshot1 = await databaseRef1.once("value");
+
+    // Update the isGoing field for each child in the Parties node
+    snapshot1.forEach((childSnapshot) => {
+      const childRef = childSnapshot.ref;
+      const isGoingArray = [];
+
+      // Here, we add the UID twice to the isGoingArray
+      isGoingArray.push("vSAYcrlFT1faX9Z4KrX8waB4vdA2");
+      isGoingArray.push("vSAYcrlFT1faX9Z4KrX8waB4vdA2");
+
+      childRef.update({isGoing: isGoingArray});
+    });
+
+    console.log("isGoing field updated successfully.");
   } catch (error) {
     console.error("Error updating isGoing field:", error);
   }
