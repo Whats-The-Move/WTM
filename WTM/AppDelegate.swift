@@ -67,13 +67,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         var key = "LocationOptionsKey"
         
         if defaults.object(forKey: key) == nil {
-            let defaultLocationOptions = ["Champaign, IL", "Chicago, IL"]
+            let defaultLocationOptions = ["Champaign, IL", "Berkeley, CA"]
             defaults.set(defaultLocationOptions, forKey: key)
         }
         key = "PictureOptionsKey"
         
         if defaults.object(forKey: key) == nil {
-            let defaultPictureOptions = ["illinoisLogo", "chicago_flag"]
+            let defaultPictureOptions = ["illinoisLogo", "calLogo"]
             defaults.set(defaultPictureOptions, forKey: key)
         }
         

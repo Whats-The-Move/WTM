@@ -113,6 +113,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     override func viewDidLoad() {
         super.viewDidLoad()
         //print(locationOptions)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleDropdown))
+        locationLabel.isUserInteractionEnabled = true
+        locationLabel.addGestureRecognizer(tapGesture)
         KeyboardManager.shared.enableTapToDismiss()
         locationManger.delegate = self
         locationManger.requestAlwaysAuthorization()
@@ -222,7 +225,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 dbName = "Parties"
             }
             else{
-                dbName = "ChicagoParties"
+                dbName = "BerkeleyParties"
             }
         }
     }
@@ -239,7 +242,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         view.addSubview(dropdownView)
         
         // Create and style collegeImage
-        collegeImage = UIImageView(image: UIImage(named: "chicago_flag"))
+        collegeImage = UIImageView(image: UIImage(named: "calLogo"))
         collegeImage.translatesAutoresizingMaskIntoConstraints = false
         dropdownView.addSubview(collegeImage)
         
@@ -293,7 +296,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
                 dbName = "Parties"
             }
             else{
-                dbName = "ChicagoParties"
+                dbName = "BerkeleyParties"
             }
             locationOptions.reverse()
             defaults.set(locationOptions, forKey: "LocationOptionsKey")
@@ -331,7 +334,12 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     }
     
     @IBAction func dropdownButtonTapped(_ sender: Any) {
+        toggleDropdown()
+    }
+    @objc func toggleDropdown() {
         dropdownView.isHidden = !dropdownView.isHidden
+
+        
     }
     
     private func setupPullToRefresh() {

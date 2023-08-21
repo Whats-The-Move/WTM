@@ -500,22 +500,45 @@ class CustomCellClass: UITableViewCell {
     contentView.layer.cornerRadius = 10
         }
     func createImageView(party: Party) -> UIImageView {
-        plusMoreBkgd.isHidden = true
-        barImageView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(barImageView)
+        
+        print("printing dbName \(dbName)")
+        if dbName == "Parties" {
+            plusMoreBkgd.isHidden = true
+            barImageView.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview(barImageView)
 
-        // Add constraints
+            // Add constraints
 
 
-        // Apply rounded edges
-        barImageView.layer.cornerRadius = 8.0
-        barImageView.clipsToBounds = true
+            // Apply rounded edges
+            barImageView.layer.cornerRadius = 8.0
+            barImageView.clipsToBounds = true
 
-        // Get the imageURL from Firebase
-        print(party.name)
-        barImageView.image = UIImage(named: party.name)
+            // Get the imageURL from Firebase
+            print(party.name)
+            barImageView.image = UIImage(named: party.name)
+            return barImageView
 
-        return barImageView
+        }
+        else {
+            plusMoreBkgd.isHidden = true
+            barImageView.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview(barImageView)
+
+            // Add constraints
+
+
+            // Apply rounded edges
+            barImageView.layer.cornerRadius = 8.0
+            barImageView.clipsToBounds = true
+
+            // Get the imageURL from Firebase
+            print(party.name)
+            let berkParty = "Berkeley_" + party.name
+            barImageView.image = UIImage(named: berkParty)
+            return barImageView
+
+        }
     }
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
