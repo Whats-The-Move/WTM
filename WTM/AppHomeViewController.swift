@@ -113,6 +113,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     override func viewDidLoad() {
         super.viewDidLoad()
         //print(locationOptions)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleDropdown))
+        locationLabel.isUserInteractionEnabled = true
+        locationLabel.addGestureRecognizer(tapGesture)
         KeyboardManager.shared.enableTapToDismiss()
         locationManger.delegate = self
         locationManger.requestAlwaysAuthorization()
@@ -331,7 +334,12 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
     }
     
     @IBAction func dropdownButtonTapped(_ sender: Any) {
+        toggleDropdown()
+    }
+    @objc func toggleDropdown() {
         dropdownView.isHidden = !dropdownView.isHidden
+
+        
     }
     
     private func setupPullToRefresh() {
