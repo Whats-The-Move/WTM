@@ -93,7 +93,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let uid = currentUser.uid
             print("User UID:", uid)
             UserDefaults.standard.setValue(uid, forKey: "UID")
+            let db = Firestore.firestore()
 
+            let userRef = db.collection("users").document(uid)
+            print("got into uid")
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    print("finding daa")
+                    let data = document.data()
+                    if let userEmail = data?["email"] as? String {
+                        if userEmail.hasSuffix("@berkeley.edu") {
+                            let dbName = "BerkeleyParties"
+                            print("User's email ends with @berkeley.edu. Setting dbName to", dbName)
+                          
+
+                            let defaultPictureOptions = [ "calLogo", "illinoisLogo"]
+                            defaults.set(defaultPictureOptions, forKey: "PictureOptionsKey")
+
+                            let defaultLocationOptions = ["Berkeley, CA", "Champaign, IL"]
+                            defaults.set(defaultLocationOptions, forKey: "LocationOptionsKey")
+                            
+                            // Now you can use dbName in your further logic.
+                        } else {
+                            // Handle the case where the email doesn't end with @berkeley.edu
+                        }
+                    } else {
+                        // Handle the case where the email field is not present in the user's document
+                    }
+                } else {
+                    // Handle the case where the user's document doesn't exist
+                }
+            }
+        
         } else {
             print("No user is currently signed in.")
         }
