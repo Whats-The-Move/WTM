@@ -72,6 +72,20 @@ class createAccountAddFriendViewController: UIViewController, UITableViewDelegat
             self.allUsers = allUsers.filter { user in
                 !self.pendingFriends.contains(user.uid) && !self.friends.contains(user.uid) && user.uid != myUid && user.username != "N/A"
             }
+            
+            // Sort the users with berkeley.edu emails first if the current user's email contains berkeley.edu
+            if let currentUserEmail = Auth.auth().currentUser?.email, currentUserEmail.contains("berkeley.edu") {
+                self.allUsers.sort { (user1, user2) -> Bool in
+                    if user1.email.contains("berkeley.edu") && !user2.email.contains("berkeley.edu") {
+                        return true
+                    } else if !user1.email.contains("berkeley.edu") && user2.email.contains("berkeley.edu") {
+                        return false
+                    } else {
+                        // If both or neither have berkeley.edu emails, maintain the original order
+                        return user1.username < user2.username
+                    }
+                }
+            }
 
             self.users = self.allUsers
             self.userList.reloadData()
