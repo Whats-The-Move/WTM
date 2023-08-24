@@ -55,7 +55,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
             return
         }
         if publicOrPriv {
-            let partyRef = Database.database().reference().child("Parties").child(partyID)
+            let partyRef = Database.database().reference().child(dbName).child(partyID)
             
             partyRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
                 guard snapshot.exists() else {
