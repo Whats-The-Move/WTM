@@ -60,7 +60,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     func setupNoDealsLabel() {
         noDealsLabel = UILabel()
-        noDealsLabel.text = "No drink deals today :("
+        noDealsLabel.text = "No events or deals today :("
         noDealsLabel.textColor = UIColor.gray
         noDealsLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         noDealsLabel.textAlignment = .center
