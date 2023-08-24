@@ -21,9 +21,9 @@ class EventCell: UITableViewCell {
     }
 
     private func setupSubviews() {
-        placeLabel.textColor = .white
-        nameLabel.textColor = .white
-        timeLabel.textColor = .white
+        placeLabel.textColor = .black
+        nameLabel.textColor = .black
+        timeLabel.textColor = .black
         
         contentView.addSubview(placeLabel)
         contentView.addSubview(nameLabel)
@@ -33,9 +33,12 @@ class EventCell: UITableViewCell {
         contentView.layer.borderWidth = 1
         contentView.layer.borderColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1).cgColor
         contentView.clipsToBounds = true
+        contentView.backgroundColor = .white
         
         // Place Label
-        placeLabel.font = UIFont(name: "Futura", size: 16)
+        let pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1)
+        placeLabel.font = UIFont(name: "Futura", size: 18)
+        placeLabel.textColor = pinkColor
         placeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             placeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
