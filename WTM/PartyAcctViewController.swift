@@ -294,9 +294,18 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
 
     @objc func barLoginTapped() {
-        // Handle the button tap event here, e.g., dismiss the view controller
-        //take to bar login screen
+        // Instantiate the view controller with the identifier "BarSignIn" from the storyboard
+        if let barSignInViewController = storyboard?.instantiateViewController(withIdentifier: "BarSignIn") {
+            
+            // Wrap the view controller in a navigation controller to ensure it's shown full screen
+            let navigationController = UINavigationController(rootViewController: barSignInViewController)
+            
+            // Present the navigation controller modally
+            navigationController.modalPresentationStyle = .fullScreen
+            present(navigationController, animated: true, completion: nil)
+        }
     }
+
 
 
   @objc func certificateUploadTapped(_ sender: Any) {

@@ -3241,6 +3241,9 @@
                                     <fontDescription key="titleFontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="forgotPasswordTapped:" destination="wPD-9X-WZF" eventType="touchUpInside" id="3WA-Vf-B7Z"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Password must be longer than 6 characters!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="acy-eU-8Zd">
                                 <rect key="frame" x="63" y="676" width="287" height="58"/>
@@ -3255,16 +3258,29 @@
                                 <state key="normal" backgroundImage="arrow">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="signInTapped:" destination="wPD-9X-WZF" eventType="touchUpInside" id="Bgd-2P-Bmy"/>
+                                </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Bar/Party Login" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7pN-yo-Dpf">
+                                <rect key="frame" x="174" y="231" width="116" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Lia-dO-zaQ"/>
                         <color key="backgroundColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <connections>
+                        <outlet property="button" destination="qnT-U6-YCk" id="0y7-3B-kXn"/>
+                        <outlet property="email" destination="xTD-U2-jGh" id="7oF-M5-KbS"/>
+                        <outlet property="emailInvalid" destination="acy-eU-8Zd" id="qa0-bI-4Uz"/>
                         <outlet property="forgotPasswordButton" destination="Vyj-dz-OxP" id="3XJ-xi-6fZ"/>
+                        <outlet property="label" destination="7pN-yo-Dpf" id="To2-uq-VtF"/>
+                        <outlet property="logo" destination="QE1-sH-1DB" id="lJS-M1-yTt"/>
                         <outlet property="password" destination="zm8-oT-h7b" id="Qkq-as-3tc"/>
-                        <outlet property="submitButton" destination="qnT-U6-YCk" id="xFL-Ld-Akg"/>
-                        <outlet property="username" destination="xTD-U2-jGh" id="y4H-Ua-q1L"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0yA-X1-Fwm" sceneMemberID="firstResponder"/>
