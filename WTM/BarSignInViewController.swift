@@ -64,16 +64,7 @@ class BarSignInViewController: UIViewController {
     @IBAction func signInTapped(_ sender: Any) {
         //need to add wrong password button
         print("poo")
-        if email.text!.contains(".edu") == false {
-            print("it says use SCHOOL email")
-            let alert = UIAlertController(title: "Alert", message: "Please use your school (.edu) email.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Sorry, I won't do it again.", style: .default, handler: nil))
-            present(alert, animated: true, completion:  {
-                return
-            })
-            
-            return
-        }
+
         guard let email = email.text, !email.isEmpty,
               let password = password.text, !password.isEmpty
         else{
@@ -86,40 +77,50 @@ class BarSignInViewController: UIViewController {
             guard error == nil else{
                 //say if pass wrong error here. look through user database, if this is already a user then say wrong password and return out of function here
                 //look through what we have in firestore, is the email entered already there? if so give alert which says wrong password
-                
+
                 let db = Firestore.firestore()
-                let usersCollection = db.collection("users")
-                usersCollection.whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
+                let barUsersCollection = db.collection("barUsers")
+
+                barUsersCollection.whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
                     if let error = error {
-                        // Handle the error
                         print("Error getting documents: \(error)")
                     } else {
-                        // Check if the query returned any documents
                         if let document = querySnapshot?.documents.first {
-                            // Document exists with the given email
-                            print("email already exists, wrong password")
-                            UserDefaults.standard.set(false, forKey: "authenticated")
-                            let alert = UIAlertController(title: "Alert", message: "Wrong password.", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "Sorry, I'll get it right this time", style: .default, handler: nil))
-                            self?.present(alert, animated: true, completion:  {
-                                return
-                            })
-                            //exit everything, wrong password happened
-                            return
-                            
-                            
-                            print("Document data: \(document.data())")
+                            // Document with the specified email exists
+                            print("Email found")
+
+                            // Create the Firebase user
+                            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+                                if let error = error {
+                                    print("Error creating user: \(error)")
+                                } else {
+                                    print("User created successfully")
+                                    // You can perform additional actions here after user creation
+                                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                    let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
+                                    appHomeVC.modalPresentationStyle = .overFullScreen
+                                    self?.present(appHomeVC, animated: true)
+                                }
+                            }
                         } else {
-                            // No document exists with the given email, make new account
-                            print("Document does not exist")
-                            UserDefaults.standard.set(true, forKey: "authenticated")
-                            strongSelf.showCreateAccount(email: email, password: password)
-                            
+                            // No document with the specified email found
+                            print("Not approved yet")
+                            let alertController = UIAlertController(title: "Not Approved Yet", message: "If you've applied, you'll receive an email when you have been approved.", preferredStyle: .alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                                // Dismiss the alert and exit functions
+                            }))
+
+                            // Present the alert
+                            self?.present(alertController, animated: true, completion: nil)
                         }
                     }
                 }
-                return }
-            
+                
+
+                return
+                
+            }
+            //this is for normal login- they alr are signed in just set fcm token and take them to app home
             if let currentUser = Auth.auth().currentUser {
                 print(currentUser.uid)
                 let uid = currentUser.uid
@@ -236,7 +237,7 @@ class BarSignInViewController: UIViewController {
                 let db = Firestore.firestore()
                 
                 // Get a reference to the "users" collection
-                let usersCollection = db.collection("users")
+                let usersCollection = db.collection("barUsers")
                 
                 // Add a new user to the "users" collection with some data
                 usersCollection.document(uid!).setData([
