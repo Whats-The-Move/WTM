@@ -26,6 +26,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var emailInvalid: UILabel!
     
     @IBOutlet weak var forgotPasswordButton: UIButton!
+    
+    @IBOutlet weak var lineView: UIView!
+    @IBOutlet weak var barButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         KeyboardManager.shared.enableTapToDismiss()
@@ -36,7 +39,8 @@ class ViewController: UIViewController {
         email.clipsToBounds = true
         password.clipsToBounds = true
         label.adjustsFontSizeToFitWidth = true
-        
+        barButton.layer.cornerRadius = 8
+        barButton.clipsToBounds = true
 
         if FirebaseAuth.Auth.auth().currentUser != nil {
             //TAKE PAST LOGIN SCREEN TO HOME SCREEN
@@ -343,12 +347,27 @@ class ViewController: UIViewController {
             forgotPasswordButton.leadingAnchor.constraint(equalTo: email.leadingAnchor),
             forgotPasswordButton.trailingAnchor.constraint(equalTo: email.trailingAnchor)
         ])
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            lineView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lineView.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 60),
+            lineView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30),
+            lineView.heightAnchor.constraint(equalToConstant: 1)
+
+        ])
+        barButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            barButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            barButton.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 90),
+            barButton.leadingAnchor.constraint(equalTo: email.leadingAnchor),
+            barButton.trailingAnchor.constraint(equalTo: email.trailingAnchor)
+        ])
         
         // Email invalid label
         emailInvalid.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             emailInvalid.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emailInvalid.bottomAnchor.constraint(equalTo: mottoLabel.topAnchor, constant: -20)
+            emailInvalid.topAnchor.constraint(equalTo: barButton.bottomAnchor, constant: 20)
         ])
         
         // Motto at the bottom
@@ -368,9 +387,8 @@ class ViewController: UIViewController {
         emailInvalid.isHidden = true
         email.borderStyle = .roundedRect
         password.borderStyle = .roundedRect  // Add this line
-
-
-
+        barButton.layer.borderWidth = 2
+        barButton.layer.borderColor = UIColor.black.cgColor
         // Set the border color and width
         var placeholderText = "Enter School Email"
         var emailAttributes: [NSAttributedString.Key: Any] = [

@@ -24,16 +24,24 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     var certificateUpload: UIButton!
     
     var success: UILabel!
+    var fail: UILabel!
+
     
     var borderView: UIView!
     
+    var backButton: UIButton!
+    
     let imagePickerController = UIImagePickerController()
     
+    var lineView: UIView!
+    
+    var barLoginButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupPartyName()
 
-
+        setupBackButton()
         
         setupVenueAddress()
         setupPersonName()
@@ -42,11 +50,42 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         setupCertificateUploadButton()
         setupSuccess()
         success.isHidden = true
+        setupFail()
+        fail.isHidden = true
+        setupLineView()
+        setupBarLoginButton()
         imagePickerController.delegate = self
         certificateUpload.addTarget(self, action: #selector(certificateUploadTapped), for: .touchUpInside)
 
     }
     
+    func setupBackButton() {
+        backButton = UIButton()
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set the button image and tint color to black
+        backButton.setImage(UIImage(systemName: "chevron.backward.circle"), for: .normal)
+        backButton.tintColor = .black
+        
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        
+        // Enable user interaction for the button
+        backButton.isUserInteractionEnabled = true
+        
+        view.addSubview(backButton)
+
+        NSLayoutConstraint.activate([
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            backButton.widthAnchor.constraint(equalToConstant: 40),
+            backButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
+
+    @objc func backButtonTapped() {
+        // Handle the button tap event here, e.g., dismiss the view controller
+        self.dismiss(animated: true, completion: nil)
+    }
 
     func setupPartyName() {
         partyName = UITextField()
@@ -64,11 +103,12 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
         NSLayoutConstraint.activate([
             partyName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            partyName.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
+            partyName.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -160),
             partyName.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
             partyName.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
         ])
     }
+    
 
     func setupVenueAddress() {
         venueAddress = UITextField()
@@ -178,7 +218,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         success = UILabel()
         success.text = "Application submitted successfully"
         success.textColor = .black // Set text color to black
-        success.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        success.font = UIFont(name: "Futura-Medium", size: 16) // Set font style and size
         success.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(success)
 
@@ -186,6 +226,76 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
             success.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             success.topAnchor.constraint(equalTo: certificateUpload.bottomAnchor, constant: 20), // 20px under certificateUpload button
         ])
+    }
+    func setupFail() {
+        fail = UILabel()
+        fail.numberOfLines = 0 // Allow text to wrap to multiple lines
+
+        fail.text = "That didn't work. Try again later or email support @ aman04shah@gmail.com"
+        fail.textColor = .black // Set text color to black
+        fail.font = UIFont(name: "Futura-Medium", size: 16) // Set font style and size
+        fail.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(fail)
+
+        NSLayoutConstraint.activate([
+            fail.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            fail.topAnchor.constraint(equalTo: certificateUpload.bottomAnchor, constant: 20), // 20px under certificateUpload button
+            fail.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20)
+        ])
+    }
+    func setupLineView() {
+        lineView = UIView()
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        lineView.backgroundColor = .white
+        // Set the button image and tint color to black
+
+        
+ 
+        
+        // Enable user interaction for the button
+        
+        view.addSubview(lineView)
+
+        NSLayoutConstraint.activate([
+            lineView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lineView.topAnchor.constraint(equalTo: fail.bottomAnchor, constant: 20),
+            lineView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+            lineView.heightAnchor.constraint(equalToConstant: 1)
+        ])
+    }
+    func setupBarLoginButton() {
+        barLoginButton = UIButton()
+        barLoginButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set the button title and styling
+        barLoginButton.setTitle("Already been approved? Sign in instead", for: .normal)
+        barLoginButton.setTitleColor(.black, for: .normal)
+        barLoginButton.backgroundColor = .white
+        barLoginButton.layer.borderWidth = 2.0
+        barLoginButton.layer.borderColor = UIColor.black.cgColor
+        barLoginButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        barLoginButton.titleLabel?.minimumScaleFactor = 0.5 // You can adjust this value as needed.
+        barLoginButton.layer.cornerRadius = 8
+        barLoginButton.clipsToBounds = true
+        barLoginButton.addTarget(self, action: #selector(barLoginTapped), for: .touchUpInside)
+        
+        // Enable user interaction for the button
+        barLoginButton.isUserInteractionEnabled = true
+        
+        view.addSubview(barLoginButton)
+        
+        NSLayoutConstraint.activate([
+            barLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            barLoginButton.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 20),
+            barLoginButton.widthAnchor.constraint(equalToConstant: 370),
+            barLoginButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
+
+
+    @objc func barLoginTapped() {
+        // Handle the button tap event here, e.g., dismiss the view controller
+        //take to bar login screen
     }
 
 
@@ -238,6 +348,8 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                     if let error = error {
                         // Handle the error
                         print("Error uploading image: \(error.localizedDescription)")
+                        self.fail.isHidden = false
+
                         return
                     }
                     
@@ -246,6 +358,8 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                         guard let downloadURL = url else {
                             // Handle the error
                             print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
+                            self.fail.isHidden = false
+
                             return
                         }
                         
@@ -264,11 +378,14 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                             if let error = error {
                                 // Handle the error
                                 print("Error creating Firestore document: \(error.localizedDescription)")
+                                self.fail.isHidden = false
+
                                 return
                             }
                             
                             // Success!
                             self.success.isHidden = false
+                            self.fail.isHidden = true
                             print("Image uploaded and download URL stored in Firestore!")
                         }
                     }
