@@ -11,14 +11,12 @@ import FirebaseAuth
 
 class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
     @IBOutlet weak var eventTitle: UITextField!
-    @IBOutlet weak var bkgdView: UIView!
     
     @IBOutlet weak var dateAndTime: UIDatePicker!
     @IBOutlet weak var location: UITextField!
     @IBOutlet weak var descriptionText: UITextView!
     
     @IBOutlet weak var createButton: UIButton!
-    @IBOutlet weak var inviteesText: UITextView!
     var selectedUsers: [User] = []
 
     override func viewDidLoad() {
@@ -27,7 +25,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         eventTitle.delegate = self
         location.delegate = self
         descriptionText.delegate = self
-        inviteesText.delegate = self
+        //inviteesText.delegate = self
         
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         swipeGesture.direction = .down
@@ -37,11 +35,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(inviteesTapped))
-             inviteesText.addGestureRecognizer(tapGestureRecognizer)
-             inviteesText.isUserInteractionEnabled = true
-        let selectedUserNames = selectedUsers.map { $0.name }
-           inviteesText.text = selectedUserNames.joined(separator: ", ")
+        
         // Do any additional setup after loading the view.
     }
     
@@ -78,8 +72,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         let keyboardHeight = keyboardFrame.size.height
 
         // Check if the text field is hidden by the keyboard
-        if eventTitle.isFirstResponder || location.isFirstResponder || descriptionText.isFirstResponder ||  inviteesText.isFirstResponder {
-            let maxY = max(eventTitle.frame.maxY, location.frame.maxY, descriptionText.frame.maxY, inviteesText.frame.maxY)
+        if eventTitle.isFirstResponder || location.isFirstResponder || descriptionText.isFirstResponder  {
+            let maxY = max(eventTitle.frame.maxY, location.frame.maxY, descriptionText.frame.maxY)
             let visibleHeight = view.frame.height - keyboardHeight
             if maxY > visibleHeight {
                 // Adjust the view's frame to move the text field above the keyboard
@@ -97,15 +91,15 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         descriptionText.textAlignment = .left
         descriptionText.font = UIFont.systemFont(ofSize: 16)
         descriptionText.layer.cornerRadius = 8
-        bkgdView.layer.cornerRadius = 8
         dateAndTime.layer.cornerRadius = 8
     }
     @IBAction func createTapped(_ sender: Any) {
     guard let eventTitle = eventTitle.text,
               let location = location.text,
-              let eventDescription = descriptionText.text,
-              let inviteesText = inviteesText.text else {
+              let eventDescription = descriptionText.text
+            else {
             return
+            print("didn't fill it")
         }
         let dateTime = dateAndTime.date
 
@@ -116,7 +110,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         inviteeUIDs.append(currentUserUID)
         
         // Create a reference to the "Privates" node in Firebase Realtime Database
-        let privatesRef = Database.database().reference().child("Privates")
+        let privatesRef = Database.database().reference().child("Events1")
         
         // Create a new child node under "Privates" and generate a unique key
         let newEventRef = privatesRef.childByAutoId()
@@ -145,7 +139,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         self.eventTitle.text = ""
         self.location.text = ""
         descriptionText.text = ""
-        self.inviteesText.text = ""
+        
         
         // Display a message
         let alertController = UIAlertController(title: "Congratulations", message: "You have created an event!", preferredStyle: .alert)
@@ -154,6 +148,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         present(alertController, animated: true, completion: nil)
         
     }
+    /*
     @objc func inviteesTapped() {
         let inviteListVC = storyboard?.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
             inviteListVC.selectedUsers = selectedUsers  // Pass the selectedUsers array to InviteListViewController
@@ -165,6 +160,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             }
             present(inviteListVC, animated: true, completion: nil)
     }
+    */
 
     /*
     // MARK: - Navigation

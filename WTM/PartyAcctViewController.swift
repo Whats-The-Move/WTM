@@ -4,6 +4,7 @@
 //
 //  Created by Aman Shah on 4/5/23.
 //
+//need to add auth stage here
 import UIKit
 import Firebase
 import FirebaseAuth
@@ -216,7 +217,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     
     func setupSuccess() {
         success = UILabel()
-        success.text = "Application submitted successfully"
+        success.text = "Application submitted successfully. You'll receive an email in 1-3 days when you've been approved"
         success.textColor = .black // Set text color to black
         success.font = UIFont(name: "Futura-Medium", size: 16) // Set font style and size
         success.translatesAutoresizingMaskIntoConstraints = false
@@ -371,32 +372,58 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
                             return
                         }
-                        
+                        //add the auth right here, only if successful, put into firestore. also get and put uid in that way as the doc title
                         // Store the download URL in Firestore
-                        let userRef = Firestore.firestore().collection("pendingParty").document()
-                        let data: [String: Any] = [
-                           
-                            "imageUrl": downloadURL.absoluteString,
-                            "venueName": self.partyName.text,
-                            "venueAddress": self.venueAddress.text,
-                            "email": self.contactEmail.text,
-                            "personName" : self.personName.text
-                            // Add other fields as needed
-                        ]
-                        userRef.setData(data) { error in
+                        let email = self.contactEmail.text
+                        //setting password to
+                        let password = self.partyName.text
+                        //do auth
+                        Auth.auth().createUser(withEmail: email ?? "nul", password: password ?? "nul") { (authResult, error) in
                             if let error = error {
-                                // Handle the error
-                                print("Error creating Firestore document: \(error.localizedDescription)")
-                                self.fail.isHidden = false
+                                print("Error creating user: \(error.localizedDescription)")
+                                // Handle the error here (e.g., show an error message to the user)
+                            } else {
+                                let uid = Auth.auth().currentUser?.uid
+                                
+                                let userRef = Firestore.firestore().collection("pendingParty").document(uid ?? "")
+                                let data: [String: Any] = [
+                                   
+                                    "imageUrl": downloadURL.absoluteString,
+                                    "venueName": self.partyName.text,
+                                    "venueAddress": self.venueAddress.text,
+                                    "email": self.contactEmail.text,
+                                    "personName" : self.personName.text
+                                    // Add other fields as needed
+                                ]
+                                userRef.setData(data) { error in
+                                    if let error = error {
+                                        // Handle the error
+                                        print("Error creating Firestore document: \(error.localizedDescription)")
+                                        self.fail.isHidden = false
 
-                                return
+                                        return
+                                    }
+                                    
+                                    // Success!
+                                    self.success.isHidden = false
+                                    self.fail.isHidden = true
+                                    print("Image uploaded and download URL stored in Firestore!")
+                                }
+                                // User creation was successful
+                                if let user = authResult?.user {
+                                    print("User created successfully with UID: \(user.uid)")
+                                    // You can perform additional actions here after user creation
+                                }
                             }
-                            
-                            // Success!
-                            self.success.isHidden = false
-                            self.fail.isHidden = true
-                            print("Image uploaded and download URL stored in Firestore!")
                         }
+   
+
+
+
+
+
+
+
                     }
                 }
             }

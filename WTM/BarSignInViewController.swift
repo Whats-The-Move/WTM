@@ -10,7 +10,8 @@ import FirebaseAuth
 import Firebase
 import FirebaseCore
 import FirebaseFirestore
-
+//need to make when they sign in and go through auth and get added to auth using create user, it also goes and edits their document by adding the uid as a field in their document.
+//to-do: berkeley ppl can't click on their friends properly, so fix dat
 class BarSignInViewController: UIViewController {
     
     @IBOutlet weak var logo: UIImageView!
@@ -75,35 +76,30 @@ class BarSignInViewController: UIViewController {
         FirebaseAuth.Auth.auth().signIn( withEmail: email, password: password, completion: {[weak self] result, error in
             guard let strongSelf = self else {return}
             guard error == nil else{
-                //say if pass wrong error here. look through user database, if this is already a user then say wrong password and return out of function here
-                //look through what we have in firestore, is the email entered already there? if so give alert which says wrong password
-
                 let db = Firestore.firestore()
                 let barUsersCollection = db.collection("barUsers")
 
                 barUsersCollection.whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
                     if let error = error {
                         print("Error getting documents: \(error)")
+                        // Handle the error here if needed
                     } else {
                         if let document = querySnapshot?.documents.first {
                             // Document with the specified email exists
                             print("Email found")
+                            //wrong password here
+                            print("wrong pass")
+                            let alertController = UIAlertController(title: "Wrong Password", message: "Press forgot password to reset password", preferredStyle: .alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                                // Dismiss the alert and exit functions
+                            }))
 
-                            // Create the Firebase user
-                            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-                                if let error = error {
-                                    print("Error creating user: \(error)")
-                                } else {
-                                    print("User created successfully")
-                                    // You can perform additional actions here after user creation
-                                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                                    let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
-                                    appHomeVC.modalPresentationStyle = .overFullScreen
-                                    self?.present(appHomeVC, animated: true)
-                                }
-                            }
+                            // Present the alert
+                            self?.present(alertController, animated: true, completion: nil)
+                            // Check if the user already exists
+
                         } else {
-                            // No document with the specified email found
+                            // No document with the specified email found, show "Not Approved Yet" alert
                             print("Not approved yet")
                             let alertController = UIAlertController(title: "Not Approved Yet", message: "If you've applied, you'll receive an email when you have been approved.", preferredStyle: .alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
@@ -115,10 +111,8 @@ class BarSignInViewController: UIViewController {
                         }
                     }
                 }
-                
 
-                return
-                
+            return
             }
             //this is for normal login- they alr are signed in just set fcm token and take them to app home
             if let currentUser = Auth.auth().currentUser {
