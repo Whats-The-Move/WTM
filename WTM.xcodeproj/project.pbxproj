@@ -53,6 +53,7 @@
 		105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */; };
 		109B93F72A6B5A9E002D4CEF /* PublicPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109B93F62A6B5A9D002D4CEF /* PublicPopUpViewController.swift */; };
 		109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109B93FC2A6CA098002D4CEF /* ReviewTableViewCell.swift */; };
+		109B94032AA1BEDC002D4CEF /* BarSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109B94022AA1BEDC002D4CEF /* BarSignInViewController.swift */; };
 		10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */; };
 		10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */; };
 		10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */; };
@@ -136,6 +137,7 @@
 		105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFriendsViewController.swift; sourceTree = "<group>"; };
 		109B93F62A6B5A9D002D4CEF /* PublicPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicPopUpViewController.swift; sourceTree = "<group>"; };
 		109B93FC2A6CA098002D4CEF /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
+		109B94022AA1BEDC002D4CEF /* BarSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarSignInViewController.swift; sourceTree = "<group>"; };
 		10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyAcctViewController.swift; sourceTree = "<group>"; };
 		10B5001E29FEDE01004FAC97 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewController.swift; sourceTree = "<group>"; };
 		10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
 				087FE8EB298DDA26001B17B6 /* Gif.swift */,
 				103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */,
+				109B94022AA1BEDC002D4CEF /* BarSignInViewController.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
 				08D313A02A4A5CBA00FBF023 /* privateParty.swift */,
 				103D80A42A4BC9D10032E4D3 /* SettingsViewController.swift */,
@@ -562,6 +565,7 @@
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				109B93F72A6B5A9E002D4CEF /* PublicPopUpViewController.swift in Sources */,
 				08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */,
+				109B94032AA1BEDC002D4CEF /* BarSignInViewController.swift in Sources */,
 				087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */,
 				10B5002B2A268214004FAC97 /* CreateAccountViewController.swift in Sources */,
 				08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */,
