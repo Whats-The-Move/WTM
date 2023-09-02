@@ -24,8 +24,13 @@ class BarSignInViewController: UIViewController {
     @IBOutlet weak var forgotPasswordButton: UIButton!
     
     @IBOutlet weak var emailInvalid: UILabel!
+    var backButton: UIButton!
+
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        setupBackButton()
+
         KeyboardManager.shared.enableTapToDismiss()
         setupShowPasswordButton()
         setupConstraints()
@@ -115,6 +120,9 @@ class BarSignInViewController: UIViewController {
             return
             }
             //this is for normal login- they alr are signed in just set fcm token and take them to app home
+            //user default make it say they're bar here
+            UserDefaults.standard.set(true, forKey: "partyAccount")
+
             if let currentUser = Auth.auth().currentUser {
                 print(currentUser.uid)
                 let uid = currentUser.uid
@@ -141,7 +149,36 @@ class BarSignInViewController: UIViewController {
         
         
     }
-    
+    func setupBackButton() {
+        backButton = UIButton()
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set the button image and tint color to black
+        backButton.setImage(UIImage(systemName: "chevron.backward.circle"), for: .normal)
+        backButton.tintColor = .black
+        
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        
+        // Enable user interaction for the button
+        backButton.isUserInteractionEnabled = true
+        
+        view.addSubview(backButton)
+
+        NSLayoutConstraint.activate([
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 55),
+            backButton.widthAnchor.constraint(equalToConstant: 80),
+            backButton.heightAnchor.constraint(equalToConstant: 80)
+        ])
+        view.bringSubviewToFront(backButton)
+
+    }
+
+    @objc func backButtonTapped() {
+        // Handle the button tap event here, e.g., dismiss the view controller
+        print("trying to dismiss")
+        self.dismiss(animated: true, completion: nil)
+    }
     @IBAction func forgotPasswordTapped(_ sender: Any) {
         let alertController = UIAlertController(title: "Reset Password", message: "Enter your email to receive a password reset link.", preferredStyle: .alert)
         
