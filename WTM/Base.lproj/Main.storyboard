@@ -416,7 +416,7 @@
         <!--Create Event View Controller-->
         <scene sceneID="r41-bl-evq">
             <objects>
-                <viewController id="KFj-Ki-J9l" customClass="CreateEventViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateEvent" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KFj-Ki-J9l" customClass="CreateEventViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4oK-En-mGr">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
