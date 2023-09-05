@@ -194,20 +194,6 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
             eventCell.placeLabel.text = event.place
             eventCell.nameLabel.text = event.name
             eventCell.timeLabel.text = event.time
-           /*
-        if selectedDateEvents.isEmpty {
-            // Display the "No events for today" cell
-            cell = tableView.dequeueReusableCell(withIdentifier: "noEventsCell", for: indexPath) as! NoEventsCell
-        } else {
-            // Display the regular event cell
-            cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! EventCell
-            
-            let event = selectedDateEvents[indexPath.section]
-            if let eventCell = cell as? EventCell {
-                eventCell.placeLabel.text = event.place
-                eventCell.nameLabel.text = event.name
-                eventCell.timeLabel.text = event.time
-            }*/
         }
 
         return cell
@@ -219,6 +205,30 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UIView() // Empty view to create the spacing
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCell = tableView.cellForRow(at: indexPath) as? EventCell
+        
+        if selectedCell?.nameLabel.text == "Free Drink Night" {
+            performSegue(withIdentifier: "freeDrinkNightSegue", sender: self)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "freeDrinkNightSegue",
+           let selectedIndexPath = tableView.indexPathForSelectedRow,
+           let destinationViewController = segue.destination as? freeDrinkNightViewController,
+           let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? EventCell {
+            destinationViewController.selectedPlace = selectedCell.placeLabel.text
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy" // Use the desired date format
+
+            let dateString = dateFormatter.string(from: selectedDate)
+
+            destinationViewController.date = dateString
+
+        }
     }
 
     override func viewDidAppear(_ animated: Bool)

@@ -42,6 +42,7 @@
 		08CF03C9297CEFAB0074A878 /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03C8297CEFAB0074A878 /* Party.swift */; };
 		08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03D8297D52770074A878 /* popUpViewController.swift */; };
 		08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D313A02A4A5CBA00FBF023 /* privateParty.swift */; };
+		08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E504942AA519BF000B4023 /* freeDrinkNightViewController.swift */; };
 		08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F793292A4A505300679EB9 /* privatePartyCellClass.swift */; };
 		08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */; };
 		08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */; };
@@ -125,6 +126,7 @@
 		08CF03C8297CEFAB0074A878 /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
 		08CF03D8297D52770074A878 /* popUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
 		08D313A02A4A5CBA00FBF023 /* privateParty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privateParty.swift; sourceTree = "<group>"; };
+		08E504942AA519BF000B4023 /* freeDrinkNightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = freeDrinkNightViewController.swift; sourceTree = "<group>"; };
 		08F793292A4A505300679EB9 /* privatePartyCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePartyCellClass.swift; sourceTree = "<group>"; };
 		08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendPopUpViewController.swift; sourceTree = "<group>"; };
 		08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendRequestCellClass.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				0825CC382A88037800C9C32E /* weeklyViewController.swift */,
 				086E2E402A88163C00BC7D85 /* EventCell.swift */,
 				086E2E3E2A88160300BC7D85 /* Event.swift */,
+				08E504942AA519BF000B4023 /* freeDrinkNightViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -592,6 +595,7 @@
 				08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */,
 				0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */,
 				086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */,
+				08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,
