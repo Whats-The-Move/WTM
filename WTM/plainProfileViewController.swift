@@ -135,9 +135,9 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         editLabel = UILabel()
         editLabel.text = "edit"
         editLabel.font = UIFont(name: "Futura-Medium", size: 16)
-        editLabel.textColor = UIColor.white
+        editLabel.textColor = UIColor.gray
         editLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        addFriendsButton.addSubview(friendNotification)
         view.addSubview(editLabel)
         NSLayoutConstraint.activate([
             // profilePic constraints
@@ -170,7 +170,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             editLabel.heightAnchor.constraint(equalToConstant: 30),
             
             friendNotification.centerYAnchor.constraint(equalTo: addFriendsButton.centerYAnchor),
-            friendNotification.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -90),
+            friendNotification.leadingAnchor.constraint(equalTo: addFriendsButton.trailingAnchor, constant: 0),
             friendNotification.widthAnchor.constraint(equalToConstant: 35),
             friendNotification.heightAnchor.constraint(equalToConstant: 35)
 
