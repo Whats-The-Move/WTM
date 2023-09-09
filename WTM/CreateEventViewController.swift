@@ -37,15 +37,16 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     @IBOutlet weak var cancel: UIButton!
     @IBOutlet weak var save: UIButton!
     
-    @IBOutlet weak var repeatButton: UIButton!
     @IBOutlet weak var eventTitle: UITextField!
     
+    @IBOutlet weak var typePicker: UIPickerView!
     @IBOutlet weak var dateAndTime: UIDatePicker!
     @IBOutlet weak var endTime: UIDatePicker!
     
     @IBOutlet weak var repeatLabel: UILabel!
     @IBOutlet weak var location: UITextField!
     @IBOutlet weak var descriptionText: UITextView!
+    
     var repeatTableView: UITableView!
         
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -58,7 +59,19 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         super.viewDidLoad()
         setupConstraints()
         setupTableView()
+        addHorizontalLine(belowView: eventTitle, spacing: 10.0)
 
+        addHorizontalLine(belowView: repeatLabel, spacing: 10.0)
+        
+        addHorizontalLine(belowView: location, spacing: 10.0)
+        addHorizontalLine(belowView: typePicker, spacing: 10.0)
+
+        addHorizontalLine(belowView: endTime, spacing: 10.0)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
+        repeatLabel.isUserInteractionEnabled = true
+        repeatLabel.addGestureRecognizer(tapGestureRecognizer)
+        
         eventTitle.delegate = self
         location.delegate = self
         descriptionText.delegate = self
@@ -78,6 +91,22 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     
     @objc func dismissKeyboard() {
         descriptionText.resignFirstResponder()
+    }
+    @objc func labelTapped(){
+        repeatTableView.isHidden = !repeatTableView.isHidden
+        print(selectedDays.count)
+        if selectedDays.count != 0 {
+            let joinedDays = selectedDays.joined(separator: ", ")
+            repeatLabel.text = "Every " + joinedDays
+            if selectedDays.count == 7 {
+                repeatLabel.text = "Every Day"
+            }
+        }
+
+        else {
+            repeatLabel.text = "Does not repeat"
+        }
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -99,14 +128,27 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
         // Set up constraints to center it in the view
         NSLayoutConstraint.activate([
-            repeatTableView.centerXAnchor.constraint(equalTo: repeatButton.centerXAnchor),
-            repeatTableView.topAnchor.constraint(equalTo: repeatButton.bottomAnchor),
+            repeatTableView.centerXAnchor.constraint(equalTo: repeatLabel.centerXAnchor),
+            repeatTableView.topAnchor.constraint(equalTo: repeatLabel.bottomAnchor),
             repeatTableView.widthAnchor.constraint(equalToConstant: 160),
             repeatTableView.heightAnchor.constraint(equalToConstant: 200)
         ])
         repeatTableView.isHidden = true
     }
 
+    func addHorizontalLine(belowView viewAbove: UIView, spacing: CGFloat = 10.0) {
+        let lineView = UIView()
+        lineView.backgroundColor = UIColor.white // Set the line color as needed
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(lineView)
+
+        NSLayoutConstraint.activate([
+            lineView.topAnchor.constraint(equalTo: viewAbove.bottomAnchor, constant: spacing),
+            lineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            lineView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            lineView.heightAnchor.constraint(equalToConstant: 1.0) // 1px height
+        ])
+    }
 
     func setupConstraints() {
         // Cancel button constraints
@@ -145,12 +187,20 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             location.heightAnchor.constraint(equalToConstant: 50)
         ])
         
+        typePicker.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            typePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            typePicker.topAnchor.constraint(equalTo: location.bottomAnchor, constant: 20),
+            typePicker.widthAnchor.constraint(equalToConstant: 300),
+            typePicker.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
         // Date and Time constraints
         dateAndTime.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             dateAndTime.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             //dateAndTime.widthAnchor.constraint(equalToConstant: 229),
-            dateAndTime.topAnchor.constraint(equalTo: location.bottomAnchor, constant: 100),
+            dateAndTime.topAnchor.constraint(equalTo: typePicker.bottomAnchor, constant: 30),
             dateAndTime.heightAnchor.constraint(equalToConstant: 40)
         ])
         
@@ -165,22 +215,16 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
         // Repeat Label constraints
         repeatLabel.translatesAutoresizingMaskIntoConstraints = false
+        repeatLabel.text = "Does not repeat"
         NSLayoutConstraint.activate([
             repeatLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
             repeatLabel.topAnchor.constraint(equalTo: endTime.bottomAnchor, constant: 30),
-            repeatLabel.widthAnchor.constraint(equalToConstant: 100),
+            repeatLabel.widthAnchor.constraint(equalToConstant: 300),
             repeatLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         // Repeat Button constraints
-        repeatButton.translatesAutoresizingMaskIntoConstraints = false
-        repeatButton.setTitle("", for: .normal)
-        NSLayoutConstraint.activate([
-            repeatButton.centerYAnchor.constraint(equalTo: repeatLabel.centerYAnchor),
-            repeatButton.leadingAnchor.constraint(equalTo: repeatLabel.trailingAnchor, constant: -20),
-            repeatButton.widthAnchor.constraint(equalToConstant: 50),
-            repeatButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
+
         descriptionText.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             descriptionText.topAnchor.constraint(equalTo: repeatLabel.bottomAnchor, constant: 50),
@@ -261,9 +305,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         self.dismiss(animated: true)
     }
  
-    @IBAction func repeatButton(_ sender: Any) {
-        repeatTableView.isHidden = !repeatTableView.isHidden
-    }
+
     @IBAction func createTapped(_ sender: Any) {
     guard let eventTitle = eventTitle.text,
               let location = location.text,

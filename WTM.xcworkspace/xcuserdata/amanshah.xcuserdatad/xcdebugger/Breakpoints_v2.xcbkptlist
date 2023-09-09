@@ -262,10 +262,10 @@
             filePath = "WTM/CreateEventViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "selectedDays"
-            landmarkType = "24">
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "CreateEventViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

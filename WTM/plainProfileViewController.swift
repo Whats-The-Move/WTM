@@ -13,18 +13,31 @@ import FirebaseStorage
 
 class plainProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBOutlet weak var profileLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     var profBool = true
+    var editLabel: UILabel!
     @IBOutlet weak var profilePic: UIImageView!
     //@IBOutlet weak var backButton: UIImageView!
     @IBOutlet weak var badgesButton: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
+    
+    
+    @IBOutlet weak var myFriendsButton: UIButton!
+    
+    @IBOutlet weak var addFriendsButton: UIButton!
     @IBOutlet weak var friendNotification: UIButton!
+    
+    @IBOutlet weak var changeName: UIButton!
+    @IBOutlet weak var changeUsername: UIButton!
+    @IBOutlet weak var privacy: UIButton!
+    @IBOutlet weak var logOutButton: UIButton!
+    @IBOutlet weak var deleteAcct: UIButton!
     let imagePickerController = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupConstraints()
         imagePickerController.delegate = self
         
         profilePic.isUserInteractionEnabled = true
@@ -113,7 +126,80 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
 //        backButton.isUserInteractionEnabled = true
 //        backButton.addGestureRecognizer(tapGestureBack)
     }
-    
+    func setupConstraints() {
+        profilePic.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        badgesButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        editLabel = UILabel()
+        editLabel.text = "edit"
+        editLabel.font = UIFont(name: "Futura-Medium", size: 16)
+        editLabel.textColor = UIColor.white
+        editLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(editLabel)
+        NSLayoutConstraint.activate([
+            // profilePic constraints
+
+
+            profilePic.widthAnchor.constraint(equalToConstant: 180),
+            profilePic.heightAnchor.constraint(equalToConstant: 180),
+            profilePic.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profilePic.topAnchor.constraint(equalTo: view.topAnchor, constant: 105),
+            profileLabel.widthAnchor.constraint(equalToConstant: 180),
+            profileLabel.heightAnchor.constraint(equalToConstant: 50),
+            profileLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 35),
+            // nameLabel constraints
+            nameLabel.topAnchor.constraint(equalTo: profilePic.bottomAnchor, constant: 20),
+            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            // usernameLabel constraints
+            usernameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 15),
+            usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            // badgesButton constraints
+            badgesButton.widthAnchor.constraint(equalToConstant: 35),
+            badgesButton.heightAnchor.constraint(equalToConstant: 35),
+            badgesButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            badgesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            editLabel.centerXAnchor.constraint(equalTo: profilePic.centerXAnchor, constant: 24),
+            editLabel.centerYAnchor.constraint(equalTo: profilePic.centerYAnchor),
+            editLabel.widthAnchor.constraint(equalToConstant: 80),
+            editLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            friendNotification.centerYAnchor.constraint(equalTo: addFriendsButton.centerYAnchor),
+            friendNotification.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -90),
+            friendNotification.widthAnchor.constraint(equalToConstant: 35),
+            friendNotification.heightAnchor.constraint(equalToConstant: 35)
+
+            
+        
+        ])
+        let buttons: [UIView] = [myFriendsButton, addFriendsButton, changeName, changeUsername, privacy, logOutButton, deleteAcct]
+
+        // Create a vertical stack view
+        let stackView = UIStackView(arrangedSubviews: buttons)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        view.addSubview(stackView)
+
+        // Set width constraint for the stack view (400 points, centered)
+        stackView.widthAnchor.constraint(equalToConstant: 400).isActive = true
+        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+
+        // Top constraint for the stack view (50 points above centerY and 20 points from the bottom)
+        stackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 30).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+
+
+    }
+
+
+
     override func viewDidAppear(_ animated: Bool) {
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
