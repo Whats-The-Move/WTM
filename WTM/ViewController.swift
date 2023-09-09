@@ -120,6 +120,8 @@ class ViewController: UIViewController {
                     } else {
                       // No document exists with the given email, make new account
                       print("Document does not exist")
+                        UserDefaults.standard.set(false, forKey: "partyAccount")
+
                         UserDefaults.standard.set(true, forKey: "authenticated")
                         strongSelf.showCreateAccount(email: email, password: password)
                         
@@ -144,7 +146,8 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            
+            UserDefaults.standard.set(false, forKey: "partyAccount")
+
             UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")

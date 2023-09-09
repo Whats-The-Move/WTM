@@ -7,11 +7,12 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var tableView: UITableView!
+    var myEventsButton: UIButton!
+
     var noDealsLabel: UILabel!
 
     var selectedDate = Date()
     var totalSquares = [Date]()
-    
     var eventsList: [Event] = []
     
     override func viewDidLoad() {
@@ -20,6 +21,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
         setWeekView()
         fetchEventData()
         setupNoDealsLabel()
+        setupMyEventsButton()
         print("viewdidload")
     }
     
@@ -79,6 +81,54 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
 
 
 
+    func setupMyEventsButton() {
+        // Create the button
+        myEventsButton = UIButton()
+        myEventsButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set button title and style
+        myEventsButton.setTitle("My Events", for: .normal)
+        myEventsButton.titleLabel?.font = UIFont(name: "Futura-Medium", size: 30)
+        myEventsButton.backgroundColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+        myEventsButton.setTitleColor(.white, for: .normal)
+        myEventsButton.layer.cornerRadius = 10
+        myEventsButton.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        // Add button target
+        myEventsButton.addTarget(self, action: #selector(myEventsButtonTapped), for: .touchUpInside)
+        
+        // Add button to the view
+        view.addSubview(myEventsButton)
+        
+        // Define constraints
+        NSLayoutConstraint.activate([
+            myEventsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            myEventsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            myEventsButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            myEventsButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+        // Retrieve the value of partyAccount from UserDefaults
+        let partyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
+        myEventsButton.isHidden = true
+        if partyAccount {
+    
+            print("party account true: partyaccount is:")
+            print(partyAccount)
+            myEventsButton.isHidden = false
+        }
+
+    }
+
+    @objc func myEventsButtonTapped() {
+        // Handle the button tap event here, e.g., show the "createEvents" view controller
+        print("my events clicked")
+
+        // Replace "YourStoryboardName" with the actual name of your storyboard
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let createEvent = storyboard.instantiateViewController(withIdentifier: "CreateEvent") as! CreateEventViewController
+        present(createEvent, animated: true, completion: nil)
+    }
+    
 
     
     func setCellsView() {

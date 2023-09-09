@@ -502,43 +502,39 @@ class CustomCellClass: UITableViewCell {
     func createImageView(party: Party) -> UIImageView {
         
         print("printing dbName \(dbName)")
+        plusMoreBkgd.isHidden = true
+        barImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(barImageView)
+        barImageView.layer.cornerRadius = 8.0
+        barImageView.clipsToBounds = true
+        var imageName = ""
         if dbName == "Parties" {
-            plusMoreBkgd.isHidden = true
-            barImageView.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview(barImageView)
-
-            // Add constraints
-
-
-            // Apply rounded edges
-            barImageView.layer.cornerRadius = 8.0
-            barImageView.clipsToBounds = true
-
-            // Get the imageURL from Firebase
             print(party.name)
-            barImageView.image = UIImage(named: party.name)
-            return barImageView
-
+            imageName = party.name
         }
         else {
-            plusMoreBkgd.isHidden = true
-            barImageView.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview(barImageView)
-
-            // Add constraints
-
-
-            // Apply rounded edges
-            barImageView.layer.cornerRadius = 8.0
-            barImageView.clipsToBounds = true
-
-            // Get the imageURL from Firebase
             print(party.name)
             let berkParty = "Berkeley_" + party.name
-            barImageView.image = UIImage(named: berkParty)
-            return barImageView
-
+            imageName = berkParty + ".jpg"
         }
+        
+        if let image = UIImage(named: imageName) {
+            barImageView.image = image
+            print("pulling from assets")
+        } else {
+            print("pulling from firebase")
+            let databaseRef = Database.database().reference().child(dbName).child(party.name)
+            databaseRef.observeSingleEvent(of: .value, with: { snapshot in
+                if let data = snapshot.value as? [String: Any],
+                   let imageURLString = data["profileURL"] as? String
+                    {
+                    // Call your loadImage function here
+                    self.loadImage(from: imageURLString, to: self.barImageView)
+                }
+            })
+        }
+
+        return barImageView
     }
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
