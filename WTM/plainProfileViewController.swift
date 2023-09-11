@@ -21,8 +21,8 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     //@IBOutlet weak var backButton: UIImageView!
     @IBOutlet weak var badgesButton: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
-    
-    
+    var barStats: UILabel!
+    var hours: UILabel!
     @IBOutlet weak var myFriendsButton: UIButton!
     
     @IBOutlet weak var addFriendsButton: UIButton!
@@ -37,94 +37,102 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupConstraints()
-        imagePickerController.delegate = self
-        
-        profilePic.isUserInteractionEnabled = true
-        let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(profilePicTapped))
-        profilePic.addGestureRecognizer(pictapGesture)
-        profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
-        profilePic.clipsToBounds = true
-        profilePic.contentMode = .scaleAspectFill
-        
-        nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.numberOfLines = 1
-        nameLabel.sizeToFit()
-        usernameLabel.adjustsFontSizeToFitWidth = true
-        usernameLabel.numberOfLines = 1
-        
-        if let uid = Auth.auth().currentUser?.uid {
+        let isPartyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
+        if isPartyAccount {
+            showBarProfile()
+        }
+        else{//show regular acct
+            setupConstraints()
+            setupStack()
+            imagePickerController.delegate = self
+            
+            profilePic.isUserInteractionEnabled = true
+            let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(profilePicTapped))
+            profilePic.addGestureRecognizer(pictapGesture)
+            profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
+            profilePic.clipsToBounds = true
+            profilePic.contentMode = .scaleAspectFill
+            
+            nameLabel.adjustsFontSizeToFitWidth = true
+            nameLabel.numberOfLines = 1
+            nameLabel.sizeToFit()
+            usernameLabel.adjustsFontSizeToFitWidth = true
+            usernameLabel.numberOfLines = 1
+            
+            if let uid = Auth.auth().currentUser?.uid {
+                let userRef = Firestore.firestore().collection("users").document(uid)
+                
+                userRef.getDocument { [weak self] (document, error) in
+                    guard let self = self, let document = document, document.exists else {
+                        // Handle error or nil self
+                        print("doesnt exist")
+                        return
+                    }
+                    
+                    if let uid = Auth.auth().currentUser?.uid {
+                        let userRef = Firestore.firestore().collection("users").document(uid)
+                        
+                        userRef.getDocument { (document, error) in
+                            if let document = document, document.exists {
+                                if let data = document.data(), let username = data["username"] as? String,
+                                   let data = document.data(), let name = data["name"] as? String {
+                                    // Access the username value
+                                    self.nameLabel.text = name
+                                    self.usernameLabel.text = username
+                                }
+                            }
+                            
+                        }
+                    }
+
+                    
+                    if let data = document.data(),
+                       let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
+                        // Access the username and name values
+                        if pendingFriendRequests.isEmpty{
+                            self.friendNotification.isHidden = true
+                        } else{
+                            self.friendNotification.isHidden = false
+                            self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                        }
+                    } else {
+                        self.friendNotification.isHidden = true
+                    }
+                }
+            }
+
+            guard let uid = Auth.auth().currentUser?.uid else {
+                return
+            }
             let userRef = Firestore.firestore().collection("users").document(uid)
             
             userRef.getDocument { [weak self] (document, error) in
                 guard let self = self, let document = document, document.exists else {
                     // Handle error or nil self
-                    print("doesnt exist")
                     return
                 }
-                
-                if let uid = Auth.auth().currentUser?.uid {
-                    let userRef = Firestore.firestore().collection("users").document(uid)
-                    
-                    userRef.getDocument { (document, error) in
-                        if let document = document, document.exists {
-                            if let data = document.data(), let username = data["username"] as? String,
-                               let data = document.data(), let name = data["name"] as? String {
-                                // Access the username value
-                                self.nameLabel.text = name
-                                self.usernameLabel.text = username
-                            }
-                        }
-                        
-                    }
-                }
 
-                
-                if let data = document.data(),
-                   let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
-                    // Access the username and name values
-                    if pendingFriendRequests.isEmpty{
-                        self.friendNotification.isHidden = true
-                    } else{
-                        self.friendNotification.isHidden = false
-                        self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
-                    }
+                if let imageURLString = document.data()?["profilePic"] as? String,
+                   let imageURL = URL(string: imageURLString) {
+                    // Load the profile picture using Kingfisher
+                    self.profilePic.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"))
                 } else {
-                    self.friendNotification.isHidden = true
+                    let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
+                    if let backupImageURL = URL(string: backupProfile) {
+                        // Load the backup profile picture using Kingfisher
+                        self.profilePic.kf.setImage(with: backupImageURL, placeholder: UIImage(named: "placeholder_image"))
+                    }
                 }
             }
+            
+            //let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
+            let tapGestureBadge = UITapGestureRecognizer(target: self, action: #selector(badgeButtonTapped))
+            badgesButton.isUserInteractionEnabled = true
+            badgesButton.addGestureRecognizer(tapGestureBadge)
+    //        backButton.isUserInteractionEnabled = true
+    //        backButton.addGestureRecognizer(tapGestureBack)
         }
 
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-        }
-        let userRef = Firestore.firestore().collection("users").document(uid)
-        
-        userRef.getDocument { [weak self] (document, error) in
-            guard let self = self, let document = document, document.exists else {
-                // Handle error or nil self
-                return
-            }
-
-            if let imageURLString = document.data()?["profilePic"] as? String,
-               let imageURL = URL(string: imageURLString) {
-                // Load the profile picture using Kingfisher
-                self.profilePic.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"))
-            } else {
-                let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
-                if let backupImageURL = URL(string: backupProfile) {
-                    // Load the backup profile picture using Kingfisher
-                    self.profilePic.kf.setImage(with: backupImageURL, placeholder: UIImage(named: "placeholder_image"))
-                }
-            }
-        }
-        
-        //let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
-        let tapGestureBadge = UITapGestureRecognizer(target: self, action: #selector(badgeButtonTapped))
-        badgesButton.isUserInteractionEnabled = true
-        badgesButton.addGestureRecognizer(tapGestureBadge)
-//        backButton.isUserInteractionEnabled = true
-//        backButton.addGestureRecognizer(tapGestureBack)
     }
     func setupConstraints() {
         profilePic.translatesAutoresizingMaskIntoConstraints = false
@@ -177,6 +185,11 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             
         
         ])
+
+
+
+    }
+    func setupStack () {
         let buttons: [UIView] = [myFriendsButton, addFriendsButton, changeName, changeUsername, privacy, logOutButton, deleteAcct]
 
         // Create a vertical stack view
@@ -194,8 +207,6 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         // Top constraint for the stack view (50 points above centerY and 20 points from the bottom)
         stackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 30).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-
-
     }
 
 
@@ -542,6 +553,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
                 
             } else {
                 // Camera permission not granted, show an alert or take appropriate action
+                print("oh no its gonna crash")
                 let alertController = UIAlertController(title: "Camera Access Denied", message: "Please allow access to the camera in Settings to use this feature.", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
                 alertController.addAction(cancelAction)
@@ -553,6 +565,19 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             
             //THIS MEANS YOU ARE EDITING PROFILE IMAGE
+        let isPartyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
+        var storageBin = ""
+        var collectionName = ""
+        if isPartyAccount {
+            collectionName = "barUsers"
+            storageBin = "partyPics/"
+        }
+        else{
+            collectionName = "users"
+            storageBin = "profilePics/"
+        }
+        
+
             var uid = ""
             if let currentUser = Auth.auth().currentUser {
                 // User is signed in
@@ -568,7 +593,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
                 profilePic.image = selectedImage
                 
                 // Upload the image to Firebase Storage
-                let storageRef = Storage.storage().reference().child("profilePics/\(String(describing: uid)).jpg")
+                let storageRef = Storage.storage().reference().child(storageBin + "\(String(describing: uid)).jpg")
                 
                 guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else {
                     return
@@ -595,7 +620,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
                             // User is signed in
                             let uid = currentUser.uid
                             
-                            let userRef = Firestore.firestore().collection("users").document(uid)
+                            let userRef = Firestore.firestore().collection(collectionName).document(uid)
                             let data: [String: Any] = [
                                 "profilePic": downloadURL.absoluteString,
                             ]
@@ -628,6 +653,185 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         newViewController.modalPresentationStyle = .fullScreen
         present(newViewController, animated: false, completion: nil)
     }
+    func showBarProfile () {
+
+        setupConstraints()
+        setupStackBarAcct()
+
+        myFriendsButton.isHidden = true
+        addFriendsButton.isHidden = true
+        friendNotification.isHidden = true
+        badgesButton.isHidden = true
+        usernameLabel.isHidden = true
+        changeName.isHidden = true
+        changeUsername.isHidden = true
+        imagePickerController.delegate = self
+        
+        profilePic.isUserInteractionEnabled = true
+        let pictapGesture = UITapGestureRecognizer(target: self, action: #selector(profilePicTapped))
+        profilePic.addGestureRecognizer(pictapGesture)
+        profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
+        profilePic.clipsToBounds = true
+        profilePic.contentMode = .scaleAspectFill
+        
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.numberOfLines = 1
+        nameLabel.sizeToFit()
+        usernameLabel.adjustsFontSizeToFitWidth = true
+        usernameLabel.numberOfLines = 1
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            print("printing uid" + uid)
+            
+            let userRef = Firestore.firestore().collection("barUsers").document(uid)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let data = document.data(), let name = data["venueName"] as? String {
+                        // Access the username value
+                        print("i found the venue name" + name )
+                        self.nameLabel.text = name
+                    }
+                    if let imageURLString = document.data()?["profilePic"] as? String,
+                       let imageURL = URL(string: imageURLString) {
+                        // Load the profile picture using Kingfisher
+                        self.profilePic.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"))
+                    } else {
+                        let backupProfile = "https://via.placeholder.com/150/CCCCCC/FFFFFF?text="
+                        if let backupImageURL = URL(string: backupProfile) {
+                            // Load the backup profile picture using Kingfisher
+                            self.profilePic.kf.setImage(with: backupImageURL, placeholder: UIImage(named: "placeholder_image"))
+                        }
+                    }
+                }
+
+                
+            }
+      
+
+        }
+
+
+        
+        //let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
+
+    }
+    func setupHours() -> UILabel { //MAYBE I RETURN HOURS LABEL HERE SO I CAN PUT IT INTO BARSTACK????????
+        hours = UILabel()
+        hours.numberOfLines = 0
+        hours.font = UIFont(name: "Futura-Medium", size: 20)
+        hours.textColor = UIColor.white
+        view.addSubview(hours)
+        print("in hours setup")
+        // Add a tap gesture recognizer to the label
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hoursLabelTapped))
+        hours.isUserInteractionEnabled = true
+        hours.addGestureRecognizer(tapGesture)
+
+        // Load hours from Firestore and set the label text
+        if let currentUserUID = Auth.auth().currentUser?.uid {
+            let db = Firestore.firestore()
+            let userRef = db.collection("barUsers").document(currentUserUID)
+
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let hoursText = document["hours"] as? String {
+                        DispatchQueue.main.async {
+                            self.hours.text = "Hours: " + hoursText
+                        }
+                    }
+                } else {
+                    print("Document does not exist in Firestore")
+                }
+            }
+        }
+        /*NSLayoutConstraint.activate([
+            // profilePic constraints
+
+
+            hours.widthAnchor.constraint(equalToConstant: 200),
+            hours.heightAnchor.constraint(equalToConstant: 80 ),
+            hours.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            hours.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 30)
+
+ 
+        
+        ])
+        */
+        return hours
+    }
+
+
+    @objc func hoursLabelTapped() {
+        print("hours label tapped")
+        // Create and show an alert when the label is tapped
+        let alert = UIAlertController(title: "Enter Hours", message: "Example: M-F 5pm-11pm, S-S 11am-2am", preferredStyle: .alert)
+        
+        // Add a text field to the alert for user input
+        alert.addTextField { (textField) in
+            textField.placeholder = "Enter hours here"
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { (_) in
+            // Handle the user's input here, e.g., get the entered hours from the text field
+            if let textField = alert.textFields?.first, let enteredHours = textField.text {
+                // Update the label with the entered hours
+                self.hours.text = "Hours: " + enteredHours
+
+                // Update the Firestore database with the entered hours
+                if let currentUserUID = Auth.auth().currentUser?.uid {
+                    let db = Firestore.firestore()
+                    let userRef = db.collection("barUsers").document(currentUserUID)
+                    
+                    // Merge the changes to avoid overwriting other fields
+                    userRef.setData(["hours": enteredHours], merge: true) { error in
+                        if let error = error {
+                            print("Error updating Firestore: \(error)")
+                        } else {
+                            print("Hours updated successfully in Firestore")
+                        }
+                    }
+                }
+            }
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(submitAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+
+
+    func setupStackBarAcct () {
+        barStats = UILabel()
+        barStats.text = "Stats: Coming Soon!"
+        barStats.numberOfLines = 0
+        barStats.font = UIFont(name: "Futura-Medium", size: 32)
+        barStats.textColor = UIColor.white
+
+        view.addSubview(barStats)
+
+        let hoursLabel = setupHours()
+        let buttons: [UIView] = [hoursLabel, barStats, myFriendsButton, addFriendsButton, changeName, changeUsername, privacy, logOutButton, deleteAcct]
+
+        // Create a vertical stack view
+        let stackView = UIStackView(arrangedSubviews: buttons)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        view.addSubview(stackView)
+
+        // Set width constraint for the stack view (400 points, centered)
+        stackView.widthAnchor.constraint(equalToConstant: 400).isActive = true
+        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+
+        // Top constraint for the stack view (50 points above centerY and 20 points from the bottom)
+        stackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 60).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+    }
+
 
     /*
     // MARK: - Navigation
