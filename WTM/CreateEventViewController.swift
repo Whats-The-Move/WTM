@@ -9,7 +9,24 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate {
+class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        typeOptions.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return typeOptions[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.typeChoice = typeOptions[row]
+        //here's where you do the code for firebase
+        // Update your UI or perform actions based on the selected option
+    }
+
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return daysOfWeek.count
     }
@@ -32,13 +49,24 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         }
         tableView.reloadRows(at: [indexPath], with: .none)
     }
-    
-    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Description" {
+            textView.text = ""
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Description"
+        }
+    }
+
+
+    var typeOptions = ["drink discount", "free drink", "event alert"]
     @IBOutlet weak var cancel: UIButton!
     @IBOutlet weak var save: UIButton!
     
     @IBOutlet weak var eventTitle: UITextField!
-    
+    var typeChoice = "drink discount"
     @IBOutlet weak var typePicker: UIPickerView!
     @IBOutlet weak var dateAndTime: UIDatePicker!
     @IBOutlet weak var endTime: UIDatePicker!
@@ -59,6 +87,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         super.viewDidLoad()
         setupConstraints()
         setupTableView()
+        setupTypePicker()
         addHorizontalLine(belowView: eventTitle, spacing: 10.0)
 
         addHorizontalLine(belowView: repeatLabel, spacing: 10.0)
@@ -67,7 +96,9 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         addHorizontalLine(belowView: typePicker, spacing: 10.0)
 
         addHorizontalLine(belowView: endTime, spacing: 10.0)
-        
+        if let futuraBig = UIFont(name: "Futura-Medium", size: 40) {
+            eventTitle.font = futuraBig
+        }
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
         repeatLabel.isUserInteractionEnabled = true
         repeatLabel.addGestureRecognizer(tapGestureRecognizer)
@@ -112,6 +143,12 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    func setupTypePicker(){
+        //add the options for the type picker here
+        typePicker.dataSource = self
+        typePicker.delegate = self
+
     }
     func setupTableView() {
         // Create and configure the tableView
@@ -277,6 +314,20 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         //descriptionText.text = "Description/details"
         descriptionText.textAlignment = .left
         descriptionText.font = UIFont.systemFont(ofSize: 16)
+        // Create a bold font
+
+        if let futuraBold = UIFont(name: "Futura-Bold", size: 18) {
+            save.titleLabel?.font = futuraBold
+
+        }
+        if let futuraRegular = UIFont(name: "Futura-Medium", size: 18) {
+            cancel.titleLabel?.font = futuraRegular
+            location.font = futuraRegular
+            repeatLabel.font = futuraRegular
+            descriptionText.font = futuraRegular
+        }
+
+
         descriptionText.layer.cornerRadius = 8
         dateAndTime.layer.cornerRadius = 8
         
@@ -306,16 +357,27 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     }
  
 
-    @IBAction func createTapped(_ sender: Any) {
+    @IBAction func saveTapped(_ sender: Any) {
     guard let eventTitle = eventTitle.text,
               let location = location.text,
               let eventDescription = descriptionText.text
-            else {
-            return
+        else {
             print("didn't fill it")
+            return
+            
         }
-        let dateTime = dateAndTime.date
+        var dateTime = dateAndTime.date
+        var endTime = endTime.date
 
+        // Create a DateFormatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+
+        // Format the date
+        let dateOnly = dateFormatter.string(from: dateTime)
+        
+        let unixStart = dateTime.timeIntervalSince1970
+        let unixEnd = dateTime.timeIntervalSince1970
         let currentUserUID = Auth.auth().currentUser?.uid ?? ""
         
         // Get the invitee UIDs as an array
@@ -323,31 +385,50 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         inviteeUIDs.append(currentUserUID)
         
         // Create a reference to the "Privates" node in Firebase Realtime Database
-        let privatesRef = Database.database().reference().child("Events1")
-        
-        // Create a new child node under "Privates" and generate a unique key
-        let newEventRef = privatesRef.childByAutoId()
-        
-        // Create a dictionary with the event information
-        let eventInfo: [String: Any] = [
-            "event": eventTitle,
-            "dateTime": dateTime.timeIntervalSince1970,
-            "location": location,
-            "description": eventDescription,
-            "invitees": inviteeUIDs,
-            "isGoing": [currentUserUID],
-            "creator": currentUserUID
-        ]
-        
-        // Set the event information under the new child node
-        newEventRef.setValue(eventInfo) { error, _ in
-            if let error = error {
-                print("Error creating event: \(error.localizedDescription)")
+        let privatesRef = Database.database().reference().child("EventsTest")
+        let db = Firestore.firestore()
+        let userRef = db.collection("barUsers").document(currentUserUID)
+        var placeName = "testParty"
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let venueName = document["venueName"] as? String {
+                    // Successfully fetched the venueName
+                    print("Venue Name: \(venueName)")
+                    placeName = venueName
+                    let newEventRef = privatesRef.child(dateOnly).child(placeName)
+                    
+                    // Create a dictionary with the event information
+                    let eventInfo: [String: Any] = [
+                        "title": eventTitle,
+                        "start": unixStart,
+                        "end": unixEnd,
+                        "location": location,
+                        "description": eventDescription,
+                        "creator": currentUserUID,
+                        "eventType": self.typeChoice,
+                        "repitition": self.selectedDays ?? "none"
+                    ]
+                    
+                    // Set the event information under the new child node
+                    newEventRef.setValue(eventInfo) { error, _ in
+                        if let error = error {
+                            print("Error creating event: \(error.localizedDescription)")
+                        } else {
+                            print("Event created successfully!")
+                            // TODO: Perform any additional actions after event creation
+                        }
+                    }
+                } else {
+                    // The "venueName" field does not exist or is not a String
+                    print("Venue Name not found or is not a String")
+                }
             } else {
-                print("Event created successfully!")
-                // TODO: Perform any additional actions after event creation
+                // Document does not exist or there was an error
+                print("Document does not exist or an error occurred")
             }
         }
+        // Create a new child node under "Privates" and generate a unique key
+
         
         self.eventTitle.text = ""
         self.location.text = ""
