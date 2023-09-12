@@ -61,7 +61,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     }
 
 
-    var typeOptions = ["drink discount", "free drink", "event alert"]
+    var typeOptions = ["Drink Discount", "Free Drink", "Event Alert", "Other"]
     @IBOutlet weak var cancel: UIButton!
     @IBOutlet weak var save: UIButton!
     
@@ -88,14 +88,17 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         setupConstraints()
         setupTableView()
         setupTypePicker()
+
         addHorizontalLine(belowView: eventTitle, spacing: 10.0)
 
-        addHorizontalLine(belowView: repeatLabel, spacing: 10.0)
+        addHorizontalLine(belowView: repeatLabel, spacing: 14.0)
         
         addHorizontalLine(belowView: location, spacing: 10.0)
         addHorizontalLine(belowView: typePicker, spacing: 10.0)
 
-        addHorizontalLine(belowView: endTime, spacing: 10.0)
+        addHorizontalLine(belowView: endTime, spacing: 13.0)
+        addHorizontalLine(belowView: descriptionText, spacing: 13.0)
+
         if let futuraBig = UIFont(name: "Futura-Medium", size: 40) {
             eventTitle.font = futuraBig
         }
@@ -175,7 +178,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
     func addHorizontalLine(belowView viewAbove: UIView, spacing: CGFloat = 10.0) {
         let lineView = UIView()
-        lineView.backgroundColor = UIColor.white // Set the line color as needed
+        lineView.backgroundColor = UIColor.gray // Set the line color as needed
         lineView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(lineView)
 
@@ -229,7 +232,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             typePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             typePicker.topAnchor.constraint(equalTo: location.bottomAnchor, constant: 20),
             typePicker.widthAnchor.constraint(equalToConstant: 300),
-            typePicker.heightAnchor.constraint(equalToConstant: 50)
+            typePicker.heightAnchor.constraint(equalToConstant: 80)
         ])
         
         // Date and Time constraints
@@ -264,10 +267,10 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
         descriptionText.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            descriptionText.topAnchor.constraint(equalTo: repeatLabel.bottomAnchor, constant: 50),
+            descriptionText.topAnchor.constraint(equalTo: repeatLabel.bottomAnchor, constant: 25),
             descriptionText.leadingAnchor.constraint(equalTo: repeatLabel.leadingAnchor),
             descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            descriptionText.heightAnchor.constraint(equalToConstant: 100)
+            descriptionText.heightAnchor.constraint(equalToConstant: 120)
         ])
     }
 
@@ -331,21 +334,21 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         descriptionText.layer.cornerRadius = 8
         dateAndTime.layer.cornerRadius = 8
         
-        let pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
-
+        var pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+        pinkColor = UIColor.black
         // Create a UITextField
 
 
         // Create an NSAttributedString with the custom pink color for the placeholder text
         let pinkPlaceholderText = NSAttributedString(string: "Event Title", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
         eventTitle.attributedPlaceholder = pinkPlaceholderText
-        let pinkPlaceholderTextLocation = NSAttributedString(string: "address", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
+        let pinkPlaceholderTextLocation = NSAttributedString(string: "Address", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
         location.attributedPlaceholder = pinkPlaceholderTextLocation
-        dateAndTime.setValue(UIColor.white, forKeyPath: "textColor")
+        //dateAndTime.setValue(UIColor.white, forKeyPath: "textColor")
 
         // Set the background color to gray
-        dateAndTime.backgroundColor = pinkColor
-        endTime.backgroundColor = pinkColor
+        //dateAndTime.backgroundColor = pinkColor
+        //endTime.backgroundColor = pinkColor
         
         eventTitle.backgroundColor = .clear
         location.backgroundColor = .clear
@@ -358,13 +361,22 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
  
 
     @IBAction func saveTapped(_ sender: Any) {
-    guard let eventTitle = eventTitle.text,
+        guard let eventTitle = eventTitle.text,
               let location = location.text,
               let eventDescription = descriptionText.text
         else {
             print("didn't fill it")
             return
             
+        }
+        if  eventTitle == "" || location == "" || eventDescription == "Description" {
+            let alertController = UIAlertController(title: "Missing Information", message: "One or more fields are empty. Please fill out all required fields.", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            
+            present(alertController, animated: true, completion: nil)
+            return
         }
         var dateTime = dateAndTime.date
         var endTime = endTime.date
