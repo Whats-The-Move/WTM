@@ -437,10 +437,14 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
         // Display a message
         let alertController = UIAlertController(title: "Congratulations", message: "You have created an event!", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            print("ok")
+            self.dismiss(animated: true)
+
+        }
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
-        
+
     }
     /*
     @objc func inviteesTapped() {

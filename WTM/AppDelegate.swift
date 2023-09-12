@@ -67,13 +67,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         var key = "LocationOptionsKey"
         
         if defaults.object(forKey: key) == nil {
-            let defaultLocationOptions = ["Champaign, IL", "Berkeley, CA"]
+            let defaultLocationOptions = ["Champaign, IL", "Berkeley, CA", "Chicago, IL"]
             defaults.set(defaultLocationOptions, forKey: key)
         }
         key = "PictureOptionsKey"
         
         if defaults.object(forKey: key) == nil {
-            let defaultPictureOptions = ["illinoisLogo", "calLogo"]
+            let defaultPictureOptions = ["illinoisLogo", "calLogo", "chicago_flag"]
             defaults.set(defaultPictureOptions, forKey: key)
         }
         
@@ -106,11 +106,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             let dbName = "BerkeleyParties"
                             print("User's email ends with @berkeley.edu. Setting dbName to", dbName)
                           
-
-                            let defaultPictureOptions = [ "calLogo", "illinoisLogo"]
+                            //cupertino
+                            let defaultPictureOptions = [ "calLogo", "illinoisLogo", "chicago_flag"]
                             defaults.set(defaultPictureOptions, forKey: "PictureOptionsKey")
 
-                            let defaultLocationOptions = ["Berkeley, CA", "Champaign, IL"]
+                            let defaultLocationOptions = ["Berkeley, CA", "Champaign, IL", "Chicago, IL"]
                             defaults.set(defaultLocationOptions, forKey: "LocationOptionsKey")
                             
                             // Now you can use dbName in your further logic.
