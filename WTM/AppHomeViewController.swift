@@ -60,23 +60,30 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
             partyList.register(FirstCustomCellClass.self, forCellReuseIdentifier: "firstPartyCell")
             partyList.register(CustomCellClass.self, forCellReuseIdentifier: "partyCell")
             // Add left and right margins of 16 points each
-            let leftMargin: CGFloat = 16
-            let rightMargin: CGFloat = 16
+            
 
             // Set the content inset to add the margins
             //partyList.contentInset = UIEdgeInsets(top: 0, left: leftMargin, bottom: 0, right: rightMargin)
 
         }
     }
+    let locationTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
     @IBOutlet weak var searchBar: UISearchBar!
     var partyArray = [String]()
     var privatePartyArray = [String]()
     var searching = false
-
     @IBOutlet weak var friendNotification: UIButton!
     @IBOutlet weak var profileUIImage: UIImageView!
     @IBOutlet var locationLabel: UILabel!
-    
+    // Retrieve values from UserDefaults without optional binding
+    var locations = UserDefaults.standard.array(forKey: "LocationOptionsKey") as? [String] ?? []
+    var pictures = UserDefaults.standard.array(forKey: "PictureOptionsKey") as? [String] ?? []
+
     @IBOutlet var locationPicture: UIImageView!
     
     var searchParty = [String]()
@@ -124,8 +131,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
         setupPullToRefresh()
         setDB()
-
+        //cupertino
         setupDropdownView()
+        setupDropdownTableView()
         dropdownView.isHidden = true
         if let locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
             locationLabel.text = locationOptions[0]
@@ -218,17 +226,23 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
         calculateFriendsAttending()
     }
+    //cupertino
     func setDB (){
         if var locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
 
             if locationOptions[0] == "Champaign, IL" {
                 dbName = "Parties"
             }
-            else{
+            else if locationOptions[0] == "Chicago, IL" {
+                dbName = "ChicagoParties"
+                
+            }
+            else {
                 dbName = "BerkeleyParties"
             }
         }
     }
+    //cupertino
     func setupDropdownView() {
         // Create and style dropdownView
         dropdownView = UIView()
@@ -285,7 +299,7 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dropdownViewTapped))
         dropdownView.addGestureRecognizer(tapGesture)
     }
-    
+    //cupertino
     @objc func dropdownViewTapped() {
         // Toggle locationIndex
         if var locationOptions = defaults.array(forKey: "LocationOptionsKey") as? [String] {
@@ -337,7 +351,9 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         toggleDropdown()
     }
     @objc func toggleDropdown() {
-        dropdownView.isHidden = !dropdownView.isHidden
+        locationTableView.isHidden = !locationTableView.isHidden
+        let indexPath = IndexPath(row: 0, section: 0)
+        locationTableView.scrollToRow(at: indexPath, at: .top, animated: true)
 
         
     }
@@ -700,7 +716,36 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
         }
     }
 
-    
+    func setupDropdownTableView() {
+        locationTableView.delegate = self
+        locationTableView.dataSource = self
+        locationTableView.register(UITableViewCell.self, forCellReuseIdentifier: "LocationCell")
+        // Remove the separator insets
+        locationTableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        // Create a custom UIColor with RGB values (255, 22, 148)
+        let pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+
+        // Set the separator line color to the custom pink color
+        locationTableView.separatorColor = pinkColor
+
+
+
+
+        // Register a custom cell if needed
+        // locationTableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "CustomCellIdentifier")
+
+        // Add the table view to your view hierarchy
+        view.addSubview(locationTableView)
+        let height = locations.count * 67
+        // Set up constraints (adjust these as needed)
+        NSLayoutConstraint.activate([
+            locationTableView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor),
+            locationTableView.leadingAnchor.constraint(equalTo: locationLabel.leadingAnchor),
+            locationTableView.trailingAnchor.constraint(equalTo: locationLabel.trailingAnchor),
+            locationTableView.bottomAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: CGFloat(height))
+        ])
+        locationTableView.isHidden = true
+    }
     
     
     func updateDicts() {
@@ -827,112 +872,219 @@ extension AppHomeViewController: UITableViewDataSource {
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if publicOrPriv == true {
+        if tableView == partyList {
+            print("table view is main")
             if searching {
                 return searchParty.count
             } else {
                 return parties.count
             }
-        } else {
-            if searching {
-                return searchParty.count
-            } else {
-                return privateParties.count
-            }
+        }
+        else { //will change this to dropdown later
+            return 1
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if tableView == partyList {
+                return 1
+            }
+        else {
+            return self.locations.count //location.count
+        }
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0.00000000000000000000000001
+        if tableView == partyList{
+            return 0.1
+            
+        }
+        return 0
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if tableView == partyList {
         let headerView = UIView()
         headerView.backgroundColor = UIColor.clear
         return headerView
+            
+        }
+        else {
+            return nil
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-
-        if indexPath.section != 0{
-            
-            print("mmmmmm")
-            print(indexPath.section)
-            let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
-
-            cell.delegate = self // Set the view controller as the delegate for the cell
-            cell.contentView.layoutMargins = .init(top: 0.0, left: 23.5, bottom: 0.0, right: 23.5)
-            cell.layer.cornerRadius = 10
-            cell.layer.borderWidth = 2
-            let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0).cgColor
-            cell.layer.borderColor = UIColor.white.cgColor
-            cell.backgroundColor = UIColor.white
-
-            
-            let party: Party
-            if searching {
-                party = parties.first { $0.name == searchParty[indexPath.section] }!
-            } else {
+        if tableView == partyList{
+            if indexPath.section != 0{
                 
-                print("bbbbbbb")
+                print("mmmmmm")
                 print(indexPath.section)
-                party = parties[indexPath.section]
-            }
-            
-            cell.configure(with: party, rankDict: rankDict, at: indexPath)
-            return cell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "partyCell", for: indexPath) as! CustomCellClass
 
-            
-        } else{
+                cell.delegate = self // Set the view controller as the delegate for the cell
+                cell.contentView.layoutMargins = .init(top: 0.0, left: 23.5, bottom: 0.0, right: 23.5)
+                cell.layer.cornerRadius = 10
+                cell.layer.borderWidth = 2
+                let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0).cgColor
+                cell.layer.borderColor = UIColor.white.cgColor
+                cell.backgroundColor = UIColor.white
 
-            print("nnnnnnnn")
-            print(indexPath.section)
+                
+                let party: Party
+                if searching {
+                    party = parties.first { $0.name == searchParty[indexPath.section] }!
+                } else {
+                    
+                    print("bbbbbbb")
+                    print(indexPath.section)
+                    party = parties[indexPath.section]
+                }
+                
+                cell.configure(with: party, rankDict: rankDict, at: indexPath)
+                return cell
 
-            // Dequeue the first cell prototype
-            let cell = tableView.dequeueReusableCell(withIdentifier: "firstPartyCell", for: indexPath) as! FirstCustomCellClass
-            
-            cell.delegate = self // Set the view controller as the delegate for the cell
-            cell.layer.cornerRadius = 10
-            cell.layer.borderWidth = 2
-            let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0).cgColor
-            cell.layer.borderColor = UIColor.white.cgColor
-            cell.backgroundColor = UIColor.white
-            // Configure the first cell with the desired layout
-            // ...
-            
-            
-            let party: Party
-            if searching {
-                party = parties.first { $0.name == searchParty[indexPath.section] }!
-            } else {
-                print("pppppp")
+                
+            } else{
+
+                print("nnnnnnnn")
                 print(indexPath.section)
 
-                party = parties[indexPath.section]
-                print(party.name)
+                // Dequeue the first cell prototype
+                let cell = tableView.dequeueReusableCell(withIdentifier: "firstPartyCell", for: indexPath) as! FirstCustomCellClass
+                
+                cell.delegate = self // Set the view controller as the delegate for the cell
+                cell.layer.cornerRadius = 10
+                cell.layer.borderWidth = 2
+                let pinkColor = UIColor(red: 255.0/255.0, green: 22.0/255.0, blue: 142.0/255.0, alpha: 1.0).cgColor
+                cell.layer.borderColor = UIColor.white.cgColor
+                cell.backgroundColor = UIColor.white
+                // Configure the first cell with the desired layout
+                // ...
+                
+                
+                let party: Party
+                if searching {
+                    party = parties.first { $0.name == searchParty[indexPath.section] }!
+                } else {
+                    print("pppppp")
+                    print(indexPath.section)
+
+                    party = parties[indexPath.section]
+                    print(party.name)
+                }
+                
+                cell.configureFirst(with: party, rankDict: rankDict, at: indexPath)
+                return cell
             }
-            
-            cell.configureFirst(with: party, rankDict: rankDict, at: indexPath)
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
+            cell.textLabel?.text = locations[indexPath.row]
+            cell.textLabel?.font = UIFont(name: "Futura-Medium", size: 18)
+
             return cell
         }
+        
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // Check if it's the first cell
-        if indexPath.section == 0 {
-            // Return the desired height for the first cell
-            return 250 // Change this value to the height you want for the first cell
-        } else {
-            // Return the default height for other cells
-            return partyList.rowHeight // Change this value to the default height for other cells
+        if tableView == partyList{
+            if indexPath.section == 0 {
+                // Return the desired height for the first cell
+                return 250 // Change this value to the height you want for the first cell
+            } else {
+                // Return the default height for other cells
+                return partyList.rowHeight // Change this value to the default height for other cells
+            }
         }
+        else {
+            return 67
+        }
+
     }
 
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == partyList {
+           //do nothing for now
+        }
+        else {
+            if let cell = tableView.cellForRow(at: indexPath) {
+                // Access the text label of the selected cell
+                if let titleLabel = cell.textLabel {
+                    // Access the text of the title label
+                    let title = titleLabel.text
+                    // Do something with the title
+                    //locationLabel.text = title
+                    if title == "Champaign, IL" {
+                        dbName = "Parties"
+                        locationPicture.image = UIImage(named: "illinoisLogo")
+                        if let index = pictures.firstIndex(of: "illinoisLogo") {
+                            // Remove the title from its current position
+                            pictures.remove(at: index)
+                            // Insert it at the beginning of the array
+                            pictures.insert("illinoisLogo", at: 0)
+                            print("Found first index")
+                            print(pictures)
+                            defaults.set(pictures, forKey: "PictureOptionsKey")
+
+                        }
+                    }
+                    else if title == "Chicago, IL" {
+                        dbName = "ChicagoParties"
+                        locationPicture.image = UIImage(named: "chicago_flag")
+                        if let index = pictures.firstIndex(of: "chicago_flag") {
+                            // Remove the title from its current position
+                            pictures.remove(at: index)
+                            // Insert it at the beginning of the array
+                            pictures.insert("chicago_flag", at: 0)
+                            defaults.set(pictures, forKey: "PictureOptionsKey")
+                            
+                        }
+
+                    }
+                    else {
+                        dbName = "BerkeleyParties"
+                        locationPicture.image = UIImage(named: "calLogo")
+                        if let index = pictures.firstIndex(of: "calLogo") {
+                            // Remove the title from its current position
+                            pictures.remove(at: index)
+                            // Insert it at the beginning of the array
+                            pictures.insert("calLogo", at: 0)
+                            defaults.set(pictures, forKey: "PictureOptionsKey")
+                            
+                        }
+
+                    }
+                    if let index = locations.firstIndex(of: title ?? "Champaign, IL") {
+                        // Remove the title from its current position
+                        locations.remove(at: index)
+                        // Insert it at the beginning of the array
+                        locations.insert(title ?? "Champaign, IL", at: 0)
+                        // Reload the table view to reflect the updated data
+
+                    }
+                    defaults.set(locations, forKey: "LocationOptionsKey")
+
+                }
+            }
+
+            locationTableView.isHidden = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            // Replace the below lines with your actual refresh logic
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+            //AppHomeVC.overrideUserInterfaceStyle = .dark
+            AppHomeVC.modalPresentationStyle = .fullScreen
+            self.present(AppHomeVC, animated: false, completion: nil)
+
+            // End the refreshing animation
+            self.refreshControl.endRefreshing()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
