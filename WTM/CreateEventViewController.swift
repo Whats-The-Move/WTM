@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import StoreKit
 
 class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -78,7 +79,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     var repeatTableView: UITableView!
         
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    @IBOutlet weak var createButton: UIButton!
+
     var selectedUsers: [User] = []
     var selectedDays: [String] = []
 
@@ -456,6 +457,17 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         }
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
+        if #available(iOS 10.3, *) {
+            if !UserDefaults.standard.bool(forKey: "reviewRequested") {
+                UserDefaults.standard.set(true, forKey: "reviewRequested")
+                print("Changing value")
+                SKStoreReviewController.requestReview()
+
+            }
+        } else {
+            // Fallback code for iOS versions earlier than 10.3
+            // You can implement your custom review prompt or use third-party libraries.
+        }
 
     }
     /*

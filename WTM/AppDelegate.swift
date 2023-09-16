@@ -26,6 +26,7 @@ public var publicOrPriv = true
 public var maxPeople = 0
 public var dbName = "Parties"
 public var userFcmToken = ""
+public var reviewRequested = false
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -62,6 +63,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         user_address = UserDefaults.standard.string(forKey: "user_address") ?? "user"
         votesLabel = UserDefaults.standard.integer(forKey: "votesLabel")
         currentDate = UserDefaults.standard.string(forKey: "currentDate") ?? ""
+        // Set the user default for reviewRequested to false
+        reviewRequested = UserDefaults.standard.bool(forKey: "reviewRequested")
+        // Set the user default for reviewRequested to false
+        UserDefaults.standard.set(false, forKey: "reviewRequested")
+
         
         let defaults = UserDefaults.standard
         var key = "LocationOptionsKey"
