@@ -379,35 +379,45 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             present(alertController, animated: true, completion: nil)
             return
         }
+        
         var dateTime = dateAndTime.date
         var endTime = endTime.date
 
         // Create a DateFormatter
         let dateFormatter = DateFormatter()
+        
+        /* if you wnat to send it as non unix
+        dateFormatter.dateFormat = "HH:mm" // This sets the format to display just the time (hours and minutes)
+
+        let startTimeString = dateFormatter.string(from: dateTime)
+        let endTimeString = dateFormatter.string(from: endTime)*/
+
         dateFormatter.dateFormat = "MMM dd, yyyy"
 
         // Format the date
         let dateOnly = dateFormatter.string(from: dateTime)
         
         let unixStart = dateTime.timeIntervalSince1970
-        let unixEnd = dateTime.timeIntervalSince1970
+        let unixEnd = endTime.timeIntervalSince1970
         let currentUserUID = Auth.auth().currentUser?.uid ?? ""
         
         // Get the invitee UIDs as an array
         var inviteeUIDs = selectedUsers.map { $0.uid }
         inviteeUIDs.append(currentUserUID)
-        
-        // Create a reference to the "Privates" node in Firebase Realtime Database
-        let privatesRef = Database.database().reference().child("EventsTest")
+
+        // Assuming you have authenticated the user and have access to their UID
+        var barLocation  = ""
         let db = Firestore.firestore()
         let userRef = db.collection("barUsers").document(currentUserUID)
         var placeName = "testParty"
         userRef.getDocument { (document, error) in
             if let document = document, document.exists {
-                if let venueName = document["venueName"] as? String {
+                if let venueName = document["venueName"] as? String, let creatorLocation = document["location"] as? String {
                     // Successfully fetched the venueName
+                    barLocation = creatorLocation
                     print("Venue Name: \(venueName)")
                     placeName = venueName
+                    let privatesRef = Database.database().reference().child("\(barLocation)Events")
                     let newEventRef = privatesRef.child(dateOnly).child(placeName)
                     
                     // Create a dictionary with the event information

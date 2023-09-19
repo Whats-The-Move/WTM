@@ -27,19 +27,33 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func fetchEventData() {
         print("fetchevent")
+        var queryFrom = "Events"
+        if dbName == "BerkeleyParties" {
+            queryFrom = "BerkeleyEvents"
+        }
+        else if dbName == "ChicagoParties" {
+            queryFrom = "ChicagoEvents"
+        }
+        else {
+            queryFrom = "EventsTest"
+        }
 
-        let ref = Database.database().reference().child("Events")
+        let ref = Database.database().reference().child(queryFrom)
         ref.observe(.childAdded) { [weak self] (snapshot) in
             let dateKey = snapshot.key
-            print(dateKey)
+            print("printing date key " + dateKey)
             guard let placeDict = snapshot.value as? [String: Any] else { return }
 
             for (eventPlaceName, placeInfo) in placeDict {
                 print("Event Place Name:", eventPlaceName)
                 print("Place Info:", placeInfo)
                 guard let eventInfo = placeInfo as? [String: Any],
-                      let eventName = eventInfo["Event Name"] as? String,
-                      let eventTime = eventInfo["Time"] as? String else {
+                      let eventName = eventInfo["title"] as? String,
+                      let start = eventInfo["start"] as? Int,
+                      let eventEnd = eventInfo["end"] as? Int,
+                      let eventLocation = eventInfo["location"] as? String,
+                      let eventType = eventInfo["eventType"] as? String,
+                      let eventDescription = eventInfo["description"] as? String else {
                         print("didnt work")
                           continue
                       }
@@ -48,10 +62,15 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
                 dateFormatter.dateFormat = "MMM d, yyyy"
                 if let eventDate = dateFormatter.date(from: dateKey) {
                     let event = Event()
+                    print("I am going to pull event")
                     event.place = eventPlaceName
                     event.name = eventName
-                    event.time = eventTime
+                    event.time = start
                     event.date = eventDate
+                    event.description = eventDescription
+                    event.endTime = eventEnd
+                    event.location = eventLocation
+                    event.type = eventType
                     self?.eventsList.append(event)
                 }
             }
@@ -243,7 +262,22 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
         if let eventCell = cell as? EventCell {
             eventCell.placeLabel.text = event.place
             eventCell.nameLabel.text = event.name
-            eventCell.timeLabel.text = event.time
+            let unixTimestamp = event.time ?? 0 // Replace this with your Unix timestamp
+            let date = Date(timeIntervalSince1970: TimeInterval(unixTimestamp))
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "h:mm a" // Set the format to display time in 12-hour format with AM/PM
+
+            let timeString = dateFormatter.string(from: date)
+
+            let endUnixTimestamp = event.endTime ?? 0 // Replace this with your Unix timestamp
+            let endDate = Date(timeIntervalSince1970: TimeInterval(endUnixTimestamp))
+
+
+            let endTimeString = dateFormatter.string(from: endDate)
+            
+            eventCell.timeLabel.text = timeString + " to " + endTimeString
+            eventCell.eventType = event.type
         }
 
         return cell
@@ -260,8 +294,22 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCell = tableView.cellForRow(at: indexPath) as? EventCell
         
-        if selectedCell?.nameLabel.text == "Free Drink Night" {
+        if selectedCell?.eventType == "Free Drink" {
             performSegue(withIdentifier: "freeDrinkNightSegue", sender: self)
+        }
+        else{
+            //let selectedItem = yourDataSource[indexPath.row]
+            //let selectedItem = yourDataSource[indexPath.row]
+           
+            // Create an instance of the destination view controller
+            let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
+            let selectedItem = selectedDateEvents[indexPath.row]
+
+            // Create an instance of the DestinationViewController and pass the selectedItem
+            let destinationVC = DestinationViewController(selectedItem: selectedItem)
+
+            // Present the destination view controller modally
+            present(destinationVC, animated: true, completion: nil)
         }
     }
     

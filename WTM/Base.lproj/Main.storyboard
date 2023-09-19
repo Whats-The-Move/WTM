@@ -2372,6 +2372,21 @@
             </objects>
             <point key="canvasLocation" x="2513.8461538461538" y="1562.5592417061612"/>
         </scene>
+        <!--Show Event View Controller-->
+        <scene sceneID="0EJ-fG-Xev">
+            <objects>
+                <viewController storyboardIdentifier="showEvent" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TiH-R1-fDM" customClass="ShowEventViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TvV-GV-aDR">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="0F7-OU-5ac"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dWp-5G-kte" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4308" y="2266"/>
+        </scene>
         <!--User Selected View Controller-->
         <scene sceneID="l3z-kc-N0S">
             <objects>
@@ -2637,7 +2652,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wNr-oe-beX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4308" y="2267"/>
+            <point key="canvasLocation" x="5197" y="2266"/>
         </scene>
         <!--Invite List View Controller-->
         <scene sceneID="3r1-RD-dMs">
