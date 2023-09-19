@@ -4,6 +4,7 @@ class EventCell: UITableViewCell {
     let placeLabel = UILabel()
     let nameLabel = UILabel()
     let timeLabel = UILabel()
+    var eventType = ""
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

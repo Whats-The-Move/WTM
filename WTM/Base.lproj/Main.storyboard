@@ -2372,10 +2372,10 @@
             </objects>
             <point key="canvasLocation" x="2513.8461538461538" y="1562.5592417061612"/>
         </scene>
-        <!--View Controller-->
+        <!--Show Event View Controller-->
         <scene sceneID="0EJ-fG-Xev">
             <objects>
-                <viewController id="TiH-R1-fDM" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="showEvent" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TiH-R1-fDM" customClass="ShowEventViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TvV-GV-aDR">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

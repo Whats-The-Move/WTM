@@ -277,6 +277,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
             let endTimeString = dateFormatter.string(from: endDate)
             
             eventCell.timeLabel.text = timeString + " to " + endTimeString
+            eventCell.eventType = event.type
         }
 
         return cell
@@ -293,8 +294,22 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCell = tableView.cellForRow(at: indexPath) as? EventCell
         
-        if selectedCell?.nameLabel.text == "Free Drink Night" {
+        if selectedCell?.eventType == "Free Drink" {
             performSegue(withIdentifier: "freeDrinkNightSegue", sender: self)
+        }
+        else{
+            //let selectedItem = yourDataSource[indexPath.row]
+            //let selectedItem = yourDataSource[indexPath.row]
+           
+            // Create an instance of the destination view controller
+            let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
+            let selectedItem = selectedDateEvents[indexPath.row]
+
+            // Create an instance of the DestinationViewController and pass the selectedItem
+            let destinationVC = DestinationViewController(selectedItem: selectedItem)
+
+            // Present the destination view controller modally
+            present(destinationVC, animated: true, completion: nil)
         }
     }
     
