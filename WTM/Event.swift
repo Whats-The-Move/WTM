@@ -6,8 +6,12 @@ class Event
 {
     var place: String!
     var name: String!
-    var time: String!
+    var time: Int!
+    var endTime: Int!
     var date: Date!
+    var description: String!
+    var location: String!
+    var type: String!
     
     func eventsForDate(date: Date) -> [Event]
     {
