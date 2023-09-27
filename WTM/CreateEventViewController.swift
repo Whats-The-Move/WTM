@@ -82,8 +82,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
     var selectedUsers: [User] = []
     var selectedDays: [String] = []
-
-
+    var userEditing = false
+    //MAKE IT SO IF EDITING SHOW BUTTON
     override func viewDidLoad() {
         super.viewDidLoad()
         setupConstraints()

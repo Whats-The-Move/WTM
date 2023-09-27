@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource {
     
@@ -53,6 +54,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
                       let eventEnd = eventInfo["end"] as? Int,
                       let eventLocation = eventInfo["location"] as? String,
                       let eventType = eventInfo["eventType"] as? String,
+                      let creator = eventInfo["creator"] as? String,
                       let eventDescription = eventInfo["description"] as? String else {
                         print("didnt work")
                           continue
@@ -71,6 +73,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
                     event.endTime = eventEnd
                     event.location = eventLocation
                     event.type = eventType
+                    event.creator = creator
                     self?.eventsList.append(event)
                 }
             }
@@ -278,6 +281,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
             
             eventCell.timeLabel.text = timeString + " to " + endTimeString
             eventCell.eventType = event.type
+            eventCell.creator = event.creator
         }
 
         return cell
@@ -294,9 +298,23 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCell = tableView.cellForRow(at: indexPath) as? EventCell
         
+        /*if selectedCell?.creator == Auth.auth().currentUser?.uid {
+                //let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
+                //let selectedItem = selectedDateEvents[indexPath.row]
+
+            print("my events clicked")
+
+            // Replace "YourStoryboardName" with the actual name of your storyboard
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let createEvent = storyboard.instantiateViewController(withIdentifier: "CreateEvent") as! CreateEventViewController
+            present(createEvent, animated: true, completion: nil)
+            }
+        */
+
         if selectedCell?.eventType == "Free Drink" {
             performSegue(withIdentifier: "freeDrinkNightSegue", sender: self)
         }
+
         else{
             //let selectedItem = yourDataSource[indexPath.row]
             //let selectedItem = yourDataSource[indexPath.row]
@@ -319,6 +337,7 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
            let destinationViewController = segue.destination as? freeDrinkNightViewController,
            let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? EventCell {
             destinationViewController.selectedPlace = selectedCell.placeLabel.text
+            destinationViewController.creator = selectedCell.creator
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMM dd, yyyy" // Use the desired date format
 
