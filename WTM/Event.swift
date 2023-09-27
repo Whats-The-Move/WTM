@@ -12,6 +12,7 @@ class Event
     var description: String!
     var location: String!
     var type: String!
+    var creator: String!
     
     func eventsForDate(date: Date) -> [Event]
     {
