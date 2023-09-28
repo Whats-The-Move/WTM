@@ -1010,6 +1010,13 @@ extension AppHomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == partyList {
            //do nothing for now
+
+
+            // Create an instance of the DestinationViewController and pass the selectedItem
+            let destinationVC = PublicPopUpViewController(selectedParty: parties[indexPath.section])
+
+            // Present the destination view controller modally
+            present(destinationVC, animated: true, completion: nil)
         }
         else {
             if let cell = tableView.cellForRow(at: indexPath) {

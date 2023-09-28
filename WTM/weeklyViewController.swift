@@ -322,9 +322,9 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
             // Create an instance of the destination view controller
             let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
             let selectedItem = selectedDateEvents[indexPath.row]
-
+            //how does this work... how does it know waht destinationViewController is
             // Create an instance of the DestinationViewController and pass the selectedItem
-            let destinationVC = DestinationViewController(selectedItem: selectedItem)
+            let destinationVC = ShowEventViewController(selectedItem: selectedItem)
 
             // Present the destination view controller modally
             present(destinationVC, animated: true, completion: nil)

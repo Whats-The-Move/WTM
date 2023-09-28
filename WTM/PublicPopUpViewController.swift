@@ -17,7 +17,17 @@ import AVFoundation
 class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
 
     
+    var selectedParty: Party // Replace YourItemType with your data type
 
+    // Custom initializer to pass data
+    init(selectedParty: Party) {
+        self.selectedParty = selectedParty // Initialize with the provided item or a default value
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     struct Reviews {
         var reviewText: String?
         var rating: Int
@@ -36,6 +46,8 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
     var pplGoing = 0
     var locationManger = CLLocationManager()
     var reviews: [Reviews] = []
+    var events: [Event] = []
+
     var avg = 0.0
 
 
@@ -57,22 +69,23 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
 
         override func viewDidLoad() {
             super.viewDidLoad()
-
+            view.backgroundColor = .black
             // Call the setupBkgdView() function to set up the background view and its constraints
+            setupTitleLabel(titleText: selectedParty.name)
+            setupNumPeople(pplGoing: selectedParty.isGoing.count)
             setupBkgdView()
-            setupTitleLabel(titleText: titleText)
-            setupNumPeople(pplGoing: 5)
-            setupStars(rating: 3)
+
+            setupStars(rating: max(1, Int(selectedParty.rating)))
             //setupBkgdSlider()
             //setupSlider()
             setupIsGoingButton()
-            setupReviewLabel()
+            setupEventsLabel()
             setupBackButton()
             setupTableView()
             tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: "ReviewCell")
-            loadReviews()
+            loadEvents()
 
-
+            tableView.reloadData()
 
 
         }
@@ -93,7 +106,7 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
                 bkgdView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 bkgdView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 bkgdView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                bkgdView.heightAnchor.constraint(equalToConstant: whiteRectangleHeight)
+                bkgdView.topAnchor.constraint(equalTo: numPeople.bottomAnchor, constant: 20)
             ])
         }
         func setupTitleLabel(titleText: String) {
@@ -125,7 +138,7 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
                 // Set the constraints for the numPeople label
                 NSLayoutConstraint.activate([
                     numPeople.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                    numPeople.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 70)
+                    numPeople.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 60)
                 ])
             }
         func setupStars(rating: Int){
@@ -207,11 +220,11 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
             isGoingButton.layer.cornerRadius = 10
             isGoingButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
-        func setupReviewLabel() {
+        func setupEventsLabel() {
             // Create the "Reviews" label
             reviewLabel = UILabel()
             reviewLabel.translatesAutoresizingMaskIntoConstraints = false
-            reviewLabel.text = "Reviews:"
+            reviewLabel.text = "Upcoming Events at \(selectedParty.name):"
             reviewLabel.font = UIFont(name: "Futura-Medium", size: 20.0)
             reviewLabel.textColor = UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 1.0)
             view.addSubview(reviewLabel)
@@ -245,18 +258,20 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
             tableView.translatesAutoresizingMaskIntoConstraints = false
             tableView.delegate = self
             tableView.dataSource = self
+            tableView.register(EventCell.self, forCellReuseIdentifier: "cellID")
+
             tableView.backgroundColor = .clear
             bkgdView.addSubview(tableView)
 
             NSLayoutConstraint.activate([
                 // Set top anchor of table view to bottom of reviewLabel
-                tableView.topAnchor.constraint(equalTo: reviewLabel.bottomAnchor),
+                tableView.topAnchor.constraint(equalTo: reviewLabel.bottomAnchor, constant: 10),
 
                 // Set left anchor of table view to left anchor of bkgdView
-                tableView.leadingAnchor.constraint(equalTo: bkgdView.leadingAnchor),
+                tableView.leadingAnchor.constraint(equalTo: bkgdView.leadingAnchor, constant: 15),
 
                 // Set right anchor of table view to right anchor of bkgdView
-                tableView.trailingAnchor.constraint(equalTo: bkgdView.trailingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: bkgdView.trailingAnchor, constant: -15),
 
                 // Set bottom anchor of table view to bottom anchor of bkgdView
                 tableView.bottomAnchor.constraint(equalTo: bkgdView.bottomAnchor),
@@ -451,31 +466,182 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
                 print(error.localizedDescription)
             }
         }
-        
-        
+    func loadEvents(){
+        var keyword = ""
+        if dbName == "Chicago, IL"{
+            keyword = "ChicagoEvents"
+        }
+        else if dbName == "Berkeley, CA"{
+            keyword = "BerkeleyEvents"
+        }
+        else{
+            keyword = "EventsTest"
+        }
+        let selectedPartyName = selectedParty.name
+        print("party name is this \(selectedPartyName)")
 
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Get a reference to the Firebase database
+        let databaseRef = Database.database().reference()
+
+        // Define the path to the `keyword` node
+        let keywordPath = keyword
+
+        // Create an observer for the `keyword` node
+        databaseRef.child(keywordPath).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Check if the `keyword` node exists
+            guard snapshot.exists() else {
+                print("Keyword node not found")
+                return
+            }
+
+            // Iterate through all child nodes of the `keyword` node
+            for childSnapshot in snapshot.children {
+                guard let nodeSnapshot = childSnapshot as? DataSnapshot,
+                      let nodeData = nodeSnapshot.value as? [String: Any], let dateKey = nodeSnapshot.key as? String else {
+                    continue
+                }
+                print("i have eaten the children")
+                                // Check if the node has a child with the name `selectedParty.name`
+                if let childNode = nodeData[selectedPartyName] as? [String: Any] {
+                    // Extract the values you need from the child node
+                    print("yippee i found the bar")
+                    if let creator = childNode["creator"] as? String,
+                       let location = childNode["location"] as? String,
+                       let start = childNode["start"] as? Int,
+                       let end = childNode["end"] as? Int,
+                       let description = childNode["description"] as? String,
+                       let title = childNode["title"] as? String,
+                       let eventType = childNode["eventType"] as? String {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "MMM d, yyyy"
+                        if let eventDate = dateFormatter.date(from: dateKey) {
+                            let event = Event()
+                            event.creator = creator
+                            event.location = location
+                            event.time = start
+                            event.endTime = end
+                            event.description = description
+                            event.name = title
+                            event.type = eventType
+                            event.date = eventDate
+                            event.place = selectedPartyName
+                            self.events.append(event)
+                            // Now you have all the values as variables
+                            print("Creator: \(creator)")
+                            print("Location: \(location)")
+                            print("Start: \(start)")
+                            print("End: \(end)")
+                            print("Description: \(description)")
+                            print("Title: \(title)")
+                            print("EventType: \(eventType)")
+                            self.tableView.reloadData()
+                            print(self.events[0].name, self.events[0].creator)
+                            
+                        }
+                        // You can use these variables as needed
+                    } else {
+                        print("Failed to extract data from child node")
+                    }
+                }
+            }
+        }) { (error) in
+            print("Error fetching data: \(error.localizedDescription)")
+        }
+    }
+        
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 5.0 // Adjust the spacing as needed
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView() // Empty view to create the spacing
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             // Return the number of rows in your table view
-            return reviews.count
-        }
-        func timeAgoString(from timestamp: Double) -> String {
-            let date = Date(timeIntervalSince1970: (timestamp - 1000)/1000 )
-            let formatter = RelativeDateTimeFormatter()
-            formatter.unitsStyle = .full
-            formatter.dateTimeStyle = .numeric
-            return formatter.localizedString(for: date, relativeTo: Date())
-        }
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = ReviewTableViewCell(style: .default, reuseIdentifier: "ReviewCell")
+        return 1
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return events.count
+    }
+    func timeAgoString(from timestamp: Double) -> String {
+        let date = Date(timeIntervalSince1970: (timestamp - 1000)/1000 )
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        formatter.dateTimeStyle = .numeric
+        return formatter.localizedString(for: date, relativeTo: Date())
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-            // Assuming you have a review object containing the necessary data
-            let review = reviews[indexPath.row]
+        let cell: UITableViewCell
+        
+
+        
+        cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! EventCell
+        
+        let event = events[indexPath.section]
+        if let eventCell = cell as? EventCell {
+            eventCell.placeLabel.text = event.place
+            eventCell.nameLabel.text = event.name
+            let unixTimestamp = event.time ?? 0 // Replace this with your Unix timestamp
+            let date = Date(timeIntervalSince1970: TimeInterval(unixTimestamp))
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "h:mm a" // Set the format to display time in 12-hour format with AM/PM
+
+            let timeString = dateFormatter.string(from: date)
+
+            let endUnixTimestamp = event.endTime ?? 0 // Replace this with your Unix timestamp
+            let endDate = Date(timeIntervalSince1970: TimeInterval(endUnixTimestamp))
+
+
+            let endTimeString = dateFormatter.string(from: endDate)
             
-            // Configure the cell with review data
-            cell.configure(comment: review.reviewText ?? "", date: review.date, rating: review.rating)
-
-            return cell
+            eventCell.timeLabel.text = timeString + " to " + endTimeString
+            eventCell.eventType = event.type
+            eventCell.creator = event.creator
         }
+
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCell = tableView.cellForRow(at: indexPath) as? EventCell
+        
+        /*if selectedCell?.creator == Auth.auth().currentUser?.uid {
+                //let selectedDateEvents = eventsList.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
+                //let selectedItem = selectedDateEvents[indexPath.row]
+
+            print("my events clicked")
+
+            // Replace "YourStoryboardName" with the actual name of your storyboard
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let createEvent = storyboard.instantiateViewController(withIdentifier: "CreateEvent") as! CreateEventViewController
+            present(createEvent, animated: true, completion: nil)
+            }
+        */
+
+        if selectedCell?.eventType == "Free Drink" {
+            performSegue(withIdentifier: "freeDrinkNightSegue", sender: self)
+        }
+
+        else{
+            //let selectedItem = yourDataSource[indexPath.row]
+            //let selectedItem = yourDataSource[indexPath.row]
+           
+            // Create an instance of the destination view controller
+           
+            //how does this work... how does it know waht destinationViewController is
+            // Create an instance of the DestinationViewController and pass the selectedItem
+            print("gonna print this n stuff \(events[indexPath.section].date)")
+            print("gonna print this n stuff \(events[indexPath.section].name)")
+
+            let destinationVC = ShowEventViewController(selectedItem: events[indexPath.section])
+
+            // Present the destination view controller modally
+            present(destinationVC, animated: true, completion: nil)
+        }
+    }
 
     /*
     // MARK: - Navigation
