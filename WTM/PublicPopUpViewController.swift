@@ -62,6 +62,9 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
     var reviewLabel: UILabel! // New label
     var backButton: UIButton! // New button
     var tableView: UITableView!
+    
+    var noEvents: UILabel!
+
 
 
 
@@ -80,11 +83,11 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
             //setupSlider()
             setupIsGoingButton()
             setupEventsLabel()
-            setupBackButton()
+            //setupBackButton()
             setupTableView()
             tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: "ReviewCell")
             loadEvents()
-
+            setupNoEvents()
             tableView.reloadData()
 
 
@@ -109,6 +112,21 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
                 bkgdView.topAnchor.constraint(equalTo: numPeople.bottomAnchor, constant: 20)
             ])
         }
+        func setupNoEvents() {
+            // Create the titleLabel
+            noEvents = UILabel()
+            noEvents.translatesAutoresizingMaskIntoConstraints = false
+            noEvents.text = "No Upcoming Events" // Set the titleLabel text using the parameter
+            noEvents.textColor = .gray
+            noEvents.font = UIFont(name: "Futura-Medium", size: 26)
+            noEvents.textAlignment = .center
+            view.addSubview(noEvents)
+            // Set the constraints for the titleLabel
+            NSLayoutConstraint.activate([
+                noEvents.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                noEvents.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 10)
+            ])
+        }
         func setupTitleLabel(titleText: String) {
             // Create the titleLabel
             titleLabel = UILabel()
@@ -129,7 +147,7 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
                 // Create the numPeople label
                 numPeople = UILabel()
                 numPeople.translatesAutoresizingMaskIntoConstraints = false
-                numPeople.text = "\(pplGoing) people going" // Set the numPeople label text using the parameter
+                numPeople.text = "\(pplGoing - 2) people going" // Set the numPeople label text using the parameter
                 numPeople.textColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0) // RGB(255, 22, 148)
                 numPeople.font = UIFont(name: "Futura-Medium", size: 20)
                 numPeople.textAlignment = .center
@@ -203,11 +221,37 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
             // Create the "Is Going" button
             isGoingButton = UIButton()
             isGoingButton.translatesAutoresizingMaskIntoConstraints = false
-            isGoingButton.setTitle("Not Attending", for: .normal)
+            isGoingButton.setTitle("Not Going", for: .normal)
             isGoingButton.backgroundColor = UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 0.5) // Dull pink with alpha 0.5
             isGoingButton.addTarget(self, action: #selector(isGoingButtonTapped), for: .touchUpInside)
             view.addSubview(isGoingButton)
 
+            
+            
+            let partyRef = Database.database().reference().child(dbName).child(selectedParty.name)
+            //                            var isUserGoing = false
+            partyRef.child("isGoing").observeSingleEvent(of: .value) { snapshot in
+                
+                
+                print("segue before it goes in")
+                if snapshot.exists() {
+                    if let attendees = snapshot.value as? [String] {
+                        let uid = Auth.auth().currentUser?.uid
+                        var isUserGoing = attendees.contains(uid ?? "zzzzzneverwillbefound")
+                        print("is user going: \(isUserGoing)")
+                        
+                        let pinkColor = UIColor(red: 215.0/255, green: 113.0/255, blue: 208.0/255, alpha: 0.5)
+                        let greenColor = UIColor(red: 0.0, green: 185.0/255, blue: 0.0, alpha: 1.0)
+                        let grayColor = UIColor(red: 128.0/255, green: 128.0/255, blue: 128.0/255, alpha: 0.5)
+                        let backgroundColor = isUserGoing ? greenColor : grayColor
+                        self.isGoingButton.backgroundColor = backgroundColor
+                        print(backgroundColor)
+                    }
+                }
+                
+            }
+            
+            
             // Set the constraints for the "Is Going" button
             NSLayoutConstraint.activate([
                 isGoingButton.leadingAnchor.constraint(equalTo: bkgdView.leadingAnchor),
@@ -562,6 +606,12 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
         return 1
     }
     func numberOfSections(in tableView: UITableView) -> Int {
+        if events.count == 0 {
+            noEvents.isHidden = false
+        }
+        else{
+            noEvents.isHidden = true
+        }
         return events.count
     }
     func timeAgoString(from timestamp: Double) -> String {
@@ -581,12 +631,16 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
         
         let event = events[indexPath.section]
         if let eventCell = cell as? EventCell {
-            eventCell.placeLabel.text = event.place
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd"
+            let dateString = dateFormatter.string(from: event.date)
+            eventCell.placeLabel.text = dateString
+            
             eventCell.nameLabel.text = event.name
             let unixTimestamp = event.time ?? 0 // Replace this with your Unix timestamp
             let date = Date(timeIntervalSince1970: TimeInterval(unixTimestamp))
 
-            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "h:mm a" // Set the format to display time in 12-hour format with AM/PM
 
             let timeString = dateFormatter.string(from: date)
@@ -622,19 +676,21 @@ class PublicPopUpViewController: UIViewController, CLLocationManagerDelegate, MK
         */
 
         if selectedCell?.eventType == "Free Drink" {
-            performSegue(withIdentifier: "freeDrinkNightSegue", sender: self)
+            //let selectedIndexPath = tableView.indexPathForSelectedRow,
+            let destinationViewController = freeDrinkNightViewController()
+            destinationViewController.creator = events[indexPath.section].creator
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy" // Use the desired date format
+
+            let dateString = dateFormatter.string(from: events[indexPath.section].date)
+            destinationViewController.date = dateString
+            destinationViewController.selectedPlace = events[indexPath.section].place
+            present(destinationViewController, animated: true, completion: nil)
+
+            
         }
 
         else{
-            //let selectedItem = yourDataSource[indexPath.row]
-            //let selectedItem = yourDataSource[indexPath.row]
-           
-            // Create an instance of the destination view controller
-           
-            //how does this work... how does it know waht destinationViewController is
-            // Create an instance of the DestinationViewController and pass the selectedItem
-            print("gonna print this n stuff \(events[indexPath.section].date)")
-            print("gonna print this n stuff \(events[indexPath.section].name)")
 
             let destinationVC = ShowEventViewController(selectedItem: events[indexPath.section])
 
