@@ -10,12 +10,17 @@ import Firebase
 import CoreGraphics
 
 class freeDrinkNightViewController: UIViewController {
-
+/*
     @IBOutlet weak var swipeDownButton: UIButton!
     @IBOutlet weak var showScreenLabel: UILabel!
     @IBOutlet weak var clickOnceLabel: UILabel!
     @IBOutlet weak var receivedButton: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!*/
+    var swipeDownButton: UIButton!
+    var showScreenLabel: UILabel!
+    var clickOnceLabel: UILabel!
+    var receivedButton: UIImageView!
+    var titleLabel: UILabel!
     private let deleteEventButton = UIButton()
 
     let gradientLayer = CAGradientLayer()
@@ -25,7 +30,14 @@ class freeDrinkNightViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        titleLabel.text = "Free Drink Night at " + (selectedPlace ?? "N/A") + "!"
+        view.backgroundColor = .white
+        setupComponents()
+        configureConstraints()
+       
+
+        // Add constraints for centering the titleLabel
+
+
         
         let databaseReference = Database.database().reference()
         
@@ -59,7 +71,58 @@ class freeDrinkNightViewController: UIViewController {
             })
             
         }
-        view.addSubview(deleteEventButton)
+        
+        // Add the button to your view
+
+        // Configure constraints for the button
+        
+
+        
+    }
+    func setupComponents(){
+
+
+        titleLabel = UILabel()
+        titleLabel.text = "Free Drink Night at " + (selectedPlace ?? "N/A") + "!"
+        titleLabel.font = UIFont(name: "Futura-Medium", size: 25)
+        titleLabel.textColor = .black
+        titleLabel.textAlignment = .center
+
+  
+
+        swipeDownButton = UIButton()
+        if let arrowImage = UIImage(systemName: "arrow.down") {
+            let pinkTintedImage = arrowImage.withTintColor(UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0), renderingMode: .alwaysOriginal)
+            swipeDownButton.setImage(pinkTintedImage, for: .normal)
+        }
+        swipeDownButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
+
+        showScreenLabel = UILabel()
+        showScreenLabel.text = "Show this screen to a bartender to claim your free drink!"
+        showScreenLabel.font = UIFont(name: "Futura-Medium", size: 20)
+        showScreenLabel.textColor = .black
+        showScreenLabel.textAlignment = .center
+        showScreenLabel.numberOfLines = 0
+
+        
+        clickOnceLabel = UILabel()
+        clickOnceLabel.text = "DO NOT TAP\nThis can only be clicked once,\nand it must be clicked by an employee of the bar!"
+
+        clickOnceLabel.font = UIFont(name: "Futura-Medium", size: 15)
+        clickOnceLabel.textColor = .black
+        clickOnceLabel.textAlignment = .center
+        clickOnceLabel.numberOfLines = 0
+
+        
+        receivedButton = UIImageView()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(receivedButtonTapped))
+            
+        // Add the UITapGestureRecognizer to the receivedButton
+        receivedButton.isUserInteractionEnabled = true
+        receivedButton.image = UIImage(named: "clinking-beer-mugs_1f37b")
+
+        receivedButton.addGestureRecognizer(tapGesture)
+        
         deleteEventButton.isHidden = true
         if Auth.auth().currentUser?.uid ?? "" == self.creator {
                 deleteEventButton.isHidden = false}
@@ -76,10 +139,53 @@ class freeDrinkNightViewController: UIViewController {
         // Add a tap gesture recognizer to the button
         deleteEventButton.addTarget(self, action: #selector(deleteEventTapped), for: .touchUpInside)
 
-        // Add the button to your view
+        view.addSubview(titleLabel)
+        view.addSubview(swipeDownButton)
+        view.addSubview(showScreenLabel)
+        view.addSubview(clickOnceLabel)
+        view.addSubview(receivedButton)
         view.addSubview(deleteEventButton)
 
-        // Configure constraints for the button
+    }
+    func configureConstraints(){
+        // Assuming you have references to these views
+        swipeDownButton.translatesAutoresizingMaskIntoConstraints = false
+        showScreenLabel.translatesAutoresizingMaskIntoConstraints = false
+        clickOnceLabel.translatesAutoresizingMaskIntoConstraints = false
+        receivedButton.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        // Define the constraints
+        NSLayoutConstraint.activate([
+            // Center swipeDownButton horizontally and set 20px from the top of the screen
+            swipeDownButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            swipeDownButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+
+            // Center showScreenLabel horizontally and set 40px below swipeDownButton
+
+
+            // Center titleLabel horizontally and set 40px below showScreenLabel
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: swipeDownButton.bottomAnchor, constant: 40),
+
+            // Center receivedButton horizontally, set its width and height to 200x200, and set 40px below titleLabel
+            receivedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            receivedButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
+            receivedButton.widthAnchor.constraint(equalToConstant: 200),
+            receivedButton.heightAnchor.constraint(equalToConstant: 200),
+            
+            showScreenLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            showScreenLabel.topAnchor.constraint(equalTo: receivedButton.bottomAnchor, constant: 40),
+            showScreenLabel.heightAnchor.constraint(equalToConstant: 90),
+            showScreenLabel.widthAnchor.constraint(equalToConstant: 220),
+
+            // Center clickOnceLabel horizontally and set 50px below receivedButton
+            clickOnceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            clickOnceLabel.topAnchor.constraint(equalTo: showScreenLabel.bottomAnchor, constant: 50),
+            clickOnceLabel.heightAnchor.constraint(equalToConstant: 90),
+            clickOnceLabel.widthAnchor.constraint(equalToConstant: 220),
+        ])
+
         deleteEventButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             deleteEventButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -87,12 +193,6 @@ class freeDrinkNightViewController: UIViewController {
             deleteEventButton.widthAnchor.constraint(equalToConstant: 150), // Adjust width as needed
             deleteEventButton.heightAnchor.constraint(equalToConstant: 60) // Adjust height as needed
         ])
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(receivedButtonTapped))
-            
-        // Add the UITapGestureRecognizer to the receivedButton
-        receivedButton.isUserInteractionEnabled = true
-        receivedButton.addGestureRecognizer(tapGesture)
         
     }
     @objc func deleteEventTapped() {
@@ -187,7 +287,7 @@ class freeDrinkNightViewController: UIViewController {
         }
     }
     
-    @IBAction func dismissVC(_ sender: Any) {
+    @objc func dismissVC(_ sender: Any) {
         dismiss(animated: true)
     }
     

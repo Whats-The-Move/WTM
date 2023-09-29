@@ -22,7 +22,7 @@ class EventCell: UITableViewCell {
         // This will disable the default highlighting behavior
     }
 
-    private func setupSubviews() {
+    func setupSubviews() {
         placeLabel.textColor = .black
         nameLabel.textColor = .black
         timeLabel.textColor = .black
@@ -109,3 +109,5 @@ class NoEventsCell: UITableViewCell {
         messageLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 }
+
+

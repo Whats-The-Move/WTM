@@ -2,7 +2,7 @@ import UIKit
 import FirebaseStorage
 import Firebase
 import FirebaseAuth
-class DestinationViewController: UIViewController {
+class ShowEventViewController: UIViewController {
     // UI Elements
     private let titleLabel = UILabel()
     private let venueNameLabel = UILabel()
@@ -220,6 +220,7 @@ class DestinationViewController: UIViewController {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.leadingAnchor.constraint(equalTo: addressLabel.leadingAnchor).isActive = true
         descriptionLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 40).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

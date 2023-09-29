@@ -1685,7 +1685,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kfk-Tw-ZvL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3534" y="55"/>
+            <point key="canvasLocation" x="3477" y="55"/>
         </scene>
         <!--Create Account View Controller-->
         <scene sceneID="wPd-jR-Ug9">
@@ -3166,83 +3166,10 @@
                     <view key="view" contentMode="scaleToFill" id="RGs-Gw-IoL">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Free Drink Night!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9uy-1W-MUh">
-                                <rect key="frame" x="0.0" y="88" width="390" height="33"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="33" id="9Ej-8r-CuC"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="25"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show this screen to a bartender to claim your free drink!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edY-q0-1Ty">
-                                <rect key="frame" x="88" y="472" width="214" height="82"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="82" id="FWo-k9-Agg"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DO NOT TAP                               This can only be clicked once, and it must be clicked by an employee of the bar!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gK7-Vu-DHM">
-                                <rect key="frame" x="88" y="597" width="214" height="104"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="104" id="nGm-Uk-tJw"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eo6-zh-vhh">
-                                <rect key="frame" x="187" y="27" width="17" height="22"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="qAM-B0-mDP"/>
-                                </constraints>
-                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="arrow.down" catalog="system"/>
-                                <connections>
-                                    <action selector="dismissVC:" destination="iZW-Ik-aRl" eventType="touchUpInside" id="VUC-O6-bcS"/>
-                                </connections>
-                            </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clinking-beer-mugs_1f37b" translatesAutoresizingMaskIntoConstraints="NO" id="qe1-eN-v6B">
-                                <rect key="frame" x="42" y="192" width="306" height="196"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="196" id="X5O-oa-seK"/>
-                                    <constraint firstAttribute="width" constant="306" id="qv6-c1-AXZ"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Wvw-JJ-ZCn"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="edY-q0-1Ty" firstAttribute="leading" secondItem="gK7-Vu-DHM" secondAttribute="leading" id="56f-4g-iwb"/>
-                            <constraint firstItem="edY-q0-1Ty" firstAttribute="leading" secondItem="Wvw-JJ-ZCn" secondAttribute="leading" constant="88" id="732-ko-r9d"/>
-                            <constraint firstItem="qe1-eN-v6B" firstAttribute="centerX" secondItem="edY-q0-1Ty" secondAttribute="centerX" id="G35-nr-q0l"/>
-                            <constraint firstItem="9uy-1W-MUh" firstAttribute="centerX" secondItem="qe1-eN-v6B" secondAttribute="centerX" id="SWu-Vj-KsI"/>
-                            <constraint firstItem="qe1-eN-v6B" firstAttribute="leading" secondItem="Wvw-JJ-ZCn" secondAttribute="leading" constant="42" id="Swi-H9-rXe"/>
-                            <constraint firstItem="9uy-1W-MUh" firstAttribute="top" secondItem="Eo6-zh-vhh" secondAttribute="bottom" constant="39" id="VE6-xk-lFO"/>
-                            <constraint firstItem="Eo6-zh-vhh" firstAttribute="centerX" secondItem="RGs-Gw-IoL" secondAttribute="centerX" id="Zf1-DA-sss"/>
-                            <constraint firstItem="edY-q0-1Ty" firstAttribute="top" secondItem="qe1-eN-v6B" secondAttribute="bottom" constant="84" id="ZjN-5g-PCo"/>
-                            <constraint firstItem="Wvw-JJ-ZCn" firstAttribute="bottom" secondItem="gK7-Vu-DHM" secondAttribute="bottom" constant="133" id="b2v-vk-e3e"/>
-                            <constraint firstItem="Eo6-zh-vhh" firstAttribute="leading" secondItem="Wvw-JJ-ZCn" secondAttribute="leading" constant="187" id="fmx-4j-0nu"/>
-                            <constraint firstItem="gK7-Vu-DHM" firstAttribute="top" secondItem="edY-q0-1Ty" secondAttribute="bottom" constant="43" id="frn-Db-cdP"/>
-                            <constraint firstItem="edY-q0-1Ty" firstAttribute="trailing" secondItem="gK7-Vu-DHM" secondAttribute="trailing" id="gdG-P6-0Ye"/>
-                            <constraint firstItem="qe1-eN-v6B" firstAttribute="top" secondItem="9uy-1W-MUh" secondAttribute="bottom" constant="71" id="mT9-Kd-NeD"/>
-                            <constraint firstItem="Eo6-zh-vhh" firstAttribute="top" secondItem="Wvw-JJ-ZCn" secondAttribute="top" constant="27" id="ndk-H4-pgl"/>
-                            <constraint firstItem="Eo6-zh-vhh" firstAttribute="centerX" secondItem="9uy-1W-MUh" secondAttribute="centerX" id="oCk-z9-zPx"/>
-                            <constraint firstItem="9uy-1W-MUh" firstAttribute="leading" secondItem="Wvw-JJ-ZCn" secondAttribute="leading" id="tCY-fW-gtk"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="9XL-mt-MMs"/>
-                    <connections>
-                        <outlet property="clickOnceLabel" destination="gK7-Vu-DHM" id="B8M-8f-he0"/>
-                        <outlet property="receivedButton" destination="qe1-eN-v6B" id="lfM-YB-nQq"/>
-                        <outlet property="showScreenLabel" destination="edY-q0-1Ty" id="kjF-UT-iYm"/>
-                        <outlet property="swipeDownButton" destination="Eo6-zh-vhh" id="Cj6-qG-o9z"/>
-                        <outlet property="titleLabel" destination="9uy-1W-MUh" id="2Z5-ID-zdx"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VqI-xU-jBy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3336,7 +3263,6 @@
     <resources>
         <image name="WTM_" width="409" height="101"/>
         <image name="arrow" width="106" height="106"/>
-        <image name="arrow.down" catalog="system" width="118" height="128"/>
         <image name="arrow.right" catalog="system" width="128" height="95"/>
         <image name="arrowshape.backward.fill" catalog="system" width="128" height="104"/>
         <image name="arrowshape.forward.fill" catalog="system" width="128" height="104"/>
@@ -3350,7 +3276,6 @@
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="chevron.backward.circle" catalog="system" width="128" height="123"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
-        <image name="clinking-beer-mugs_1f37b" width="160" height="160"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
