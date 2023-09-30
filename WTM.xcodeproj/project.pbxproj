@@ -29,6 +29,7 @@
 		08B8A5372A72BB440082B8E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08B8A5362A72BB440082B8E6 /* GoogleService-Info.plist */; };
 		08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */; };
 		08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */; };
+		08CB6A612AC79E5500576D96 /* upcomingEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CB6A602AC79E5500576D96 /* upcomingEventsViewController.swift */; };
 		08CF0393297CB6030074A878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0392297CB6030074A878 /* AppDelegate.swift */; };
 		08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0394297CB6030074A878 /* SceneDelegate.swift */; };
 		08CF0397297CB6030074A878 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF0396297CB6030074A878 /* ViewController.swift */; };
@@ -108,6 +109,7 @@
 		08B8A5362A72BB440082B8E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addFriendCustomCellClass.swift; sourceTree = "<group>"; };
 		08C7C5DE2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allFriendsPopUpViewController.swift; sourceTree = "<group>"; };
+		08CB6A602AC79E5500576D96 /* upcomingEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upcomingEventsViewController.swift; sourceTree = "<group>"; };
 		08CF038F297CB6030074A878 /* WTM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WTM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CF0392297CB6030074A878 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		08CF0394297CB6030074A878 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				086E2E402A88163C00BC7D85 /* EventCell.swift */,
 				086E2E3E2A88160300BC7D85 /* Event.swift */,
 				08E504942AA519BF000B4023 /* freeDrinkNightViewController.swift */,
+				08CB6A602AC79E5500576D96 /* upcomingEventsViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -602,6 +605,7 @@
 				08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
+				08CB6A612AC79E5500576D96 /* upcomingEventsViewController.swift in Sources */,
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,
 				10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */,
 				08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */,
