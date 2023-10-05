@@ -10,8 +10,10 @@ class ShowEventViewController: UIViewController {
     private let eventName = UILabel()
     private let addressLabel = UILabel()
     private let descriptionLabel = UILabel()
-    var labels : [UILabel] = []
+    var labels : [UIView] = []
     private let deleteEventButton = UIButton()
+    let goingButton = UIImageView()
+    let gradientLayer = CAGradientLayer()
 
 
 
@@ -51,7 +53,7 @@ class ShowEventViewController: UIViewController {
                 deleteEventButton.isHidden = false}
             
 
-        labels = [venueNameLabel, eventName, startTimeLabel, addressLabel, descriptionLabel]
+        labels = [venueNameLabel, eventName, startTimeLabel, addressLabel, descriptionLabel, goingButton]
 
         
         addHorizontalLine(belowView: titleLabel, spacing: 10.0)
@@ -113,7 +115,46 @@ class ShowEventViewController: UIViewController {
         // Add a tap gesture recognizer to the button
         deleteEventButton.addTarget(self, action: #selector(deleteEventTapped), for: .touchUpInside)
 
+        
+        let image = UIImage(named: "clinking-beer-mugs_1f37b")
+        goingButton.image = image
+                
+        // Add a tap gesture recognizer to the button
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(isGoingTapped))
+        goingButton.isUserInteractionEnabled = true
+        goingButton.addGestureRecognizer(tapGestureRecognizer)
+        goingButton.alpha = 0.5
+        goingButton.contentMode = .scaleAspectFit
+
+        // Set the frame and position of the UIImageView
+
+        // Create a circular border
+        goingButton.layer.cornerRadius = 150 / 2
+        goingButton.layer.borderWidth = 2.0
+        goingButton.layer.borderColor = UIColor(red: 255/255.0, green: 22/255.0, blue: 148/255.0, alpha: 1.0).cgColor // Border color (RGB values)
+        goingButton.clipsToBounds = true
+
+        // Add a drop shadow
+        goingButton.layer.shadowColor = UIColor.black.cgColor
+        goingButton.layer.shadowOffset = CGSize(width: 0, height: 2)
+        goingButton.layer.shadowOpacity = 1
+        goingButton.layer.shadowRadius = 4.0
+
         // Add the button to your view
+        view.addSubview(goingButton)
+        checkColor()
+
+        goingButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Center the button horizontally
+        NSLayoutConstraint.activate([
+            goingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            goingButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: view.frame.height / 4), // Adjust the constant to position it vertically
+            goingButton.widthAnchor.constraint(equalToConstant: 150),
+            goingButton.heightAnchor.constraint(equalToConstant: 150)
+        ])
+        
+        
         view.addSubview(deleteEventButton)
 
         // Configure constraints for the button
@@ -124,6 +165,114 @@ class ShowEventViewController: UIViewController {
             deleteEventButton.widthAnchor.constraint(equalToConstant: 150), // Adjust width as needed
             deleteEventButton.heightAnchor.constraint(equalToConstant: 60) // Adjust height as needed
         ])
+    }
+    func checkColor(){
+        print("going tapped")
+        let database = Database.database().reference()
+        let currentUserUID = Auth.auth().currentUser?.uid
+        
+        // Reference to the isGoing field in the selected event
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy" // You can choose your desired date format
+        let dateString = dateFormatter.string(from: selectedItem.date)
+        
+        var queryFrom = "Events"
+        if dbName == "BerkeleyParties" {
+            queryFrom = "BerkeleyEvents"
+        } else if dbName == "ChicagoParties" {
+            queryFrom = "ChicagoEvents"
+        } else {
+            queryFrom = "EventsTest"
+        }
+        print(dateString)
+        let isGoingRef = database.child(queryFrom).child(dateString).child(selectedItem.place).child("isGoing")
+        
+        isGoingRef.observeSingleEvent(of: .value) { (snapshot) in
+            if let isGoingList = snapshot.value as? [String] {
+                print("got the snapshot")
+                if let currentUserIndex = isGoingList.firstIndex(of: currentUserUID ?? "") {
+                    // User is in the list, remove them
+
+                    
+                    // Set the alpha to 0.5
+                    self.goingButton.alpha = 1.0
+                } else {
+                    // User is not in the list, add them
+
+                    
+                    // Set the alpha to 1.0
+                    self.goingButton.alpha = 0.5
+                }
+            }
+        }
+    }
+    @objc func isGoingTapped() {
+
+        print("going tapped")
+        let database = Database.database().reference()
+        let currentUserUID = Auth.auth().currentUser?.uid
+        
+        // Reference to the isGoing field in the selected event
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy" // You can choose your desired date format
+        let dateString = dateFormatter.string(from: selectedItem.date)
+        
+        var queryFrom = "Events"
+        if dbName == "BerkeleyParties" {
+            queryFrom = "BerkeleyEvents"
+        } else if dbName == "ChicagoParties" {
+            queryFrom = "ChicagoEvents"
+        } else {
+            queryFrom = "EventsTest"
+        }
+        print(dateString)
+        let isGoingRef = database.child(queryFrom).child(dateString).child(selectedItem.place).child("isGoing")
+        
+        isGoingRef.observeSingleEvent(of: .value) { (snapshot) in
+            if var isGoingList = snapshot.value as? [String] {
+                print("got the snapshot")
+                if let currentUserIndex = isGoingList.firstIndex(of: currentUserUID ?? "") {
+                    // User is in the list, remove them
+                    isGoingList.remove(at: currentUserIndex)
+                    
+                    // Update the isGoing field in Firebase
+                    isGoingRef.setValue(isGoingList)
+
+                    if let sublayers = self.view.layer.sublayers {
+                        for layer in sublayers {
+                            if layer is CAGradientLayer {
+                                layer.removeFromSuperlayer()
+                            }
+                        }
+                    }
+                    // Set the alpha to 0.5
+                    self.goingButton.alpha = 0.5
+                } else {
+                    // User is not in the list, add them
+                    isGoingList.append(currentUserUID ?? "")
+                    
+                    // Update the isGoing field in Firebase
+                    isGoingRef.setValue(isGoingList)
+                    
+                    // Set the alpha to 1.0
+                    let pinkColor1 = UIColor(red: 231.0/255.0, green: 19.0/255.0, blue: 238.0/255.0, alpha: 1.0).cgColor
+                    let pinkColor2 = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 100.0/255.0, alpha: 1.0).cgColor
+                    self.gradientLayer.colors = [pinkColor1, pinkColor2]
+                    
+                    // Set the frame for the gradient layer to cover the entire view
+                    self.gradientLayer.frame = self.view.bounds
+                    
+                    // Add the gradientLayer to the view controller's view
+                    self.view.layer.insertSublayer(self.gradientLayer, at: 0)
+                    self.goingButton.alpha = 1.0
+                }
+            }
+            else{
+                let initialList = [currentUserUID ?? ""]
+                isGoingRef.setValue(initialList)
+                self.goingButton.alpha = 1.0
+            }
+        }
     }
     @objc func deleteEventTapped() {
         // Show an alert when the button is tapped

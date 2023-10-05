@@ -1011,9 +1011,17 @@ extension AppHomeViewController: UITableViewDataSource {
         if tableView == partyList {
            //do nothing for now
 
+            var destinationVC = PublicPopUpViewController(selectedParty: parties[indexPath.section])
 
             // Create an instance of the DestinationViewController and pass the selectedItem
-            let destinationVC = PublicPopUpViewController(selectedParty: parties[indexPath.section])
+            if searching {
+                if let foundParty = parties.first(where: { $0.name == searchParty[indexPath.section] }) {
+                    destinationVC = PublicPopUpViewController(selectedParty:foundParty)
+                }
+
+
+            }
+            
 
             // Present the destination view controller modally
             present(destinationVC, animated: true, completion: nil)
