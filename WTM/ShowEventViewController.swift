@@ -14,6 +14,12 @@ class ShowEventViewController: UIViewController {
     private let deleteEventButton = UIButton()
     let goingButton = UIImageView()
     let gradientLayer = CAGradientLayer()
+    let topBkgd = UIView()
+    var imageViewsStack = UIStackView()
+    var profileImageViews: [UIImageView] = []
+    var partyGoersArray: [String] = []
+
+
 
 
 
@@ -53,40 +59,73 @@ class ShowEventViewController: UIViewController {
                 deleteEventButton.isHidden = false}
             
 
-        labels = [venueNameLabel, eventName, startTimeLabel, addressLabel, descriptionLabel, goingButton]
+        labels = [startTimeLabel, addressLabel, descriptionLabel, goingButton]
 
-        
-        addHorizontalLine(belowView: titleLabel, spacing: 10.0)
+        //venueNameLabel, eventName,
+        //addHorizontalLine(belowView: titleLabel, spacing: 10.0)
 
         // Add constraints
         configureConstraints()
+
         labels.forEach { label in
             label.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
         }
     }
+    func checkFriendshipStatus(isGoing: [String], completion: @escaping ([String]) -> Void) {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("Error: No user is currently signed in.")
+            completion([])
+            return
+        }
 
+        let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                guard let friendList = document.data()?["friends"] as? [String] else {
+                    print("Error: No friends list found.")
+                    completion([])
+                    return
+                }
+
+                let commonFriends = friendList.filter { isGoing.contains($0) }
+                print(commonFriends)
+                completion(commonFriends)
+            } else {
+                print("Error: Current user document does not exist.")
+                completion([])
+            }
+        }
+    }
     private func configureLabels() {
         // Configure titleLabel
-        titleLabel.font = UIFont(name: "Futura-Medium", size: 40)
-        titleLabel.textColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+        
+        topBkgd.backgroundColor = UIColor.black
+        view.addSubview(topBkgd)
+        let pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+        titleLabel.font = UIFont(name: "Futura-Medium", size: 32)
+        titleLabel.textColor = UIColor.white
         // Assuming selectedItem.date is of type Date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy" // Define the desired date format
-        titleLabel.text = dateFormatter.string(from: selectedItem.date)
+ // Define the desired date format
+        titleLabel.text = selectedItem.name//
+        titleLabel.textAlignment = .center // Center-align the text
 
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
 
         // Configure venueNameLabel
-        venueNameLabel.font = UIFont(name: "Futura-Medium", size: 20)
-        venueNameLabel.textColor = UIColor.black
-        venueNameLabel.text = "Who?: " + selectedItem.place // Set the text based on selectedItem's properties
+        venueNameLabel.font = UIFont(name: "Futura-Medium", size: 18)
+        venueNameLabel.textColor = pinkColor
+        venueNameLabel.text = dateFormatter.string(from: selectedItem.date)
+         // Set the text based on selectedItem's properties
 
         eventName.font = UIFont(name: "Futura-Medium", size: 20)
-        eventName.textColor = UIColor.black
-        eventName.text = "What?: " + selectedItem.name // Set the text based on selectedItem's properties
+        eventName.textColor = pinkColor
+        eventName.text = selectedItem.place // Set the text based on selectedItem's properties
 
         // Configure startTimeLabel
         startTimeLabel.font = UIFont(name: "Futura-Medium", size: 20)
-        startTimeLabel.textColor = UIColor.black
+        startTimeLabel.textColor = pinkColor //UIColor.black
         // Assuming selectedItem.time is a Unix timestamp (TimeInterval)
         dateFormatter.dateFormat = "h:mm a" // Define the desired time format
 
@@ -95,11 +134,11 @@ class ShowEventViewController: UIViewController {
         startTimeLabel.text = "When?: " + dateFormatter.string(from: selectedTimeDate) + " to " + dateFormatter.string(from: selectedEndTimeDate)
         
         addressLabel.font = UIFont(name: "Futura-Medium", size: 20)
-        addressLabel.textColor = UIColor.black
+        addressLabel.textColor = pinkColor // UIColor.black
         addressLabel.text = "Where?: " + selectedItem.location // Set the text based on selectedItem's properties
         
         descriptionLabel.font = UIFont(name: "Futura-Medium", size: 20)
-        descriptionLabel.textColor = UIColor.black
+        descriptionLabel.textColor = pinkColor //UIColor.black
         descriptionLabel.text = "Description: " + selectedItem.description // Set the text based on selectedItem's properties
         descriptionLabel.numberOfLines = 0
         
@@ -149,7 +188,7 @@ class ShowEventViewController: UIViewController {
         // Center the button horizontally
         NSLayoutConstraint.activate([
             goingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            goingButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: view.frame.height / 4), // Adjust the constant to position it vertically
+            goingButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: view.frame.height / 8), // Adjust the constant to position it vertically
             goingButton.widthAnchor.constraint(equalToConstant: 150),
             goingButton.heightAnchor.constraint(equalToConstant: 150)
         ])
@@ -165,6 +204,154 @@ class ShowEventViewController: UIViewController {
             deleteEventButton.widthAnchor.constraint(equalToConstant: 150), // Adjust width as needed
             deleteEventButton.heightAnchor.constraint(equalToConstant: 60) // Adjust height as needed
         ])
+    }
+    func assignProfilePictures(commonFriends: [String]) {
+            
+        imageViewsStack.axis = .horizontal
+        imageViewsStack.alignment = .fill
+        imageViewsStack.distribution = .fill
+        imageViewsStack.spacing = -10 // Adjust the spacing between image views as needed
+        var maxImageCount = 8 // Maximum number of profile pictures to show
+
+        // Remove existing profile image views from the stack view and clear the array
+        for profileImageView in profileImageViews {
+            imageViewsStack.removeArrangedSubview(profileImageView)
+            profileImageView.removeFromSuperview()
+        }
+        profileImageViews.removeAll()
+
+        // Create 4 image views and add them to the stack view
+        for _ in 0..<maxImageCount {
+            let profileImageView = UIImageView()
+            profileImageViews.append(profileImageView)
+
+            // Set up properties and constraints for the profileImageView (same as before)
+            profileImageView.layer.cornerRadius = 35.0 / 2
+            profileImageView.clipsToBounds = true
+            profileImageView.contentMode = .scaleAspectFill
+            profileImageView.layer.borderWidth = 1.0
+            profileImageView.layer.borderColor = UIColor.black.cgColor
+            profileImageView.isUserInteractionEnabled = true
+            profileImageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+            profileImageView.translatesAutoresizingMaskIntoConstraints = false
+            profileImageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
+            profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
+            //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
+            //profileImageView.addGestureRecognizer(tapGesture)
+
+            // Add the profile image view to the stack view
+            imageViewsStack.addArrangedSubview(profileImageView)
+        }
+
+        // Assign profile pictures to the image views
+        for i in 0..<commonFriends.count {
+            if i >= maxImageCount {
+                break // Break out of the loop if we have filled all 4 image views
+            }
+
+            let friendUID = commonFriends[i]
+            let profileImageView = profileImageViews[i]
+
+            // Load the profile picture from commonFriends
+            let userRef = Firestore.firestore().collection("users").document(friendUID)
+            userRef.getDocument { (document, error) in
+                if let error = error {
+                    print("Error retrieving profile picture: \(error.localizedDescription)")
+                    return
+                }
+
+                if let document = document, document.exists {
+                    if let profilePicURL = document.data()?["profilePic"] as? String {
+                        // Assuming you have a function to retrieve the image from the URL
+                        self.loadImage(from: profilePicURL, to: profileImageView)
+                    } else {
+                        print("No profile picture found for friend with UID: \(friendUID)")
+                        profileImageView.image = AppHomeViewController().transImage
+                        profileImageView.layer.borderWidth = 0
+                    }
+                }
+            }
+        }
+
+        // Hide the remaining image views with transparent image
+        for i in min(commonFriends.count, maxImageCount)..<maxImageCount {
+            profileImageViews[i].image = AppHomeViewController().transImage
+            profileImageViews[i].isUserInteractionEnabled = false
+            profileImageViews[i].layer.borderWidth = 0
+        }
+
+        // Rest of your existing code...
+        // ...
+
+        // Update the stack view with the arranged profile image views
+        let stackViewSuperview = self.view // Replace this with the superview of your desired location for the stack view
+        imageViewsStack.translatesAutoresizingMaskIntoConstraints = false
+        stackViewSuperview?.addSubview(imageViewsStack)
+
+        // Add constraints to position the stack view (bottom right corner of the cell)
+        let circles = maxImageCount//min(commonFriends.count, 4)
+        NSLayoutConstraint.activate([
+            imageViewsStack.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 8), // Adjust the right margin as needed
+            imageViewsStack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50), // Adjust the bottom margin as needed
+            imageViewsStack.widthAnchor.constraint(equalToConstant: CGFloat(circles) * 35.0 - CGFloat(circles - 1) * 10.0), // Adjust the width of the stack view based on the number of image views and the spacing
+            imageViewsStack.heightAnchor.constraint(equalToConstant: 35.0)
+        ])
+    
+/*
+        plusMoreLabel.font = UIFont(name: "Futura-Medium", size: 15)
+        plusMoreLabel.textColor = .black
+        plusMoreLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        // Add the plusMoreLabel to the cell's contentView
+        plusMoreBkgd.translatesAutoresizingMaskIntoConstraints = false
+        plusMoreBkgd.backgroundColor = UIColor.gray.withAlphaComponent(1.0)
+        plusMoreBkgd.layer.cornerRadius = 17.5 // Half of 35px
+        plusMoreBkgd.layer.borderWidth = 1
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profTapped(_:)))
+        plusMoreBkgd.addGestureRecognizer(tapGesture)
+        
+        contentView.addSubview(plusMoreBkgd)
+ 
+
+        // Set up constraints for the circular background view
+        NSLayoutConstraint.activate([
+            plusMoreBkgd.widthAnchor.constraint(equalToConstant: 35),
+            plusMoreBkgd.heightAnchor.constraint(equalToConstant: 35),
+            plusMoreBkgd.leadingAnchor.constraint(equalTo: imageViewsStack.trailingAnchor, constant: -10),
+            plusMoreBkgd.topAnchor.constraint(equalTo: imageViewsStack.topAnchor)
+        ])
+
+        // Add the plusMoreLabel to the circular background view
+        contentView.addSubview(plusMoreLabel)
+
+        // Set up constraints for the plusMoreLabel within the circular background view
+        NSLayoutConstraint.activate([
+            plusMoreLabel.centerXAnchor.constraint(equalTo: plusMoreBkgd.centerXAnchor),
+            plusMoreLabel.centerYAnchor.constraint(equalTo: plusMoreBkgd.centerYAnchor)
+        ])
+
+        // Update the plusMoreLabel text based on commonFriends count and maxImageCount
+        if commonFriends.count > maxImageCount {
+            plusMoreBkgd.isHidden = false
+
+            plusMoreLabel.text = "+" + String(commonFriends.count - maxImageCount)
+        } else {
+            plusMoreLabel.text = ""
+        }
+    
+    contentView.addSubview(plusMoreLabel)
+
+ */
+
+        }
+    func loadImage(from urlString: String, to imageView: UIImageView) {
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL: \(urlString)")
+            return
+        }
+        
+        imageView.kf.setImage(with: url)
     }
     func checkColor(){
         print("going tapped")
@@ -190,6 +377,11 @@ class ShowEventViewController: UIViewController {
         isGoingRef.observeSingleEvent(of: .value) { (snapshot) in
             if let isGoingList = snapshot.value as? [String] {
                 print("got the snapshot")
+                self.partyGoersArray = isGoingList
+                self.checkFriendshipStatus(isGoing: self.partyGoersArray) { commonFriends in
+                    self.assignProfilePictures(commonFriends: commonFriends)
+                    //print(commonFriends)
+                }
                 if let currentUserIndex = isGoingList.firstIndex(of: currentUserUID ?? "") {
                     // User is in the list, remove them
 
@@ -343,33 +535,40 @@ class ShowEventViewController: UIViewController {
     private func configureConstraints() {
         // Add constraints for titleLabel
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30).isActive = true
-
-        // Add constraints for venueNameLabel
+        topBkgd.translatesAutoresizingMaskIntoConstraints = false
         venueNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        venueNameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 20).isActive = true
-        venueNameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40).isActive = true
-
-        // Add constraints for startTimeLabel
-
-        
         eventName.translatesAutoresizingMaskIntoConstraints = false
-        eventName.leadingAnchor.constraint(equalTo: venueNameLabel.leadingAnchor).isActive = true
-        eventName.topAnchor.constraint(equalTo: venueNameLabel.bottomAnchor, constant: 40).isActive = true
-        
         startTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        startTimeLabel.leadingAnchor.constraint(equalTo: eventName.leadingAnchor).isActive = true
-        startTimeLabel.topAnchor.constraint(equalTo: eventName.bottomAnchor, constant: 40).isActive = true
-
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
-        addressLabel.leadingAnchor.constraint(equalTo: startTimeLabel.leadingAnchor).isActive = true
-        addressLabel.topAnchor.constraint(equalTo: startTimeLabel.bottomAnchor, constant: 40).isActive = true
-        
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.leadingAnchor.constraint(equalTo: addressLabel.leadingAnchor).isActive = true
-        descriptionLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 40).isActive = true
-        descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
+
+        
+        NSLayoutConstraint.activate([
+            topBkgd.topAnchor.constraint(equalTo: view.topAnchor),
+            topBkgd.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topBkgd.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topBkgd.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
+            
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            
+            venueNameLabel.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
+            venueNameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            
+            eventName.centerXAnchor.constraint(equalTo: venueNameLabel.centerXAnchor),
+            eventName.topAnchor.constraint(equalTo: venueNameLabel.bottomAnchor, constant: 20),
+            
+            startTimeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            startTimeLabel.topAnchor.constraint(equalTo: eventName.bottomAnchor, constant: 40),
+            
+            addressLabel.leadingAnchor.constraint(equalTo: startTimeLabel.leadingAnchor),
+            addressLabel.topAnchor.constraint(equalTo: startTimeLabel.bottomAnchor, constant: 40),
+            
+            descriptionLabel.leadingAnchor.constraint(equalTo: addressLabel.leadingAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 40),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+        ])
+
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
