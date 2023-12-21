@@ -9,7 +9,6 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         super.init(frame: frame)
         setupTitleLabel()
         setupHorizontalCollectionView()
-
     }
     
     required init?(coder: NSCoder) {
@@ -20,6 +19,7 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         titleLabel = UILabel()
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.text = "trending"
         contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
@@ -35,7 +35,7 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         layout.itemSize = CGSize(width: 100, height: 150) // Adjust as needed
 
         horizontalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        horizontalCollectionView.backgroundColor = .white
+        horizontalCollectionView.backgroundColor = .clear
         horizontalCollectionView.dataSource = self
         horizontalCollectionView.delegate = self
         horizontalCollectionView.register(HorizontalCollectionViewCell.self, forCellWithReuseIdentifier: "HorizontalCell")
@@ -61,7 +61,7 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath)
         // Configure your cell here
-        cell.backgroundColor = .gray // Example styling
+        //cell.backgroundColor = .lightGray // Example styling
         return cell
     }
 
