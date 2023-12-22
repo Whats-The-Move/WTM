@@ -10,6 +10,9 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         setupTitleLabel()
         setupHorizontalCollectionView()
     }
+    func configure(withTitle title: String) {
+        titleLabel.text = title
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -19,7 +22,7 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         titleLabel = UILabel()
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = "trending"
+
         contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
