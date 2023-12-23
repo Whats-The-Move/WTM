@@ -94,7 +94,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // Adjust cell size
         if indexPath.item == 0 {
-            return CGSize(width: 300, height: 300) // Example size
+            return CGSize(width: 300, height: 350) // Example size
         }
         else {
             return CGSize(width: view.frame.width, height: 200) // Example size

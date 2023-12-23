@@ -12,9 +12,9 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
 
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 290, height: 290)
+        layout.itemSize = CGSize(width: 280, height: 350)
         layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = -10
+        layout.minimumInteritemSpacing = 0
         galleryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         galleryCollectionView.collectionViewLayout = layout
 
@@ -24,6 +24,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         setupTitleLabel()
         setupGalleryCollectionView()
         setupPageControl()
+
     }
 
     required init?(coder: NSCoder) {
@@ -40,7 +41,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
@@ -54,7 +55,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         galleryCollectionView.register(ImageCell.self, forCellWithReuseIdentifier: "ImageCell")
         galleryCollectionView.dataSource = self
         galleryCollectionView.delegate = self
-
+        galleryCollectionView.layer.cornerRadius = 10
         contentView.addSubview(galleryCollectionView)
 
         NSLayoutConstraint.activate([
@@ -99,7 +100,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as? ImageCell else {
             fatalError("Could not dequeue ImageCell")
         }
-        cell.configure(with: galleryImages[indexPath.row])
+        cell.configure(with: galleryImages[indexPath.item])
         //cell.layer.cornerRadius = 10
         return cell
     }
@@ -107,10 +108,15 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
 
 class ImageCell: UICollectionViewCell {
     private let imageView = UIImageView()
+    private var pplLabel: UILabel!
+    private var pplImage: UIImageView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupImageView()
+        setupPplLabel()
+        setupPplImage()
+        setupCellAppearance()
     }
 
     required init?(coder: NSCoder) {
@@ -121,18 +127,55 @@ class ImageCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10
+        //imageView.layer.cornerRadius = 10
         contentView.addSubview(imageView)
 
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -70),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
+    private func setupPplLabel() {
+            pplLabel = UILabel()
+            pplLabel.translatesAutoresizingMaskIntoConstraints = false
+            pplLabel.text = "36" // Set the default text
+            pplLabel.font = UIFont.boldSystemFont(ofSize: 18)
+            contentView.addSubview(pplLabel)
+
+            NSLayoutConstraint.activate([
+                pplLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor),
+                //pplLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                pplLabel.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
+                pplLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                pplLabel.heightAnchor.constraint(equalToConstant: 50)
+            ])
+        }
+
+        private func setupPplImage() {
+            pplImage = UIImageView(image: UIImage(systemName: "person.3.fill"))
+            pplImage.tintColor = UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 1)
+            pplImage.translatesAutoresizingMaskIntoConstraints = false
+            pplImage.contentMode = .scaleAspectFit
+            contentView.addSubview(pplImage)
+
+            NSLayoutConstraint.activate([
+                pplImage.centerYAnchor.constraint(equalTo: pplLabel.centerYAnchor),
+                pplImage.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -5),
+                pplImage.widthAnchor.constraint(equalToConstant: 40),
+                pplImage.heightAnchor.constraint(equalToConstant: 32)
+            ])
+        }
 
     func configure(with image: UIImage) {
         imageView.image = image
+    }
+    private func setupCellAppearance() {
+        contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
+
+
     }
 }

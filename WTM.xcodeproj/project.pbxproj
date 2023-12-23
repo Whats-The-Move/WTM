@@ -63,7 +63,6 @@
 		10B5002B2A268214004FAC97 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */; };
 		10B616372B33E22900CE1226 /* NewHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616362B33E22900CE1226 /* NewHomeViewController.swift */; };
 		10B616392B33E69100CE1226 /* VerticalCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */; };
-		10B6163B2B33E69E00CE1226 /* HorizontalCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163A2B33E69E00CE1226 /* HorizontalCollectionViewCell.swift */; };
 		10B6163D2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */; };
 		10C1699A2AB969AB00355BC4 /* ShowEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C169992AB969AB00355BC4 /* ShowEventViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
@@ -154,7 +153,6 @@
 		10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		10B616362B33E22900CE1226 /* NewHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeViewController.swift; sourceTree = "<group>"; };
 		10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalCollectionViewCell.swift; sourceTree = "<group>"; };
-		10B6163A2B33E69E00CE1226 /* HorizontalCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCollectionViewCell.swift; sourceTree = "<group>"; };
 		10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		10C169992AB969AB00355BC4 /* ShowEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -238,7 +236,6 @@
 				10B616362B33E22900CE1226 /* NewHomeViewController.swift */,
 				10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */,
 				10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */,
-				10B6163A2B33E69E00CE1226 /* HorizontalCollectionViewCell.swift */,
 				083B618F2A1FD00400018798 /* CustomCellClass.swift */,
 				08F793292A4A505300679EB9 /* privatePartyCellClass.swift */,
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
@@ -615,7 +612,6 @@
 				08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */,
 				086E2E412A88163C00BC7D85 /* EventCell.swift in Sources */,
 				08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */,
-				10B6163B2B33E69E00CE1226 /* HorizontalCollectionViewCell.swift in Sources */,
 				0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */,
 				086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */,
 				08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */,
