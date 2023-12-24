@@ -4,7 +4,17 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
 
     var verticalCollectionView: UICollectionView!
     let filters = ["trending", "friend's choice", "your favorites", "best deals"]
+    var events: [[EventLoad]]
 
+    init(events: [[EventLoad]]) {
+        self.events = events
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupVerticalCollectionView()
@@ -46,7 +56,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     private func setupGradientBackground() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [UIColor.white.cgColor, UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 1).cgColor]
+        let pink = UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 1).cgColor
+        gradientLayer.colors = [ UIColor.white.cgColor, pink]
         gradientLayer.locations = [0.0, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
@@ -84,7 +95,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             cell.contentView.backgroundColor = .clear
 
             let filterTitle = filters[indexPath.item]
-            cell.configure(withTitle: filterTitle)
+            cell.configure(title: filterTitle, with: events[indexPath.item])
             return cell
         }
     }

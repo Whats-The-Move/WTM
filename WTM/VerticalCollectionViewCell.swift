@@ -1,17 +1,20 @@
 import UIKit
+import Kingfisher
 
 class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     var titleLabel: UILabel!
     var horizontalCollectionView: UICollectionView!
+    var events: [EventLoad] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupTitleLabel()
         setupHorizontalCollectionView()
     }
-    func configure(withTitle title: String) {
+    func configure(title: String, with events: [EventLoad]) {
         titleLabel.text = title
+        self.events = events
     }
     
     required init?(coder: NSCoder) {
@@ -58,15 +61,16 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // Return the number of items in each horizontal collection view
-        return 10 // Example number
+        return events.count // Example number
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! HorizontalCollectionViewCell
         // Configure your cell here
         //cell.backgroundColor = .lightGray // Example styling
+
         let imageName = "Fiji" // 'images' is the array of image names
-        cell.configure(with: imageName)
+        cell.configure(with: events[indexPath.item])
         return cell
     }
 
@@ -78,25 +82,25 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
     var pplLabel: UILabel!
     var pplImage: UIImageView!
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupImageView()
-        setupPplLabel()
-        setupPplImage()
 
-        setupCellAppearance()
+
+    override init(frame: CGRect = .zero) {
+        super.init(frame: frame)
+
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupImageView() {
+    private func setupImageView(event: EventLoad) {
         imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         //imageView.layer.cornerRadius = 10
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        loadImage(from: event.imageURL, to: self.imageView)
+
         contentView.addSubview(imageView)
 
         NSLayoutConstraint.activate([
@@ -106,11 +110,11 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
             imageView.heightAnchor.constraint(equalToConstant: 120) // Height of the image
         ])
     }
-    private func setupPplLabel() {
+    private func setupPplLabel(event: EventLoad) {
         pplLabel = UILabel()
         //imageView.layer.cornerRadius = 10
         pplLabel.translatesAutoresizingMaskIntoConstraints = false
-        pplLabel.text = "36"
+        pplLabel.text = String(event.isGoing.count)
         pplLabel.font = UIFont.boldSystemFont(ofSize: 16)
         contentView.addSubview(pplLabel)
 
@@ -121,7 +125,7 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
             pplLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
-    private func setupPplImage() {
+    private func setupPplImage(event: EventLoad) {
         pplImage = UIImageView(image: UIImage(systemName: "person.3.fill"))
         pplImage.tintColor = UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 1)
         pplImage.translatesAutoresizingMaskIntoConstraints = false
@@ -136,9 +140,25 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
             pplImage.heightAnchor.constraint(equalToConstant: 24)  // Adjust size as needed
         ])
     }
-    func configure(with imageName: String) {
+    func configure(with eventLoad: EventLoad) {
         // Load the image into imageView. Example:
-        imageView.image = UIImage(named: imageName)
+        //imageView.image = UIImage(named: imageName)
+        
+        //change above to immageview.image = loadImage(event.imageURL)
+        let event = eventLoad
+        setupImageView(event: event)
+        setupPplLabel(event: event)
+        setupPplImage(event: event)
+        setupCellAppearance()
+    }
+    
+    func loadImage(from urlString: String, to imageView: UIImageView) {
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL: \(urlString)")
+            return
+        }
+        
+        imageView.kf.setImage(with: url)
     }
 
     private func setupCellAppearance() {
