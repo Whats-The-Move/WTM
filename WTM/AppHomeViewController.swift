@@ -232,13 +232,16 @@ class AppHomeViewController: UIViewController, UITableViewDelegate, CustomCellDe
 
             if locationOptions[0] == "Champaign, IL" {
                 dbName = "Parties"
+                currCity = "Champaign"
             }
             else if locationOptions[0] == "Chicago, IL" {
                 dbName = "ChicagoParties"
+                currCity = "Chicago"
                 
             }
             else {
                 dbName = "BerkeleyParties"
+                currCity = "Berkeley"
             }
         }
     }

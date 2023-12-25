@@ -25,6 +25,7 @@ public var UID = ""
 public var publicOrPriv = true
 public var maxPeople = 0
 public var dbName = "Parties"
+public var currCity = "Champaign"
 public var userFcmToken = ""
 public var reviewRequested = false
 

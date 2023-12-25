@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iif-sc-Lfv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="I3F-17-A16">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -1468,6 +1468,82 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EVS-R5-0IA" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2587.6923076923076" y="814.69194312796208"/>
+        </scene>
+        <!--Anonymous Chat View Controller-->
+        <scene sceneID="6Ji-Lp-ykL">
+            <objects>
+                <viewController storyboardIdentifier="anonymousChat" useStoryboardIdentifierAsRestorationIdentifier="YES" id="I3F-17-A16" customClass="anonymousChatViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lhF-ey-Zi9">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLY-bu-mOy">
+                                <rect key="frame" x="158" y="73" width="74" height="39"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="z3A-eS-zfj">
+                                <rect key="frame" x="16" y="159" width="358" height="577"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textCell" id="AtO-Ll-me3" customClass="ChatMessageCell" customModule="WTM" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="358" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AtO-Ll-me3" id="44o-bP-hVo">
+                                            <rect key="frame" x="0.0" y="0.0" width="358" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type your message here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6g3-Ar-Hs7">
+                                <rect key="frame" x="16" y="744" width="308" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xfv-Sy-A4Q">
+                                <rect key="frame" x="332" y="744" width="42" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="ehf-IN-Pb7"/>
+                                </constraints>
+                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="paperplane.circle.fill" catalog="system" symbolScale="large"/>
+                                </state>
+                                <connections>
+                                    <action selector="sendMessage:" destination="I3F-17-A16" eventType="touchUpInside" id="LOK-fq-tTd"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7Hu-4G-Zfe"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="6g3-Ar-Hs7" firstAttribute="top" secondItem="z3A-eS-zfj" secondAttribute="bottom" constant="8" id="3SD-Lq-sW4"/>
+                            <constraint firstItem="SLY-bu-mOy" firstAttribute="top" secondItem="7Hu-4G-Zfe" secondAttribute="top" constant="26" id="6fu-86-T5Q"/>
+                            <constraint firstItem="z3A-eS-zfj" firstAttribute="leading" secondItem="lhF-ey-Zi9" secondAttribute="leadingMargin" id="FxY-ci-mn4"/>
+                            <constraint firstItem="6g3-Ar-Hs7" firstAttribute="top" secondItem="xfv-Sy-A4Q" secondAttribute="top" id="H2e-oK-76E"/>
+                            <constraint firstItem="7Hu-4G-Zfe" firstAttribute="bottom" secondItem="6g3-Ar-Hs7" secondAttribute="bottom" constant="32" id="IbE-5O-Svb"/>
+                            <constraint firstItem="z3A-eS-zfj" firstAttribute="trailing" secondItem="lhF-ey-Zi9" secondAttribute="trailingMargin" id="IwI-W2-0el"/>
+                            <constraint firstItem="z3A-eS-zfj" firstAttribute="leading" secondItem="6g3-Ar-Hs7" secondAttribute="leading" id="LOC-k6-Z1m"/>
+                            <constraint firstItem="z3A-eS-zfj" firstAttribute="trailing" secondItem="xfv-Sy-A4Q" secondAttribute="trailing" id="LfR-dQ-pwI"/>
+                            <constraint firstItem="xfv-Sy-A4Q" firstAttribute="leading" secondItem="6g3-Ar-Hs7" secondAttribute="trailing" constant="8" id="UY8-mz-nDa"/>
+                            <constraint firstItem="6g3-Ar-Hs7" firstAttribute="bottom" secondItem="xfv-Sy-A4Q" secondAttribute="bottom" id="g8k-HA-KiB"/>
+                            <constraint firstItem="z3A-eS-zfj" firstAttribute="top" secondItem="SLY-bu-mOy" secondAttribute="bottom" constant="47" id="mhP-Af-CVg"/>
+                            <constraint firstItem="SLY-bu-mOy" firstAttribute="centerX" secondItem="z3A-eS-zfj" secondAttribute="centerX" id="tNs-dq-BRE"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="messageTextField" destination="6g3-Ar-Hs7" id="rle-E2-Hi1"/>
+                        <outlet property="sendButton" destination="xfv-Sy-A4Q" id="s4u-f7-a8x"/>
+                        <outlet property="textTableView" destination="z3A-eS-zfj" id="HQX-AD-l3W"/>
+                        <outlet property="titleLabel" destination="SLY-bu-mOy" id="807-n0-Ti9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="npQ-Dl-cs5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-863.07692307692309" y="-649.05213270142178"/>
         </scene>
         <!--Party Acct View Controller-->
         <scene sceneID="a9l-I7-B3x">
@@ -3298,6 +3374,7 @@
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="illinoisLogo" width="710" height="1024"/>
         <image name="lock" catalog="system" width="125" height="128"/>
+        <image name="paperplane.circle.fill" catalog="system" width="128" height="123"/>
         <image name="pencil.and.ellipsis.rectangle" catalog="system" width="128" height="80"/>
         <image name="person" catalog="system" width="128" height="121"/>
         <image name="person.3" catalog="system" width="128" height="62"/>
