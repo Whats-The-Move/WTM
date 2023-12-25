@@ -52,7 +52,7 @@ class ChatMessageCell: UITableViewCell {
         
         // Set bubble color based on the creator
         if message.creatorID == UID {
-            bubbleView.backgroundColor = .systemPink
+            bubbleView.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
             bubbleView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive = true
             bubbleView.leadingAnchor.constraint(greaterThanOrEqualTo: centerXAnchor).isActive = true
             messageLabel.textAlignment = .right
