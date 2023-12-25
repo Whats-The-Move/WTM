@@ -7,6 +7,8 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
+import FirebaseFirestore
 
 class LoadDataViewController: UIViewController {
     var results: [EventLoad] = [] // List of Event objects
@@ -26,7 +28,37 @@ class LoadDataViewController: UIViewController {
         loadData(from: queryFrom)
         // Do any additional setup after loading the view.
     }
-    
+    func checkFriendshipStatus(isGoing: [String]) async -> [String] {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("Error: No user is currently signed in.")
+            return []
+        }
+
+        let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+
+        do {
+            let document = try await userRef.getDocument()
+            if document.exists {
+                guard let friendList = document.data()?["friends"] as? [String] else {
+                    print("Error: No friends list found.")
+                    return []
+                }
+
+                let commonFriends = friendList.filter { isGoing.contains($0) }
+                print(commonFriends)
+                return commonFriends
+            } else {
+                print("Error: Current user document does not exist.")
+                return []
+            }
+        } catch {
+            print("Error: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+
+
     private func loadData(from queryFrom: String) {
             let ref = Database.database().reference()
 
@@ -53,27 +85,52 @@ class LoadDataViewController: UIViewController {
                         self.results.append(event)
                     }
                 }
-                // Assuming `results` is an array of EventLoad instances fetched from Firebase
-                let sortedByMostGoing = self.results.sorted { $0.isGoing.count > $1.isGoing.count }
-                let sortedByLeastGoing = self.results.sorted { $0.isGoing.count < $1.isGoing.count }
 
-                let mostGoingTopFive = Array(sortedByMostGoing.prefix(5))
-                let leastGoingTopFive = Array(sortedByLeastGoing.prefix(5))
+                Task {
+                    //TOP FRIENDS START
+                    var friendsDict =   [Int: [String]] ()
+                    var counter = 0
+                    for item in self.results {
+                        let commonFriends = await self.checkFriendshipStatus(isGoing: item.isGoing)
+                        friendsDict[counter] = commonFriends
+                        counter += 1
+                        
+                    }
+                    var topFriends: [EventLoad] = []
+                    let sortedKeys = friendsDict.keys.sorted {
+                        (friendsDict[$0]?.count ?? 0) > (friendsDict[$1]?.count ?? 0)
+                    }
+                    for item in sortedKeys {
+                        topFriends.append(self.results[item])
+                    }
+                    //TOP FRIENDS DONE
+                    
+                    
+                    //MOST POPULAR
+                    let sortedByMostGoing = self.results.sorted { $0.isGoing.count > $1.isGoing.count }
+                    let mostGoingTopFive = Array(sortedByMostGoing.prefix(5))
+                    
 
-                // Select any 10 other EventLoad instances and split into two lists
-                let otherresults = Array(self.results.shuffled().prefix(10))
-                let otherListOne = Array(otherresults.prefix(5))
-                let otherListTwo = Array(otherresults.suffix(5))
+                    // DEALS
+                    let sortedByDeals = self.results.filter { $0.deals != "" }
 
-                // Combine into a list of lists
-                let combinedLists = [mostGoingTopFive, leastGoingTopFive, otherListOne, otherListTwo]
+                   
+                    //NUMBER 4
+                    let otherresults = Array(self.results.shuffled().prefix(5))
 
-                // Initialize NewHomeViewController with combinedLists
-                let newHomeVC = NewHomeViewController(events: combinedLists)
 
-                newHomeVC.modalPresentationStyle = .fullScreen
+                    
+                    let combinedLists = [mostGoingTopFive, topFriends, sortedByDeals, otherresults]
 
-                self.present(newHomeVC, animated: true, completion: nil)
+                    // Initialize NewHomeViewController with combinedLists
+                    let newHomeVC = NewHomeViewController(events: combinedLists)
+
+                    newHomeVC.modalPresentationStyle = .fullScreen
+
+                    self.present(newHomeVC, animated: true, completion: nil)
+
+                }
+
             }) { error in
                 print(error.localizedDescription)
             }

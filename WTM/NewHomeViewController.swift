@@ -84,7 +84,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             let otherimage = UIImage(named: "Fiji") ?? UIImage()
             let filterTitle = filters[indexPath.item]
 
-            cell.configure(with: [postImage, otherimage], title: filterTitle)
+            cell.configure(title: filterTitle, with: events[indexPath.item])
             cell.contentView.backgroundColor = .clear
             return cell
         } else {

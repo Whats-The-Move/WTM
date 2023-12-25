@@ -88,6 +88,18 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
 
     }
+    func configure(with eventLoad: EventLoad) {
+        // Load the image into imageView. Example:
+        //imageView.image = UIImage(named: imageName)
+        
+        //change above to immageview.image = loadImage(event.imageURL)
+        let event = eventLoad
+        setupImageView(event: event)
+        setupPplLabel(event: event)
+        setupPplImage(event: event)
+        setupCellAppearance()
+    }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -140,18 +152,7 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
             pplImage.heightAnchor.constraint(equalToConstant: 24)  // Adjust size as needed
         ])
     }
-    func configure(with eventLoad: EventLoad) {
-        // Load the image into imageView. Example:
-        //imageView.image = UIImage(named: imageName)
-        
-        //change above to immageview.image = loadImage(event.imageURL)
-        let event = eventLoad
-        setupImageView(event: event)
-        setupPplLabel(event: event)
-        setupPplImage(event: event)
-        setupCellAppearance()
-    }
-    
+
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")

@@ -1,32 +1,27 @@
 import UIKit
 
 class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    private var galleryImages: [UIImage] = []
-    private var titleLabel: UILabel!
-    private let galleryCollectionView: UICollectionView
+    //var galleryImages: [UIImage] = []
+    var titleLabel: UILabel!
+    var galleryCollectionView: UICollectionView!
     var pageControl: UIPageControl!
+    var events: [EventLoad] = []
 
-    let picWidth = 250
+
 
     override init(frame: CGRect) {
-
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 280, height: 350)
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        galleryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        galleryCollectionView.collectionViewLayout = layout
-
-
         super.init(frame: frame)
-
         setupTitleLabel()
         setupGalleryCollectionView()
         setupPageControl()
 
     }
-
+    func configure(title: String, with events: [EventLoad]) {
+        self.titleLabel.text = title
+        self.events = events
+        //self.galleryCollectionView.reloadData() // Reload data with new events
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -47,8 +42,15 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
     }
     
     private func setupGalleryCollectionView() {
-        
-        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 280, height: 350)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        galleryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        //galleryCollectionView.collectionViewLayout = layout
+
+ 
         galleryCollectionView.translatesAutoresizingMaskIntoConstraints = false
         galleryCollectionView.showsHorizontalScrollIndicator = false
         galleryCollectionView.isPagingEnabled = true
@@ -67,7 +69,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
     }
     func setupPageControl() {
         pageControl = UIPageControl()
-        pageControl.numberOfPages = 2 // Replace with your number of pages
+        pageControl.numberOfPages = events.count// Replace with your number of pages
         pageControl.currentPage = 0
 
         pageControl.translatesAutoresizingMaskIntoConstraints = false
@@ -86,35 +88,36 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         pageControl.currentPage = currentPage
     }
 
-    func configure(with images: [UIImage], title: String) {
-        self.galleryImages = images
-        self.titleLabel.text = title
-        self.galleryCollectionView.reloadData()
-    }
+
+
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return galleryImages.count
+        return events.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as? ImageCell else {
             fatalError("Could not dequeue ImageCell")
         }
-        cell.configure(with: galleryImages[indexPath.item])
+        cell.configure(with: events[indexPath.item])
         //cell.layer.cornerRadius = 10
         return cell
     }
 }
 
 class ImageCell: UICollectionViewCell {
-    private let imageView = UIImageView()
-    private var pplLabel: UILabel!
-    private var pplImage: UIImageView!
+    let imageView = UIImageView()
+    var pplLabel: UILabel!
+    var pplImage: UIImageView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupImageView()
-        setupPplLabel()
+
+    }
+    func configure(with event: EventLoad) {
+        //imageView.image = image
+        setupImageView(event: event)
+        setupPplLabel(event: event)
         setupPplImage()
         setupCellAppearance()
     }
@@ -123,10 +126,12 @@ class ImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupImageView() {
+    private func setupImageView(event: EventLoad) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        HorizontalCollectionViewCell().loadImage(from: event.imageURL, to: self.imageView)
+
         //imageView.layer.cornerRadius = 10
         contentView.addSubview(imageView)
 
@@ -137,10 +142,10 @@ class ImageCell: UICollectionViewCell {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
-    private func setupPplLabel() {
+    private func setupPplLabel(event: EventLoad) {
             pplLabel = UILabel()
             pplLabel.translatesAutoresizingMaskIntoConstraints = false
-            pplLabel.text = "36" // Set the default text
+            pplLabel.text = String(event.isGoing.count) // Set the default text
             pplLabel.font = UIFont.boldSystemFont(ofSize: 18)
             contentView.addSubview(pplLabel)
 
@@ -168,9 +173,7 @@ class ImageCell: UICollectionViewCell {
             ])
         }
 
-    func configure(with image: UIImage) {
-        imageView.image = image
-    }
+
     private func setupCellAppearance() {
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 10
