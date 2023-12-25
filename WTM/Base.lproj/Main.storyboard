@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="I3F-17-A16">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iif-sc-Lfv">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -326,6 +326,20 @@
                                     <action selector="dropdownButtonTapped:" destination="M1m-Q3-HIT" eventType="touchUpInside" id="D0F-cU-nc9"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WsO-dl-xmX">
+                                <rect key="frame" x="278" y="55" width="41" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="41" id="JLq-fh-9A9"/>
+                                </constraints>
+                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="ellipsis.message.fill" catalog="system" symbolScale="large"/>
+                                </state>
+                                <connections>
+                                    <segue destination="I3F-17-A16" kind="show" id="T8Y-Cp-ZI2"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="h7n-Zv-bqp"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -337,10 +351,12 @@
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="top" secondItem="h7n-Zv-bqp" secondAttribute="top" constant="4" id="AzW-zO-6uq"/>
                             <constraint firstItem="kSK-fm-DMN" firstAttribute="trailing" secondItem="OPQ-RV-cyj" secondAttribute="trailingMargin" id="AzY-vZ-gKL"/>
                             <constraint firstItem="OlS-8c-7Ec" firstAttribute="leading" secondItem="OPQ-RV-cyj" secondAttribute="leadingMargin" constant="-6" id="BGf-js-ntt"/>
+                            <constraint firstItem="WsO-dl-xmX" firstAttribute="centerY" secondItem="UsN-MX-RZF" secondAttribute="centerY" id="BR2-lR-dXY"/>
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="trailing" secondItem="OlS-8c-7Ec" secondAttribute="trailing" constant="-6" id="Cb4-eI-JxF"/>
                             <constraint firstItem="c6T-sD-sqC" firstAttribute="top" secondItem="h7n-Zv-bqp" secondAttribute="top" constant="7" id="EKe-Ho-91Y"/>
                             <constraint firstItem="aIt-Bt-B8h" firstAttribute="leading" secondItem="c6T-sD-sqC" secondAttribute="trailing" constant="8" id="HQp-aG-Qwy"/>
                             <constraint firstItem="UsN-MX-RZF" firstAttribute="centerY" secondItem="aIt-Bt-B8h" secondAttribute="centerY" id="Jsb-xc-gfE"/>
+                            <constraint firstItem="WsO-dl-xmX" firstAttribute="bottom" secondItem="c6T-sD-sqC" secondAttribute="bottom" id="SSc-0s-r6h"/>
                             <constraint firstItem="OlS-8c-7Ec" firstAttribute="top" secondItem="ny7-WR-ZZK" secondAttribute="bottom" id="Xhj-su-4OS"/>
                             <constraint firstItem="UsN-MX-RZF" firstAttribute="leading" secondItem="aIt-Bt-B8h" secondAttribute="trailing" id="ZHp-4D-GDV"/>
                             <constraint firstItem="OlS-8c-7Ec" firstAttribute="bottom" secondItem="h7n-Zv-bqp" secondAttribute="bottom" id="ZUK-gi-yQd"/>
@@ -348,6 +364,7 @@
                             <constraint firstItem="aIt-Bt-B8h" firstAttribute="centerY" secondItem="kzk-HV-dSR" secondAttribute="centerY" id="dlT-oZ-rP6"/>
                             <constraint firstItem="ny7-WR-ZZK" firstAttribute="top" secondItem="aIt-Bt-B8h" secondAttribute="bottom" constant="1" id="eTa-ix-Bf1"/>
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="trailing" secondItem="kSK-fm-DMN" secondAttribute="trailing" id="f8p-mq-FXb"/>
+                            <constraint firstItem="kzk-HV-dSR" firstAttribute="leading" secondItem="WsO-dl-xmX" secondAttribute="trailing" constant="2.9999999999999432" id="hR4-HU-U0q"/>
                             <constraint firstItem="c6T-sD-sqC" firstAttribute="centerY" secondItem="aIt-Bt-B8h" secondAttribute="centerY" id="lGi-C8-SPv"/>
                             <constraint firstItem="ny7-WR-ZZK" firstAttribute="top" secondItem="kzk-HV-dSR" secondAttribute="bottom" constant="14" id="lR2-xF-Nfs"/>
                             <constraint firstItem="kzk-HV-dSR" firstAttribute="top" secondItem="kSK-fm-DMN" secondAttribute="top" id="vi5-12-fbh"/>
@@ -1472,19 +1489,13 @@
         <!--Anonymous Chat View Controller-->
         <scene sceneID="6Ji-Lp-ykL">
             <objects>
-                <viewController storyboardIdentifier="anonymousChat" useStoryboardIdentifierAsRestorationIdentifier="YES" id="I3F-17-A16" customClass="anonymousChatViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="anonymousChat" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="I3F-17-A16" customClass="anonymousChatViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lhF-ey-Zi9">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLY-bu-mOy">
-                                <rect key="frame" x="158" y="73" width="74" height="39"/>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="30"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="z3A-eS-zfj">
-                                <rect key="frame" x="16" y="159" width="358" height="577"/>
+                                <rect key="frame" x="16" y="112" width="358" height="658"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textCell" id="AtO-Ll-me3" customClass="ChatMessageCell" customModule="WTM" customModuleProvider="target">
@@ -1498,12 +1509,12 @@
                                 </prototypes>
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type your message here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6g3-Ar-Hs7">
-                                <rect key="frame" x="16" y="744" width="308" height="34"/>
+                                <rect key="frame" x="16" y="778" width="308" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xfv-Sy-A4Q">
-                                <rect key="frame" x="332" y="744" width="42" height="34"/>
+                                <rect key="frame" x="332" y="778" width="42" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="42" id="ehf-IN-Pb7"/>
                                 </constraints>
@@ -1516,12 +1527,32 @@
                                     <action selector="sendMessage:" destination="I3F-17-A16" eventType="touchUpInside" id="LOK-fq-tTd"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6R4-aq-CmO">
+                                <rect key="frame" x="16" y="20" width="38" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="38" id="F72-9b-MDJ"/>
+                                </constraints>
+                                <color key="tintColor" red="1" green="0.086274509799999996" blue="0.58039215690000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="chevron.backward.circle.fill" catalog="system" symbolScale="large"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButtonTapped:" destination="I3F-17-A16" eventType="touchUpInside" id="Uq5-jO-C9O"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLY-bu-mOy">
+                                <rect key="frame" x="158" y="50" width="74" height="39"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7Hu-4G-Zfe"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6g3-Ar-Hs7" firstAttribute="top" secondItem="z3A-eS-zfj" secondAttribute="bottom" constant="8" id="3SD-Lq-sW4"/>
-                            <constraint firstItem="SLY-bu-mOy" firstAttribute="top" secondItem="7Hu-4G-Zfe" secondAttribute="top" constant="26" id="6fu-86-T5Q"/>
+                            <constraint firstItem="SLY-bu-mOy" firstAttribute="top" secondItem="7Hu-4G-Zfe" secondAttribute="top" constant="50" id="6fu-86-T5Q"/>
                             <constraint firstItem="z3A-eS-zfj" firstAttribute="leading" secondItem="lhF-ey-Zi9" secondAttribute="leadingMargin" id="FxY-ci-mn4"/>
                             <constraint firstItem="6g3-Ar-Hs7" firstAttribute="top" secondItem="xfv-Sy-A4Q" secondAttribute="top" id="H2e-oK-76E"/>
                             <constraint firstItem="7Hu-4G-Zfe" firstAttribute="bottom" secondItem="6g3-Ar-Hs7" secondAttribute="bottom" constant="32" id="IbE-5O-Svb"/>
@@ -1530,11 +1561,16 @@
                             <constraint firstItem="z3A-eS-zfj" firstAttribute="trailing" secondItem="xfv-Sy-A4Q" secondAttribute="trailing" id="LfR-dQ-pwI"/>
                             <constraint firstItem="xfv-Sy-A4Q" firstAttribute="leading" secondItem="6g3-Ar-Hs7" secondAttribute="trailing" constant="8" id="UY8-mz-nDa"/>
                             <constraint firstItem="6g3-Ar-Hs7" firstAttribute="bottom" secondItem="xfv-Sy-A4Q" secondAttribute="bottom" id="g8k-HA-KiB"/>
-                            <constraint firstItem="z3A-eS-zfj" firstAttribute="top" secondItem="SLY-bu-mOy" secondAttribute="bottom" constant="47" id="mhP-Af-CVg"/>
+                            <constraint firstItem="z3A-eS-zfj" firstAttribute="top" secondItem="SLY-bu-mOy" secondAttribute="bottom" constant="23" id="mhP-Af-CVg"/>
+                            <constraint firstItem="6R4-aq-CmO" firstAttribute="top" secondItem="7Hu-4G-Zfe" secondAttribute="top" constant="20" id="qJC-QK-ofJ"/>
+                            <constraint firstItem="6R4-aq-CmO" firstAttribute="leading" secondItem="z3A-eS-zfj" secondAttribute="leading" id="stw-MJ-5V9"/>
                             <constraint firstItem="SLY-bu-mOy" firstAttribute="centerX" secondItem="z3A-eS-zfj" secondAttribute="centerX" id="tNs-dq-BRE"/>
+                            <constraint firstItem="z3A-eS-zfj" firstAttribute="top" secondItem="6R4-aq-CmO" secondAttribute="bottom" constant="54" id="vH3-4b-2OC"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="K7x-MS-CQo"/>
                     <connections>
+                        <outlet property="backButtton" destination="6R4-aq-CmO" id="B28-VE-RDb"/>
                         <outlet property="messageTextField" destination="6g3-Ar-Hs7" id="rle-E2-Hi1"/>
                         <outlet property="sendButton" destination="xfv-Sy-A4Q" id="s4u-f7-a8x"/>
                         <outlet property="textTableView" destination="z3A-eS-zfj" id="HQX-AD-l3W"/>
@@ -3351,7 +3387,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="GAb-m4-rqd"/>
-        <segue reference="A31-YU-FqS"/>
+        <segue reference="AMW-4w-VvX"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="WTM_" width="409" height="101"/>
@@ -3368,7 +3404,9 @@
         <image name="camera.on.rectangle.fill" catalog="system" width="128" height="98"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="chevron.backward.circle" catalog="system" width="128" height="123"/>
+        <image name="chevron.backward.circle.fill" catalog="system" width="128" height="123"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
+        <image name="ellipsis.message.fill" catalog="system" width="128" height="114"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>

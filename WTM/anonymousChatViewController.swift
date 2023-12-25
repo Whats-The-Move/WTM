@@ -6,6 +6,7 @@ class anonymousChatViewController: UIViewController {
     @IBOutlet weak var textTableView: UITableView!
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var backButtton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     
     var messages: [Message] = []
@@ -97,13 +98,17 @@ class anonymousChatViewController: UIViewController {
     }
 
     func addSwipeGesture() {
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture))
         swipeGesture.direction = .down
         view.addGestureRecognizer(swipeGesture)
     }
 
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        dismiss(animated: true)
     }
 }
 
