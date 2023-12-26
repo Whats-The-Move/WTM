@@ -1,5 +1,6 @@
 import UIKit
 import Firebase
+import FirebaseAuth
 
 class anonymousChatViewController: UIViewController {
 
@@ -65,7 +66,7 @@ class anonymousChatViewController: UIViewController {
         let dateString = dateFormatter.string(from: currentDate)
 
         let databaseRef = Database.database().reference().child("\(currCity)Chat").child(dateString)
-        let message = ["message": text, "creator": UID]
+        let message = ["message": text, "creator": Auth.auth().currentUser?.uid]
 
         databaseRef.setValue(message)
         messageTextField.text = ""
@@ -98,7 +99,7 @@ class anonymousChatViewController: UIViewController {
     }
 
     func addSwipeGesture() {
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture))
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         swipeGesture.direction = .down
         view.addGestureRecognizer(swipeGesture)
     }

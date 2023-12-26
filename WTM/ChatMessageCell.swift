@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseAuth
 
 class ChatMessageCell: UITableViewCell {
 
@@ -51,7 +52,7 @@ class ChatMessageCell: UITableViewCell {
         messageLabel.text = message.text
         
         // Set bubble color based on the creator
-        if message.creatorID == UID {
+        if message.creatorID == Auth.auth().currentUser?.uid {
             bubbleView.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
             bubbleView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive = true
             bubbleView.leadingAnchor.constraint(greaterThanOrEqualTo: centerXAnchor).isActive = true
