@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+ platform :ios, '16.0'
 
 target 'WTM' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -16,6 +16,7 @@ pod 'Firebase/Firestore'
 pod 'Kingfisher'
 pod 'FSCalendar'
 pod 'Firebase/Messaging'
+
 
 
   target 'WTMTests' do

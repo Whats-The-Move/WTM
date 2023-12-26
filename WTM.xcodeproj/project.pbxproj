@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -63,6 +63,10 @@
 		10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */; };
 		10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */; };
 		10B5002B2A268214004FAC97 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */; };
+		10B616372B33E22900CE1226 /* NewHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616362B33E22900CE1226 /* NewHomeViewController.swift */; };
+		10B616392B33E69100CE1226 /* VerticalCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */; };
+		10B6163D2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */; };
+		10B6163F2B36C05D00CE1226 /* LoadDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */; };
 		10C1699A2AB969AB00355BC4 /* ShowEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C169992AB969AB00355BC4 /* ShowEventViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		1411292AC27485DEEBB18704 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */; };
@@ -152,6 +156,10 @@
 		10B5002029FF6B16004FAC97 /* PicturesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesCollectionViewCell.swift; sourceTree = "<group>"; };
 		10B500242A00BC76004FAC97 /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
+		10B616362B33E22900CE1226 /* NewHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeViewController.swift; sourceTree = "<group>"; };
+		10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalCollectionViewCell.swift; sourceTree = "<group>"; };
+		10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
+		10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDataViewController.swift; sourceTree = "<group>"; };
 		10C169992AB969AB00355BC4 /* ShowEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -231,6 +239,10 @@
 				10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */,
 				103D80A12A3E77870032E4D3 /* BadgesViewController.swift */,
 				08CF03C2297CB7590074A878 /* AppHomeViewController.swift */,
+				10B616362B33E22900CE1226 /* NewHomeViewController.swift */,
+				10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */,
+				10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */,
+				10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */,
 				083B618F2A1FD00400018798 /* CustomCellClass.swift */,
 				08F793292A4A505300679EB9 /* privatePartyCellClass.swift */,
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
@@ -586,6 +598,7 @@
 				109B94032AA1BEDC002D4CEF /* BarSignInViewController.swift in Sources */,
 				087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */,
 				10B5002B2A268214004FAC97 /* CreateAccountViewController.swift in Sources */,
+				10B6163D2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift in Sources */,
 				08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */,
 				086042D129C292C900066892 /* reviewViewController.swift in Sources */,
 				08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */,
@@ -594,7 +607,9 @@
 				10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */,
 				082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
+				10B616372B33E22900CE1226 /* NewHomeViewController.swift in Sources */,
 				103D80A52A4BC9D10032E4D3 /* SettingsViewController.swift in Sources */,
+				10B616392B33E69100CE1226 /* VerticalCollectionViewCell.swift in Sources */,
 				08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */,
 				0825CC2E2A87F18200C9C32E /* monthlyCalendarViewController.swift in Sources */,
 				10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */,
@@ -610,6 +625,7 @@
 				08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */,
 				0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */,
 				086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */,
+				10B6163F2B36C05D00CE1226 /* LoadDataViewController.swift in Sources */,
 				08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
