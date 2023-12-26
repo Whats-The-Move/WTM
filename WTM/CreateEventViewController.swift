@@ -10,7 +10,7 @@ import Firebase
 import FirebaseAuth
 import StoreKit
 
-class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
@@ -67,18 +67,26 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     @IBOutlet weak var save: UIButton!
     
     @IBOutlet weak var eventTitle: UITextField!
-    var typeChoice = "drink discount"
-    @IBOutlet weak var typePicker: UIPickerView!
-    @IBOutlet weak var dateAndTime: UIDatePicker!
-    @IBOutlet weak var endTime: UIDatePicker!
     
+    @IBOutlet weak var imageView: UIImageView!
+    
+    @IBOutlet weak var deals: UITextField!
+    @IBOutlet weak var typePicker: UIPickerView!
+
+    
+    @IBOutlet weak var time: UITextField!
+    @IBOutlet weak var date: UITextField!
     @IBOutlet weak var repeatLabel: UILabel!
     @IBOutlet weak var location: UITextField!
-    @IBOutlet weak var descriptionText: UITextView!
     
+    @IBOutlet weak var descriptionText: UITextView!
+    var typeChoice = "drink discount"
+
     var repeatTableView: UITableView!
         
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    var imageUploadURL = ""
+    
 
     var selectedUsers: [User] = []
     var selectedDays: [String] = []
@@ -86,20 +94,29 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     //MAKE IT SO IF EDITING SHOW BUTTON
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
         setupConstraints()
         setupTableView()
         setupTypePicker()
+        if let image = UIImage(named: "profileIcon") {
+                imageView.image = image
+            } else {
+                print("Image not found")
+            }
 
-        addHorizontalLine(belowView: eventTitle, spacing: 10.0)
+        //addHorizontalLine(belowView: eventTitle, spacing: 10.0)
 
-        addHorizontalLine(belowView: repeatLabel, spacing: 14.0)
+        //addHorizontalLine(belowView: repeatLabel, spacing: 14.0)
         
-        addHorizontalLine(belowView: location, spacing: 10.0)
-        addHorizontalLine(belowView: typePicker, spacing: 10.0)
+        //addHorizontalLine(belowView: location, spacing: 10.0)
+        //addHorizontalLine(belowView: typePicker, spacing: 10.0)
 
-        addHorizontalLine(belowView: endTime, spacing: 13.0)
-        addHorizontalLine(belowView: descriptionText, spacing: 13.0)
-
+       // addHorizontalLine(belowView: descriptionText, spacing: 13.0)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        imageView.addGestureRecognizer(tapGesture)
+        imageView.isUserInteractionEnabled = true
+        
         if let futuraBig = UIFont(name: "Futura-Medium", size: 40) {
             eventTitle.font = futuraBig
         }
@@ -122,6 +139,40 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
         
         // Do any additional setup after loading the view.
+    }
+    /*
+    func setupContentView() {
+        let contentView = UIView()
+        scrollView.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+
+        // Add your UI components to contentView instead of view
+        // Example: contentView.addSubview(eventTitle)
+        // Don't forget to update the constraints of each component to be relative to contentView
+    }
+    func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+     */
+    @objc func imageTapped() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true)
     }
     
     @objc func dismissKeyboard() {
@@ -218,61 +269,72 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             eventTitle.widthAnchor.constraint(equalToConstant: 200),
             eventTitle.heightAnchor.constraint(equalToConstant: 50)
         ])
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.topAnchor.constraint(equalTo: eventTitle.bottomAnchor, constant: 20),
+            imageView.widthAnchor.constraint(equalToConstant: 200),
+            imageView.heightAnchor.constraint(equalToConstant: 200)
+        ])
+        descriptionText.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            descriptionText.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15),
+            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            descriptionText.heightAnchor.constraint(equalToConstant: 120)
+        ])
+        typePicker.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            typePicker.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 30),
+            typePicker.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: 20),
+            typePicker.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            typePicker.heightAnchor.constraint(equalToConstant: 80)
+        ])
+        deals.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            deals.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
+            deals.topAnchor.constraint(equalTo: typePicker.bottomAnchor, constant: 15),
+            deals.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            deals.heightAnchor.constraint(equalToConstant: 50)
+        ])
         
         // Location constraints
         location.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            location.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            location.topAnchor.constraint(equalTo: eventTitle.bottomAnchor, constant: 20),
+            location.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
+            location.topAnchor.constraint(equalTo: deals.bottomAnchor, constant: 15),
             location.widthAnchor.constraint(equalToConstant: 300),
             location.heightAnchor.constraint(equalToConstant: 50)
         ])
-        
-        typePicker.translatesAutoresizingMaskIntoConstraints = false
+        date.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            typePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            typePicker.topAnchor.constraint(equalTo: location.bottomAnchor, constant: 20),
-            typePicker.widthAnchor.constraint(equalToConstant: 300),
-            typePicker.heightAnchor.constraint(equalToConstant: 80)
+            date.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
+            date.topAnchor.constraint(equalTo: location.bottomAnchor, constant: 15),
+            date.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            date.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        time.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            time.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
+            time.topAnchor.constraint(equalTo: date.bottomAnchor, constant: 15),
+            time.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            time.heightAnchor.constraint(equalToConstant: 50)
         ])
         
-        // Date and Time constraints
-        dateAndTime.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            dateAndTime.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            //dateAndTime.widthAnchor.constraint(equalToConstant: 229),
-            dateAndTime.topAnchor.constraint(equalTo: typePicker.bottomAnchor, constant: 30),
-            dateAndTime.heightAnchor.constraint(equalToConstant: 40)
-        ])
-        
-        // End Time constraints
-        endTime.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            endTime.leadingAnchor.constraint(equalTo: dateAndTime.leadingAnchor),
-            endTime.trailingAnchor.constraint(equalTo: dateAndTime.trailingAnchor),
-            endTime.topAnchor.constraint(equalTo: dateAndTime.bottomAnchor, constant: 20),
-            endTime.heightAnchor.constraint(equalToConstant: 40)
-        ])
         
         // Repeat Label constraints
         repeatLabel.translatesAutoresizingMaskIntoConstraints = false
         repeatLabel.text = "Does not repeat"
         NSLayoutConstraint.activate([
             repeatLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
-            repeatLabel.topAnchor.constraint(equalTo: endTime.bottomAnchor, constant: 30),
+            repeatLabel.topAnchor.constraint(equalTo: time.bottomAnchor, constant:  15),
             repeatLabel.widthAnchor.constraint(equalToConstant: 300),
             repeatLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         // Repeat Button constraints
 
-        descriptionText.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            descriptionText.topAnchor.constraint(equalTo: repeatLabel.bottomAnchor, constant: 25),
-            descriptionText.leadingAnchor.constraint(equalTo: repeatLabel.leadingAnchor),
-            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            descriptionText.heightAnchor.constraint(equalToConstant: 120)
-        ])
+
     }
 
     
@@ -329,11 +391,13 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             location.font = futuraRegular
             repeatLabel.font = futuraRegular
             descriptionText.font = futuraRegular
+            deals.font = futuraRegular
+            time.font = futuraRegular
+            date.font = futuraRegular
         }
 
 
         descriptionText.layer.cornerRadius = 8
-        dateAndTime.layer.cornerRadius = 8
         
         var pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
         pinkColor = UIColor.black
@@ -343,8 +407,16 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         // Create an NSAttributedString with the custom pink color for the placeholder text
         let pinkPlaceholderText = NSAttributedString(string: "Event Title", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
         eventTitle.attributedPlaceholder = pinkPlaceholderText
-        let pinkPlaceholderTextLocation = NSAttributedString(string: "Address", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
+        var pinkPlaceholderTextLocation = NSAttributedString(string: "Address", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
         location.attributedPlaceholder = pinkPlaceholderTextLocation
+        var placeholderText = NSAttributedString(string: "Date", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
+        date.attributedPlaceholder = placeholderText
+        placeholderText = NSAttributedString(string: "time", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
+        time.attributedPlaceholder = placeholderText
+        placeholderText = NSAttributedString(string: "Deals", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
+        deals.attributedPlaceholder = placeholderText
+
+
         //dateAndTime.setValue(UIColor.white, forKeyPath: "textColor")
 
         // Set the background color to gray
@@ -363,7 +435,10 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
     @IBAction func saveTapped(_ sender: Any) {
         guard let eventTitle = eventTitle.text,
+              let date = date.text,
+              let deals = deals.text,
               let location = location.text,
+              let time = time.text,
               let eventDescription = descriptionText.text
         else {
             print("didn't fill it")
@@ -379,34 +454,16 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             present(alertController, animated: true, completion: nil)
             return
         }
-        
-        var dateTime = dateAndTime.date
-        var endTime = endTime.date
-
-        // Create a DateFormatter
-        let dateFormatter = DateFormatter()
-        
-        /* if you wnat to send it as non unix
-        dateFormatter.dateFormat = "HH:mm" // This sets the format to display just the time (hours and minutes)
-
-        let startTimeString = dateFormatter.string(from: dateTime)
-        let endTimeString = dateFormatter.string(from: endTime)*/
-
-        dateFormatter.dateFormat = "MMM dd, yyyy"
-
-        // Format the date
-        let dateOnly = dateFormatter.string(from: dateTime)
-        
-        let unixStart = dateTime.timeIntervalSince1970
-        let unixEnd = endTime.timeIntervalSince1970
+        let unixStart = 4
+        let unixEnd = 4
         let currentUserUID = Auth.auth().currentUser?.uid ?? ""
+        let imageURL = self.imageUploadURL
         
         // Get the invitee UIDs as an array
-        var inviteeUIDs = selectedUsers.map { $0.uid }
-        inviteeUIDs.append(currentUserUID)
+        /*var inviteeUIDs = selectedUsers.map { $0.uid }
+        inviteeUIDs.append(currentUserUID)*/
 
         // Assuming you have authenticated the user and have access to their UID
-        var barLocation  = ""
         let db = Firestore.firestore()
         let userRef = db.collection("barUsers").document(currentUserUID)
         var placeName = "testParty"
@@ -414,11 +471,10 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             if let document = document, document.exists {
                 if let venueName = document["venueName"] as? String, let creatorLocation = document["location"] as? String {
                     // Successfully fetched the venueName
-                    barLocation = creatorLocation
                     print("Venue Name: \(venueName)")
                     placeName = venueName
-                    let privatesRef = Database.database().reference().child("\(barLocation)Events")
-                    let newEventRef = privatesRef.child(dateOnly).child(placeName)
+                    let privatesRef = Database.database().reference().child("\(creatorLocation)Events")
+                    let newEventRef = privatesRef.child(placeName)
                     
                     // Create a dictionary with the event information
                     let eventInfo: [String: Any] = [
@@ -429,8 +485,23 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                         "description": eventDescription,
                         "creator": currentUserUID,
                         "eventType": self.typeChoice,
-                        "repitition": self.selectedDays ?? "none"
+                        "repitition": self.selectedDays 
                     ]
+                    /*
+                     let eventInfo: [String: Any] = [
+                        "creator": currentUserUID,
+                        "date": date,
+                     "deals" : deals,
+                     "description": eventDescription,
+                     "eventName": eventTitle,
+                        "imageURL": imageURL, //not good
+                     "location": location,
+                     "time" : time,
+                     "venueName": placeName
+                         "eventType": self.typeChoice,
+                         "repitition": self.selectedDays ?? "none"
+                     ]
+                     */
                     
                     // Set the event information under the new child node
                     newEventRef.setValue(eventInfo) { error, _ in
@@ -480,6 +551,45 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         }
 
     }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+
+        guard let selectedImage = info[.originalImage] as? UIImage else { return }
+        imageView.image = selectedImage
+
+        // Call the function to upload the image
+        uploadImageToFirebase(image: selectedImage)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    func uploadImageToFirebase(image: UIImage) {
+        guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("images/\(UUID().uuidString).jpg")
+
+        imageRef.putData(imageData, metadata: nil) { metadata, error in
+            guard metadata != nil else {
+                print(error?.localizedDescription ?? "Unknown error occurred")
+                return
+            }
+            
+            // Retrieve the download URL
+            imageRef.downloadURL { url, error in
+                guard let downloadURL = url else {
+                    print(error?.localizedDescription ?? "Unknown error occurred")
+                    return
+                }
+                
+                let imageUploadURL = downloadURL.absoluteString
+                // Do something with imageUploadURL
+                print("Download URL: \(imageUploadURL)")
+            }
+        }
+    }
+
     /*
     @objc func inviteesTapped() {
         let inviteListVC = storyboard?.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
