@@ -81,22 +81,21 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     
     @IBOutlet weak var descriptionText: UITextView!
     var typeChoice = "drink discount"
-
     var repeatTableView: UITableView!
-        
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     var imageUploadURL = ""
-    
-
     var selectedUsers: [User] = []
     var selectedDays: [String] = []
     var userEditing = false
+    var scrollView: UIScrollView!
+    var contentView: UIView!
+    
     //MAKE IT SO IF EDITING SHOW BUTTON
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
-        setupConstraints()
+        setupScrollView()
+        //setupConstraints()
         setupTableView()
         setupTypePicker()
         if let image = UIImage(named: "profileIcon") {
@@ -140,34 +139,43 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
         // Do any additional setup after loading the view.
     }
-    /*
-    func setupContentView() {
-        let contentView = UIView()
+
+    func setupScrollView() {
+        scrollView = UIScrollView()
+        contentView = UIView()
         scrollView.addSubview(contentView)
+        view.addSubview(scrollView)
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
+
+        // ScrollView constraints
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
 
-        // Add your UI components to contentView instead of view
-        // Example: contentView.addSubview(eventTitle)
-        // Don't forget to update the constraints of each component to be relative to contentView
+        // Transfer all subviews from self.view to contentView
+        transferSubviewsToContentView()
     }
-    func setupScrollView() {
-        view.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+    func transferSubviewsToContentView() {
+        let subviews = view.subviews.filter { $0 != scrollView }
+        for subview in subviews {
+            subview.removeFromSuperview()
+            contentView.addSubview(subview)
+        }
+        setupConstraints()
+        // Since we are moving subviews, we need to re-apply the constraints to contentView
+        // Ideally, this would be done in Interface Builder or by re-activating each view's constraints relative to contentView.
+        // For now, this function will be a placeholder for you to manually update the constraints as needed.
     }
-     */
     @objc func imageTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -244,10 +252,11 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
     func setupConstraints() {
         // Cancel button constraints
+        let view = contentView
         cancel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cancel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
-            cancel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cancel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            cancel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             cancel.widthAnchor.constraint(equalToConstant: 100),
             cancel.heightAnchor.constraint(equalToConstant: 50)
         ])
@@ -255,8 +264,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         // Save button constraints
         save.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            save.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
-            save.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            save.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            save.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             save.widthAnchor.constraint(equalToConstant: 100),
             save.heightAnchor.constraint(equalToConstant: 50)
         ])
@@ -264,14 +273,14 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         // Event title constraints
         eventTitle.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            eventTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            eventTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            eventTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            eventTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 100),
             eventTitle.widthAnchor.constraint(equalToConstant: 200),
             eventTitle.heightAnchor.constraint(equalToConstant: 50)
         ])
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.topAnchor.constraint(equalTo: eventTitle.bottomAnchor, constant: 20),
             imageView.widthAnchor.constraint(equalToConstant: 200),
             imageView.heightAnchor.constraint(equalToConstant: 200)
@@ -279,8 +288,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         descriptionText.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             descriptionText.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15),
-            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            descriptionText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
+            descriptionText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
             descriptionText.heightAnchor.constraint(equalToConstant: 120)
         ])
         typePicker.translatesAutoresizingMaskIntoConstraints = false
@@ -326,10 +335,10 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         repeatLabel.translatesAutoresizingMaskIntoConstraints = false
         repeatLabel.text = "Does not repeat"
         NSLayoutConstraint.activate([
-            repeatLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
+            repeatLabel.leadingAnchor.constraint(equalTo: time.leadingAnchor),
             repeatLabel.topAnchor.constraint(equalTo: time.bottomAnchor, constant:  15),
             repeatLabel.widthAnchor.constraint(equalToConstant: 300),
-            repeatLabel.heightAnchor.constraint(equalToConstant: 40)
+            repeatLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         
         // Repeat Button constraints
@@ -411,7 +420,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         location.attributedPlaceholder = pinkPlaceholderTextLocation
         var placeholderText = NSAttributedString(string: "Date", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
         date.attributedPlaceholder = placeholderText
-        placeholderText = NSAttributedString(string: "time", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
+        placeholderText = NSAttributedString(string: "Time", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
         time.attributedPlaceholder = placeholderText
         placeholderText = NSAttributedString(string: "Deals", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
         deals.attributedPlaceholder = placeholderText
@@ -474,7 +483,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                     print("Venue Name: \(venueName)")
                     placeName = venueName
                     let privatesRef = Database.database().reference().child("\(creatorLocation)Events")
-                    let newEventRef = privatesRef.child(placeName)
+                    let newEventRef = privatesRef.childByAutoId()
                     
                     // Create a dictionary with the event information
                     let eventInfo: [String: Any] = [
