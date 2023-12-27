@@ -23,9 +23,12 @@
 		087FE8EC298DDA26001B17B6 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087FE8EB298DDA26001B17B6 /* Gif.swift */; };
 		087FE8EE298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */; };
 		087FE8F0298E15E4001B17B6 /* finalillini.gif in Resources */ = {isa = PBXBuildFile; fileRef = 087FE8EF298E15E4001B17B6 /* finalillini.gif */; };
+		0881D8E72B3A853B002F48AC /* futureEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0881D8E62B3A853B002F48AC /* futureEventsViewController.swift */; };
 		088BD7C22A68885A008D3EA9 /* plainProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */; };
 		088BD7C42A68C1A5008D3EA9 /* userSelectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */; };
 		088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */; };
+		08A871D92B3BE75100EB3CC4 /* EventNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A871D82B3BE75100EB3CC4 /* EventNew.swift */; };
+		08A871DB2B3BE93100EB3CC4 /* futureEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A871DA2B3BE93100EB3CC4 /* futureEventCell.swift */; };
 		08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8A5312A6AF6830082B8E6 /*  requestUserCellClass.swift */; };
 		08B8A5372A72BB440082B8E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08B8A5362A72BB440082B8E6 /* GoogleService-Info.plist */; };
 		08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */; };
@@ -104,9 +107,12 @@
 		087FE8EB298DDA26001B17B6 /* Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ezgif-5-9342675cf1.gif"; sourceTree = "<group>"; };
 		087FE8EF298E15E4001B17B6 /* finalillini.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = finalillini.gif; sourceTree = "<group>"; };
+		0881D8E62B3A853B002F48AC /* futureEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = futureEventsViewController.swift; sourceTree = "<group>"; };
 		088BD7C12A68885A008D3EA9 /* plainProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = plainProfileViewController.swift; sourceTree = "<group>"; };
 		088BD7C32A68C1A5008D3EA9 /* userSelectedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = userSelectedViewController.swift; sourceTree = "<group>"; };
 		088D72B92A37CE2300ECFA4F /* friendsGoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendsGoingViewController.swift; sourceTree = "<group>"; };
+		08A871D82B3BE75100EB3CC4 /* EventNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNew.swift; sourceTree = "<group>"; };
+		08A871DA2B3BE93100EB3CC4 /* futureEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = futureEventCell.swift; sourceTree = "<group>"; };
 		08B8A5312A6AF6830082B8E6 /*  requestUserCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " requestUserCellClass.swift"; sourceTree = "<group>"; };
 		08B8A5332A6C77460082B8E6 /* WTM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WTM.entitlements; sourceTree = "<group>"; };
 		08B8A5362A72BB440082B8E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -267,10 +273,13 @@
 				0825CC382A88037800C9C32E /* weeklyViewController.swift */,
 				086E2E402A88163C00BC7D85 /* EventCell.swift */,
 				086E2E3E2A88160300BC7D85 /* Event.swift */,
+				08A871D82B3BE75100EB3CC4 /* EventNew.swift */,
 				08E504942AA519BF000B4023 /* freeDrinkNightViewController.swift */,
 				08CB6A602AC79E5500576D96 /* upcomingEventsViewController.swift */,
 				087AC2EE2B3522B300F3CCBE /* anonymousChatViewController.swift */,
 				08C97D8A2B39476100EC31F9 /* ChatMessageCell.swift */,
+				0881D8E62B3A853B002F48AC /* futureEventsViewController.swift */,
+				08A871DA2B3BE93100EB3CC4 /* futureEventCell.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -572,12 +581,14 @@
 				103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */,
 				103D80A22A3E77870032E4D3 /* BadgesViewController.swift in Sources */,
 				105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */,
+				08A871D92B3BE75100EB3CC4 /* EventNew.swift in Sources */,
 				088D72BA2A37CE2300ECFA4F /* friendsGoingViewController.swift in Sources */,
 				08C97D8B2B39476100EC31F9 /* ChatMessageCell.swift in Sources */,
 				088BD7C42A68C1A5008D3EA9 /* userSelectedViewController.swift in Sources */,
 				10C1699A2AB969AB00355BC4 /* ShowEventViewController.swift in Sources */,
 				08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */,
 				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
+				0881D8E72B3A853B002F48AC /* futureEventsViewController.swift in Sources */,
 				103D80A02A38E71F0032E4D3 /* InviteListViewController.swift in Sources */,
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				109B93F72A6B5A9E002D4CEF /* PublicPopUpViewController.swift in Sources */,
@@ -611,6 +622,7 @@
 				0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */,
 				086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */,
 				08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */,
+				08A871DB2B3BE93100EB3CC4 /* futureEventCell.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
 				08CB6A612AC79E5500576D96 /* upcomingEventsViewController.swift in Sources */,
