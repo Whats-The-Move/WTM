@@ -210,7 +210,7 @@ class LoadDataViewController: UIViewController {
                     let combinedLists = [mostGoingTopFive, topFriends, sortedByDeals, otherresults]
 
                     // Initialize NewHomeViewController with combinedLists
-                    let newHomeVC = NewHomeViewController(events: combinedLists)
+                    let newHomeVC = NewHomeViewController()
 
                     newHomeVC.modalPresentationStyle = .fullScreen
 

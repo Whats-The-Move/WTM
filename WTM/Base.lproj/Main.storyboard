@@ -1929,22 +1929,6 @@
             </objects>
             <point key="canvasLocation" x="-748" y="815"/>
         </scene>
-        <!--Item-->
-        <scene sceneID="3HT-mS-jaC">
-            <objects>
-                <viewController storyboardIdentifier="NewHome" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hLV-WL-bNN" customClass="NewHomeViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="BmT-2O-Crb">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="eyL-Vj-4Ft"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="gyc-l9-v4j"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="u6j-mP-LUJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-605" y="1699"/>
-        </scene>
         <!--Settings View Controller-->
         <scene sceneID="Nsx-Sp-2U3">
             <objects>

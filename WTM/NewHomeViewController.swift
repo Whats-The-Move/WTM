@@ -1,25 +1,72 @@
 import UIKit
+import FirebaseDatabase
 
 class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var verticalCollectionView: UICollectionView!
     let filters = ["trending", "friend's choice", "your favorites", "best deals"]
-    var events: [[EventLoad]]
+    var events: [EventLoad] = []
 
-    init(events: [[EventLoad]]) {
-        self.events = events
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupVerticalCollectionView()
         setupGradientBackground()
+
+        loadData(queryFrom: "BerkeleyEvents", dateStrings: ["Jan 4, 2023", "Dec 31, 2024"]) { [weak self] loadedEvents in
+
+            self?.events = loadedEvents
+            self?.setupVerticalCollectionView()
+
+
+        }
+
     }
+    func loadData(queryFrom: String, dateStrings: [String], completion: @escaping ([EventLoad]) -> Void) {
+        let ref = Database.database().reference(withPath: queryFrom)
+        var events: [EventLoad] = []
+        let group = DispatchGroup()
+
+        for dateString in dateStrings {
+            group.enter()
+            ref.child(dateString).observeSingleEvent(of: .value, with: { snapshot in
+                guard let value = snapshot.value as? [String: Any] else {
+                    print("No data available")
+                    return
+                }
+                for (key, data) in value {
+                    if let eventData = data as? [String: Any],
+                       let creator = eventData["creator"] as? String,
+                       let date = dateString as? String,
+                       let deals = eventData["deals"] as? String,
+                       let description = eventData["description"] as? String,
+                       let eventName = eventData["eventName"] as? String,
+                       let imageURL = eventData["imageURL"] as? String,
+                       let isGoing = eventData["isGoing"] as? [String],
+                       let location = eventData["location"] as? String,
+                       let time = eventData["time"] as? String,
+                       let venueName = eventData["venueName"] as? String
+                        {
+                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName)
+                        events.append(event)
+                        print("FUCK!!")
+                        print(event.creator)
+  
+                    }
+                }
+
+                group.leave()
+            }) { error in
+                print(error.localizedDescription)
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) {
+            completion(events)
+        }
+    }
+
 
     private func setupVerticalCollectionView() {
         let layout = UICollectionViewFlowLayout()
@@ -84,7 +131,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             let otherimage = UIImage(named: "Fiji") ?? UIImage()
             let filterTitle = filters[indexPath.item]
 
-            cell.configure(title: filterTitle, with: events[indexPath.item])
+            cell.configure(title: filterTitle, with: events)
             cell.contentView.backgroundColor = .clear
             return cell
         } else {
@@ -95,7 +142,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             cell.contentView.backgroundColor = .clear
 
             let filterTitle = filters[indexPath.item]
-            cell.configure(title: filterTitle, with: events[indexPath.item])
+            cell.configure(title: filterTitle, with: events)
             return cell
         }
     }

@@ -69,7 +69,6 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         // Configure your cell here
         //cell.backgroundColor = .lightGray // Example styling
 
-        let imageName = "Fiji" // 'images' is the array of image names
         cell.configure(with: events[indexPath.item])
         return cell
     }
