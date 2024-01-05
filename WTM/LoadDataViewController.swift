@@ -25,6 +25,7 @@ class LoadDataViewController: UIViewController {
         else {
             queryFrom = "EventsTest"
         }
+        queryFrom = "ChampaignEvents"
         loadData(from: queryFrom)
         // Do any additional setup after loading the view.
     }
@@ -56,8 +57,94 @@ class LoadDataViewController: UIViewController {
             return []
         }
     }
+/*
+    private func loadData(from queryFrom: String, with dates: [String]) {
+        let ref = Database.database().reference()
+
+        // Initialize a group to manage multiple async requests
+        let dispatchGroup = DispatchGroup()
+
+        // This will store all the events from the specified dates
+
+        for date in dates {
+            dispatchGroup.enter()
+            ref.child(queryFrom).child(date).observeSingleEvent(of: .value, with: { snapshot in
+                guard let value = snapshot.value as? [String: Any] else {
+                    print("No data available for date \(date)")
+                    dispatchGroup.leave()
+                    return
+                }
+
+                for (key, data) in value {
+                    if let eventData = data as? [String: Any],
+                       let creator = eventData["creator"] as? String,
+                       let date = eventData["date"] as? String,
+                       let deals = eventData["deals"] as? String,
+                       let description = eventData["description"] as? String,
+                       let eventName = eventData["eventName"] as? String,
+                       let imageURL = eventData["imageURL"] as? String,
+                       let isGoing = eventData["isGoing"] as? [String],
+                       let location = eventData["location"] as? String,
+                       let time = eventData["time"] as? String,
+                       let venueName = eventData["venueName"] as? String
+                    {
+                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName)
+                        self.results.append(event)
+                    }
+                }
+                dispatchGroup.leave()
+            }) { error in
+                print(error.localizedDescription)
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            Task {
+                var friendsDict =   [Int: [String]] ()
+                var counter = 0
+                for item in self.results {
+                    let commonFriends = await self.checkFriendshipStatus(isGoing: item.isGoing)
+                    friendsDict[counter] = commonFriends
+                    counter += 1
+                    
+                }
+                var topFriends: [EventLoad] = []
+                let sortedKeys = friendsDict.keys.sorted {
+                    (friendsDict[$0]?.count ?? 0) > (friendsDict[$1]?.count ?? 0)
+                }
+                for item in sortedKeys {
+                    topFriends.append(self.results[item])
+                }
+                //TOP FRIENDS DONE
+                
+                
+                //MOST POPULAR
+                let sortedByMostGoing = self.results.sorted { $0.isGoing.count > $1.isGoing.count }
+                let mostGoingTopFive = Array(sortedByMostGoing.prefix(5))
+                
+
+                // DEALS
+                let sortedByDeals = self.results.filter { $0.deals != "" }
+
+               
+                //NUMBER 4
+                let otherresults = Array(self.results.shuffled().prefix(5))
 
 
+                
+                let combinedLists = [mostGoingTopFive, topFriends, sortedByDeals, otherresults]
+
+                // Initialize NewHomeViewController with combinedLists
+                let newHomeVC = NewHomeViewController(events: combinedLists)
+
+                newHomeVC.modalPresentationStyle = .fullScreen
+
+                self.present(newHomeVC, animated: true, completion: nil)
+            }
+        }
+    }
+*/
 
     private func loadData(from queryFrom: String) {
             let ref = Database.database().reference()
@@ -123,7 +210,7 @@ class LoadDataViewController: UIViewController {
                     let combinedLists = [mostGoingTopFive, topFriends, sortedByDeals, otherresults]
 
                     // Initialize NewHomeViewController with combinedLists
-                    let newHomeVC = NewHomeViewController(events: combinedLists)
+                    let newHomeVC = NewHomeViewController()
 
                     newHomeVC.modalPresentationStyle = .fullScreen
 

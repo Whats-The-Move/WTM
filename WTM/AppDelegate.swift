@@ -28,6 +28,8 @@ public var dbName = "Parties"
 public var currCity = "Champaign"
 public var userFcmToken = ""
 public var reviewRequested = false
+public var currentOption = "This Week"
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {

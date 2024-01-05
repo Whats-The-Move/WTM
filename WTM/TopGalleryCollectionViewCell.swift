@@ -13,12 +13,13 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         super.init(frame: frame)
         setupTitleLabel()
         setupGalleryCollectionView()
-        setupPageControl()
 
     }
     func configure(title: String, with events: [EventLoad]) {
         self.titleLabel.text = title
         self.events = events
+        setupPageControl()
+
         //self.galleryCollectionView.reloadData() // Reload data with new events
     }
     
@@ -30,13 +31,14 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        titleLabel.textAlignment = .center
+        //titleLabel.textAlignment = .center
+        titleLabel.textColor = .white
 
         contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
@@ -50,7 +52,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         galleryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         //galleryCollectionView.collectionViewLayout = layout
 
- 
+        galleryCollectionView.backgroundColor = .clear
         galleryCollectionView.translatesAutoresizingMaskIntoConstraints = false
         galleryCollectionView.showsHorizontalScrollIndicator = false
         galleryCollectionView.isPagingEnabled = true
@@ -63,8 +65,8 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         NSLayoutConstraint.activate([
             galleryCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             galleryCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            galleryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            galleryCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+            galleryCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -7.5),
+            galleryCollectionView.widthAnchor.constraint(equalToConstant: 280)
         ])
     }
     func setupPageControl() {
@@ -78,7 +80,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
 
             // PageControl Constraints
             pageControl.topAnchor.constraint(equalTo: galleryCollectionView.bottomAnchor, constant: 5), // Adjust the constant for spacing
-            pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            pageControl.centerXAnchor.constraint(equalTo: galleryCollectionView.centerXAnchor),
             pageControl.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
@@ -99,6 +101,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as? ImageCell else {
             fatalError("Could not dequeue ImageCell")
         }
+        //cell.backgroundColor = .black
         cell.configure(with: events[indexPath.item])
         //cell.layer.cornerRadius = 10
         return cell

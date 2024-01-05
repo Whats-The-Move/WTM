@@ -482,7 +482,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                     // Successfully fetched the venueName
                     print("Venue Name: \(venueName)")
                     placeName = venueName
-                    let privatesRef = Database.database().reference().child("\(creatorLocation)Events")
+                    //let privatesRef = Database.database().reference().child("\(creatorLocation)Events")
+                    let privatesRef = Database.database().reference().child("BerkeleyEvents")
                     let newEventRef = privatesRef.childByAutoId()
                     
                     // Create a dictionary with the event information

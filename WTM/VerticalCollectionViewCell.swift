@@ -25,12 +25,13 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         titleLabel = UILabel()
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = .white
 
         contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
         ])
     }
@@ -69,7 +70,6 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         // Configure your cell here
         //cell.backgroundColor = .lightGray // Example styling
 
-        let imageName = "Fiji" // 'images' is the array of image names
         cell.configure(with: events[indexPath.item])
         return cell
     }
@@ -128,6 +128,7 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
         pplLabel.translatesAutoresizingMaskIntoConstraints = false
         pplLabel.text = String(event.isGoing.count)
         pplLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        pplLabel.textColor = .black
         contentView.addSubview(pplLabel)
 
         NSLayoutConstraint.activate([
