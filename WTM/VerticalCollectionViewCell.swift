@@ -25,6 +25,7 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         titleLabel = UILabel()
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = .white
 
         contentView.addSubview(titleLabel)
 
@@ -127,6 +128,7 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
         pplLabel.translatesAutoresizingMaskIntoConstraints = false
         pplLabel.text = String(event.isGoing.count)
         pplLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        pplLabel.textColor = .black
         contentView.addSubview(pplLabel)
 
         NSLayoutConstraint.activate([

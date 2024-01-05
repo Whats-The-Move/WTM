@@ -13,12 +13,13 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         super.init(frame: frame)
         setupTitleLabel()
         setupGalleryCollectionView()
-        setupPageControl()
 
     }
     func configure(title: String, with events: [EventLoad]) {
         self.titleLabel.text = title
         self.events = events
+        setupPageControl()
+
         //self.galleryCollectionView.reloadData() // Reload data with new events
     }
     
@@ -31,6 +32,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         titleLabel.textAlignment = .center
+        titleLabel.textColor = .white
 
         contentView.addSubview(titleLabel)
 
@@ -78,7 +80,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
 
             // PageControl Constraints
             pageControl.topAnchor.constraint(equalTo: galleryCollectionView.bottomAnchor, constant: 5), // Adjust the constant for spacing
-            pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            pageControl.centerXAnchor.constraint(equalTo: galleryCollectionView.centerXAnchor),
             pageControl.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
