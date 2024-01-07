@@ -255,22 +255,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "62636DCB-0488-43B7-AE04-8EA65F015F0E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WTM/CreateEventViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
-            landmarkName = "CreateEventViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "8EB0BAF3-9B3E-4219-A291-59DF76325E2B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -519,139 +503,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9"
+            uuid = "C99583D0-6EC2-47B8-ACFF-6E976B9CA644"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WTM/CreateEventViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "CreateEventViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - 1b9177be48b3a48"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.typeOptions.getter : Swift.Array&lt;Swift.String&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/CreateEventViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - 845b5bcfd20d7f13"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.typeOptions.setter : Swift.Array&lt;Swift.String&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/CreateEventViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - a3455eb12745afe2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.typeOptions.modify : Swift.Array&lt;Swift.String&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/CreateEventViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - fd2c4e1dfe903664"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.typeOptions.modify : Swift.Array&lt;Swift.String&gt; with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/%3Ccompiler-generated%3E"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - 5786bbd6e6865af1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; WTM.CreateEventViewController"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/CreateEventViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "248">
-               </Location>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - c2982a3aa9484735"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;WTM.CreateEventViewController&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/CreateEventViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "224">
-               </Location>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - 5786bbd6e6865af1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; WTM.CreateEventViewController"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/CreateEventViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "256">
-               </Location>
-               <Location
-                  uuid = "E015FD22-C8F7-4010-A19D-8BB3A5760EA9 - c2982a3aa9484735"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WTM.CreateEventViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;WTM.CreateEventViewController&gt;"
-                  moduleName = "WTM"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amanshah/Documents/XCODE/WTM/WTM/CreateEventViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "232">
-               </Location>
-            </Locations>
+            startingLineNumber = "513"
+            endingLineNumber = "513"
+            landmarkName = "saveTapped()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

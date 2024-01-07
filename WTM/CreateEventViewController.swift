@@ -9,46 +9,252 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import StoreKit
+class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    
+    
+    var cancel: UIButton!
+    var save: UIButton!
+    var eventTitle: UITextField!
+    var imageView: UIImageView!
+    var deals: UITextField!
+    var datePicker: UIDatePicker!
+    var time: UITextField!
+    var repeatLabel: UILabel!
+    var descriptionText: UITextView!
+    var repeatTableView: UITableView!
+    
+    var typeOptions = ["Drink Discount", "Free Drink", "Event Alert", "Other"]
+    var typeChoice = "drink discount"
+    let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    var imageUploadURL = ""
+    var selectedUsers: [User] = []
+    var selectedDays: [String] = []
+    var userEditing = false
 
-class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        1
-    }
+    //var scrollView = UIScrollView()
+    //var contentView = UIView()
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        typeOptions.count
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        //setupScrollView()
+        setupCancel()
+        setupSave()
+        setupEventTitle()
+        setupImageView()
+        setupDescriptionText()
+        setupDatePicker()
+        setupDeals()
+
+        setupTime()
+        setupRepeatLabel()
+        setupTableView()
+        //addSubviews()
+        setFonts()
+        setupGestureRecognizers()
+
     }
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return typeOptions[row]
-    }
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.typeChoice = typeOptions[row]
-        //here's where you do the code for firebase
-        // Update your UI or perform actions based on the selected option
+    private func setFonts() {
+        let futuraMedium20 = UIFont(name: "Futura-Medium", size: 20)
+        let futuraMedium40 = UIFont(name: "Futura-Medium", size: 40)
+
+        // Set font for each UI component
+        cancel.titleLabel?.font = futuraMedium20
+        save.titleLabel?.font = futuraMedium20
+        eventTitle.font = futuraMedium40
+        deals.font = futuraMedium20
+        time.font = futuraMedium20
+        repeatLabel.font = futuraMedium20
+        descriptionText.font = futuraMedium20
+        
+        imageView.image = UIImage(named: "profileIcon")
+        
+        eventTitle.delegate = self
+        descriptionText.delegate = self
+        //inviteesText.delegate = self
+        
+
+        
+        
+        // Do any additional setup after loading the view.
+        
     }
 
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return daysOfWeek.count
+/*
+    private func setupScrollView() {
+        scrollView.addSubview(contentView)
+        view.addSubview(scrollView)
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            // Important: contentView's bottom should be equal or greater than scrollView's bottom
+            contentView.bottomAnchor.constraint(greaterThanOrEqualTo: scrollView.bottomAnchor),
+
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+
+            // Add a height constraint if needed
+            // contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumHeight)
+        ])
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let day = daysOfWeek[indexPath.row]
-        cell.textLabel?.text = day
-        cell.accessoryType = selectedDays.contains(day) ? .checkmark : .none
-        return cell
+*/
+
+
+    private func setupCancel() {
+        cancel = UIButton(type: .system)
+        cancel.setTitle("Cancel", for: .normal)
+        let pinkColor = UIColor(red: 255/255.0, green: 28/255.0, blue: 142/255.0, alpha: 1.0)
+        cancel.setTitleColor(pinkColor, for: .normal)
+        let futuraBig = UIFont(name: "Futura-Medium", size: 20)
+        cancel.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
+
+        
+        cancel.backgroundColor = .white
+        cancel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cancel)
+
+        NSLayoutConstraint.activate([
+            cancel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            cancel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cancel.widthAnchor.constraint(equalToConstant: 100),
+            cancel.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let day = daysOfWeek[indexPath.row]
-        if selectedDays.contains(day) {
-            // Deselect the day
-            selectedDays.removeAll { $0 == day }
-        } else {
-            // Select the day
-            selectedDays.append(day)
-        }
-        tableView.reloadRows(at: [indexPath], with: .none)
+
+    private func setupSave() {
+        save = UIButton(type: .system)
+        save.setTitle("Save", for: .normal)
+        let pinkColor = UIColor(red: 255/255.0, green: 28/255.0, blue: 142/255.0, alpha: 1.0)
+        save.setTitleColor(pinkColor, for: .normal)
+        save.backgroundColor = .white
+        save.translatesAutoresizingMaskIntoConstraints = false
+        save.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+
+        view.addSubview(save)
+
+        NSLayoutConstraint.activate([
+            save.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            save.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            save.widthAnchor.constraint(equalToConstant: 100),
+            save.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    private func setupEventTitle() {
+        eventTitle = UITextField()
+        eventTitle.attributedPlaceholder = NSAttributedString(string: "Event Title", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        eventTitle.textColor = .black
+        eventTitle.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(eventTitle)
+        eventTitle.textAlignment = .center
+
+        NSLayoutConstraint.activate([
+            eventTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            eventTitle.topAnchor.constraint(equalTo: save.bottomAnchor, constant: 15),
+            eventTitle.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+            eventTitle.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func setupImageView() {
+        imageView = UIImageView()
+        imageView.image = UIImage(named: "profile.icon") // Ensure this image is in your assets
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageView)
+
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.topAnchor.constraint(equalTo: eventTitle.bottomAnchor, constant: 15),
+            imageView.widthAnchor.constraint(equalToConstant: 200),
+            imageView.heightAnchor.constraint(equalToConstant: 200)
+        ])
+    }
+
+    private func setupDescriptionText() {
+        descriptionText = UITextView()
+        descriptionText.textColor = .black
+        //descriptionText.backgroundColor = .lightGray // Temporary background color for visibility
+        descriptionText.text = "Description" // Temporary text for debugging
+
+        descriptionText.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(descriptionText)
+       
+
+        NSLayoutConstraint.activate([
+            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            descriptionText.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15),
+            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            descriptionText.heightAnchor.constraint(equalToConstant: 170)
+        ])
+    }
+
+    private func setupDatePicker() {
+        datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(datePicker)
+
+        NSLayoutConstraint.activate([
+            datePicker.widthAnchor.constraint(equalToConstant: 200),
+            datePicker.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: 10),
+            datePicker.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: 70),
+            datePicker.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func setupDeals() {
+        deals = UITextField()
+        deals.attributedPlaceholder = NSAttributedString(string: "Deals", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        deals.textColor = .black
+        deals.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(deals)
+
+        NSLayoutConstraint.activate([
+            deals.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            deals.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 15),
+            deals.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            deals.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func setupTime() {
+        time = UITextField()
+        time.attributedPlaceholder = NSAttributedString(string: "Time", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        time.textColor = .black
+        time.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(time)
+
+        NSLayoutConstraint.activate([
+            time.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            time.topAnchor.constraint(equalTo: deals.bottomAnchor, constant: 13),
+            time.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            time.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func setupRepeatLabel() {
+        repeatLabel = UILabel()
+        repeatLabel.isUserInteractionEnabled = true
+        repeatLabel.text = "Does not repeat"
+        repeatLabel.textColor = .black
+        repeatLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(repeatLabel)
+
+        NSLayoutConstraint.activate([
+            repeatLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            repeatLabel.topAnchor.constraint(equalTo: time.bottomAnchor, constant: 15),
+            repeatLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Description" {
@@ -60,131 +266,76 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             textView.text = "Description"
         }
     }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+
+    
+    
+
+    /*
+    private func addSubviews() {
+        contentView.addSubview(cancel)
+        contentView.addSubview(save)
+        contentView.addSubview(eventTitle)
+        contentView.addSubview(imageView)
+        contentView.addSubview(deals)
+        contentView.addSubview(datePicker)
+        contentView.addSubview(time)
+        contentView.addSubview(repeatLabel)
+        contentView.addSubview(descriptionText)
+    }*/
+    
+    
+    
+    private func setupTableView() {
+        repeatTableView = UITableView()
+        repeatTableView.delegate = self
+        repeatTableView.dataSource = self
+        repeatTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        repeatTableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(repeatTableView)
+        NSLayoutConstraint.activate([
+            repeatTableView.centerXAnchor.constraint(equalTo: repeatLabel.centerXAnchor),
+            repeatTableView.heightAnchor.constraint(equalToConstant: 200),
+            repeatTableView.widthAnchor.constraint(equalToConstant: 160),
+            repeatTableView.bottomAnchor.constraint(equalTo: repeatLabel.topAnchor)
+        ])
+        repeatTableView.isHidden = true
+    }
+    
 
 
-    var typeOptions = ["Drink Discount", "Free Drink", "Event Alert", "Other"]
-    @IBOutlet weak var cancel: UIButton!
-    @IBOutlet weak var save: UIButton!
     
-    @IBOutlet weak var eventTitle: UITextField!
-    
-    @IBOutlet weak var imageView: UIImageView!
-    
-    @IBOutlet weak var deals: UITextField!
-    @IBOutlet weak var typePicker: UIPickerView!
-
-    
-    @IBOutlet weak var time: UITextField!
-    @IBOutlet weak var date: UITextField!
-    @IBOutlet weak var repeatLabel: UILabel!
-    @IBOutlet weak var location: UITextField!
-    
-    @IBOutlet weak var descriptionText: UITextView!
-    var typeChoice = "drink discount"
-    var repeatTableView: UITableView!
-    let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    var imageUploadURL = ""
-    var selectedUsers: [User] = []
-    var selectedDays: [String] = []
-    var userEditing = false
-    var scrollView: UIScrollView!
-    var contentView: UIView!
-    
-    //MAKE IT SO IF EDITING SHOW BUTTON
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupScrollView()
-        //setupConstraints()
-        setupTableView()
-        setupTypePicker()
-        if let image = UIImage(named: "profileIcon") {
-                imageView.image = image
-            } else {
-                print("Image not found")
-            }
-
-        //addHorizontalLine(belowView: eventTitle, spacing: 10.0)
-
-        //addHorizontalLine(belowView: repeatLabel, spacing: 14.0)
+    private func setupGestureRecognizers() {
         
-        //addHorizontalLine(belowView: location, spacing: 10.0)
-        //addHorizontalLine(belowView: typePicker, spacing: 10.0)
-
-       // addHorizontalLine(belowView: descriptionText, spacing: 13.0)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         imageView.addGestureRecognizer(tapGesture)
         imageView.isUserInteractionEnabled = true
         
-        if let futuraBig = UIFont(name: "Futura-Medium", size: 40) {
-            eventTitle.font = futuraBig
-        }
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
         repeatLabel.isUserInteractionEnabled = true
         repeatLabel.addGestureRecognizer(tapGestureRecognizer)
         
-        eventTitle.delegate = self
-        location.delegate = self
-        descriptionText.delegate = self
-        //inviteesText.delegate = self
-        
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         swipeGesture.direction = .down
-        swipeGesture.delegate = self
-        descriptionText.addGestureRecognizer(swipeGesture)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
-        // Do any additional setup after loading the view.
-    }
-
-    func setupScrollView() {
-        scrollView = UIScrollView()
-        contentView = UIView()
-        scrollView.addSubview(contentView)
-        view.addSubview(scrollView)
-
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-
-        // ScrollView constraints
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
-
-        // Transfer all subviews from self.view to contentView
-        transferSubviewsToContentView()
-    }
-    func transferSubviewsToContentView() {
-        let subviews = view.subviews.filter { $0 != scrollView }
-        for subview in subviews {
-            subview.removeFromSuperview()
-            contentView.addSubview(subview)
-        }
-        setupConstraints()
-        // Since we are moving subviews, we need to re-apply the constraints to contentView
-        // Ideally, this would be done in Interface Builder or by re-activating each view's constraints relative to contentView.
-        // For now, this function will be a placeholder for you to manually update the constraints as needed.
+        view.addGestureRecognizer(swipeGesture)
     }
     @objc func imageTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true)
-    }
-    
-    @objc func dismissKeyboard() {
-        descriptionText.resignFirstResponder()
     }
     @objc func labelTapped(){
         repeatTableView.isHidden = !repeatTableView.isHidden
@@ -203,158 +354,10 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    func setupTypePicker(){
-        //add the options for the type picker here
-        typePicker.dataSource = self
-        typePicker.delegate = self
-
-    }
-    func setupTableView() {
-        // Create and configure the tableView
-        repeatTableView = UITableView()
-        repeatTableView.delegate = self
-        repeatTableView.dataSource = self
-        repeatTableView.translatesAutoresizingMaskIntoConstraints = false
-
-        // Register the default UITableViewCell class with the table view
-        repeatTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
-        // Add the tableView to the view hierarchy
-        view.addSubview(repeatTableView)
-
-        // Set up constraints to center it in the view
-        NSLayoutConstraint.activate([
-            repeatTableView.centerXAnchor.constraint(equalTo: repeatLabel.centerXAnchor),
-            repeatTableView.topAnchor.constraint(equalTo: repeatLabel.bottomAnchor),
-            repeatTableView.widthAnchor.constraint(equalToConstant: 160),
-            repeatTableView.heightAnchor.constraint(equalToConstant: 200)
-        ])
-        repeatTableView.isHidden = true
-    }
-
-    func addHorizontalLine(belowView viewAbove: UIView, spacing: CGFloat = 10.0) {
-        let lineView = UIView()
-        lineView.backgroundColor = UIColor.gray // Set the line color as needed
-        lineView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(lineView)
-
-        NSLayoutConstraint.activate([
-            lineView.topAnchor.constraint(equalTo: viewAbove.bottomAnchor, constant: spacing),
-            lineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            lineView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            lineView.heightAnchor.constraint(equalToConstant: 1.0) // 1px height
-        ])
-    }
-
-    func setupConstraints() {
-        // Cancel button constraints
-        let view = contentView
-        cancel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            cancel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
-            cancel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            cancel.widthAnchor.constraint(equalToConstant: 100),
-            cancel.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        // Save button constraints
-        save.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            save.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
-            save.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            save.widthAnchor.constraint(equalToConstant: 100),
-            save.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        // Event title constraints
-        eventTitle.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            eventTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            eventTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 100),
-            eventTitle.widthAnchor.constraint(equalToConstant: 200),
-            eventTitle.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            imageView.topAnchor.constraint(equalTo: eventTitle.bottomAnchor, constant: 20),
-            imageView.widthAnchor.constraint(equalToConstant: 200),
-            imageView.heightAnchor.constraint(equalToConstant: 200)
-        ])
-        descriptionText.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            descriptionText.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15),
-            descriptionText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
-            descriptionText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
-            descriptionText.heightAnchor.constraint(equalToConstant: 120)
-        ])
-        typePicker.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            typePicker.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 30),
-            typePicker.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: 20),
-            typePicker.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            typePicker.heightAnchor.constraint(equalToConstant: 80)
-        ])
-        deals.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            deals.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
-            deals.topAnchor.constraint(equalTo: typePicker.bottomAnchor, constant: 15),
-            deals.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            deals.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        // Location constraints
-        location.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            location.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
-            location.topAnchor.constraint(equalTo: deals.bottomAnchor, constant: 15),
-            location.widthAnchor.constraint(equalToConstant: 300),
-            location.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        date.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            date.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
-            date.topAnchor.constraint(equalTo: location.bottomAnchor, constant: 15),
-            date.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            date.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        time.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            time.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
-            time.topAnchor.constraint(equalTo: date.bottomAnchor, constant: 15),
-            time.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            time.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        
-        // Repeat Label constraints
-        repeatLabel.translatesAutoresizingMaskIntoConstraints = false
-        repeatLabel.text = "Does not repeat"
-        NSLayoutConstraint.activate([
-            repeatLabel.leadingAnchor.constraint(equalTo: time.leadingAnchor),
-            repeatLabel.topAnchor.constraint(equalTo: time.bottomAnchor, constant:  15),
-            repeatLabel.widthAnchor.constraint(equalToConstant: 300),
-            repeatLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-        
-        // Repeat Button constraints
-
-
-    }
-
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
-    }
-    
     @objc func keyboardWillHide(notification: Notification) {
         // Restore the original position of the view
         UIView.animate(withDuration: 0.3) {
@@ -366,13 +369,14 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
+    
 
         // Calculate the height of the keyboard
         let keyboardHeight = keyboardFrame.size.height
 
         // Check if the text field is hidden by the keyboard
-        if eventTitle.isFirstResponder || location.isFirstResponder || descriptionText.isFirstResponder  {
-            let maxY = max(eventTitle.frame.maxY, location.frame.maxY, descriptionText.frame.maxY)
+        if eventTitle.isFirstResponder ||  descriptionText.isFirstResponder  {
+            let maxY = max(eventTitle.frame.maxY, descriptionText.frame.maxY)
             let visibleHeight = view.frame.height - keyboardHeight
             if maxY > visibleHeight {
                 // Adjust the view's frame to move the text field above the keyboard
@@ -382,184 +386,10 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                 }
             }
         }
-    }
     
-    override func viewDidLayoutSubviews() {
-        descriptionText.isEditable = true
-        //descriptionText.text = "Description/details"
-        descriptionText.textAlignment = .left
-        descriptionText.font = UIFont.systemFont(ofSize: 16)
-        // Create a bold font
-
-        if let futuraBold = UIFont(name: "Futura-Bold", size: 18) {
-            save.titleLabel?.font = futuraBold
-
-        }
-        if let futuraRegular = UIFont(name: "Futura-Medium", size: 18) {
-            cancel.titleLabel?.font = futuraRegular
-            location.font = futuraRegular
-            repeatLabel.font = futuraRegular
-            descriptionText.font = futuraRegular
-            deals.font = futuraRegular
-            time.font = futuraRegular
-            date.font = futuraRegular
-        }
-
-
-        descriptionText.layer.cornerRadius = 8
-        
-        var pinkColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
-        pinkColor = UIColor.black
-        // Create a UITextField
-
-
-        // Create an NSAttributedString with the custom pink color for the placeholder text
-        let pinkPlaceholderText = NSAttributedString(string: "Event Title", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
-        eventTitle.attributedPlaceholder = pinkPlaceholderText
-        var pinkPlaceholderTextLocation = NSAttributedString(string: "Address", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
-        location.attributedPlaceholder = pinkPlaceholderTextLocation
-        var placeholderText = NSAttributedString(string: "Date", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
-        date.attributedPlaceholder = placeholderText
-        placeholderText = NSAttributedString(string: "Time", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
-        time.attributedPlaceholder = placeholderText
-        placeholderText = NSAttributedString(string: "Deals", attributes: [NSAttributedString.Key.foregroundColor: pinkColor])
-        deals.attributedPlaceholder = placeholderText
-
-
-        //dateAndTime.setValue(UIColor.white, forKeyPath: "textColor")
-
-        // Set the background color to gray
-        //dateAndTime.backgroundColor = pinkColor
-        //endTime.backgroundColor = pinkColor
-        
-        eventTitle.backgroundColor = .clear
-        location.backgroundColor = .clear
-
     }
-    
-    @IBAction func cancelTapped(_ sender: Any) {
-        self.dismiss(animated: true)
-    }
- 
-
-    @IBAction func saveTapped(_ sender: Any) {
-        guard let eventTitle = eventTitle.text,
-              let date = date.text,
-              let deals = deals.text,
-              let location = location.text,
-              let time = time.text,
-              let eventDescription = descriptionText.text
-        else {
-            print("didn't fill it")
-            return
-            
-        }
-        if  eventTitle == "" || location == "" || eventDescription == "Description" {
-            let alertController = UIAlertController(title: "Missing Information", message: "One or more fields are empty. Please fill out all required fields.", preferredStyle: .alert)
-            
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(okAction)
-            
-            present(alertController, animated: true, completion: nil)
-            return
-        }
-        let unixStart = 4
-        let unixEnd = 4
-        let currentUserUID = Auth.auth().currentUser?.uid ?? ""
-        let imageURL = self.imageUploadURL
-        
-        // Get the invitee UIDs as an array
-        /*var inviteeUIDs = selectedUsers.map { $0.uid }
-        inviteeUIDs.append(currentUserUID)*/
-
-        // Assuming you have authenticated the user and have access to their UID
-        let db = Firestore.firestore()
-        let userRef = db.collection("barUsers").document(currentUserUID)
-        var placeName = "testParty"
-        userRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let venueName = document["venueName"] as? String, let creatorLocation = document["location"] as? String {
-                    // Successfully fetched the venueName
-                    print("Venue Name: \(venueName)")
-                    placeName = venueName
-                    //let privatesRef = Database.database().reference().child("\(creatorLocation)Events")
-                    let privatesRef = Database.database().reference().child("BerkeleyEvents")
-                    let newEventRef = privatesRef.childByAutoId()
-                    
-                    // Create a dictionary with the event information
-                    let eventInfo: [String: Any] = [
-                        "title": eventTitle,
-                        "start": unixStart,
-                        "end": unixEnd,
-                        "location": location,
-                        "description": eventDescription,
-                        "creator": currentUserUID,
-                        "eventType": self.typeChoice,
-                        "repitition": self.selectedDays 
-                    ]
-                    /*
-                     let eventInfo: [String: Any] = [
-                        "creator": currentUserUID,
-                        "date": date,
-                     "deals" : deals,
-                     "description": eventDescription,
-                     "eventName": eventTitle,
-                        "imageURL": imageURL, //not good
-                     "location": location,
-                     "time" : time,
-                     "venueName": placeName
-                         "eventType": self.typeChoice,
-                         "repitition": self.selectedDays ?? "none"
-                     ]
-                     */
-                    
-                    // Set the event information under the new child node
-                    newEventRef.setValue(eventInfo) { error, _ in
-                        if let error = error {
-                            print("Error creating event: \(error.localizedDescription)")
-                        } else {
-                            print("Event created successfully!")
-                            // TODO: Perform any additional actions after event creation
-                        }
-                    }
-                } else {
-                    // The "venueName" field does not exist or is not a String
-                    print("Venue Name not found or is not a String")
-                }
-            } else {
-                // Document does not exist or there was an error
-                print("Document does not exist or an error occurred")
-            }
-        }
-        // Create a new child node under "Privates" and generate a unique key
-
-        
-        self.eventTitle.text = ""
-        self.location.text = ""
-        descriptionText.text = ""
-        
-        
-        // Display a message
-        let alertController = UIAlertController(title: "Congratulations", message: "You have created an event!", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
-            print("ok")
-            self.dismiss(animated: true)
-
-        }
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
-        if #available(iOS 10.3, *) {
-            if !UserDefaults.standard.bool(forKey: "reviewRequested") {
-                UserDefaults.standard.set(true, forKey: "reviewRequested")
-                print("Changing value")
-                SKStoreReviewController.requestReview()
-
-            }
-        } else {
-            // Fallback code for iOS versions earlier than 10.3
-            // You can implement your custom review prompt or use third-party libraries.
-        }
-
+    @objc func dismissKeyboard() {
+        descriptionText.resignFirstResponder()
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
@@ -593,35 +423,144 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                     return
                 }
                 
-                let imageUploadURL = downloadURL.absoluteString
+                self.imageUploadURL = downloadURL.absoluteString
                 // Do something with imageUploadURL
-                print("Download URL: \(imageUploadURL)")
+                print("Download URL: \(self.imageUploadURL)")
             }
         }
     }
+    // ... Rest of your methods ...
+    
+    // Don't forget to update any method that refers to UI elements, replacing IBOutlet references with the newly created UI elements.
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return daysOfWeek.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let day = daysOfWeek[indexPath.row]
+        cell.textLabel?.text = day
+        cell.accessoryType = selectedDays.contains(day) ? .checkmark : .none
+        return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let day = daysOfWeek[indexPath.row]
+        if selectedDays.contains(day) {
+            // Deselect the day
+            selectedDays.removeAll { $0 == day }
+        } else {
+            // Select the day
+            selectedDays.append(day)
+        }
+        tableView.reloadRows(at: [indexPath], with: .none)
+    }
+    
+    @objc func cancelTapped() {
+        self.dismiss(animated: true)
+    }
+ 
 
-    /*
-    @objc func inviteesTapped() {
-        let inviteListVC = storyboard?.instantiateViewController(withIdentifier: "InviteList") as! InviteListViewController
-            inviteListVC.selectedUsers = selectedUsers  // Pass the selectedUsers array to InviteListViewController
-            inviteListVC.didSelectUsers = { [weak self] users in
-                // Update inviteesText with the names of the selected users
-                let names = users.map { $0.name }
-                self?.inviteesText.text = names.joined(separator: ", ")
-                self?.selectedUsers = users  // Update the selectedUsers array with the newly selected users
+    @objc func saveTapped() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy" // "Jan 3, 2023" format
+        
+        guard let eventTitle = eventTitle.text,
+              let deals = deals.text,
+              let time = time.text,
+              let eventDescription = descriptionText.text
+        else {
+            print("didn't fill it")
+            return
+            
+        }
+        if  eventTitle == "" ||  eventDescription == "Description" {
+            let alertController = UIAlertController(title: "Missing Information", message: "One or more fields are empty. Please fill out all required fields.", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            
+            present(alertController, animated: true, completion: nil)
+            return
+        }
+
+        let currentUserUID = Auth.auth().currentUser?.uid ?? ""
+
+        let db = Firestore.firestore()
+        let userRef = db.collection("barUsers").document(currentUserUID)
+        
+
+        let imageURL = self.imageUploadURL
+        let date = datePicker.date
+
+        let dateString = dateFormatter.string(from: date)
+
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let venueName = document["venueName"] as? String, let creatorLocation = document["location"] as? String {
+                    // Successfully fetched the venueName
+                    print("Venue Name: \(venueName)")
+                    let privatesRef = Database.database().reference().child("\(creatorLocation)Events").child(dateString)
+                    let newEventRef = privatesRef.childByAutoId()
+                     let eventInfo: [String: Any] = [
+                        "creator": currentUserUID,
+                     "deals" : deals,
+                     "description": eventDescription,
+                     "eventName": eventTitle,
+                    "imageURL": imageURL,
+                        "isGoing" : [],
+                     "location": "N/A",
+                     "time" : time,
+                     "venueName": venueName,
+                    "repitition": self.selectedDays
+                     ]
+                     
+                    
+                    // Set the event information under the new child node
+                    newEventRef.setValue(eventInfo) { error, _ in
+                        if let error = error {
+                            print("Error creating event: \(error.localizedDescription)")
+                        } else {
+                            print("Event created successfully!")
+                            // TODO: Perform any additional actions after event creation
+                        }
+                    }
+                } else {
+                    // The "venueName" field does not exist or is not a String
+                    print("Venue Name not found or is not a String")
+                }
+            } else {
+                // Document does not exist or there was an error
+                print("Document does not exist or an error occurred")
             }
-            present(inviteListVC, animated: true, completion: nil)
-    }
-    */
+        }
+        // Create a new child node under "Privates" and generate a unique key
 
-    /*
-    // MARK: - Navigation
+        
+        self.eventTitle.text = ""
+        descriptionText.text = ""
+        
+        
+        // Display a message
+        let alertController = UIAlertController(title: "Congratulations", message: "You have created an event!", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            print("ok")
+            self.dismiss(animated: true)
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        }
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+        if #available(iOS 10.3, *) {
+            if !UserDefaults.standard.bool(forKey: "reviewRequested") {
+                UserDefaults.standard.set(true, forKey: "reviewRequested")
+                print("Changing value")
+                SKStoreReviewController.requestReview()
+
+            }
+        } else {
+            // Fallback code for iOS versions earlier than 10.3
+            // You can implement your custom review prompt or use third-party libraries.
+        }
+
     }
-    */
 
 }

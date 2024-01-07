@@ -142,14 +142,13 @@ class weeklyViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
 
     @objc func myEventsButtonTapped() {
-        // Handle the button tap event here, e.g., show the "createEvents" view controller
         print("my events clicked")
 
-        // Replace "YourStoryboardName" with the actual name of your storyboard
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let createEvent = storyboard.instantiateViewController(withIdentifier: "CreateEvent") as! CreateEventViewController
-        present(createEvent, animated: true, completion: nil)
+        let createEventVC = CreateEventViewController()
+        createEventVC.modalPresentationStyle = .fullScreen // Optional: Present full screen
+        present(createEventVC, animated: true, completion: nil)
     }
+
     
 
     

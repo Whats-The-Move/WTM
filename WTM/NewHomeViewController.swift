@@ -28,6 +28,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         loadData(queryFrom: currCity + "Events", dateStrings: datelist) { [weak self] loadedEvents in
 
             self?.events = loadedEvents
+            print(self?.events[0].creator)
             self?.setupVerticalCollectionView()
 
 
@@ -246,7 +247,9 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             group.enter()
             ref.child(dateString).observeSingleEvent(of: .value, with: { snapshot in
                 guard let value = snapshot.value as? [String: Any] else {
+                    print(dateString)
                     print("No data available")
+                    group.leave()
                     return
                 }
                 for (key, data) in value {
@@ -269,21 +272,24 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
   
                     }
                 }
-
+                print("leaving gropu")
+                print(String(events.count))
                 group.leave()
             }) { error in
                 print(error.localizedDescription)
                 group.leave()
             }
         }
-
+        print("time to execute completion")
         group.notify(queue: .main) {
+
             completion(events)
         }
     }
 
 
     private func setupVerticalCollectionView() {
+        print("setting up collection view")
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         // Adjust the item size as per your requirement
