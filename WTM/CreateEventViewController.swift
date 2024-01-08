@@ -68,7 +68,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         repeatLabel.font = futuraMedium20
         descriptionText.font = futuraMedium20
         
-        imageView.image = UIImage(named: "profileIcon")
+        imageView.image = UIImage(named: "EventPhoto")
         
         eventTitle.delegate = self
         descriptionText.delegate = self
@@ -214,7 +214,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
     private func setupDeals() {
         deals = UITextField()
-        deals.attributedPlaceholder = NSAttributedString(string: "Deals", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        deals.attributedPlaceholder = NSAttributedString(string: "Deals (optional)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         deals.textColor = .black
         deals.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(deals)
@@ -248,6 +248,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         repeatLabel.text = "Does not repeat"
         repeatLabel.textColor = .black
         repeatLabel.translatesAutoresizingMaskIntoConstraints = false
+        //hiding for now
+        repeatLabel.isHidden =  true
         view.addSubview(repeatLabel)
 
         NSLayoutConstraint.activate([
@@ -507,7 +509,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                      "description": eventDescription,
                      "eventName": eventTitle,
                     "imageURL": imageURL,
-                        "isGoing" : [],
+                        "isGoing" : ["placeholder"],
                      "location": "N/A",
                      "time" : time,
                      "venueName": venueName,

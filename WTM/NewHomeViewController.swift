@@ -13,6 +13,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     let titleLabel = UILabel()
 
 
+    
+
 
 
 
@@ -24,17 +26,21 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         setupDropdownButton()
         setupOptionsStackView()
         setupTitleLabel()
+
+
+        
         let datelist = getDatesBasedOnCurrentOption()
         loadData(queryFrom: currCity + "Events", dateStrings: datelist) { [weak self] loadedEvents in
 
             self?.events = loadedEvents
-            print(self?.events[0].creator)
             self?.setupVerticalCollectionView()
 
 
         }
 
+
     }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let path = UIBezierPath(roundedRect: dropdownButton.bounds,
@@ -44,10 +50,12 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         // Create a shape layer and apply it as the mask
         let maskLayer = CAShapeLayer()
         maskLayer.path = path.cgPath
+        
         dropdownButton.layer.mask = maskLayer
 
         // Create an additional layer for the border
         let borderLayer = CAShapeLayer()
+        
         borderLayer.path = maskLayer.path // Reuse the same path
         borderLayer.fillColor = UIColor.clear.cgColor
         borderLayer.strokeColor = UIColor.white.cgColor
@@ -56,6 +64,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
 
         // Add the border layer to the button
         dropdownButton.layer.addSublayer(borderLayer)
+        view.bringSubviewToFront(optionsStackView)
+
     }
     func setupTitleLabel() {
         view.addSubview(titleLabel)
@@ -100,9 +110,44 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             optionsStackView.heightAnchor.constraint(equalToConstant: 25)
         ])
     }
+
+    func createButtonWithTitle(_ title: String) -> UIButton {
+            let button = UIButton(type: .system)
+            button.setTitle(title, for: .normal)
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            button.setTitleColor(.white, for: .normal)
+            button.backgroundColor = UIColor(red: 131/255.0, green: 10/255.0, blue: 70/255.0, alpha: 1)
+        button.layer.cornerRadius = 12.5
+            button.layer.borderColor = UIColor.white.cgColor
+            button.layer.borderWidth = 1
+            button.addTarget(self, action: #selector(optionSelected(_:)), for: .touchUpInside)
+            button.isUserInteractionEnabled = true
+
+
+            // Set alpha based on currentOption
+            if currentOption == title {
+                button.alpha = 1
+            }
+
+            return button
+    }
+
+
+    @objc func optionSelected(_ sender: UIButton) {
+            print("Selected option:")
+
+            guard let title = sender.titleLabel?.text else { return }
+            print("Selected option: \(title)")
+            // Handle the selection
+            currentOption = title
+            dropdownTapped()
+            //RELOAD HERE
+            // Update button alphas
+
+    }
     func setupDropdownButton() {
         view.addSubview(dropdownButton)
-        dropdownButton.setTitle("This week", for: .normal)
+        dropdownButton.setTitle(currentOption, for: .normal)
         let originalImage = UIImage(systemName: "chevron.down")! // Replace with your down arrow image
         let resizedImage = resizeImage(image: originalImage, targetSize: CGSize(width: 15, height: 15)) // Adjust target size as needed
         
@@ -149,40 +194,11 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     }
 
     @objc func dropdownTapped() {
+
         optionsStackView.isHidden = !optionsStackView.isHidden
-    }
-    func createButtonWithTitle(_ title: String) -> UIButton {
-            let button = UIButton(type: .system)
-            button.setTitle(title, for: .normal)
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-            button.setTitleColor(.white, for: .normal)
-            button.backgroundColor = UIColor(red: 131/255.0, green: 10/255.0, blue: 70/255.0, alpha: 1)
-        button.layer.cornerRadius = 12.5
-            button.layer.borderColor = UIColor.white.cgColor
-            button.layer.borderWidth = 1
-            button.addTarget(self, action: #selector(optionSelected(_:)), for: .touchUpInside)
-            button.isUserInteractionEnabled = true
-
-
-            // Set alpha based on currentOption
-            if currentOption == title {
-                button.alpha = 1
-            }
-
-            return button
-    }
-
-
-    @objc func optionSelected(_ sender: UIButton) {
-            print("Selected option:")
-
-            guard let title = sender.titleLabel?.text else { return }
-            print("Selected option: \(title)")
-            // Handle the selection
-            currentOption = title
-            // Update button alphas
 
     }
+
 
     func setupSearchBar() {
         searchBar.delegate = self
