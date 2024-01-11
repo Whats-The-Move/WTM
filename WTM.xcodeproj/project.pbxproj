@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,8 @@
 		082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */; };
 		083B618E2A1FCE6400018798 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 083B618D2A1FCE6400018798 /* video.png */; };
 		083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083B618F2A1FD00400018798 /* CustomCellClass.swift */; };
+		0849501E2B45E23000211FFF /* activityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0849501D2B45E23000211FFF /* activityViewController.swift */; };
+		084950202B48B14900211FFF /* inviteCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0849501F2B48B14900211FFF /* inviteCellClass.swift */; };
 		086042D129C292C900066892 /* reviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086042D029C292C900066892 /* reviewViewController.swift */; };
 		086E2E3F2A88160300BC7D85 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E3E2A88160300BC7D85 /* Event.swift */; };
 		086E2E412A88163C00BC7D85 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E402A88163C00BC7D85 /* EventCell.swift */; };
@@ -100,6 +102,8 @@
 		082C6CB12A4B2EDC0048321D /* privatePopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePopUpViewController.swift; sourceTree = "<group>"; };
 		083B618D2A1FCE6400018798 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
 		083B618F2A1FD00400018798 /* CustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellClass.swift; sourceTree = "<group>"; };
+		0849501D2B45E23000211FFF /* activityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = activityViewController.swift; sourceTree = "<group>"; };
+		0849501F2B48B14900211FFF /* inviteCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = inviteCellClass.swift; sourceTree = "<group>"; };
 		086042D029C292C900066892 /* reviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewViewController.swift; sourceTree = "<group>"; };
 		086E2E3E2A88160300BC7D85 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		086E2E402A88163C00BC7D85 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
@@ -283,6 +287,8 @@
 				08CB6A602AC79E5500576D96 /* upcomingEventsViewController.swift */,
 				087AC2EE2B3522B300F3CCBE /* anonymousChatViewController.swift */,
 				08C97D8A2B39476100EC31F9 /* ChatMessageCell.swift */,
+				0849501D2B45E23000211FFF /* activityViewController.swift */,
+				0849501F2B48B14900211FFF /* inviteCellClass.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -580,6 +586,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				084950202B48B14900211FFF /* inviteCellClass.swift in Sources */,
 				0825CC372A87FE7600C9C32E /* calendarHelper.swift in Sources */,
 				103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */,
 				103D80A22A3E77870032E4D3 /* BadgesViewController.swift in Sources */,
@@ -605,6 +612,7 @@
 				10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */,
 				103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */,
 				10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */,
+				0849501E2B45E23000211FFF /* activityViewController.swift in Sources */,
 				082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */,
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
 				10B616372B33E22900CE1226 /* NewHomeViewController.swift in Sources */,
