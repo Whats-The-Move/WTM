@@ -4,7 +4,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 
-class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, TopGalleryCollectionViewCellDelegate {
+class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, UIScrollViewDelegate, TopGalleryCollectionViewCellDelegate {
 
     
 
@@ -16,9 +16,9 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     var friendSortedList: [EventLoad] = []
 
     //let searchBar = UISearchBar()
-    let dropdownButton = UIButton(type: .system)
+    //let dropdownButton = UIButton(type: .system)
     let dates = ["This Week", "Tomorrow", "Today"]
-    let optionsStackView = UIStackView()
+    //let optionsStackView = UIStackView()
     let titleLabel = UILabel()
     
     private let ticketButton = UIButton(type: .system)
@@ -38,8 +38,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         //setupSearchBar()
         setupTitleLabel()
 
-        setupDropdownButton()
-        setupOptionsStackView()
+        //setupDropdownButton()
+        //setupOptionsStackView()
         setupTicketButton()
         setupAddFriendsButton()
         
@@ -50,16 +50,30 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         /*Task {
             await loadAndPrepareData()
         }*/
-        
         loadData(queryFrom: currCity + "Events", dateStrings: datelist) { [weak self] loadedEvents in
-
             self?.events = loadedEvents
             self?.events.sort { $0.isGoing.count > $1.isGoing.count }
+
+            // Use a Task to call the asynchronous function
             self?.prepareRushData()
             self?.prepareBarClubData()
-            //self?.friendSortedList = await getEventsSortedByFriends()
-            self?.setupVerticalCollectionView()
-         }
+            Task {
+                // Make sure to capture self weakly to avoid retain cycles
+                guard let strongSelf = self else { return }
+                let friendSortedEvents = await strongSelf.getEventsSortedByFriends()
+
+                // Dispatch back to the main thread for any UI updates
+                DispatchQueue.main.async {
+                    strongSelf.friendSortedList = friendSortedEvents
+                    strongSelf.setupVerticalCollectionView()
+                    // Any other UI updates
+                }
+            }
+
+
+
+        }
+
 
 
 
@@ -103,7 +117,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
        
-        view.bringSubviewToFront(optionsStackView)
+        //view.bringSubviewToFront(optionsStackView)
 
     }
     func setupTitleLabel() {
@@ -121,7 +135,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
         ])
     }
-    
+    /*
     func setupOptionsStackView() {
         view.addSubview(optionsStackView)
         optionsStackView.axis = .horizontal
@@ -148,8 +162,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             optionsStackView.widthAnchor.constraint(equalToConstant: 270),
             optionsStackView.heightAnchor.constraint(equalToConstant: 25)
         ])
-    }
-
+    }*/
+/*
     func createButtonWithTitle(_ title: String) -> UIButton {
             let button = UIButton(type: .system)
             button.setTitle(title, for: .normal)
@@ -184,6 +198,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             // Update button alphas
 
     }
+   
     func setupDropdownButton() {
         view.addSubview(dropdownButton)
         dropdownButton.setTitle(currentOption, for: .normal)
@@ -202,8 +217,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         // Layout the button
         dropdownButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dropdownButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 25),
-            dropdownButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            dropdownButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35),
+            dropdownButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -22),
             dropdownButton.widthAnchor.constraint(equalToConstant: 90),
             dropdownButton.heightAnchor.constraint(equalToConstant: 20)
         ])
@@ -213,12 +228,14 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         dropdownButton.imageEdgeInsets = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0) // Adjust as needed
         dropdownButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: -2) // Adjust as needed
     }
+     
 
     @objc func dropdownTapped() {
 
         optionsStackView.isHidden = !optionsStackView.isHidden
 
     }
+     */
 
 /*
     func setupSearchBar() {
@@ -338,6 +355,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         verticalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         verticalCollectionView.dataSource = self
         verticalCollectionView.delegate = self
+        verticalCollectionView.isScrollEnabled = true
+
         verticalCollectionView.backgroundColor = .clear // Change as needed
         if let flowLayout = verticalCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -355,7 +374,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         view.addSubview(verticalCollectionView)
 
         NSLayoutConstraint.activate([
-            verticalCollectionView.topAnchor.constraint(equalTo: dropdownButton.topAnchor, constant: -20),
+            verticalCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             verticalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             verticalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 15),
             verticalCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -553,6 +572,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
 
                 let commonFriends = friendList.filter { isGoing.contains($0) }
                 print(commonFriends)
+                //returns a list of common friends uid
                 return commonFriends
             } else {
                 print("Error: Current user document does not exist.")
@@ -562,6 +582,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             print("Error: \(error.localizedDescription)")
             return []
         }
+
+
     }
 
 

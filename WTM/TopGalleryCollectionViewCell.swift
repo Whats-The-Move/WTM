@@ -9,6 +9,10 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
     var pageControl: UIPageControl!
     var events: [EventLoad] = []
     weak var delegate: TopGalleryCollectionViewCellDelegate?
+    
+    let dropdownButton = UIButton(type: .system)
+    let dates = ["This Week", "Tomorrow", "Today"]
+    let optionsStackView = UIStackView()
 
 
 
@@ -23,8 +27,10 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         self.titleLabel.text = title
         self.events = events
         setupPageControl()
+        
+        setupDropdownButton()
+        setupOptionsStackView()
 
-        //self.galleryCollectionView.reloadData() // Reload data with new events
     }
     
     required init?(coder: NSCoder) {
@@ -46,6 +52,104 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
+    }
+    func setupOptionsStackView() {
+        contentView.addSubview(optionsStackView)
+        optionsStackView.axis = .horizontal
+        optionsStackView.distribution = .fillEqually
+        optionsStackView.alignment = .fill
+        optionsStackView.spacing = 5
+        optionsStackView.isHidden = true  // Initially hidden
+        optionsStackView.isUserInteractionEnabled = true
+
+
+        // Create and add buttons
+        let todayButton = createButtonWithTitle("Today")
+        let tomorrowButton = createButtonWithTitle("Tomorrow")
+        let thisWeekButton = createButtonWithTitle("This Week")
+
+        optionsStackView.addArrangedSubview(todayButton)
+        optionsStackView.addArrangedSubview(tomorrowButton)
+        optionsStackView.addArrangedSubview(thisWeekButton)
+
+        optionsStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            optionsStackView.topAnchor.constraint(equalTo: dropdownButton.bottomAnchor, constant: 5),
+            optionsStackView.trailingAnchor.constraint(equalTo: dropdownButton.trailingAnchor),
+            optionsStackView.widthAnchor.constraint(equalToConstant: 270),
+            optionsStackView.heightAnchor.constraint(equalToConstant: 20)
+        ])
+    }
+    func createButtonWithTitle(_ title: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.black
+        button.layer.cornerRadius = 10
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderWidth = 1
+        button.addTarget(self, action: #selector(optionSelected(_:)), for: .touchUpInside)
+        button.isUserInteractionEnabled = true
+
+
+        // Set alpha based on currentOption
+        if currentOption == title {
+            button.backgroundColor = UIColor(_colorLiteralRed: 255/500, green: 28/500, blue: 142/500, alpha: 1.0)
+        }
+
+        return button
+    }
+
+
+    @objc func optionSelected(_ sender: UIButton) {
+            print("Selected option:")
+
+            guard let title = sender.titleLabel?.text else { return }
+            print("Selected option: \(title)")
+            // Handle the selection
+            currentOption = title
+            dropdownTapped()
+            //RELOAD HERE
+            // Update button alphas
+
+    }
+   
+    func setupDropdownButton() {
+        contentView.addSubview(dropdownButton)
+        dropdownButton.setTitle(currentOption, for: .normal)
+        let originalImage = UIImage(systemName: "chevron.down")! // Replace with your down arrow image
+        let resizedImage = resizeImage(image: originalImage, targetSize: CGSize(width: 12, height: 12)) // Adjust target size as needed
+        
+        dropdownButton.setImage(resizedImage, for: .normal) // Replace with your down arrow image
+        dropdownButton.tintColor = .white
+        dropdownButton.setTitleColor(.white, for: .normal)
+        dropdownButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        dropdownButton.addTarget(self, action: #selector(dropdownTapped), for: .touchUpInside)
+        dropdownButton.layer.cornerRadius = 10
+        dropdownButton.layer.borderWidth = 1
+        dropdownButton.layer.borderColor = UIColor.white.cgColor
+        
+        // Layout the button
+        dropdownButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dropdownButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            dropdownButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            dropdownButton.widthAnchor.constraint(equalToConstant: 90),
+            dropdownButton.heightAnchor.constraint(equalToConstant: 20)
+        ])
+
+        // Adjust the position of the image and text
+        dropdownButton.semanticContentAttribute = .forceRightToLeft
+        dropdownButton.imageEdgeInsets = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0) // Adjust as needed
+        dropdownButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: -2) // Adjust as needed
+    }
+     
+
+    @objc func dropdownTapped() {
+
+        optionsStackView.isHidden = !optionsStackView.isHidden
+
     }
     
     private func setupGalleryCollectionView() {
@@ -141,6 +245,7 @@ class ImageCell: UICollectionViewCell {
     var pplImage: UIImageView!
     var cellDetailsLabel: UILabel! // Declare the new label
     private var gradientLayer: CAGradientLayer?
+    
 
     
 
