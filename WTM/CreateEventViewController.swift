@@ -498,7 +498,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
         userRef.getDocument { (document, error) in
             if let document = document, document.exists {
-                if let venueName = document["venueName"] as? String, let creatorLocation = document["location"] as? String {
+                if let venueName = document["venueName"] as? String, let creatorLocation = document["location"] as? String, let type = document["type"] as? String {
                     // Successfully fetched the venueName
                     print("Venue Name: \(venueName)")
                     let privatesRef = Database.database().reference().child("\(creatorLocation)Events").child(dateString)
@@ -513,7 +513,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                      "location": "N/A",
                      "time" : time,
                      "venueName": venueName,
-                    "repitition": self.selectedDays
+                    "repitition": self.selectedDays,
+                        "type" : type
                      ]
                      
                     
@@ -543,7 +544,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
         
         // Display a message
-        let alertController = UIAlertController(title: "Congratulations", message: "You have created an event!", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Congratulations", message: "You have created an event! You can find it in My Events", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
             print("ok")
             self.dismiss(animated: true)

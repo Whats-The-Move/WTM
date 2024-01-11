@@ -1,16 +1,28 @@
 import UIKit
+import FirebaseFirestore
+import FirebaseAuth
 import FirebaseDatabase
 
-class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
+
+class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, TopGalleryCollectionViewCellDelegate {
+
+    
 
     var verticalCollectionView: UICollectionView!
-    let filters = ["Trending", "Friend's Choice", "Your Favorites", "Best Deals"]
+    let filters = ["Trending Now", "Friend's Choice", "Rush Events", "Bars/Clubs", "Best Deals"]
     var events: [EventLoad] = []
-    let searchBar = UISearchBar()
+    var rushList: [EventLoad] = []
+    var barList: [EventLoad] = []
+    var friendSortedList: [EventLoad] = []
+
+    //let searchBar = UISearchBar()
     let dropdownButton = UIButton(type: .system)
     let dates = ["This Week", "Tomorrow", "Today"]
     let optionsStackView = UIStackView()
     let titleLabel = UILabel()
+    
+    private let ticketButton = UIButton(type: .system)
+    private let addFriendsButton = UIButton(type: .system)
 
 
     
@@ -21,56 +33,83 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGradientBackground()
-        setupSearchBar()
+        //setupGradientBackground()
+        view.backgroundColor = .black
+        //setupSearchBar()
+        setupTitleLabel()
+
         setupDropdownButton()
         setupOptionsStackView()
-        setupTitleLabel()
+        setupTicketButton()
+        setupAddFriendsButton()
+        
 
 
         
         let datelist = getDatesBasedOnCurrentOption()
+        /*Task {
+            await loadAndPrepareData()
+        }*/
+        
         loadData(queryFrom: currCity + "Events", dateStrings: datelist) { [weak self] loadedEvents in
 
             self?.events = loadedEvents
+            self?.events.sort { $0.isGoing.count > $1.isGoing.count }
+            self?.prepareRushData()
+            self?.prepareBarClubData()
+            //self?.friendSortedList = await getEventsSortedByFriends()
             self?.setupVerticalCollectionView()
+         }
 
 
-        }
+
+        
 
 
     }
 
+
+    private func setupTicketButton() {
+        ticketButton.setImage(UIImage(systemName: "ticket"), for: .normal)
+        ticketButton.tintColor = .white
+        ticketButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(ticketButton)
+
+        NSLayoutConstraint.activate([
+            ticketButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            ticketButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            ticketButton.heightAnchor.constraint(equalToConstant: 30),
+            ticketButton.widthAnchor.constraint(equalToConstant: 30)
+
+
+        ])
+    }
+    private func setupAddFriendsButton() {
+        addFriendsButton.setImage(UIImage(systemName: "person.crop.circle.badge.plus"), for: .normal)
+        addFriendsButton.tintColor = .white
+        addFriendsButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(addFriendsButton)
+
+        NSLayoutConstraint.activate([
+            addFriendsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            addFriendsButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            addFriendsButton.heightAnchor.constraint(equalToConstant: 30),
+            addFriendsButton.widthAnchor.constraint(equalToConstant: 30)
+
+
+        ])
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let path = UIBezierPath(roundedRect: dropdownButton.bounds,
-                                byRoundingCorners: [.topRight, .bottomRight],
-                                cornerRadii: CGSize(width: 15, height: 15))
-
-        // Create a shape layer and apply it as the mask
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = path.cgPath
-        
-        dropdownButton.layer.mask = maskLayer
-
-        // Create an additional layer for the border
-        let borderLayer = CAShapeLayer()
-        
-        borderLayer.path = maskLayer.path // Reuse the same path
-        borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.strokeColor = UIColor.white.cgColor
-        borderLayer.lineWidth = 1
-        borderLayer.frame = dropdownButton.bounds
-
-        // Add the border layer to the button
-        dropdownButton.layer.addSublayer(borderLayer)
+       
         view.bringSubviewToFront(optionsStackView)
 
     }
     func setupTitleLabel() {
         view.addSubview(titleLabel)
 
-        titleLabel.text = "CalEvents"
+        titleLabel.text = "WTM"
         titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
@@ -79,7 +118,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: searchBar.topAnchor, constant: -15)
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
         ])
     }
     
@@ -149,42 +188,24 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         view.addSubview(dropdownButton)
         dropdownButton.setTitle(currentOption, for: .normal)
         let originalImage = UIImage(systemName: "chevron.down")! // Replace with your down arrow image
-        let resizedImage = resizeImage(image: originalImage, targetSize: CGSize(width: 15, height: 15)) // Adjust target size as needed
+        let resizedImage = resizeImage(image: originalImage, targetSize: CGSize(width: 12, height: 12)) // Adjust target size as needed
         
         dropdownButton.setImage(resizedImage, for: .normal) // Replace with your down arrow image
         dropdownButton.tintColor = .white
         dropdownButton.setTitleColor(.white, for: .normal)
-        dropdownButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        dropdownButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
         dropdownButton.addTarget(self, action: #selector(dropdownTapped), for: .touchUpInside)
-        /*
-        let path = UIBezierPath(roundedRect: dropdownButton.bounds,
-                                byRoundingCorners: [.topRight, .bottomRight],
-                                cornerRadii: CGSize(width: 15, height: 15))
-
-        // Create a shape layer and apply it as the mask
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = path.cgPath
-        dropdownButton.layer.mask = maskLayer
-
-        // Create an additional layer for the border
-        let borderLayer = CAShapeLayer()
-        borderLayer.path = maskLayer.path // Reuse the same path
-        borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.strokeColor = UIColor.white.cgColor
-        borderLayer.lineWidth = 1
-        borderLayer.frame = dropdownButton.bounds
-
-        // Add the border layer to the button
-        dropdownButton.layer.addSublayer(borderLayer)*/
+        dropdownButton.layer.cornerRadius = 10
+        dropdownButton.layer.borderWidth = 1
+        dropdownButton.layer.borderColor = UIColor.white.cgColor
         
-
         // Layout the button
         dropdownButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dropdownButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
-            dropdownButton.trailingAnchor.constraint(equalTo: searchBar.trailingAnchor),
-            dropdownButton.widthAnchor.constraint(equalToConstant: 110),
-            dropdownButton.heightAnchor.constraint(equalToConstant: 30)
+            dropdownButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 25),
+            dropdownButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            dropdownButton.widthAnchor.constraint(equalToConstant: 90),
+            dropdownButton.heightAnchor.constraint(equalToConstant: 20)
         ])
 
         // Adjust the position of the image and text
@@ -199,7 +220,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
 
     }
 
-
+/*
     func setupSearchBar() {
         searchBar.delegate = self
         searchBar.placeholder = "Search here"
@@ -253,6 +274,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15)
         ])
     }
+*/
+
 
     func loadData(queryFrom: String, dateStrings: [String], completion: @escaping ([EventLoad]) -> Void) {
         let ref = Database.database().reference(withPath: queryFrom)
@@ -279,9 +302,10 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
                        let isGoing = eventData["isGoing"] as? [String],
                        let location = eventData["location"] as? String,
                        let time = eventData["time"] as? String,
-                       let venueName = eventData["venueName"] as? String
+                       let venueName = eventData["venueName"] as? String,
+                       let type = eventData["type"] as? String
                         {
-                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName)
+                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName, type: type)
                         events.append(event)
                         print("FUCK!!")
                         print(event.creator)
@@ -331,7 +355,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         view.addSubview(verticalCollectionView)
 
         NSLayoutConstraint.activate([
-            verticalCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            verticalCollectionView.topAnchor.constraint(equalTo: dropdownButton.topAnchor, constant: -20),
             verticalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             verticalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 15),
             verticalCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -363,20 +387,63 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         if indexPath.item == 0 {
             // This is the gallery section
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCell", for: indexPath) as! TopGalleryCollectionViewCell
+            cell.delegate = self
+
             
-            let postImage = UIImage(named: "AppIcon") ?? UIImage()
-            let otherimage = UIImage(named: "Fiji") ?? UIImage()
             let filterTitle = filters[indexPath.item]
 
             cell.configure(title: filterTitle, with: events)
             cell.contentView.backgroundColor = .clear
             return cell
-        } else {
+        } else if indexPath.item == 1 {
             // This is the main content section
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VerticalCell", for: indexPath) as! VerticalCollectionViewCell
             // Configure your cell here
             cell.backgroundColor = .clear
             cell.contentView.backgroundColor = .clear
+            cell.delegate = self
+
+            let filterTitle = filters[indexPath.item]
+            cell.configure(title: filterTitle, with: events)
+            return cell
+        }
+        else if indexPath.item == 2 { //Rush Events
+            // This is the main content section
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VerticalCell", for: indexPath) as! VerticalCollectionViewCell
+            // Configure your cell here
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            cell.delegate = self
+            //**************
+
+            //**************
+
+            let filterTitle = filters[indexPath.item]
+            cell.configure(title: filterTitle, with: rushList)
+            return cell
+        }
+        else if indexPath.item == 3 { //Bar Club
+            // This is the main content section
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VerticalCell", for: indexPath) as! VerticalCollectionViewCell
+            // Configure your cell here
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            cell.delegate = self
+            //**************
+
+            //**************
+
+            let filterTitle = filters[indexPath.item]
+            cell.configure(title: filterTitle, with: barList)
+            return cell
+        }
+        else {
+            // This is the main content section
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VerticalCell", for: indexPath) as! VerticalCollectionViewCell
+            // Configure your cell here
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            cell.delegate = self
 
             let filterTitle = filters[indexPath.item]
             cell.configure(title: filterTitle, with: events)
@@ -389,7 +456,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // Adjust cell size
         if indexPath.item == 0 {
-            return CGSize(width: view.frame.width, height: 350) // Example size
+            return CGSize(width: view.frame.width - 15, height: view.frame.width - 45 + 48) // this is size of pic plus spacing plus height of label
         }
         else {
             return CGSize(width: view.frame.width, height: 200) // Example size
@@ -422,6 +489,85 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
 
         return dates
     }
+    func didSelectEventLoad(eventLoad: EventLoad) {
+        let detailsVC = EventDetailsViewController(eventLoad: eventLoad)
+        present(detailsVC, animated: true, completion: nil)
+    }
+    func prepareRushData() {
+        // Filter and sort events
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        rushList = events.filter { $0.type == "Frat" }.sorted {
+            guard let date1 = dateFormatter.date(from: $0.date),
+                  let date2 = dateFormatter.date(from: $1.date) else {
+                return false
+            }
+            return date1 < date2
+        }
+    }
+    func prepareBarClubData() {
+        // Filter and sort events
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        barList = events.filter { $0.type == "Bar" || $0.type == "Club"}.sorted {
+            guard let date1 = dateFormatter.date(from: $0.date),
+                  let date2 = dateFormatter.date(from: $1.date) else {
+                return false
+            }
+            return date1 < date2
+        }
+    }
+    func getEventsSortedByFriends() async -> [EventLoad] {
+        var friendsDict = [Int: [String]]()
+        for (index, item) in events.enumerated() {
+            let commonFriends = await self.checkFriendshipStatus(isGoing: item.isGoing)
+            friendsDict[index] = commonFriends
+        }
+
+        let sortedKeys = friendsDict.keys.sorted {
+            (friendsDict[$0]?.count ?? 0) > (friendsDict[$1]?.count ?? 0)
+        }
+
+        var topFriends: [EventLoad] = []
+        for item in sortedKeys {
+            topFriends.append(events[item])
+        }
+
+        return topFriends
+    }
+    func checkFriendshipStatus(isGoing: [String]) async -> [String] {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("Error: No user is currently signed in.")
+            return []
+        }
+
+        let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+
+        do {
+            let document = try await userRef.getDocument()
+            if document.exists {
+                guard let friendList = document.data()?["friends"] as? [String] else {
+                    print("Error: No friends list found.")
+                    return []
+                }
+
+                let commonFriends = friendList.filter { isGoing.contains($0) }
+                print(commonFriends)
+                return commonFriends
+            } else {
+                print("Error: Current user document does not exist.")
+                return []
+            }
+        } catch {
+            print("Error: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+
+
+
+
 }
 func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
     let size = image.size

@@ -168,7 +168,7 @@ class LoadDataViewController: UIViewController {
                        let time = eventData["time"] as? String,
                        let venueName = eventData["venueName"] as? String
                         {
-                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName)
+                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName, type: "nil")
                         self.results.append(event)
                     }
                 }
@@ -235,8 +235,9 @@ class EventLoad {
     var location: String
     var time: String
     var venueName: String
+    var type: String
 
-    init(creator: String, date: String, deals: String, description: String, eventName: String, imageURL: String, isGoing: [String], location: String, time: String, venueName: String) {
+    init(creator: String, date: String, deals: String, description: String, eventName: String, imageURL: String, isGoing: [String], location: String, time: String, venueName: String, type: String) {
         self.creator = creator
         self.date = date
         self.deals = deals
@@ -247,6 +248,7 @@ class EventLoad {
         self.location = location
         self.time = time
         self.venueName = venueName
+        self.type = type
     }
 
 }

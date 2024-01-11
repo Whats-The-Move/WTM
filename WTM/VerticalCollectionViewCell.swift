@@ -6,6 +6,8 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
     var titleLabel: UILabel!
     var horizontalCollectionView: UICollectionView!
     var events: [EventLoad] = []
+    weak var delegate: TopGalleryCollectionViewCellDelegate?
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,7 +25,7 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
 
     private func setupTitleLabel() {
         titleLabel = UILabel()
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .white
 
@@ -32,14 +34,15 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            titleLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 
     private func setupHorizontalCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 100, height: 150) // Adjust as needed
+        layout.itemSize = CGSize(width: 150, height: 150) // Adjust as needed
 
         horizontalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         horizontalCollectionView.backgroundColor = .clear
@@ -73,6 +76,11 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
         cell.configure(with: events[indexPath.item])
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("event clicked")
+        let selectedEventLoad = events[indexPath.item]
+        delegate?.didSelectEventLoad(eventLoad: selectedEventLoad)
+    }
 
     // Add more delegate methods as needed...
 }
@@ -81,6 +89,11 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
     var imageView: UIImageView!
     var pplLabel: UILabel!
     var pplImage: UIImageView!
+    weak var delegate: TopGalleryCollectionViewCellDelegate?
+    private var gradientLayer: CAGradientLayer?
+    var cellDetailsLabel: UILabel! // Declare the new label
+
+
 
 
 
@@ -88,16 +101,21 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
 
     }
+
     func configure(with eventLoad: EventLoad) {
         // Load the image into imageView. Example:
         //imageView.image = UIImage(named: imageName)
         
         //change above to immageview.image = loadImage(event.imageURL)
         let event = eventLoad
+        setupCellAppearance()
+
         setupImageView(event: event)
+        setupGradientBackground() // Set up the gradient here
+
         setupPplLabel(event: event)
         setupPplImage(event: event)
-        setupCellAppearance()
+        setupCellDetailsLabel(event: event)
     }
     
     
@@ -119,28 +137,45 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 120) // Height of the image
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor) // Height of the image
         ])
     }
+    private func setupGradientBackground() {
+        gradientLayer?.removeFromSuperlayer() // Remove the old gradient layer if it exists
+
+        let gradient = CAGradientLayer()
+        gradient.frame = contentView.bounds
+        let transparent = UIColor.black.withAlphaComponent(0.0).cgColor
+        let black = UIColor.black.withAlphaComponent(1.0).cgColor
+
+        gradient.colors = [transparent, black]
+        gradient.locations = [0.8, 1.0]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+
+        imageView.layer.insertSublayer(gradient, at: 0)
+        gradientLayer = gradient // Store the gradient layer
+    }
+    
     private func setupPplLabel(event: EventLoad) {
         pplLabel = UILabel()
         //imageView.layer.cornerRadius = 10
         pplLabel.translatesAutoresizingMaskIntoConstraints = false
         pplLabel.text = String(event.isGoing.count)
-        pplLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        pplLabel.textColor = .black
+        pplLabel.font = UIFont.boldSystemFont(ofSize: 13)
+        pplLabel.textColor = .white
         contentView.addSubview(pplLabel)
 
         NSLayoutConstraint.activate([
-            pplLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor),
-            pplLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            pplLabel.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
+            pplLabel.heightAnchor.constraint(equalToConstant: 20),
+            pplLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -4),
+            pplLabel.widthAnchor.constraint(equalToConstant: 20),
             pplLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
     private func setupPplImage(event: EventLoad) {
         pplImage = UIImageView(image: UIImage(systemName: "person.3.fill"))
-        pplImage.tintColor = UIColor(red: 255/255, green: 22/255, blue: 142/255, alpha: 1)
+        pplImage.tintColor = UIColor.white
         pplImage.translatesAutoresizingMaskIntoConstraints = false
         pplImage.contentMode = .scaleAspectFit // Set contentMode to scaleAspectFit
 
@@ -148,9 +183,25 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
 
         NSLayoutConstraint.activate([
             pplImage.centerYAnchor.constraint(equalTo: pplLabel.centerYAnchor),
-            pplImage.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -5), // 5 points space between label and image
-            pplImage.widthAnchor.constraint(equalToConstant: 30), // Adjust size as needed
-            pplImage.heightAnchor.constraint(equalToConstant: 24)  // Adjust size as needed
+            pplImage.trailingAnchor.constraint(equalTo: pplLabel.leadingAnchor), // 5 points space between label and image
+            pplImage.widthAnchor.constraint(equalToConstant: 22), // Adjust size as needed
+            pplImage.heightAnchor.constraint(equalToConstant: 18)  // Adjust size as needed
+        ])
+    }
+    private func setupCellDetailsLabel(event: EventLoad) {
+        cellDetailsLabel = UILabel()
+        cellDetailsLabel.translatesAutoresizingMaskIntoConstraints = false
+        cellDetailsLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        cellDetailsLabel.adjustsFontSizeToFitWidth = true
+        cellDetailsLabel.textColor = .white
+        cellDetailsLabel.text = event.eventName // MADE JUST evnet NAME CUZ TOO SMALL OTHERWISE
+        contentView.addSubview(cellDetailsLabel)
+
+        NSLayoutConstraint.activate([
+            cellDetailsLabel.centerYAnchor.constraint(equalTo: pplLabel.centerYAnchor), // Adjust constant for padding
+            cellDetailsLabel.heightAnchor.constraint(equalTo: pplLabel.heightAnchor), // Adjust constant for padding
+            cellDetailsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5), // Set the height of the label
+            cellDetailsLabel.trailingAnchor.constraint(equalTo: pplImage.leadingAnchor, constant: -5)
         ])
     }
 
@@ -165,8 +216,9 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
 
     private func setupCellAppearance() {
         contentView.backgroundColor = .white
-        contentView.layer.cornerRadius = 10
+        contentView.layer.cornerRadius = 3
         contentView.layer.masksToBounds = true
+        
 
         NSLayoutConstraint.activate([
             contentView.widthAnchor.constraint(equalToConstant: 150),
