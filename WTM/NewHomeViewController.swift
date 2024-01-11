@@ -320,9 +320,10 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
                        let location = eventData["location"] as? String,
                        let time = eventData["time"] as? String,
                        let venueName = eventData["venueName"] as? String,
-                       let type = eventData["type"] as? String
+                       let type = eventData["type"] as? String,
+                       let eventKey = key as? String
                         {
-                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName, type: type)
+                        let event = EventLoad(creator: creator, date: date, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName, type: type, eventKey: eventKey)
                         events.append(event)
                         print("FUCK!!")
                         print(event.creator)
@@ -490,6 +491,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
 
         if currentOption == "Today" {
             let today = Date()
+            print(today)
             dates.append(dateFormatter.string(from: today))
         } else if currentOption == "Tomorrow" {
             let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
@@ -497,15 +499,18 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         } else if currentOption == "This Week" {
             let today = Date()
             let calendar = Calendar.current
-            let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today))!
 
-            for i in 0..<7 {
-                if let weekDay = calendar.date(byAdding: .day, value: i, to: weekStart) {
-                    dates.append(dateFormatter.string(from: weekDay))
+            // Find the start of the current week
+            if let weekStart = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: today)) {
+                for i in 0..<7 {
+                    if let weekDay = calendar.date(byAdding: .day, value: i, to: weekStart) {
+                        dates.append(dateFormatter.string(from: weekDay))
+                    }
                 }
+                print("printing dates")
+                print(dates)
             }
         }
-
         return dates
     }
     func didSelectEventLoad(eventLoad: EventLoad) {

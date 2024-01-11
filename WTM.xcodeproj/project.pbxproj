@@ -68,6 +68,7 @@
 		10B6163D2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */; };
 		10B6163F2B36C05D00CE1226 /* LoadDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */; };
 		10B616412B4CB7A900CE1226 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */; };
+		10B616432B508C3000CE1226 /* EventLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616422B508C3000CE1226 /* EventLoad.swift */; };
 		10C1699A2AB969AB00355BC4 /* ShowEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C169992AB969AB00355BC4 /* ShowEventViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		1411292AC27485DEEBB18704 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */; };
@@ -162,6 +163,7 @@
 		10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDataViewController.swift; sourceTree = "<group>"; };
 		10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
+		10B616422B508C3000CE1226 /* EventLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLoad.swift; sourceTree = "<group>"; };
 		10C169992AB969AB00355BC4 /* ShowEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +255,7 @@
 				103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */,
 				109B94022AA1BEDC002D4CEF /* BarSignInViewController.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
+				10B616422B508C3000CE1226 /* EventLoad.swift */,
 				08D313A02A4A5CBA00FBF023 /* privateParty.swift */,
 				103D80A42A4BC9D10032E4D3 /* SettingsViewController.swift */,
 				08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */,
@@ -636,6 +639,7 @@
 				08CB6A612AC79E5500576D96 /* upcomingEventsViewController.swift in Sources */,
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,
 				10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */,
+				10B616432B508C3000CE1226 /* EventLoad.swift in Sources */,
 				08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

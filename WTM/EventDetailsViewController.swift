@@ -1,4 +1,6 @@
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 import FirebaseFirestore
 
 class EventDetailsViewController: UIViewController {
@@ -8,6 +10,11 @@ class EventDetailsViewController: UIViewController {
     let infoStackView = UIStackView()
     let descriptionLabel = UILabel()
     var profileImageViews: [UIImageView] = []
+    var grayBkgd: UIView!
+    var bkgdLabel: UILabel!
+    var goingButton: UIButton!
+    var isUserGoing = false
+    var pplGoing: UIStackView!
 
 
 
@@ -34,6 +41,9 @@ class EventDetailsViewController: UIViewController {
         //configureProfileImageStackView(with: ["00NOZzy9prZdbWpLdE61dgZIEj83", "01sdNvA3ksgQn7ivXWEve9wpnQ83"])
         assignProfilePictures(commonFriends: ["00NOZzy9prZdbWpLdE61dgZIEj83", "01sdNvA3ksgQn7ivXWEve9wpnQ83"])
         addDescriptionLabel()
+        setupGrayBkgd()
+        setupBkgdLabel()
+        setupGoingButton()
 
         print(eventLoad.creator)
         // Setup UI and use eventLoad as needed
@@ -41,8 +51,9 @@ class EventDetailsViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = barImage.bounds // Corrected line
-        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.8).cgColor]
-        gradientLayer.locations = [0.7, 1.0]
+        gradientLayer.colors = [UIColor.black.withAlphaComponent(0.0).cgColor, UIColor.black.withAlphaComponent(0.6).cgColor]
+        gradientLayer.locations = [0.5, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.6)
 
         // Add gradient layer as an overlay to barImage
         barImage.layer.addSublayer(gradientLayer)
@@ -114,16 +125,24 @@ class EventDetailsViewController: UIViewController {
 
         // Create labels
         let venueName = eventLoad.venueName + "   "
-        let venueLabel = createInfoLabel(text: venueName)
+        var going = String(eventLoad.isGoing.count)
+        if going == "1" {
+            going = "1 person"
+        }
+        else{
+            going = going + " people"
+        }
         let dateLabel = createInfoLabel(text: String(eventLoad.date.prefix(eventLoad.date.count - 6)))
         let timeLabel = createInfoLabel(text: eventLoad.time)
-        let typeLabel = createInfoLabel(text: eventLoad.type)
+        let venueLabel = createInfoLabel(text: venueName)
+        pplGoing = createInfoLabel(text: going)
 
         // Add labels to stack view
-        infoStackView.addArrangedSubview(venueLabel)
         infoStackView.addArrangedSubview(dateLabel)
         infoStackView.addArrangedSubview(timeLabel)
-        infoStackView.addArrangedSubview(typeLabel)
+        infoStackView.addArrangedSubview(venueLabel)
+
+        infoStackView.addArrangedSubview(pplGoing)
 
         // Add stack view to the view
         view.addSubview(infoStackView)
@@ -180,6 +199,8 @@ class EventDetailsViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+
             descriptionLabel.topAnchor.constraint(equalTo: infoStackView.bottomAnchor, constant: 70),
             descriptionLabel.widthAnchor.constraint(equalToConstant: 300)
         ])
@@ -194,7 +215,7 @@ class EventDetailsViewController: UIViewController {
         let maxImageCount = 6 // Maximum number of profile pictures to show
 
         // Create 4 image views and add them to the stack view
-        for _ in 0..<maxImageCount {
+        for i in 0..<min(maxImageCount, commonFriends.count) {
             let profileImageView = UIImageView()
 
             // Set up properties and constraints for the profileImageView (same as before)
@@ -214,16 +235,9 @@ class EventDetailsViewController: UIViewController {
             // Add the profile image view to the stack view
             imageViewsStack.addArrangedSubview(profileImageView)
             profileImageViews.append(profileImageView)//del
-        }
-
-        // Assign profile pictures to the image views
-        for i in 0..<commonFriends.count {
-            if i >= maxImageCount {
-                break // Break out of the loop if we have filled all 4 image views
-            }
-
+            
             let friendUID = commonFriends[i]
-            let profileImageView = profileImageViews[i]
+            //let profileImageView = profileImageViews[i]
 
             // Load the profile picture from commonFriends
             let userRef = Firestore.firestore().collection("users").document(friendUID)
@@ -244,25 +258,22 @@ class EventDetailsViewController: UIViewController {
                     }
                 }
             }
+            
+            
         }
 
-        // Hide the remaining image views with transparent image
-        for i in min(commonFriends.count, maxImageCount)..<maxImageCount {
-            profileImageViews[i].image = AppHomeViewController().transImage
-            profileImageViews[i].isUserInteractionEnabled = false
-            profileImageViews[i].layer.borderWidth = 0
-        }
+
 
         // Rest of your existing code...
         // ...
 
         // Update the stack view with the arranged profile image views
-        let stackViewSuperview = self.view // Replace this with the superview of your desired location for the stack view
+         // Replace this with the superview of your desired location for the stack view
         imageViewsStack.translatesAutoresizingMaskIntoConstraints = false
-        stackViewSuperview?.addSubview(imageViewsStack)
+        view.addSubview(imageViewsStack)
 
         // Add constraints to position the stack view (bottom right corner of the cell)
-        let circles = maxImageCount//min(commonFriends.count, 4)
+        let circles = min(maxImageCount, commonFriends.count)//min(commonFriends.count, 4)
    
         NSLayoutConstraint.activate([
             imageViewsStack.centerXAnchor.constraint(equalTo: view.centerXAnchor), // Adjust the right margin as needed
@@ -343,16 +354,208 @@ class EventDetailsViewController: UIViewController {
         }
     }
 
-    
-    
+    func setupGrayBkgd() {
+            grayBkgd = UIView()
+        grayBkgd.backgroundColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 0.9)
+            grayBkgd.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(grayBkgd)
 
-
-
-
-        @objc func backButtonTapped() {
-            // Dismiss the current view controller
-            self.dismiss(animated: true, completion: nil)
+            NSLayoutConstraint.activate([
+                grayBkgd.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                grayBkgd.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                grayBkgd.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                grayBkgd.heightAnchor.constraint(equalToConstant: 100)
+            ])
         }
+
+    func setupBkgdLabel() {
+        bkgdLabel = UILabel()
+        bkgdLabel.text = "Are you..."
+        bkgdLabel.textColor = .white
+        bkgdLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+
+        bkgdLabel.translatesAutoresizingMaskIntoConstraints = false
+        grayBkgd.addSubview(bkgdLabel)
+
+        NSLayoutConstraint.activate([
+            bkgdLabel.leadingAnchor.constraint(equalTo: grayBkgd.leadingAnchor, constant: 50),
+            bkgdLabel.centerYAnchor.constraint(equalTo: grayBkgd.centerYAnchor, constant: -10)
+        ])
+    }
+
+    func setupGoingButton() {
+        goingButton = UIButton()
+        goingButton.setTitle("Going?", for: .normal)
+        goingButton.setTitleColor(.white, for: .normal)
+        goingButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        let eventref = Database.database().reference().child(currCity + "Events").child(eventLoad.date).child(eventLoad.eventKey)
+        //                            var isUserGoing = false
+        eventref.child("isGoing").observeSingleEvent(of: .value) { snapshot in
+            
+            
+            print("segue before it goes in")
+            if snapshot.exists() {
+                if let attendees = snapshot.value as? [String] {
+                    let uid = Auth.auth().currentUser?.uid
+                    var isUserGoing = attendees.contains(uid ?? "zzzzzneverwillbefound")
+                    print("is user going: \(isUserGoing)")
+                    self.isUserGoing = isUserGoing
+                    if isUserGoing {
+                        self.goingButton.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 1.0)
+                        self.goingButton.layer.shadowColor = UIColor.black.cgColor
+                        self.goingButton.layer.shadowOffset = CGSize(width: 0, height: 2)
+                        self.goingButton.layer.shadowOpacity = 0.5
+
+                    }
+                    else{
+                        self.goingButton.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 0.5)
+
+                    }
+    
+                }
+            }
+            
+        }
+
+        goingButton.layer.cornerRadius = 8
+       
+        goingButton.addTarget(self, action: #selector(goingTapped), for: .touchUpInside)
+        goingButton.translatesAutoresizingMaskIntoConstraints = false
+        grayBkgd.addSubview(goingButton)
+
+        NSLayoutConstraint.activate([
+            goingButton.trailingAnchor.constraint(equalTo: grayBkgd.trailingAnchor, constant: -16),
+            goingButton.centerYAnchor.constraint(equalTo: bkgdLabel.centerYAnchor),
+            goingButton.widthAnchor.constraint(equalToConstant: 140),
+            goingButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        goingButton.addTarget(self, action: #selector(buttonClickAnimation), for: .touchDown)
+        goingButton.addTarget(self, action: #selector(buttonReleaseAnimation), for: [.touchUpInside, .touchUpOutside])
+    }
+
+    @objc func goingTapped() {
+        isUserGoing = !isUserGoing
+        print("Going button tapped!")
+        print(eventLoad.eventKey)
+
+        // Assuming you have a reference to your Firebase Realtime Database
+        let database = Database.database()
+
+        // Get the current user's UID
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+
+        // Replace "yourCurrCity" with the actual value for currCity
+        let eventsRef = database.reference(withPath: currCity + "Events")
+
+        // Access the specific event's data in the database
+        let eventRef = eventsRef.child(eventLoad.date).child(eventLoad.eventKey) // Replace with your actual path
+
+        // Use observeSingleEvent to fetch data once
+        eventRef.observeSingleEvent(of: .value) { (snapshot) in
+            guard var event = snapshot.value as? [String: Any] else {
+                print("Missing or malformed event data")
+                return
+            }
+
+            // Check if the "isGoing" field exists
+            if var isGoingList = event["isGoing"] as? [String] {
+                // Check if the user is already in the list
+                if isGoingList.contains(currentUserUID) {
+                    // User is already in the list, remove them
+                    isGoingList.removeAll { $0 == currentUserUID }
+                    print("Removing user from isGoing")
+                    self.locallyDecrement()
+                    
+                } else {
+                    // User is not in the list, add them
+                    isGoingList.append(currentUserUID)
+                    print("Adding user to isGoing")
+                    self.locallyIncrement()
+                }
+
+                // Update the "isGoing" field in the event data
+                event["isGoing"] = isGoingList
+
+                // Set the updated event data
+                eventRef.setValue(event)
+
+                print("Updated event data: \(event)")
+            } else {
+                print("Missing or malformed 'isGoing' field")
+            }
+        }
+    }
+    func locallyIncrement (){
+        self.goingButton.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 1.0)
+        self.goingButton.layer.shadowColor = UIColor.black.cgColor
+        self.goingButton.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.goingButton.layer.shadowOpacity = 0.5
+        self.updatePeopleGoingLabel(up: true)
+        
+    }
+    func locallyDecrement (){
+        self.goingButton.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 0.5)
+
+        self.updatePeopleGoingLabel(up: false)
+        
+    }
+    func updatePeopleGoingLabel(up: Bool) {
+        // Assuming infoStackView is your UIStackView
+        guard let pplGoingLabel = pplGoing.arrangedSubviews[0] as? UILabel else {
+            print("Error accessing pplGoing label")
+            return
+        }
+
+        // Extract the numeric value from the label text using regular expression
+        let regex = try! NSRegularExpression(pattern: "^(\\S+)", options: [])
+        let matches = regex.matches(in: pplGoingLabel.text!, options: [], range: NSRange(location: 0, length: pplGoingLabel.text!.count))
+
+        if let match = matches.first, let range = Range(match.range, in: pplGoingLabel.text!) {
+            let currentText = pplGoingLabel.text![range]
+            if var currentNumber = Int(currentText) {
+                // Update the number based on the 'up' parameter
+                currentNumber = up ? currentNumber + 1 : max(0, currentNumber - 1)
+
+                // Update the label text with proper grammar
+                if currentNumber == 0 {
+                    pplGoingLabel.text = "0 people"
+                } else if currentNumber == 1 {
+                    pplGoingLabel.text = "1 person"
+                } else {
+                    pplGoingLabel.text = "\(currentNumber) people"
+                }
+            } else {
+                print("Error converting current text to Int")
+            }
+        } else {
+            print("Error extracting text from pplGoing label text")
+        }
+    }
+
+
+
+
+
+    @objc func buttonClickAnimation() {
+        UIView.animate(withDuration: 0.1) {
+            self.goingButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }
+    }
+
+    @objc func buttonReleaseAnimation() {
+        UIView.animate(withDuration: 0.1) {
+            self.goingButton.transform = CGAffineTransform.identity
+        }
+    }
+
+
+    @objc func backButtonTapped() {
+        // Dismiss the current view controller
+        self.dismiss(animated: true, completion: nil)
+    }
     func loadImage(from urlString: String, to imageView: UIImageView) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL: \(urlString)")

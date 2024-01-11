@@ -475,7 +475,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
             return
             
         }
-        if  eventTitle == "" ||  eventDescription == "Description" {
+        if  eventTitle == "" ||  eventDescription == "Description" || imageUploadURL == "" || time == "" {
             let alertController = UIAlertController(title: "Missing Information", message: "One or more fields are empty. Please fill out all required fields.", preferredStyle: .alert)
             
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
