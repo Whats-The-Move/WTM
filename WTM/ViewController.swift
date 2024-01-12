@@ -29,8 +29,41 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var lineView: UIView!
     @IBOutlet weak var barButton: UIButton!
+    var backButton: UIButton = {
+        let button = UIButton()
+        let backImage = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))?.withRenderingMode(.alwaysTemplate)
+        button.setImage(backImage, for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .clear
+        button.layer.cornerRadius = 15 // half of the desired height
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    // MARK: - Button Actions
+
+    @objc func backButtonTapped() {
+        // Handle back button tap
+        dismiss(animated: true, completion: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Add the backButton to your view hierarchy, then apply these constraints
+        view.addSubview(backButton)
+
+        // Constraints
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            backButton.widthAnchor.constraint(equalToConstant: 30),
+            backButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+
+        
+        
         KeyboardManager.shared.enableTapToDismiss()
         setupShowPasswordButton()
         setupConstraints()

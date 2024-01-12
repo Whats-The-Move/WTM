@@ -14,45 +14,147 @@ import FirebaseMessaging
 
 class CreateAccountViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
+    
 
+    @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var uploadPFP: UIButton!
-    @IBOutlet weak var username: UITextField!
-    @IBOutlet weak var name: UITextField!
+    
+    var email: UITextField!
+    var password: UITextField!
+    var phone: UITextField!
+    var username: UITextField!
+    var name: UITextField!
+    var interests: UITextField!
+    
+    
     @IBOutlet weak var doneButton: UIButton!
     
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [email, password, phone, username, name, interests, doneButton])
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 8
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    
     let imagePickerController = UIImagePickerController()
+    var backButton: UIButton = {
+        let button = UIButton()
+        let backImage = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))?.withRenderingMode(.alwaysTemplate)
+        button.setImage(backImage, for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .clear
+        button.layer.cornerRadius = 15 // half of the desired height
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    // MARK: - Button Actions
+
+    @objc func backButtonTapped() {
+        // Handle back button tap
+        dismiss(animated: true, completion: nil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupBackButton()
+        email = createTextField(placeholder: "Email")
+        password = createTextField(placeholder: "Password", isSecure: true)
+        password.isSecureTextEntry = true
+        phone = createTextField(placeholder: "Phone Number")
+        username = createTextField(placeholder: "Username")
+        name = createTextField(placeholder: "Display Name")
+        interests = createTextField(placeholder: "List 3 Interests")
+        
+        setupConstraints()
+        
+        username.delegate = self
+        name.delegate = self
+        email.delegate = self
+        password.delegate = self
+        phone.delegate = self
+        interests.delegate = self
+        imagePickerController.delegate = self
+        
+        
+        // Add the backButton to your view hierarchy, then apply these constraints
+
+
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        username.delegate = self
-        name.delegate = self
+
+        setupUI()
+
+
+        // Do any additional setup after loading the view.
+    }
+    private func setupConstraints() {
+        view.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            stackView.topAnchor.constraint(equalTo: view.centerYAnchor, constant: 0)
+            // Adjust centerYAnchor based on your layout requirements
+        ])
+        NSLayoutConstraint.activate([
+            profilePic.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            profilePic.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 15),
+            profilePic.heightAnchor.constraint(equalToConstant: 150),
+            profilePic.widthAnchor.constraint(equalToConstant: 150)
+            // Adjust centerYAnchor based on your layout requirements
+        ])
+        NSLayoutConstraint.activate([
+            doneButton.heightAnchor.constraint(equalToConstant: 50),
+            doneButton.widthAnchor.constraint(equalToConstant: 200)
+            // Adjust centerYAnchor based on your layout requirements
+        ])
+    }
+    func createTextField(placeholder: String, isSecure: Bool = false) -> UITextField {
+        let textField = UITextField()
+        textField.placeholder = placeholder
+        //textField.isSecureTextEntry = isSecure
+        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 8.0 // You can adjust the radius value as needed
+        textField.clipsToBounds = true // Add this line
+
+        textField.translatesAutoresizingMaskIntoConstraints = false
         
-        viewDidLayoutSubviews()
-        username.borderStyle = .line
-        name.borderStyle = .line
-        username.backgroundColor = UIColor.white // Set the desired background color
-        name.backgroundColor = UIColor.white // Set the desired background color
+        // Set background color and border color
+        textField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Light gray
+        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.borderWidth = 1.0
+        
+        NSLayoutConstraint.activate([
+            textField.heightAnchor.constraint(equalToConstant: 50),
+            textField.widthAnchor.constraint(equalToConstant: 200),
+            // Adjust centerYAnchor based on your layout requirements
+        ])
+        
+        return textField
+    }
+
+    func setupUI(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileImageTapped(_:)))
+        profilePic.isUserInteractionEnabled = true
+        profilePic.addGestureRecognizer(tapGesture)
+        
         name.textColor = .black
         username.textColor = .black
         username.autocapitalizationType = .none
-        imagePickerController.delegate = self
-        let usernamePlaceholder = "Create username"
-        let namePlaceholder = "Create display name"
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.lightGray,  // Set the desired color here
-        ]
-        let attributedUsernamePlaceholder = NSAttributedString(string: usernamePlaceholder, attributes: attributes)
-        let attributedNamePlaceholder = NSAttributedString(string: namePlaceholder, attributes: attributes)
         
-        // Set the attributed string as the placeholder of the text field
-        username.attributedPlaceholder = attributedUsernamePlaceholder
-        name.attributedPlaceholder = attributedNamePlaceholder
         
-        guard let uid = Auth.auth().currentUser?.uid else {
+
+        //profilePic.image = UIImage(named: "profileIcon")
+        /*guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
         let userRef = Firestore.firestore().collection("users").document(uid)
@@ -96,29 +198,8 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             } else {
                 print("User document not found")
             }
-        }
-        // Do any additional setup after loading the view.
+        }*/
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let minDimension = min(profilePic.frame.size.width, profilePic.frame.size.height)
-            profilePic.layer.cornerRadius = minDimension / 2
-            profilePic.clipsToBounds = true
-            profilePic.contentMode = .scaleAspectFill
-
-        username.borderStyle = .line
-        name.borderStyle = .line
-        username.backgroundColor = UIColor.white // Set the desired background color
-        name.backgroundColor = UIColor.white // Set the desired background color
-        profilePic.frame = CGRect(x: profilePic.frame.origin.x, y: profilePic.frame.origin.y, width: 150, height: 150)
-        uploadPFP.frame = CGRect(x: profilePic.frame.origin.x, y: profilePic.frame.origin.y + 167, width: 150, height: 30)
-        username.frame = CGRect(x: username.frame.origin.x, y: uploadPFP.frame.origin.y + 60, width: username.frame.size.width, height: 40)
-        name.frame = CGRect(x: name.frame.origin.x, y: username.frame.origin.y + 55, width: name.frame.size.width, height: 40)
-        doneButton.frame = CGRect(x: uploadPFP.frame.origin.x, y: name.frame.origin.y + 60, width: uploadPFP.frame.size.width, height: 30)
-
-    }
-    
     @objc func keyboardWillShow(notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
@@ -148,7 +229,7 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         }
     }
 
-    @IBAction func uploadPFPclicked(_ sender: Any) {
+    @objc func profileImageTapped(_ sender: Any) {
         print("edit clicked")
         let imagePickerActionSheet = UIAlertController(title: "Select Image", message: nil, preferredStyle: .actionSheet)
         
@@ -282,12 +363,29 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
             completion(!isTaken, nil)
         }
     }
+    func setupBackButton(){
+        view.addSubview(backButton)
+
+        // Constraints
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            backButton.widthAnchor.constraint(equalToConstant: 30),
+            backButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+
+    }
     @IBAction func doneTapped(_ sender: Any) {
         //check for empty feilds
         //todo: username cant have spaces, uppercases, can't be used by anyone, must have pfp
 //check for empty
         guard let username = username.text, !username.isEmpty,
-              let name = name.text, !name.isEmpty
+              let name = name.text, !name.isEmpty,
+              let email = email.text, !email.isEmpty,
+              let password = password.text, !password.isEmpty,
+              let phone = phone.text, !phone.isEmpty,
+              let interests = interests.text, !interests.isEmpty
+
         else{
             print("missing field data")
             let alert = UIAlertController(title: "Alert", message: "Fill the blanks", preferredStyle: .alert)

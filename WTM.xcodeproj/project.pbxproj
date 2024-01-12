@@ -69,6 +69,7 @@
 		10B6163F2B36C05D00CE1226 /* LoadDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */; };
 		10B616412B4CB7A900CE1226 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */; };
 		10B616432B508C3000CE1226 /* EventLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616422B508C3000CE1226 /* EventLoad.swift */; };
+		10B616452B50A88500CE1226 /* WelcomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616442B50A88500CE1226 /* WelcomePageViewController.swift */; };
 		10C1699A2AB969AB00355BC4 /* ShowEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C169992AB969AB00355BC4 /* ShowEventViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		1411292AC27485DEEBB18704 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */; };
@@ -164,6 +165,7 @@
 		10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDataViewController.swift; sourceTree = "<group>"; };
 		10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
 		10B616422B508C3000CE1226 /* EventLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLoad.swift; sourceTree = "<group>"; };
+		10B616442B50A88500CE1226 /* WelcomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePageViewController.swift; sourceTree = "<group>"; };
 		10C169992AB969AB00355BC4 /* ShowEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -249,6 +251,7 @@
 				10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */,
 				10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */,
 				083B618F2A1FD00400018798 /* CustomCellClass.swift */,
+				10B616442B50A88500CE1226 /* WelcomePageViewController.swift */,
 				08F793292A4A505300679EB9 /* privatePartyCellClass.swift */,
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
 				087FE8EB298DDA26001B17B6 /* Gif.swift */,
@@ -636,6 +639,7 @@
 				08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
+				10B616452B50A88500CE1226 /* WelcomePageViewController.swift in Sources */,
 				08CB6A612AC79E5500576D96 /* upcomingEventsViewController.swift in Sources */,
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,
 				10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */,

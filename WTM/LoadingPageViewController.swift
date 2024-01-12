@@ -17,7 +17,7 @@ class LoadingPageViewController: UIViewController {
             } else {
                 UserDefaults.standard.set(true, forKey: "launchedBefore")
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewController(identifier: "SignUpPage")
+                let vc = storyboard.instantiateViewController(identifier: "WelcomePage")
                 vc.modalPresentationStyle = .overFullScreen
                 self.present(vc, animated: true)
             }
@@ -28,7 +28,7 @@ class LoadingPageViewController: UIViewController {
             }
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(identifier: "SignUpPage")
+            let vc = storyboard.instantiateViewController(identifier: "WelcomePage")
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
         }
