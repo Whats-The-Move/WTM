@@ -3,11 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0806DF552A813FA8001D04BD /* createAccountAddFriendViewController.swift */; };
+		080DCDAA2B505D3A004FCA98 /* messagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080DCDA92B505D3A004FCA98 /* messagingViewController.swift */; };
+		080DCDAC2B506002004FCA98 /* chatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080DCDAB2B506002004FCA98 /* chatMessage.swift */; };
+		080DCDAE2B5066E3004FCA98 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080DCDAD2B5066E3004FCA98 /* MessageCell.swift */; };
 		0825CC2E2A87F18200C9C32E /* monthlyCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0825CC2D2A87F18200C9C32E /* monthlyCalendarViewController.swift */; };
 		0825CC352A87FC4900C9C32E /* calendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0825CC342A87FC4900C9C32E /* calendarCell.swift */; };
 		0825CC372A87FE7600C9C32E /* calendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0825CC362A87FE7600C9C32E /* calendarHelper.swift */; };
@@ -16,6 +19,7 @@
 		083B618E2A1FCE6400018798 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 083B618D2A1FCE6400018798 /* video.png */; };
 		083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083B618F2A1FD00400018798 /* CustomCellClass.swift */; };
 		086042D129C292C900066892 /* reviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086042D029C292C900066892 /* reviewViewController.swift */; };
+		08630DE92B525AF800046309 /* addMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08630DE82B525AF800046309 /* addMessageViewController.swift */; };
 		086E2E3F2A88160300BC7D85 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E3E2A88160300BC7D85 /* Event.swift */; };
 		086E2E412A88163C00BC7D85 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E402A88163C00BC7D85 /* EventCell.swift */; };
 		086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E2E422A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift */; };
@@ -93,6 +97,9 @@
 
 /* Begin PBXFileReference section */
 		0806DF552A813FA8001D04BD /* createAccountAddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createAccountAddFriendViewController.swift; sourceTree = "<group>"; };
+		080DCDA92B505D3A004FCA98 /* messagingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messagingViewController.swift; sourceTree = "<group>"; };
+		080DCDAB2B506002004FCA98 /* chatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatMessage.swift; sourceTree = "<group>"; };
+		080DCDAD2B5066E3004FCA98 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		0825CC2D2A87F18200C9C32E /* monthlyCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = monthlyCalendarViewController.swift; sourceTree = "<group>"; };
 		0825CC342A87FC4900C9C32E /* calendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarCell.swift; sourceTree = "<group>"; };
 		0825CC362A87FE7600C9C32E /* calendarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarHelper.swift; sourceTree = "<group>"; };
@@ -101,6 +108,7 @@
 		083B618D2A1FCE6400018798 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
 		083B618F2A1FD00400018798 /* CustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellClass.swift; sourceTree = "<group>"; };
 		086042D029C292C900066892 /* reviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewViewController.swift; sourceTree = "<group>"; };
+		08630DE82B525AF800046309 /* addMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addMessageViewController.swift; sourceTree = "<group>"; };
 		086E2E3E2A88160300BC7D85 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		086E2E402A88163C00BC7D85 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		086E2E422A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = removeFriendCustomCellClass.swift; sourceTree = "<group>"; };
@@ -283,6 +291,10 @@
 				08CB6A602AC79E5500576D96 /* upcomingEventsViewController.swift */,
 				087AC2EE2B3522B300F3CCBE /* anonymousChatViewController.swift */,
 				08C97D8A2B39476100EC31F9 /* ChatMessageCell.swift */,
+				080DCDA92B505D3A004FCA98 /* messagingViewController.swift */,
+				080DCDAB2B506002004FCA98 /* chatMessage.swift */,
+				080DCDAD2B5066E3004FCA98 /* MessageCell.swift */,
+				08630DE82B525AF800046309 /* addMessageViewController.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -581,6 +593,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0825CC372A87FE7600C9C32E /* calendarHelper.swift in Sources */,
+				080DCDAC2B506002004FCA98 /* chatMessage.swift in Sources */,
 				103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */,
 				103D80A22A3E77870032E4D3 /* BadgesViewController.swift in Sources */,
 				105CCA0829AD4EE2003CF893 /* MyFriendsViewController.swift in Sources */,
@@ -603,6 +616,7 @@
 				086042D129C292C900066892 /* reviewViewController.swift in Sources */,
 				08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */,
 				10B5002129FF6B16004FAC97 /* PicturesCollectionViewCell.swift in Sources */,
+				080DCDAA2B505D3A004FCA98 /* messagingViewController.swift in Sources */,
 				103D809E2A38D6610032E4D3 /* CreateEventViewController.swift in Sources */,
 				10B5001D29DE78CB004FAC97 /* PartyAcctViewController.swift in Sources */,
 				082C6CB22A4B2EDD0048321D /* privatePopUpViewController.swift in Sources */,
@@ -619,6 +633,7 @@
 				086E2E3F2A88160300BC7D85 /* Event.swift in Sources */,
 				0825CC392A88037800C9C32E /* weeklyViewController.swift in Sources */,
 				08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */,
+				080DCDAE2B5066E3004FCA98 /* MessageCell.swift in Sources */,
 				10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */,
 				08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */,
 				086E2E412A88163C00BC7D85 /* EventCell.swift in Sources */,
@@ -633,6 +648,7 @@
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,
 				10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */,
 				08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */,
+				08630DE92B525AF800046309 /* addMessageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
