@@ -15,10 +15,12 @@ import FirebaseFirestore
 
 class ViewController: UIViewController {
 
-
+    var barAcct = false
     var email: UITextField = {
         let textField = UITextField()
+        
         textField.placeholder = "Enter school email"
+
         textField.font = UIFont(name: "Futura-Medium", size: 18)
         textField.textColor = .gray
         textField.backgroundColor = .gray
@@ -60,6 +62,7 @@ class ViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: "Futura-Medium", size: 14)
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(forgotPasswordTapped), for: .touchUpInside)
         // Add any additional constraints as needed
         return button
     }()
@@ -115,7 +118,10 @@ class ViewController: UIViewController {
         view.addSubview(button)
         view.addSubview(forgotPasswordButton)
         view.addSubview(logo)
+        if barAcct{
+            email.placeholder = "Enter email"
 
+        }
 
         // Constraints
         NSLayoutConstraint.activate([
@@ -167,22 +173,26 @@ class ViewController: UIViewController {
     @IBAction func signInTapped(_ sender: Any) {
         //need to add wrong password button
         print("poo")
-        if email.text!.contains(".edu") == false {
-            print("it says use SCHOOL email")
-            let alert = UIAlertController(title: "Alert", message: "Please use your school (.edu) email.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Sorry, I won't do it again.", style: .default, handler: nil))
-            present(alert, animated: true, completion:  {
+        if !barAcct{
+            if email.text!.contains(".edu") == false {
+                print("it says use SCHOOL email")
+                let alert = UIAlertController(title: "Alert", message: "Please use your school (.edu) email.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Sorry, I won't do it again.", style: .default, handler: nil))
+                present(alert, animated: true, completion:  {
+                    return
+                })
+                
                 return
-            })
-            
-        return
+            }
         }
         guard let email = email.text, !email.isEmpty,
-                let password = password.text, !password.isEmpty
+              let password = password.text, !password.isEmpty
         else{
             print("missing field data")
             return
         }
+        
+
         
         FirebaseAuth.Auth.auth().signIn( withEmail: email, password: password, completion: {[weak self] result, error in
             guard let strongSelf = self else {return}
@@ -254,7 +264,7 @@ class ViewController: UIViewController {
 
     }
     
-    @IBAction func forgotPasswordTapped(_ sender: Any) {
+    @objc func forgotPasswordTapped() {
         let alertController = UIAlertController(title: "Reset Password", message: "Enter your email to receive a password reset link.", preferredStyle: .alert)
 
         alertController.addTextField { textField in

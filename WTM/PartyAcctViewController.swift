@@ -10,8 +10,13 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 
-class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+
     
+    var typeOptions = ["Frat", "Bar", "Nightclub", "School club"]
+    var cityOptions = ["Berkeley", "Champaign", "Chicago"]
+    var selectedType = "Frat"
+    var selectedCity = "Berkeley"
     @IBOutlet weak var barLabel: UILabel!
     
     var partyName: UITextField!
@@ -19,9 +24,15 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     var personName: UITextField!
     
     var contactEmail: UITextField!
-    
+
+    var password: UITextField!
+
     var venueAddress: UITextField!
     
+    var type: UIPickerView!
+
+    var city: UIPickerView!
+
     var uploadLabel: UILabel!
     
     var certificateUpload: UIButton!
@@ -49,6 +60,10 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         setupVenueAddress()
         setupPersonName()
         setupContactEmail()
+        setupPassword()
+        setupShowPasswordButton()
+        setupTypePickerView()
+        setupCityPickerView()
         setupUploadLabel()
         setupCertificateUploadButton()
  
@@ -180,6 +195,83 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
             contactEmail.heightAnchor.constraint(equalToConstant: 45) // Set height to 35
         ])
     }
+    func setupPassword() {
+        password = UITextField()
+        password.borderStyle = .roundedRect
+        password.clipsToBounds = true
+        password.isSecureTextEntry = true
+        password.placeholder = "Password"
+        password.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
+        password.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+
+        password.layer.cornerRadius = 10 // Add rounded corners
+        password.layer.borderWidth = 1.0 // Add border
+
+        password.layer.borderColor = UIColor.darkGray.cgColor // Set border color to black
+        password.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(password)
+
+        NSLayoutConstraint.activate([
+            password.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            password.topAnchor.constraint(equalTo: contactEmail.bottomAnchor, constant: 10),
+            password.widthAnchor.constraint(equalToConstant: 320), // Set width to 300
+            password.heightAnchor.constraint(equalToConstant: 45) // Set height to 35
+        ])
+    }
+    private func setupShowPasswordButton() {
+        let showPasswordButton = UIButton(type: .custom)
+        showPasswordButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        showPasswordButton.tintColor = .black
+        showPasswordButton.translatesAutoresizingMaskIntoConstraints = false
+        showPasswordButton.addTarget(self, action: #selector(showPassword), for: .touchUpInside)
+        view.addSubview(showPasswordButton)
+        
+        NSLayoutConstraint.activate([
+            showPasswordButton.widthAnchor.constraint(equalToConstant: 30),
+            showPasswordButton.heightAnchor.constraint(equalToConstant: 20),
+            showPasswordButton.centerYAnchor.constraint(equalTo: password.centerYAnchor),
+            showPasswordButton.trailingAnchor.constraint(equalTo: password.trailingAnchor, constant: -10)
+        ])
+    }
+    @objc private func showPassword() {
+        password.isSecureTextEntry = !password.isSecureTextEntry
+    }
+    
+    func setupTypePickerView() {
+        type = UIPickerView()
+        type.delegate = self
+        type.dataSource = self
+        type.translatesAutoresizingMaskIntoConstraints = false
+        type.frame = CGRect(x: 0, y: 0, width: 320, height: 40)
+
+        view.addSubview(type)
+        
+        NSLayoutConstraint.activate([
+            type.leadingAnchor.constraint(equalTo: password.leadingAnchor),
+            type.trailingAnchor.constraint(equalTo: password.trailingAnchor),
+            type.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 0),
+            type.heightAnchor.constraint(equalToConstant: 60) // Adjust the height as needed
+        ])
+    }
+    
+    // MARK: - City Picker View Setup
+    
+    func setupCityPickerView() {
+        city = UIPickerView()
+        city.delegate = self
+        city.dataSource = self
+        city.translatesAutoresizingMaskIntoConstraints = false
+        city.frame = CGRect(x: 0, y: 0, width: 320, height: 40)
+
+        view.addSubview(city)
+        
+        NSLayoutConstraint.activate([
+            city.leadingAnchor.constraint(equalTo: type.leadingAnchor),
+            city.trailingAnchor.constraint(equalTo: type.trailingAnchor),
+            city.topAnchor.constraint(equalTo: type.bottomAnchor, constant: 0),
+            city.heightAnchor.constraint(equalToConstant: 60) // Adjust the height as needed
+        ])
+    }
     func setupUploadLabel() {
         uploadLabel = UILabel()
         uploadLabel.text = "Upon clicking submit below, you'll have to submit proof that you are a registered organization (liquor license, frat registration, etc.)"
@@ -192,7 +284,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
         NSLayoutConstraint.activate([
             uploadLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            uploadLabel.topAnchor.constraint(equalTo: contactEmail.bottomAnchor, constant: 30), // 20px below contactEmail
+            uploadLabel.topAnchor.constraint(equalTo: city.bottomAnchor, constant: 30), // 20px below contactEmail
             uploadLabel.widthAnchor.constraint(equalToConstant: 320), // 20px below contactEmail
 
         ])
@@ -220,7 +312,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     
     func setupSuccess() {
         success = UILabel()
-        success.text = "Application submitted successfully. You'll receive an email in 1-3 days when you've been approved"
+        success.text = "Account created successfully!"
         success.textColor = .black // Set text color to black
         success.font = UIFont(name: "Futura-Medium", size: 16) // Set font style and size
         success.translatesAutoresizingMaskIntoConstraints = false
@@ -228,16 +320,16 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
         NSLayoutConstraint.activate([
             success.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            success.topAnchor.constraint(equalTo: barLoginButton.bottomAnchor, constant: 20), // 20px under certificateUpload button
+            success.topAnchor.constraint(equalTo: barLoginButton.bottomAnchor, constant: 10), // 20px under certificateUpload button
         ])
     }
     func setupFail() {
         fail = UILabel()
         fail.numberOfLines = 0 // Allow text to wrap to multiple lines
 
-        fail.text = "That didn't work. Try again later or email support @ aman04shah@gmail.com"
+        fail.text = "Error. Try again or email aman04shah@gmail.com"
         fail.textColor = .black // Set text color to black
-        fail.font = UIFont(name: "Futura-Medium", size: 16) // Set font style and size
+        fail.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
         fail.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(fail)
 
@@ -303,6 +395,11 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
     @objc func barLoginTapped() {
         // Instantiate the view controller with the identifier "BarSignIn" from the storyboard
+        let vc = storyboard?.instantiateViewController(identifier: "SignUpPage") as ViewController?
+        vc?.modalPresentationStyle = .overFullScreen
+        vc?.barAcct = true
+        self.present(vc!, animated: true)
+        /*
         if let barSignInViewController = storyboard?.instantiateViewController(withIdentifier: "BarSignIn") {
             
             // Wrap the view controller in a navigation controller to ensure it's shown full screen
@@ -311,9 +408,41 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
             // Present the navigation controller modally
             navigationController.modalPresentationStyle = .fullScreen
             present(navigationController, animated: true, completion: nil)
-        }
+        }*/
     }
 
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if pickerView == type {
+            return typeOptions.count
+        } else if pickerView == city {
+            return cityOptions.count
+        }
+        return 0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if pickerView == type {
+            return typeOptions[row]
+        } else if pickerView == city {
+            return cityOptions[row]
+        }
+        return nil
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView == type {
+            selectedType = typeOptions[row]
+            print("Selected Type: \(selectedType)")
+            // Do something with the selected type
+        } else if pickerView == city {
+            selectedCity = cityOptions[row]
+            print("Selected City: \(selectedCity)")
+            // Do something with the selected city
+        }
+    }
 
 
   @objc func certificateUploadTapped(_ sender: Any) {
@@ -322,7 +451,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                 let contactEmail = contactEmail.text, !contactEmail.isEmpty,
                 let venueAddress = venueAddress.text, !venueAddress.isEmpty
         else{
-            let alert = UIAlertController(title: "Alert", message: "missing field data", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Alert", message: "Missing field data", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion:  {
                 return
@@ -366,6 +495,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                         // Handle the error
                         print("Error uploading image: \(error.localizedDescription)")
                         self.fail.isHidden = false
+                        
 
                         return
                     }
@@ -388,18 +518,31 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                         Auth.auth().createUser(withEmail: email ?? "nul", password: password ?? "nul") { (authResult, error) in
                             if let error = error {
                                 print("Error creating user: \(error.localizedDescription)")
+                                let alert = UIAlertController(title: "Alert", message: "Invalid email/password", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                self.present(alert, animated: true, completion:  {
+                                    return
+                                })
+                                print("missing field data")
+                                return
                                 // Handle the error here (e.g., show an error message to the user)
                             } else {
                                 let uid = Auth.auth().currentUser?.uid
                                 
-                                let userRef = Firestore.firestore().collection("pendingParty").document(uid ?? "")
+                                let userRef = Firestore.firestore().collection("barUsers").document(uid ?? "")
                                 let data: [String: Any] = [
                                    
-                                    "imageUrl": downloadURL.absoluteString,
+                                    "proofURL": downloadURL.absoluteString,
                                     "venueName": self.partyName.text,
                                     "venueAddress": self.venueAddress.text,
                                     "email": self.contactEmail.text,
-                                    "personName" : self.personName.text
+                                    "personName" : self.personName.text,
+                                    "verified" : "no",
+                                    "type" : self.selectedType ,//needs work
+                                    "location": self.selectedCity,
+                                    "hours" : "",
+                                    "profilePic": ""
+                                    
                                     // Add other fields as needed
                                 ]
                                 userRef.setData(data) { error in
@@ -412,8 +555,8 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                                     }
                                     
                                     // Success!
-                                    self.success.isHidden = false
-                                    self.fail.isHidden = true
+
+                                    self.submitSuccess()
                                     print("Image uploaded and download URL stored in Firestore!")
                                 }
                                 // User creation was successful
@@ -437,6 +580,14 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
             
             dismiss(animated: true, completion: nil)
        }
+    func submitSuccess (){
+        self.success.isHidden = false
+        self.fail.isHidden = true
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
+        appHomeVC.modalPresentationStyle = .overFullScreen
+        self.present(appHomeVC, animated: true)
+    }
     /*
     // MARK: - Navigation
 
