@@ -40,7 +40,9 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
     private func setupTitleLabel() {
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        //titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        titleLabel.font = UIFont(name: "Futura-Medium", size: 24)
+
         //titleLabel.textAlignment = .center
         titleLabel.textColor = .white
 

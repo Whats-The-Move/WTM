@@ -15,25 +15,84 @@ import FirebaseFirestore
 
 class ViewController: UIViewController {
 
-    @IBOutlet var email: UITextField!
-    @IBOutlet weak var password: UITextField!
-    
-    @IBOutlet weak var button: UIButton!
-    @IBOutlet weak var logo: UIImageView!
-    @IBOutlet weak var label: UILabel!
-    
-    @IBOutlet weak var mottoLabel: UILabel!
-    @IBOutlet weak var emailInvalid: UILabel!
-    
-    @IBOutlet weak var forgotPasswordButton: UIButton!
-    
-    @IBOutlet weak var lineView: UIView!
-    @IBOutlet weak var barButton: UIButton!
+
+    var email: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Enter school email"
+        textField.font = UIFont(name: "Futura-Medium", size: 18)
+        textField.textColor = .gray
+        textField.backgroundColor = .gray
+        textField.layer.cornerRadius = 8.0
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.borderStyle = .roundedRect
+        textField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Light gray
+        textField.autocapitalizationType = .none
+
+        // Add any additional constraints as needed
+        return textField
+    }()
+
+    var password: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Password (6 char minimum)"
+        textField.font = UIFont(name: "Futura-Medium", size: 18)
+        textField.textColor = .gray
+        textField.isSecureTextEntry = true
+        textField.backgroundColor = .gray
+        textField.layer.cornerRadius = 8.0
+        textField.layer.borderWidth = 1.0
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.borderStyle = .roundedRect
+        textField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Light gray
+        textField.autocapitalizationType = .none
+
+        // Add any additional constraints as needed
+        return textField
+    }()
+
+    var forgotPasswordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Forgot Password?", for: .normal)
+        button.setTitleColor(UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0), for: .normal)
+        button.titleLabel?.font = UIFont(name: "Futura-Medium", size: 14)
+        button.backgroundColor = .clear
+        button.translatesAutoresizingMaskIntoConstraints = false
+        // Add any additional constraints as needed
+        return button
+    }()
+
+    var logo: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "WTM_")
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 8.0
+        imageView.layer.masksToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        // Add any additional constraints as needed
+        return imageView
+    }()
+
+    var button: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Log In", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+        button.layer.cornerRadius = 8.0
+        button.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
+        button.titleLabel?.font = UIFont(name: "Futura-Medium", size: 18)
+
+
+        return button
+    }()
+
     var backButton: UIButton = {
         let button = UIButton()
         let backImage = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))?.withRenderingMode(.alwaysTemplate)
         button.setImage(backImage, for: .normal)
-        button.tintColor = .white
+        button.tintColor = .black
         button.backgroundColor = .clear
         button.layer.cornerRadius = 15 // half of the desired height
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
@@ -43,16 +102,20 @@ class ViewController: UIViewController {
 
     // MARK: - Button Actions
 
-    @objc func backButtonTapped() {
-        // Handle back button tap
-        dismiss(animated: true, completion: nil)
-    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .white
         // Add the backButton to your view hierarchy, then apply these constraints
         view.addSubview(backButton)
+        view.addSubview(email)
+        view.addSubview(password)
+
+        view.addSubview(button)
+        view.addSubview(forgotPasswordButton)
+        view.addSubview(logo)
+
 
         // Constraints
         NSLayoutConstraint.activate([
@@ -67,13 +130,12 @@ class ViewController: UIViewController {
         KeyboardManager.shared.enableTapToDismiss()
         setupShowPasswordButton()
         setupConstraints()
+        
         email.layer.cornerRadius = 8
         password.layer.cornerRadius = 8
         email.clipsToBounds = true
         password.clipsToBounds = true
-        label.adjustsFontSizeToFitWidth = true
-        barButton.layer.cornerRadius = 8
-        barButton.clipsToBounds = true
+
 
         if FirebaseAuth.Auth.auth().currentUser != nil {
             //TAKE PAST LOGIN SCREEN TO HOME SCREEN
@@ -156,7 +218,7 @@ class ViewController: UIViewController {
                         UserDefaults.standard.set(false, forKey: "partyAccount")
 
                         UserDefaults.standard.set(true, forKey: "authenticated")
-                        strongSelf.showCreateAccount(email: email, password: password)
+                        //strongSelf.showCreateAccount(email: email, password: password)
                         
                     }
                   }
@@ -253,7 +315,7 @@ class ViewController: UIViewController {
     // Your other methods and code
 
 
-    
+    /*
     func showCreateAccount(email: String, password: String){
         let alert = UIAlertController(title: "Create Account", message: "Would you like to create an account?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "continue", style: .default, handler: {_ in
@@ -262,7 +324,7 @@ class ViewController: UIViewController {
                     guard let strongSelf = self else {return}
                     guard error == nil else{
                         print("failed")
-                        self?.emailInvalid.isHidden = false
+                        //self?.emailInvalid.isHidden = false
                         return
                         }
                     print("signed in")
@@ -330,176 +392,75 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "cancel", style: .cancel, handler: {_ in
         }))
         present(alert, animated: true)
-    }
+    }*/
+    
     private func setupConstraints() {
         // Logo at the top
         logo.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            logo.widthAnchor.constraint(equalToConstant: 240),
-            logo.heightAnchor.constraint(equalToConstant: 100)
+            logo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            logo.widthAnchor.constraint(equalToConstant: 150),
+            logo.heightAnchor.constraint(equalToConstant: 70)
         ])
         
         // Label below the logo
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 100)
-        ])
+
         
         // Email text field
         email.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 20),
+            email.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 20),
             email.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -70),
-            email.heightAnchor.constraint(equalToConstant: 50)
+            email.heightAnchor.constraint(equalToConstant: 45)
         ])
         
         // Password text field
         password.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             password.leadingAnchor.constraint(equalTo: email.leadingAnchor),
-            password.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
-            password.widthAnchor.constraint(equalTo: email.widthAnchor, constant: -60),
-            password.heightAnchor.constraint(equalToConstant: 50)
+            password.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 15),
+            password.widthAnchor.constraint(equalTo: email.widthAnchor),
+            password.heightAnchor.constraint(equalToConstant: 45)
         ])
         
         // Show password button
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.trailingAnchor.constraint(equalTo: email.trailingAnchor),
-            button.centerYAnchor.constraint(equalTo: password.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 50),
-            button.heightAnchor.constraint(equalToConstant: 50)
-        ])
+
         
         // Forgot password button
         forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            forgotPasswordButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
-            forgotPasswordButton.leadingAnchor.constraint(equalTo: email.leadingAnchor),
-            forgotPasswordButton.trailingAnchor.constraint(equalTo: email.trailingAnchor)
+            forgotPasswordButton.trailingAnchor.constraint(equalTo: button.trailingAnchor),
+            forgotPasswordButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 15),
+            forgotPasswordButton.widthAnchor.constraint(equalToConstant: 120),
+            forgotPasswordButton.heightAnchor.constraint(equalToConstant: 30)
         ])
-        lineView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            lineView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            lineView.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 60),
-            lineView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30),
-            lineView.heightAnchor.constraint(equalToConstant: 1)
+        button.translatesAutoresizingMaskIntoConstraints = false
 
-        ])
-        barButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            barButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            barButton.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 90),
-            barButton.leadingAnchor.constraint(equalTo: email.leadingAnchor),
-            barButton.trailingAnchor.constraint(equalTo: email.trailingAnchor)
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            button.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 15),
+            button.widthAnchor.constraint(equalTo: email.widthAnchor),
+            button.heightAnchor.constraint(equalToConstant: 45)
         ])
+
+
         
         // Email invalid label
-        emailInvalid.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            emailInvalid.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emailInvalid.topAnchor.constraint(equalTo: barButton.bottomAnchor, constant: 20)
-        ])
+
         
         // Motto at the bottom
-        mottoLabel.translatesAutoresizingMaskIntoConstraints = false
-        mottoLabel.numberOfLines = 2
-        mottoLabel.lineBreakMode = .byWordWrapping
-        NSLayoutConstraint.activate([
-            mottoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            mottoLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            mottoLabel.widthAnchor.constraint(equalToConstant: 260),
-            mottoLabel.heightAnchor.constraint(equalToConstant: 160)
-        ])
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        emailInvalid.isHidden = true
-        email.borderStyle = .roundedRect
-        password.borderStyle = .roundedRect  // Add this line
-        barButton.layer.borderWidth = 2
-        barButton.layer.borderColor = UIColor.black.cgColor
-        // Set the border color and width
-        var placeholderText = "Enter School Email"
-        var emailAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.lightGray,  // Set the desired color here
-        ]
-        var attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: emailAttributes)
-        email.attributedPlaceholder = attributedPlaceholder
-        email.layer.borderWidth = 2
-        email.layer.borderColor = UIColor.black.cgColor
-       // email.frame = CGRect(x: 20,y: label.frame.origin.y + label.frame.size.height + 10, width: view.frame.size.width - 40, height: 50)
-        
-        placeholderText = "Enter Password (6 character min)"
-        var passAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.lightGray,  // Set the desired color here
-        ]
-        attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: passAttributes)
-        password.attributedPlaceholder = attributedPlaceholder
-        password.layer.borderWidth = 2
-        password.layer.borderColor = UIColor.black.cgColor
-        password.isSecureTextEntry = true
-        //password.frame = CGRect(x: 20, y: email.frame.origin.y + email.frame.size.height + 10, width: view.frame.size.width - 100, height: 50)
-        //button.frame = CGRect(x: -70 + view.frame.size.width, y: password.frame.origin.y, width: 50, height: 50)
-
-
-
 
     }
+
+    @objc func backButtonTapped() {
+        // Handle back button tap
+        dismiss(animated: true, completion: nil)
+    }
+
    
-        /*
-        
-        if email.text?.isEmpty == true {
-            print ("No text in email field")
-            return
-        } else if email.text!.contains(".edu") == false {
-            print("This app currently only accepts UIUC students")
-            let alert = UIAlertController(title: "Alert", message: "This app currently only accepts college students", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion:  {
-                return
-            })
-        }
-        else {
-            UserDefaults.standard.set(true, forKey: "authenticated")
-            signUP()
-        }
-    }*/
-    /*
-    func signUP() {
-            
-            // Create a reference to the Realtime Database
-        let databaseRef = Database.database().reference()
-            var username = ""
-            
-        if email.text != nil && email.text!.contains(".edu") == true{
-          
-            let i = email.text!.firstIndex(of: "@")
-            username = email.text!.substring(to: i!)
-            UserDefaults.standard.set(username, forKey: "user_address")
-
-            }
-        
-        let newUserId = databaseRef.child("Users").childByAutoId().key ?? ""
-        let newUserRef = databaseRef.child("Users").child(username)
-        let newUser = [
-            "email": (self.email.text)!
-        ]
-        newUserRef.setValue(newUser)
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(identifier: "TabBarController")
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true)
-
-    }*/
-    
+  
     
 }
 

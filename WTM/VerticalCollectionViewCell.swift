@@ -25,7 +25,9 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
 
     private func setupTitleLabel() {
         titleLabel = UILabel()
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        //titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        titleLabel.font = UIFont(name: "Futura-Medium", size: 20)
+
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .white
 

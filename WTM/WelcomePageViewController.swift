@@ -13,7 +13,7 @@ class WelcomePageViewController: UIViewController {
     let welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = "Welcome!"
-        label.font = UIFont.boldSystemFont(ofSize: 36)
+        label.font = UIFont(name: "Futura-Medium", size: 36)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -23,7 +23,7 @@ class WelcomePageViewController: UIViewController {
     let signInDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Sign in or create a new account"
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont(name: "Futura-Medium", size: 16)
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontSizeToFitWidth = true
@@ -42,7 +42,7 @@ class WelcomePageViewController: UIViewController {
     let signInButton: UIButton = {
         let button = UIButton()
         button.setTitle("Sign In", for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.titleLabel?.font = UIFont(name: "Futura-Medium", size: 18)
         button.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 1)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
@@ -56,7 +56,7 @@ class WelcomePageViewController: UIViewController {
         let attributedString = NSMutableAttributedString(string: "No account yet? ")
         attributedString.append(NSAttributedString(string: "Sign up", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 1)]))
         button.setAttributedTitle(attributedString, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.titleLabel?.font = UIFont(name: "Futura-Medium", size: 16)
         button.titleLabel?.textColor = .gray
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
@@ -130,8 +130,12 @@ class WelcomePageViewController: UIViewController {
     }
 
     @objc func signUpButtonTapped() {
+        /*let newAcct1VC = NewAcctLandingViewController()
+        newAcct1VC.modalPresentationStyle = .overFullScreen
+        present(newAcct1VC, animated: true)
+        */
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(identifier: "CreateAccount")
+        let vc = storyboard.instantiateViewController(identifier: "CreateAccountStart")
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
