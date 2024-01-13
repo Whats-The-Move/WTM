@@ -401,7 +401,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             print("error")
         }
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyboard.instantiateViewController(withIdentifier: "SignUpPage") as! ViewController
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "WelcomePage") as! WelcomePageViewController
         newViewController.modalPresentationStyle = .fullScreen
         present(newViewController, animated: false, completion: nil)
     }

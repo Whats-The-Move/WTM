@@ -30,6 +30,16 @@ public var userFcmToken = ""
 public var reviewRequested = false
 public var currentOption = "This Week"
 
+public var createEmail = ""
+public var createPassword = ""
+public var createUsername = ""
+public var createDisplayName = ""
+public var createInterests = ""
+public var createImageURL = ""
+public var createPhone = ""
+
+
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {

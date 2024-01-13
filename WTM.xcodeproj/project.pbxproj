@@ -67,6 +67,13 @@
 		10B616392B33E69100CE1226 /* VerticalCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */; };
 		10B6163D2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */; };
 		10B6163F2B36C05D00CE1226 /* LoadDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */; };
+		10B616412B4CB7A900CE1226 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */; };
+		10B616432B508C3000CE1226 /* EventLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616422B508C3000CE1226 /* EventLoad.swift */; };
+		10B616452B50A88500CE1226 /* WelcomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616442B50A88500CE1226 /* WelcomePageViewController.swift */; };
+		10B616472B5226E900CE1226 /* NewAcctLandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616462B5226E900CE1226 /* NewAcctLandingViewController.swift */; };
+		10B616492B52492F00CE1226 /* NewAcct1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616482B52492F00CE1226 /* NewAcct1ViewController.swift */; };
+		10B6164B2B524C9B00CE1226 /* NewAcct2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6164A2B524C9B00CE1226 /* NewAcct2ViewController.swift */; };
+		10B6164D2B524EC300CE1226 /* NewAcct3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6164C2B524EC300CE1226 /* NewAcct3ViewController.swift */; };
 		10C1699A2AB969AB00355BC4 /* ShowEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C169992AB969AB00355BC4 /* ShowEventViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		1411292AC27485DEEBB18704 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */; };
@@ -160,6 +167,13 @@
 		10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalCollectionViewCell.swift; sourceTree = "<group>"; };
 		10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDataViewController.swift; sourceTree = "<group>"; };
+		10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
+		10B616422B508C3000CE1226 /* EventLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLoad.swift; sourceTree = "<group>"; };
+		10B616442B50A88500CE1226 /* WelcomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePageViewController.swift; sourceTree = "<group>"; };
+		10B616462B5226E900CE1226 /* NewAcctLandingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAcctLandingViewController.swift; sourceTree = "<group>"; };
+		10B616482B52492F00CE1226 /* NewAcct1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAcct1ViewController.swift; sourceTree = "<group>"; };
+		10B6164A2B524C9B00CE1226 /* NewAcct2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAcct2ViewController.swift; sourceTree = "<group>"; };
+		10B6164C2B524EC300CE1226 /* NewAcct3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAcct3ViewController.swift; sourceTree = "<group>"; };
 		10C169992AB969AB00355BC4 /* ShowEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,19 +251,26 @@
 				10B5001C29DE78CB004FAC97 /* PartyAcctViewController.swift */,
 				103D809D2A38D6610032E4D3 /* CreateEventViewController.swift */,
 				10B5002A2A268214004FAC97 /* CreateAccountViewController.swift */,
+				10B616462B5226E900CE1226 /* NewAcctLandingViewController.swift */,
+				10B616482B52492F00CE1226 /* NewAcct1ViewController.swift */,
+				10B6164A2B524C9B00CE1226 /* NewAcct2ViewController.swift */,
+				10B6164C2B524EC300CE1226 /* NewAcct3ViewController.swift */,
 				103D80A12A3E77870032E4D3 /* BadgesViewController.swift */,
 				08CF03C2297CB7590074A878 /* AppHomeViewController.swift */,
 				10B616362B33E22900CE1226 /* NewHomeViewController.swift */,
 				10B6163E2B36C05D00CE1226 /* LoadDataViewController.swift */,
 				10B6163C2B342BDF00CE1226 /* TopGalleryCollectionViewCell.swift */,
+				10B616402B4CB7A900CE1226 /* EventDetailsViewController.swift */,
 				10B616382B33E69100CE1226 /* VerticalCollectionViewCell.swift */,
 				083B618F2A1FD00400018798 /* CustomCellClass.swift */,
+				10B616442B50A88500CE1226 /* WelcomePageViewController.swift */,
 				08F793292A4A505300679EB9 /* privatePartyCellClass.swift */,
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
 				087FE8EB298DDA26001B17B6 /* Gif.swift */,
 				103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */,
 				109B94022AA1BEDC002D4CEF /* BarSignInViewController.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
+				10B616422B508C3000CE1226 /* EventLoad.swift */,
 				08D313A02A4A5CBA00FBF023 /* privateParty.swift */,
 				103D80A42A4BC9D10032E4D3 /* SettingsViewController.swift */,
 				08C7C5DC2A3031E400B8E9F6 /* addFriendCustomCellClass.swift */,
@@ -580,6 +601,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10B616492B52492F00CE1226 /* NewAcct1ViewController.swift in Sources */,
 				0825CC372A87FE7600C9C32E /* calendarHelper.swift in Sources */,
 				103D809A2A2E9B1F0032E4D3 /* CameraPermissionManager.swift in Sources */,
 				103D80A22A3E77870032E4D3 /* BadgesViewController.swift in Sources */,
@@ -609,9 +631,11 @@
 				08CF0395297CB6030074A878 /* SceneDelegate.swift in Sources */,
 				10B616372B33E22900CE1226 /* NewHomeViewController.swift in Sources */,
 				103D80A52A4BC9D10032E4D3 /* SettingsViewController.swift in Sources */,
+				10B6164D2B524EC300CE1226 /* NewAcct3ViewController.swift in Sources */,
 				10B616392B33E69100CE1226 /* VerticalCollectionViewCell.swift in Sources */,
 				08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */,
 				0825CC2E2A87F18200C9C32E /* monthlyCalendarViewController.swift in Sources */,
+				10B616472B5226E900CE1226 /* NewAcctLandingViewController.swift in Sources */,
 				10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */,
 				0825CC352A87FC4900C9C32E /* calendarCell.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
@@ -622,6 +646,7 @@
 				10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */,
 				08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */,
 				086E2E412A88163C00BC7D85 /* EventCell.swift in Sources */,
+				10B616412B4CB7A900CE1226 /* EventDetailsViewController.swift in Sources */,
 				08B8A5322A6AF6830082B8E6 /*  requestUserCellClass.swift in Sources */,
 				0806DF562A813FA8001D04BD /* createAccountAddFriendViewController.swift in Sources */,
 				086E2E432A8AE1AF00BC7D85 /* removeFriendCustomCellClass.swift in Sources */,
@@ -629,9 +654,12 @@
 				08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */,
 				08CF03C9297CEFAB0074A878 /* Party.swift in Sources */,
 				08C7C5DD2A3031E400B8E9F6 /* addFriendCustomCellClass.swift in Sources */,
+				10B616452B50A88500CE1226 /* WelcomePageViewController.swift in Sources */,
+				10B6164B2B524C9B00CE1226 /* NewAcct2ViewController.swift in Sources */,
 				08CB6A612AC79E5500576D96 /* upcomingEventsViewController.swift in Sources */,
 				109B93FD2A6CA098002D4CEF /* ReviewTableViewCell.swift in Sources */,
 				10B500252A00BC76004FAC97 /* HeaderCollectionReusableView.swift in Sources */,
+				10B616432B508C3000CE1226 /* EventLoad.swift in Sources */,
 				08CF03C3297CB7590074A878 /* AppHomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
