@@ -12,6 +12,8 @@ import FirebaseStorage
 
 class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBOutlet weak var barLabel: UILabel!
+    
     var partyName: UITextField!
     
     var personName: UITextField!
@@ -49,12 +51,13 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         setupContactEmail()
         setupUploadLabel()
         setupCertificateUploadButton()
+ 
+        //setupLineView()
+        setupBarLoginButton()
         setupSuccess()
         success.isHidden = true
         setupFail()
         fail.isHidden = true
-        setupLineView()
-        setupBarLoginButton()
         imagePickerController.delegate = self
         certificateUpload.addTarget(self, action: #selector(certificateUploadTapped), for: .touchUpInside)
 
@@ -94,19 +97,19 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         partyName.clipsToBounds = true
 
         partyName.placeholder = "Name of Frat/Bar/Party"
-        partyName.backgroundColor = .white // Set background color to white
+        partyName.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
         partyName.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
         partyName.layer.cornerRadius = 10 // Add rounded corners
         partyName.layer.borderWidth = 1.0 // Add border
-        partyName.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        partyName.layer.borderColor = UIColor.darkGray.cgColor // Set border color to black
         partyName.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(partyName)
 
         NSLayoutConstraint.activate([
             partyName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            partyName.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -160),
-            partyName.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
-            partyName.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+            partyName.topAnchor.constraint(equalTo: barLabel.bottomAnchor, constant: 50),
+            partyName.widthAnchor.constraint(equalToConstant: 320), // Set width to 300
+            partyName.heightAnchor.constraint(equalToConstant: 45) // Set height to 35
         ])
     }
     
@@ -117,19 +120,19 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         venueAddress.clipsToBounds = true
 
         venueAddress.placeholder = "Address of Frat/Bar/Party"
-        venueAddress.backgroundColor = .white // Set background color to white
+        venueAddress.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)// Set background color to white
         venueAddress.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
         venueAddress.layer.cornerRadius = 10 // Add rounded corners
         venueAddress.layer.borderWidth = 1.0 // Add border
-        venueAddress.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        venueAddress.layer.borderColor = UIColor.darkGray.cgColor // Set border color to black
         venueAddress.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(venueAddress)
 
         NSLayoutConstraint.activate([
             venueAddress.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            venueAddress.topAnchor.constraint(equalTo: partyName.bottomAnchor, constant: 20),
-            venueAddress.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
-            venueAddress.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+            venueAddress.topAnchor.constraint(equalTo: partyName.bottomAnchor, constant: 10),
+            venueAddress.widthAnchor.constraint(equalToConstant: 320), // Set width to 300
+            venueAddress.heightAnchor.constraint(equalToConstant: 45) // Set height to 35
         ])
     }
 
@@ -139,19 +142,19 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         personName.clipsToBounds = true
 
         personName.placeholder = "Name of Person who is point of contact"
-        personName.backgroundColor = .white // Set background color to white
+        personName.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
         personName.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
         personName.layer.cornerRadius = 10 // Add rounded corners
         personName.layer.borderWidth = 1.0 // Add border
-        personName.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        personName.layer.borderColor = UIColor.darkGray.cgColor // Set border color to black
         personName.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(personName)
 
         NSLayoutConstraint.activate([
             personName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            personName.topAnchor.constraint(equalTo: venueAddress.bottomAnchor, constant: 20),
-            personName.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
-            personName.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+            personName.topAnchor.constraint(equalTo: venueAddress.bottomAnchor, constant: 10),
+            personName.widthAnchor.constraint(equalToConstant: 320), // Set width to 300
+            personName.heightAnchor.constraint(equalToConstant: 45) // Set height to 35
         ])
     }
 
@@ -160,21 +163,21 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         contactEmail.borderStyle = .roundedRect
         contactEmail.clipsToBounds = true
         contactEmail.placeholder = "Email address of primary contact"
-        contactEmail.backgroundColor = .white // Set background color to white
+        contactEmail.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
         contactEmail.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
 
         contactEmail.layer.cornerRadius = 10 // Add rounded corners
         contactEmail.layer.borderWidth = 1.0 // Add border
 
-        contactEmail.layer.borderColor = UIColor.black.cgColor // Set border color to black
+        contactEmail.layer.borderColor = UIColor.darkGray.cgColor // Set border color to black
         contactEmail.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(contactEmail)
 
         NSLayoutConstraint.activate([
             contactEmail.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            contactEmail.topAnchor.constraint(equalTo: personName.bottomAnchor, constant: 20),
-            contactEmail.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
-            contactEmail.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+            contactEmail.topAnchor.constraint(equalTo: personName.bottomAnchor, constant: 10),
+            contactEmail.widthAnchor.constraint(equalToConstant: 320), // Set width to 300
+            contactEmail.heightAnchor.constraint(equalToConstant: 45) // Set height to 35
         ])
     }
     func setupUploadLabel() {
@@ -189,8 +192,8 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
         NSLayoutConstraint.activate([
             uploadLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            uploadLabel.topAnchor.constraint(equalTo: contactEmail.bottomAnchor, constant: 20), // 20px below contactEmail
-            uploadLabel.widthAnchor.constraint(equalToConstant: 300), // 20px below contactEmail
+            uploadLabel.topAnchor.constraint(equalTo: contactEmail.bottomAnchor, constant: 30), // 20px below contactEmail
+            uploadLabel.widthAnchor.constraint(equalToConstant: 320), // 20px below contactEmail
 
         ])
     }
@@ -202,16 +205,16 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         certificateUpload.setTitle("Upload and Submit", for: .normal)
         certificateUpload.setTitleColor(.white, for: .normal) // Set text color to white
 
-        certificateUpload.backgroundColor = .black // Set background fill color to white
+        certificateUpload.backgroundColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1) // Set background fill color to white
         certificateUpload.layer.cornerRadius = 10 // Add rounded corners
         certificateUpload.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(certificateUpload)
 
         NSLayoutConstraint.activate([
             certificateUpload.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            certificateUpload.topAnchor.constraint(equalTo: uploadLabel.bottomAnchor, constant: 20),
-            certificateUpload.widthAnchor.constraint(equalToConstant: 300), // Set width to 300
-            certificateUpload.heightAnchor.constraint(equalToConstant: 35) // Set height to 35
+            certificateUpload.topAnchor.constraint(equalTo: uploadLabel.bottomAnchor, constant: 30),
+            certificateUpload.widthAnchor.constraint(equalToConstant: 320), // Set width to 300
+            certificateUpload.heightAnchor.constraint(equalToConstant: 45) // Set height to 35
         ])
     }
     
@@ -225,7 +228,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
         NSLayoutConstraint.activate([
             success.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            success.topAnchor.constraint(equalTo: certificateUpload.bottomAnchor, constant: 20), // 20px under certificateUpload button
+            success.topAnchor.constraint(equalTo: barLoginButton.bottomAnchor, constant: 20), // 20px under certificateUpload button
         ])
     }
     func setupFail() {
@@ -240,7 +243,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
         NSLayoutConstraint.activate([
             fail.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fail.topAnchor.constraint(equalTo: certificateUpload.bottomAnchor, constant: 20), // 20px under certificateUpload button
+            fail.topAnchor.constraint(equalTo: barLoginButton.bottomAnchor, constant: 20), // 20px under certificateUpload button
             fail.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20)
         ])
     }
@@ -267,15 +270,19 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
     func setupBarLoginButton() {
         barLoginButton = UIButton()
         barLoginButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        let attributedString = NSMutableAttributedString(string: "Have a party account? ")
+        attributedString.append(NSAttributedString(string: "Sign in", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 1)]))
+        barLoginButton.setAttributedTitle(attributedString, for: .normal)
         // Set the button title and styling
-        barLoginButton.setTitle("Already been approved? Sign in instead", for: .normal)
-        barLoginButton.setTitleColor(.black, for: .normal)
+        //barLoginButton.setTitle("Already been approved? Sign in instead", for: .normal)
+        
+        barLoginButton.setTitleColor(.gray, for: .normal)
         barLoginButton.backgroundColor = .white
-        barLoginButton.layer.borderWidth = 2.0
+        //barLoginButton.layer.borderWidth = 2.0
         barLoginButton.layer.borderColor = UIColor.black.cgColor
         barLoginButton.titleLabel?.adjustsFontSizeToFitWidth = true
         barLoginButton.titleLabel?.minimumScaleFactor = 0.5 // You can adjust this value as needed.
+        barLoginButton.titleLabel?.font =  UIFont(name: "Futura-Medium", size: 16)
         barLoginButton.layer.cornerRadius = 8
         barLoginButton.clipsToBounds = true
         barLoginButton.addTarget(self, action: #selector(barLoginTapped), for: .touchUpInside)
@@ -287,8 +294,8 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         
         NSLayoutConstraint.activate([
             barLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            barLoginButton.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 20),
-            barLoginButton.widthAnchor.constraint(equalToConstant: 370),
+            barLoginButton.topAnchor.constraint(equalTo: certificateUpload.bottomAnchor, constant: 5),
+            barLoginButton.widthAnchor.constraint(equalToConstant: 320),
             barLoginButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }

@@ -8,7 +8,7 @@
 import UIKit
 
 
-class NewAcct1ViewController: UIViewController {
+class NewAcct1ViewController: UIViewController, UITextFieldDelegate {
     var descriptionLabel: UILabel!
     var phone: UITextField!
     var backButton: UIButton!
@@ -34,6 +34,8 @@ class NewAcct1ViewController: UIViewController {
         
         phone = vc.createTextField(placeholder: "Phone", fontSize: 18, isSecure: false)
         view.addSubview(phone)
+        phone.keyboardType = .numberPad
+        phone.delegate = self
 
 
 
@@ -85,6 +87,19 @@ class NewAcct1ViewController: UIViewController {
     }
     
     @IBAction func continueTapped(_ sender: Any) {
+        guard let phone = phone.text, !phone.isEmpty
+            
+
+        else{
+            print("missing field data")
+            let alert = UIAlertController(title: "Alert", message: "There are missing fields", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Sorry I won't do it again", style: .default, handler: nil))
+            present(alert, animated: true, completion:  {
+                return
+            })
+            return
+        }
+        createPhone = phone
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "CreateAccount2")
         vc.modalPresentationStyle = .overFullScreen

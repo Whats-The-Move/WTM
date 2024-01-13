@@ -6,9 +6,9 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
-class NewAcctLandingViewController: UIViewController {
-    
+class NewAcctLandingViewController: UIViewController, UITextFieldDelegate {
     var descriptionLabel: UILabel!
     var email: UITextField!
     var password: UITextField!
@@ -38,7 +38,7 @@ class NewAcctLandingViewController: UIViewController {
         
         
         
-        descriptionLabel = createLabel(text: "Enter your school email and password.", fontSize: 36)
+        descriptionLabel = createLabel(text: "Enter your school email and password", fontSize: 36)
         view.addSubview(descriptionLabel)
 
         NSLayoutConstraint.activate([
@@ -59,6 +59,7 @@ class NewAcctLandingViewController: UIViewController {
             email.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             email.heightAnchor.constraint(equalToConstant: 60),
         ])
+        email.delegate = self
         
         
         
@@ -71,6 +72,9 @@ class NewAcctLandingViewController: UIViewController {
             password.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             password.heightAnchor.constraint(equalToConstant: 60),
         ])
+        password.delegate = self
+        setupShowPasswordButton()
+
 
         /*
         submitButton = createButton(title: "Continue", bgColor: UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1))
@@ -136,6 +140,24 @@ class NewAcctLandingViewController: UIViewController {
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         return submitButton
     }
+    private func setupShowPasswordButton() {
+        let showPasswordButton = UIButton(type: .custom)
+        showPasswordButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        showPasswordButton.tintColor = .black
+        showPasswordButton.translatesAutoresizingMaskIntoConstraints = false
+        showPasswordButton.addTarget(self, action: #selector(showPassword), for: .touchUpInside)
+        view.addSubview(showPasswordButton)
+        
+        NSLayoutConstraint.activate([
+            showPasswordButton.widthAnchor.constraint(equalToConstant: 30),
+            showPasswordButton.heightAnchor.constraint(equalToConstant: 20),
+            showPasswordButton.centerYAnchor.constraint(equalTo: password.centerYAnchor),
+            showPasswordButton.trailingAnchor.constraint(equalTo: password.trailingAnchor, constant: -10)
+        ])
+    }
+    @objc private func showPassword() {
+        password.isSecureTextEntry = !password.isSecureTextEntry
+    }
     
 
     
@@ -144,16 +166,112 @@ class NewAcctLandingViewController: UIViewController {
     }
     
     @objc func nextTapped() {
-        let newAcct1VC = NewAcct1ViewController()
-        newAcct1VC.modalPresentationStyle = .overFullScreen
-        present(newAcct1VC, animated: true)
+
     }
     @IBAction func continuePressed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(identifier: "CreateAccount1")
-        vc.modalPresentationStyle = .overFullScreen
-        self.present(vc, animated: true)
+        guard let email = email.text, !email.isEmpty,
+              let password = password.text, !password.isEmpty
+                
+                
+        else{
+            print("missing field data")
+            let alert = UIAlertController(title: "Alert", message: "Fill the blanks", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Sorry I won't do it again", style: .default, handler: nil))
+            present(alert, animated: true, completion:  {
+                return
+            })
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let usersCollection = db.collection("users")
+        usersCollection.whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                // Handle the error
+                print("Error getting documents: \(error)")
+            } else {
+                // Check if the query returned any documents
+                if let document = querySnapshot?.documents.first {
+                    // Document exists with the given email
+                    print("email already exists, wrong password")
+                    UserDefaults.standard.set(false, forKey: "authenticated")
+                    let alert = UIAlertController(title: "Alert", message: "Account already exists", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion:  {
+                        return
+                    })
+                    //exit everything, wrong password happened
+                    
+    
+                }
+                else{
+                    //email does not exist
+                    if email.contains(".edu") == false {
+                        print("it says use SCHOOL email")
+                        let alert = UIAlertController(title: "Alert", message: "Please use your school (.edu) email.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Sorry, I won't do it again.", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion:  {
+                            return
+                        })
+                        
+                    return
+                    }
+                    if self.isPasswordValid(password) == false {
+                        let alert = UIAlertController(title: "Alert", message: "Password invalid. Must contain uppercase, lowercase, and numbers", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Sorry, I won't do it again.", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion:  {
+                            return
+                        })
+                    return
+                    }
+                    
+                    
+                    createEmail = email
+                    createPassword = password
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let vc = storyboard.instantiateViewController(identifier: "CreateAccount1")
+                    vc.modalPresentationStyle = .overFullScreen
+                    self.present(vc, animated: true)
+
+                }
+            }
+        }
+ 
+    
+    
     }
+    func isPasswordValid(_ password: String) -> Bool {
+        // Check if the password is at least 6 characters long
+        guard password.count >= 6 else {
+            return false
+        }
+
+        // Check if the password contains at least one uppercase letter
+        let uppercaseLetterRegex = ".*[A-Z]+.*"
+        let uppercaseLetterTest = NSPredicate(format: "SELF MATCHES %@", uppercaseLetterRegex)
+        guard uppercaseLetterTest.evaluate(with: password) else {
+            return false
+        }
+
+        // Check if the password contains at least one lowercase letter
+        let lowercaseLetterRegex = ".*[a-z]+.*"
+        let lowercaseLetterTest = NSPredicate(format: "SELF MATCHES %@", lowercaseLetterRegex)
+        guard lowercaseLetterTest.evaluate(with: password) else {
+            return false
+        }
+
+        // Check if the password contains at least one numeric digit
+        let numericDigitRegex = ".*[0-9]+.*"
+        let numericDigitTest = NSPredicate(format: "SELF MATCHES %@", numericDigitRegex)
+        guard numericDigitTest.evaluate(with: password) else {
+            return false
+        }
+
+        // All criteria met
+        return true
+    }
+    
+
 }
 
 

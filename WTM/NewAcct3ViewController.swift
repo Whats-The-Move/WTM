@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class NewAcct3ViewController: UIViewController {
 
@@ -77,6 +79,137 @@ class NewAcct3ViewController: UIViewController {
 
     
     @IBAction func partyPressed(_ sender: Any) {
+        guard let username = username.text, !username.isEmpty,
+              let displayName = displayName.text, !displayName.isEmpty,
+              let interests = interests.text, !interests.isEmpty
+            
+
+        else{
+            print("missing field data")
+            let alert = UIAlertController(title: "Alert", message: "Fill the blanks", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Sorry I won't do it again", style: .default, handler: nil))
+            present(alert, animated: true, completion:  {
+                return
+            })
+            return
+        }
+        createUsername = username
+        createDisplayName = displayName
+        createInterests = interests
+        
+        if username.contains(" ") {
+            print("Username contains spaces")
+            let alert = UIAlertController(title: "Alert", message: "Username should not contain spaces", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        checkUsernameAvailability(username: username) { isAvailable, error in
+            if let error = error {
+                // Handle the error
+                print("Error checking username availability: \(error.localizedDescription)")
+                return
+            }
+          
+            if isAvailable {
+                // Create a new user with email and password
+                Auth.auth().createUser(withEmail: createEmail, password: createPassword) { (authResult, error) in
+                    if let error = error {
+                        // Handle the error
+                        print("Error creating user: \(error.localizedDescription)")
+                        let alert = UIAlertController(title: "Alert", message: "Error creating user", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }
+                    
+                    // User successfully created, proceed with adding data to Firestore
+                    if let authResult = authResult {
+                        let uid = authResult.user.uid
+                        let userRef = Firestore.firestore().collection("users").document(uid)
+                        
+                        let data: [String: Any] = [
+                            "email": createEmail,
+                            "username": createUsername,
+                            "name": createDisplayName,
+                            "phone": createPhone,
+                            "interests": createInterests,
+                            "profilePic": createImageURL,
+                            "uid": uid,
+                            "images": [],
+                            "bestFriends": [],
+                            "friends": [],
+                            "fcmToken": userFcmToken,
+                            "pendingFriendRequests": [],
+                            "spots": []
+                        ]
+                        
+                        userRef.setData(data, merge: true) { error in
+                            if let error = error {
+                                // Handle the error
+                                print("Error creating Firestore document: \(error.localizedDescription)")
+                                let alert = UIAlertController(title: "Alert", message: "Error creating Firestore document", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                                return
+                            }
+                            
+                            // Success!
+                            UserDefaults.standard.set(true, forKey: "authenticated")
+
+                            print("Added username, name, phone, and interests")
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let appHomeVC = storyboard.instantiateViewController(identifier: "createAddFriend")
+                            appHomeVC.modalPresentationStyle = .overFullScreen
+                            self.present(appHomeVC, animated: true)
+                        }
+                    }
+                }
+          
+            }
+            else{
+                // Username is already taken
+                print("Username is already taken")
+                let alert = UIAlertController(title: "Alert", message: "Username taken", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                return // Exit the entire function
+            }
+        }
+        // Check if the username is valid (add your validation logic here)
+
+        
+     
+        /*
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(identifier: "CreateAccount1")
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: true)*/
+    }
+    func checkUsernameAvailability(username: String, completion: @escaping (Bool, Error?) -> Void) {
+        let db = Firestore.firestore()
+        let usersCollection = db.collection("users")
+        
+        let query = usersCollection.whereField("username", isEqualTo: username)
+        
+        query.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                // Handle the error
+                completion(false, error)
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                // No documents found, username is available
+                completion(true, nil)
+                return
+            }
+            
+            // If any documents are found, the username is already taken
+            let isTaken = !documents.isEmpty
+            completion(!isTaken, nil)
+        }
     }
     
 

@@ -1591,32 +1591,30 @@
         <!--Party Acct View Controller-->
         <scene sceneID="a9l-I7-B3x">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="KxP-oA-FbL" customClass="PartyAcctViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreatePartyAcct" modalPresentationStyle="fullScreen" id="KxP-oA-FbL" customClass="PartyAcctViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5UT-l3-DwY">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="WTM_" translatesAutoresizingMaskIntoConstraints="NO" id="mQP-uT-ome">
-                                <rect key="frame" x="75" y="94" width="240" height="101"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bar/Frat/Party Application" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNa-Os-aQ4">
-                                <rect key="frame" x="67" y="196" width="256" height="28"/>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="21"/>
+                                <rect key="frame" x="49" y="119" width="293" height="32"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YQy-vI-Tmk"/>
-                        <color key="backgroundColor" red="1" green="0.087840844869930088" blue="0.57871482684965037" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="mQP-uT-ome" firstAttribute="top" secondItem="YQy-vI-Tmk" secondAttribute="top" constant="47" id="5JT-FW-Ki8"/>
-                            <constraint firstItem="mQP-uT-ome" firstAttribute="leading" secondItem="YQy-vI-Tmk" secondAttribute="leading" constant="75" id="EuV-A4-IKI"/>
-                            <constraint firstItem="nNa-Os-aQ4" firstAttribute="centerX" secondItem="mQP-uT-ome" secondAttribute="centerX" id="FQ4-Zq-7x5"/>
-                            <constraint firstItem="nNa-Os-aQ4" firstAttribute="top" secondItem="mQP-uT-ome" secondAttribute="bottom" constant="1" id="ee4-3b-lOz"/>
-                            <constraint firstItem="mQP-uT-ome" firstAttribute="centerX" secondItem="5UT-l3-DwY" secondAttribute="centerX" id="wrq-8H-xao"/>
+                            <constraint firstItem="YQy-vI-Tmk" firstAttribute="trailing" secondItem="nNa-Os-aQ4" secondAttribute="trailing" constant="48" id="QIK-7S-Mpu"/>
+                            <constraint firstItem="nNa-Os-aQ4" firstAttribute="top" secondItem="YQy-vI-Tmk" secondAttribute="top" constant="72" id="bdE-Dw-pT4"/>
+                            <constraint firstItem="nNa-Os-aQ4" firstAttribute="leading" secondItem="YQy-vI-Tmk" secondAttribute="leading" constant="49" id="kS6-xa-1hA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eMu-xL-UaC"/>
+                    <connections>
+                        <outlet property="barLabel" destination="nNa-Os-aQ4" id="2xO-8g-bPS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pbl-N1-GX1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3440,17 +3438,27 @@
                                     <action selector="continueTapped:" destination="jbf-o5-BYN" eventType="touchUpInside" id="NI4-dP-hTS"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lnf-8N-84a">
+                                <rect key="frame" x="120" y="229" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Lnf-8N-84a" secondAttribute="height" multiplier="3:3" id="zJG-qm-DNy"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Mp4-Br-YvR"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Mp4-Br-YvR" firstAttribute="trailing" secondItem="rFV-zN-fGK" secondAttribute="trailing" constant="30" id="E2Z-9m-Lna"/>
+                            <constraint firstItem="rFV-zN-fGK" firstAttribute="top" secondItem="Lnf-8N-84a" secondAttribute="bottom" constant="15" id="IRW-7i-fUZ"/>
+                            <constraint firstItem="Mp4-Br-YvR" firstAttribute="trailing" secondItem="Lnf-8N-84a" secondAttribute="trailing" constant="120" id="PkM-Gq-Sja"/>
+                            <constraint firstItem="Lnf-8N-84a" firstAttribute="leading" secondItem="Mp4-Br-YvR" secondAttribute="leading" constant="120" id="YGW-Tl-FIG"/>
+                            <constraint firstItem="rFV-zN-fGK" firstAttribute="top" secondItem="l9O-oY-yNE" secondAttribute="topMargin" constant="347" id="ZJu-wT-hvW"/>
                             <constraint firstItem="rFV-zN-fGK" firstAttribute="leading" secondItem="Mp4-Br-YvR" secondAttribute="leading" constant="30" id="d0Q-Wa-an7"/>
-                            <constraint firstItem="Mp4-Br-YvR" firstAttribute="bottom" secondItem="rFV-zN-fGK" secondAttribute="bottom" constant="356" id="uZp-Ru-WeQ"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="button" destination="rFV-zN-fGK" id="yM6-Ez-Om1"/>
+                        <outlet property="profilePic" destination="Lnf-8N-84a" id="6QJ-kz-jF8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zOR-XJ-33U" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -51,6 +51,18 @@ class WelcomePageViewController: UIViewController {
         return button
     }()
 
+    let fratBarButton: UIButton = {
+        let button = UIButton()
+        let attributedString = NSMutableAttributedString(string: "Frat, Bar, or Club? ")
+        attributedString.append(NSAttributedString(string: "Click here", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 1)]))
+        button.setAttributedTitle(attributedString, for: .normal)
+        button.titleLabel?.font = UIFont(name: "Futura-Medium", size: 16)
+        button.titleLabel?.textColor = .gray
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(fratBarTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     let signUpButton: UIButton = {
         let button = UIButton()
         let attributedString = NSMutableAttributedString(string: "No account yet? ")
@@ -83,6 +95,7 @@ class WelcomePageViewController: UIViewController {
         view.addSubview(welcomePicImageView)
         view.addSubview(signInButton)
         view.addSubview(signUpButton)
+        view.addSubview(fratBarButton)
 
         // Set width and height anchors
         NSLayoutConstraint.activate([
@@ -99,7 +112,9 @@ class WelcomePageViewController: UIViewController {
             signInButton.heightAnchor.constraint(equalToConstant: 45),
             
             signUpButton.widthAnchor.constraint(equalToConstant: 310),
-            signUpButton.heightAnchor.constraint(equalToConstant: 45)
+            signUpButton.heightAnchor.constraint(equalToConstant: 45),
+            fratBarButton.widthAnchor.constraint(equalToConstant: 310),
+            fratBarButton.heightAnchor.constraint(equalToConstant: 45)
         ])
 
         // Center everything on the X-axis
@@ -108,7 +123,8 @@ class WelcomePageViewController: UIViewController {
             signInDescriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             welcomePicImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            fratBarButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
 
         // Add vertical constraints
@@ -116,8 +132,9 @@ class WelcomePageViewController: UIViewController {
             welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
             signInDescriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 14),
             welcomePicImageView.topAnchor.constraint(equalTo: signInDescriptionLabel.bottomAnchor, constant: 60),
-            signInButton.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -180),
-            signUpButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 10)
+            signInButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
+            signUpButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 15),
+            fratBarButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 5)
         ])
     }
 
@@ -136,6 +153,17 @@ class WelcomePageViewController: UIViewController {
         */
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "CreateAccountStart")
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: true)
+    }
+    @objc func fratBarTapped() {
+        //todo
+        /*let newAcct1VC = NewAcctLandingViewController()
+        newAcct1VC.modalPresentationStyle = .overFullScreen
+        present(newAcct1VC, animated: true)
+        */
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(identifier: "CreatePartyAcct")
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }

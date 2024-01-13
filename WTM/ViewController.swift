@@ -189,41 +189,42 @@ class ViewController: UIViewController {
             guard error == nil else{
                 //say if pass wrong error here. look through user database, if this is already a user then say wrong password and return out of function here
                 //look through what we have in firestore, is the email entered already there? if so give alert which says wrong password
-
+                
                 let db = Firestore.firestore()
                 let usersCollection = db.collection("users")
                 usersCollection.whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
-                  if let error = error {
-                    // Handle the error
-                    print("Error getting documents: \(error)")
-                  } else {
-                    // Check if the query returned any documents
-                      if let document = querySnapshot?.documents.first {
-                          // Document exists with the given email
-                          print("email already exists, wrong password")
-                          UserDefaults.standard.set(false, forKey: "authenticated")
-                          let alert = UIAlertController(title: "Alert", message: "Wrong password.", preferredStyle: .alert)
-                          alert.addAction(UIAlertAction(title: "Sorry, I'll get it right this time", style: .default, handler: nil))
-                          self?.present(alert, animated: true, completion:  {
-                              return
-                          })
-                          //exit everything, wrong password happened
-                          return
-                          
-                      
-                      print("Document data: \(document.data())")
+                    if let error = error {
+                        // Handle the error
+                        print("Error getting documents: \(error)")
                     } else {
-                      // No document exists with the given email, make new account
-                      print("Document does not exist")
-                        UserDefaults.standard.set(false, forKey: "partyAccount")
-
-                        UserDefaults.standard.set(true, forKey: "authenticated")
-                        //strongSelf.showCreateAccount(email: email, password: password)
-                        
+                        // Check if the query returned any documents
+                        if let document = querySnapshot?.documents.first {
+                            // Document exists with the given email
+                            print("email already exists, wrong password")
+                            UserDefaults.standard.set(false, forKey: "authenticated")
+                            let alert = UIAlertController(title: "Alert", message: "Wrong password.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Sorry, I'll get it right this time", style: .default, handler: nil))
+                            self?.present(alert, animated: true, completion:  {
+                                return
+                            })
+                            //exit everything, wrong password happened
+                            return
+                            
+                            
+                            print("Document data: \(document.data())")
+                        } else {
+                            // No document exists with the given email, make new account
+                            print("Document does not exist")
+                            UserDefaults.standard.set(false, forKey: "partyAccount")
+                            
+                            UserDefaults.standard.set(true, forKey: "authenticated")
+                            //strongSelf.showCreateAccount(email: email, password: password)
+                            
+                        }
                     }
-                  }
                 }
-                 return }
+                return
+            }
             
             if let currentUser = Auth.auth().currentUser {
                 print(currentUser.uid)
