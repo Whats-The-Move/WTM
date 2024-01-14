@@ -74,6 +74,7 @@
 		10B616492B52492F00CE1226 /* NewAcct1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B616482B52492F00CE1226 /* NewAcct1ViewController.swift */; };
 		10B6164B2B524C9B00CE1226 /* NewAcct2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6164A2B524C9B00CE1226 /* NewAcct2ViewController.swift */; };
 		10B6164D2B524EC300CE1226 /* NewAcct3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6164C2B524EC300CE1226 /* NewAcct3ViewController.swift */; };
+		10B6164F2B53803300CE1226 /* MyEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B6164E2B53803300CE1226 /* MyEventsViewController.swift */; };
 		10C1699A2AB969AB00355BC4 /* ShowEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C169992AB969AB00355BC4 /* ShowEventViewController.swift */; };
 		10C5DE5C29AC0C6B00BBA1D5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */; };
 		1411292AC27485DEEBB18704 /* Pods_WTM_WTMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */; };
@@ -174,6 +175,7 @@
 		10B616482B52492F00CE1226 /* NewAcct1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAcct1ViewController.swift; sourceTree = "<group>"; };
 		10B6164A2B524C9B00CE1226 /* NewAcct2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAcct2ViewController.swift; sourceTree = "<group>"; };
 		10B6164C2B524EC300CE1226 /* NewAcct3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAcct3ViewController.swift; sourceTree = "<group>"; };
+		10B6164E2B53803300CE1226 /* MyEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsViewController.swift; sourceTree = "<group>"; };
 		10C169992AB969AB00355BC4 /* ShowEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventViewController.swift; sourceTree = "<group>"; };
 		10C5DE5A29AC0C6B00BBA1D5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		438AFBCFD51F6B51CFCF76F5 /* Pods_WTM_WTMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WTM_WTMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -268,6 +270,7 @@
 				105CCA0729AD4EE2003CF893 /* MyFriendsViewController.swift */,
 				087FE8EB298DDA26001B17B6 /* Gif.swift */,
 				103D809F2A38E71F0032E4D3 /* InviteListViewController.swift */,
+				10B6164E2B53803300CE1226 /* MyEventsViewController.swift */,
 				109B94022AA1BEDC002D4CEF /* BarSignInViewController.swift */,
 				08CF03C8297CEFAB0074A878 /* Party.swift */,
 				10B616422B508C3000CE1226 /* EventLoad.swift */,
@@ -613,6 +616,7 @@
 				08C7C5DF2A30DC0E00B8E9F6 /* allFriendsPopUpViewController.swift in Sources */,
 				083B61902A1FD00400018798 /* CustomCellClass.swift in Sources */,
 				103D80A02A38E71F0032E4D3 /* InviteListViewController.swift in Sources */,
+				10B6164F2B53803300CE1226 /* MyEventsViewController.swift in Sources */,
 				08CF0397297CB6030074A878 /* ViewController.swift in Sources */,
 				109B93F72A6B5A9E002D4CEF /* PublicPopUpViewController.swift in Sources */,
 				087AC2EF2B3522B300F3CCBE /* anonymousChatViewController.swift in Sources */,

@@ -61,13 +61,21 @@ class UserSelectedViewController: UIViewController, UITableViewDelegate, UITable
                 self.usernameLabel.text = "Username not available"
             }
 
-            if let spots = document.data()?["spots"] as? [String: Int] {
+            if let interests = document.data()?["interests"] as? String {
                 // Get the party with the largest occurrence (maximum value) from the spots map
+                if interests != "" {
+                    self.favSpotLabel.text = "Likes: \(interests)"
+                }
+
+                /*
                 if let maxSpot = spots.max(by: { $0.value < $1.value }) {
-                    self.favSpotLabel.text = "Favorite Spot: \(maxSpot.key)"
+                    self.favSpotLabel.text = "Interests: \(maxSpot.key)"
                 } else {
                     self.favSpotLabel.text = "No favorite spot found"
-                }
+                }*/
+            }                
+            else {
+                self.favSpotLabel.text = "Likes: None entered"
             }
 
             // Fetch the friends for the current user and the selected user

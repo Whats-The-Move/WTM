@@ -1322,8 +1322,8 @@
                         <segue destination="M1m-Q3-HIT" kind="relationship" relationship="viewControllers" id="7fv-8A-rol"/>
                         <segue destination="AyE-Da-atm" kind="relationship" relationship="viewControllers" id="z9G-pI-IXW"/>
                         <segue destination="rRF-pa-RY0" kind="relationship" relationship="viewControllers" id="pQz-mh-iwU"/>
-                        <segue destination="cBJ-Ct-Tgw" kind="relationship" relationship="viewControllers" id="KYV-6J-S5v"/>
                         <segue destination="pnL-cO-tBO" kind="relationship" relationship="viewControllers" id="h3E-DM-OH2"/>
+                        <segue destination="Fvh-Su-O6F" kind="relationship" relationship="viewControllers" id="HZT-Gj-yoL"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UPN-kv-oKl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2742,7 +2742,7 @@
             <objects>
                 <viewController id="cBJ-Ct-Tgw" customClass="upcomingEventsViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MMZ-YI-WzP">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="Mbj-kE-kfd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -3069,6 +3069,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mNt-HL-lIQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5444.6153846153848" y="822.51184834123217"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="RNH-X8-UoE">
+            <objects>
+                <viewController storyboardIdentifier="myEvents" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Fvh-Su-O6F" customClass="MyEventsViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0Ms-Gp-lMw">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="qDp-HI-9LP"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="eWx-eo-VPg"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sU2-A9-wG0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6361" y="829"/>
         </scene>
         <!--Weekly View Controller-->
         <scene sceneID="WY3-vz-MLe">

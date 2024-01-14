@@ -15,6 +15,8 @@ class EventDetailsViewController: UIViewController {
     var goingButton: UIButton!
     var isUserGoing = false
     var pplGoing: UIStackView!
+    
+    var friendsGoingList: [User] = []
 
 
 
@@ -38,7 +40,10 @@ class EventDetailsViewController: UIViewController {
         addBackButton()
         addNameLabel()
         addInfoStackView()
-        //configureProfileImageStackView(with: ["00NOZzy9prZdbWpLdE61dgZIEj83", "01sdNvA3ksgQn7ivXWEve9wpnQ83"])
+        /*checkFriendshipStatus(isGoing: eventLoad.isGoing) { commonFriends in
+            self.assignProfilePictures(commonFriends: commonFriends)
+            //print(commonFriends)
+        }*/
         assignProfilePictures(commonFriends: ["00NOZzy9prZdbWpLdE61dgZIEj83", "01sdNvA3ksgQn7ivXWEve9wpnQ83"])
         addDescriptionLabel()
         setupGrayBkgd()
@@ -102,7 +107,7 @@ class EventDetailsViewController: UIViewController {
     func addNameLabel() {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.textColor = .white
-        nameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        nameLabel.font = UIFont(name: "Futura-Medium", size: 24)
         nameLabel.text = eventLoad.eventName
         nameLabel.adjustsFontSizeToFitWidth = true
         nameLabel.minimumScaleFactor = 0.5 // Adjust as needed
@@ -158,7 +163,7 @@ class EventDetailsViewController: UIViewController {
     func createInfoLabel(text: String) -> UIStackView {
         let label = UILabel()
         label.text = text
-        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        label.font = UIFont(name: "Futura-Medium", size: 14)
 
         label.textColor = .gray
         label.adjustsFontSizeToFitWidth = true
@@ -190,7 +195,7 @@ class EventDetailsViewController: UIViewController {
     func addDescriptionLabel() {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.text = eventLoad.description
-        descriptionLabel.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        descriptionLabel.font = UIFont(name: "Futura-Medium", size: 15)
 
         descriptionLabel.textColor = .white
         descriptionLabel.numberOfLines = 0 // Allow multiple lines for description
@@ -248,12 +253,17 @@ class EventDetailsViewController: UIViewController {
                 }
 
                 if let document = document, document.exists {
-                    if let profilePicURL = document.data()?["profilePic"] as? String {
+                    if let profilePicURL = document.data()?["profilePic"] as? String,
+                       let usersName = document.data()?["name"] as? String,
+                       let usersEmail = document.data()?["email"] as? String,
+                       let usersUsername = document.data()?["username"] as? String {
                         // Assuming you have a function to retrieve the image from the URL
                         self.loadImage(from: profilePicURL, to: profileImageView)
+                        let person = User(uid: friendUID, email: usersEmail, name: usersName, username: usersUsername, profilePic: profilePicURL)
+                        self.friendsGoingList.append(person)
                     } else {
-                        print("No profile picture found for friend with UID: \(friendUID)")
-                        profileImageView.image = AppHomeViewController().transImage
+                        print("Field data missing for friend whos uid: \(friendUID)")
+                        profileImageView.image = UIImage(named: "pinkPFP")
                         profileImageView.layer.borderWidth = 0
                     }
                 }
@@ -330,25 +340,26 @@ class EventDetailsViewController: UIViewController {
         // Adjust the contentView of the view controller as needed
         // Replace the following line with the actual background color you want for the view controller
     }
-    func profileClicked(for party: Party) {
-        // Create an instance of friendsGoingViewController
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let friendsGoingVC = storyboard.instantiateViewController(withIdentifier: "FriendsGoing") as! friendsGoingViewController
-        
-        // Pass the selected party object
-        friendsGoingVC.selectedParty = party
-        
-        friendsGoingVC.modalPresentationStyle = .overFullScreen
-        
-        // Present the friendsGoingVC modally
-        present(friendsGoingVC, animated: true, completion: nil)
-    }
+
     
     @objc func profTapped(_ sender: UITapGestureRecognizer) {
         // Handle the profile image tap event (e.g., show a profile view)
+        
         if let tappedImageView = sender.view as? UIImageView {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let friendsGoingVC = storyboard.instantiateViewController(withIdentifier: "FriendsGoing") as! friendsGoingViewController
+            
+            // Pass the selected party object
+            friendsGoingVC.friendsGoing = self.friendsGoingList
+            friendsGoingVC.eventName = eventLoad.eventName
+            
+            friendsGoingVC.modalPresentationStyle = .overFullScreen
+            
+            // Present the friendsGoingVC modally
+            present(friendsGoingVC, animated: true, completion: nil)
             // Perform the action based on the tappedImageView
             print("Profile image tapped!")
+            
             //CALL PROFILE CLICKED ABOVE^^
             
         }
@@ -372,7 +383,7 @@ class EventDetailsViewController: UIViewController {
         bkgdLabel = UILabel()
         bkgdLabel.text = "Are you..."
         bkgdLabel.textColor = .white
-        bkgdLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        bkgdLabel.font = UIFont(name: "Futura-Medium", size: 18)
 
         bkgdLabel.translatesAutoresizingMaskIntoConstraints = false
         grayBkgd.addSubview(bkgdLabel)
@@ -387,7 +398,7 @@ class EventDetailsViewController: UIViewController {
         goingButton = UIButton()
         goingButton.setTitle("Going?", for: .normal)
         goingButton.setTitleColor(.white, for: .normal)
-        goingButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        goingButton.titleLabel?.font = UIFont(name: "Futura-Medium", size: 18)
         let eventref = Database.database().reference().child(currCity + "Events").child(eventLoad.date).child(eventLoad.eventKey)
         //                            var isUserGoing = false
         eventref.child("isGoing").observeSingleEvent(of: .value) { snapshot in
@@ -408,7 +419,7 @@ class EventDetailsViewController: UIViewController {
 
                     }
                     else{
-                        self.goingButton.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 0.5)
+                        self.goingButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
 
                     }
     
@@ -497,7 +508,7 @@ class EventDetailsViewController: UIViewController {
         
     }
     func locallyDecrement (){
-        self.goingButton.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 0.5)
+        self.goingButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
 
         self.updatePeopleGoingLabel(up: false)
         
@@ -538,6 +549,32 @@ class EventDetailsViewController: UIViewController {
 
 
 
+    func checkFriendshipStatus(isGoing: [String], completion: @escaping ([String]) -> Void) {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("Error: No user is currently signed in.")
+            completion([])
+            return
+        }
+
+        let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                guard let friendList = document.data()?["friends"] as? [String] else {
+                    print("Error: No friends list found.")
+                    completion([])
+                    return
+                }
+
+                let commonFriends = friendList.filter { isGoing.contains($0) }
+                print(commonFriends)
+                completion(commonFriends)
+            } else {
+                print("Error: Current user document does not exist.")
+                completion([])
+            }
+        }
+    }
 
     @objc func buttonClickAnimation() {
         UIView.animate(withDuration: 0.1) {
