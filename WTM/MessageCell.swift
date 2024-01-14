@@ -3,12 +3,17 @@ import Firebase
 import FirebaseAuth
 import Kingfisher
 
+protocol MessageCellDelegate: AnyObject {
+    func repliesButtonTapped(inCell cell: MessageCell, withMessage message: chatMessage)
+}
+
 class MessageCell: UITableViewCell {
 
     // MARK: - Properties
     private var minHeightConstraint: NSLayoutConstraint!
     private var message: chatMessage?
-
+    weak var delegate: MessageCellDelegate?
+    
     private let tagLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Futura-Medium", size: 18)
@@ -65,6 +70,7 @@ class MessageCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         setupButtons()
+        setupImageView()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -106,18 +112,12 @@ class MessageCell: UITableViewCell {
             }
         }
         
-        let chatRef = Database.database().reference().child("\(currCity)Chat").child(message.chatID)
-
-        chatRef.child("picture").observeSingleEvent(of: .value) { snapshot in
-            if let pictureURL = snapshot.value as? String {
-                // If there is a picture URL, show the pictureImageView using Kingfisher
-                self.pictureImageView.isHidden = false
-                let url = URL(string: pictureURL)
-                self.pictureImageView.kf.setImage(with: url)
-            } else {
-                // If there is no picture URL, hide the pictureImageView
-                self.pictureImageView.isHidden = true
-            }
+        if message.picture != "" {
+            self.pictureImageView.isHidden = false
+            let url = URL(string: message.picture)
+            self.pictureImageView.kf.setImage(with: url)
+        } else {
+            self.pictureImageView.isHidden = true
         }
 
         backgroundColor = .black
@@ -196,6 +196,13 @@ class MessageCell: UITableViewCell {
             self.updateLikesDislikesInDatabase(message: message)
         }
     }
+    
+    @objc private func repliesButtonTapped() {
+        print("replies tapped")
+        if let message = message {
+            delegate?.repliesButtonTapped(inCell: self, withMessage: message)
+        }
+    }
 
     private func updateLikesDislikesInDatabase(message: chatMessage) {
         guard let currentUID = Auth.auth().currentUser?.uid else {
@@ -224,7 +231,6 @@ class MessageCell: UITableViewCell {
         contentView.addSubview(likeButton)
         contentView.addSubview(dislikeButton)
         contentView.addSubview(repliesButton)
-        contentView.addSubview(pictureImageView)
         contentView.backgroundColor = .white
 
         // Additional constraints for spacing and rounded corners
@@ -250,32 +256,49 @@ class MessageCell: UITableViewCell {
         minHeightConstraint.priority = .required
         minHeightConstraint.isActive = true
         messageLabel.addObserver(self, forKeyPath: "contentSize", options: [.new], context: nil)
-        
+    }
+    
+    private func setupImageView() {
+        contentView.addSubview(pictureImageView)
+
         pictureImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        pictureImageView.topAnchor.constraint(equalTo: messageLabel.bottomAnchor).isActive = true
-        pictureImageView.bottomAnchor.constraint(equalTo: repliesButton.topAnchor).isActive = true
+        pictureImageView.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8).isActive = true
         pictureImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
         pictureImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
-        pictureImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        //pictureImageView.bottomAnchor.constraint(equalTo: repliesButton.topAnchor, constant: 8).isActive = true
+        
+        // Constrain picture height to 200 if there is an image
+        let pictureHeightConstraint = pictureImageView.heightAnchor.constraint(equalToConstant: 200)
+        pictureHeightConstraint.priority = .required
+        pictureHeightConstraint.isActive = true
+
+        let aspectRatioConstraint = NSLayoutConstraint(item: pictureImageView,
+                                                       attribute: .height,
+                                                       relatedBy: .equal,
+                                                       toItem: pictureImageView,
+                                                       attribute: .width,
+                                                       multiplier: 9.0/16.0,
+                                                       constant: 0)
+        aspectRatioConstraint.priority = .required
+        aspectRatioConstraint.isActive = true
+
         pictureImageView.contentMode = .scaleAspectFit
         pictureImageView.layer.cornerRadius = 8
         pictureImageView.clipsToBounds = true
     }
-    
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize", let newSize = change?[.newKey] as? CGSize {
             var heightIncrease = newSize.height - messageLabel.bounds.height + 25
 
-            // Check if there is a picture
-            if !pictureImageView.isHidden {
-                // Add additional height for the picture
-                heightIncrease += 200 + 10
+            if !message!.picture.isEmpty {
+                heightIncrease += 200.0 + 10.0
             }
 
-            self.minHeightConstraint.constant += heightIncrease
+            // Update the cell height
+            self.minHeightConstraint.constant = max(125.0, self.minHeightConstraint.constant + heightIncrease)
         }
     }
-
 
     // Remove observer when the cell is deallocated
     deinit {
@@ -302,7 +325,7 @@ class MessageCell: UITableViewCell {
         repliesButton.translatesAutoresizingMaskIntoConstraints = false
         repliesButton.trailingAnchor.constraint(equalTo: likeButton.leadingAnchor, constant: -32).isActive = true
         repliesButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
-        repliesButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        repliesButton.addTarget(self, action: #selector(repliesButtonTapped), for: .touchUpInside)
         repliesButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
     }
 

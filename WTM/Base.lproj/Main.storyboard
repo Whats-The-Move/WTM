@@ -1533,6 +1533,21 @@
             </objects>
             <point key="canvasLocation" x="2587.6923076923076" y="814.69194312796208"/>
         </scene>
+        <!--Replies View Controller-->
+        <scene sceneID="7JK-P4-cbJ">
+            <objects>
+                <viewController storyboardIdentifier="repliesVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="9dP-oo-9cP" customClass="repliesViewController" customModule="WTM" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cuO-jK-UYI">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="yel-zi-Yug"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f9v-eQ-LuR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2706" y="-1295"/>
+        </scene>
         <!--Add Message View Controller-->
         <scene sceneID="OUS-Jn-6Zp">
             <objects>

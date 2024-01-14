@@ -1,7 +1,7 @@
 import UIKit
 import Firebase
 
-class messagingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class messagingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MessageCellDelegate {
 
     private let titleLabel = UILabel()
     private let tableView = UITableView()
@@ -53,14 +53,27 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
                     let dislikes = messageData["dislikes"] as? [String],
                     let time = messageData["time"] as? Int
                 {
-                    let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time)
-                    self.messages.append(newMessage)
-
-                    // Sort messages based on time before reloading the table view
-                    self.messages.sort { $0.time > $1.time }
-                    self.messagesTwo = self.messages
-                    self.noMessagesLabel.isHidden = !self.messages.isEmpty
-                    self.tableView.reloadData()
+                    var picture = ""
+                    messageRef.child("picture").observeSingleEvent(of: .value) { snapshot in
+                        if let pictureURL = snapshot.value as? String {
+                            picture = pictureURL
+                            let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+                            self.messages.append(newMessage)
+                            // Sort messages based on time before reloading the table view
+                            self.messages.sort { $0.time > $1.time }
+                            self.messagesTwo = self.messages
+                            self.noMessagesLabel.isHidden = !self.messages.isEmpty
+                            self.tableView.reloadData()
+                        } else {
+                            let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+                            self.messages.append(newMessage)
+                            // Sort messages based on time before reloading the table view
+                            self.messages.sort { $0.time > $1.time }
+                            self.messagesTwo = self.messages
+                            self.noMessagesLabel.isHidden = !self.messages.isEmpty
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
             }
         }
@@ -79,24 +92,51 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
                     let dislikes = messageData["dislikes"] as? [String],
                     let time = messageData["time"] as? Int
                 {
-                    // Check if the message already exists in the array
-                    if let existingMessage = self.messages.first(where: { $0.chatID == chatID }) {
-                        // Update the existing message
-                        existingMessage.message = message
-                        existingMessage.tag = tag
-                        existingMessage.likes = likes
-                        existingMessage.dislikes = dislikes
-                        existingMessage.time = time
-                    } else {
-                        // Add the new message to the array
-                        let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time)
-                        self.messages.append(newMessage)
-                    }
+                    let picture = ""
+                    messageRef.child("picture").observeSingleEvent(of: .value) { snapshot in
+                        if let pictureURL = snapshot.value as? String {
+                            let picture = pictureURL
+                            // Check if the message already exists in the array
+                            if let existingMessage = self.messages.first(where: { $0.chatID == chatID }) {
+                                // Update the existing message
+                                existingMessage.message = message
+                                existingMessage.tag = tag
+                                existingMessage.likes = likes
+                                existingMessage.dislikes = dislikes
+                                existingMessage.time = time
+                                existingMessage.picture = picture
+                            } else {
+                                // Add the new message to the array
+                                let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+                                self.messages.append(newMessage)
+                            }
 
-                    // Sort messages based on time before reloading the table view
-                    self.messages.sort { $0.time > $1.time }
-                    self.messagesTwo = self.messages
-                    self.tableView.reloadData()
+                            // Sort messages based on time before reloading the table view
+                            self.messages.sort { $0.time > $1.time }
+                            self.messagesTwo = self.messages
+                            self.tableView.reloadData()
+                        } else {
+                            // Check if the message already exists in the array
+                            if let existingMessage = self.messages.first(where: { $0.chatID == chatID }) {
+                                // Update the existing message
+                                existingMessage.message = message
+                                existingMessage.tag = tag
+                                existingMessage.likes = likes
+                                existingMessage.dislikes = dislikes
+                                existingMessage.time = time
+                                existingMessage.picture = picture
+                            } else {
+                                // Add the new message to the array
+                                let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+                                self.messages.append(newMessage)
+                            }
+
+                            // Sort messages based on time before reloading the table view
+                            self.messages.sort { $0.time > $1.time }
+                            self.messagesTwo = self.messages
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
             }
         }
@@ -219,10 +259,11 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MessageCell
         let message = messages[indexPath.section]
         cell.configure(with: message)
+        cell.delegate = self
 
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
     }
@@ -263,5 +304,11 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(MessageCell.self, forCellReuseIdentifier: "cell")
+    }
+    
+    func repliesButtonTapped(inCell cell: MessageCell, withMessage message: chatMessage) {
+        let newViewController = repliesViewController()
+        newViewController.mainMessage = message
+        present(newViewController, animated: true, completion: nil)
     }
 }
