@@ -1,6 +1,7 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseAuth
+import FirebaseFirestore
 
 
 class MyEventsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -17,17 +18,32 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        fetchEvents { pastEvents, upcomingEvents in
-            // This code block will be executed after the events are fetched
-            // Setup your UI using pastEvents and upcomingEvents
-            self.pastEvents = pastEvents
-            self.upcomingEvents = upcomingEvents
-            DispatchQueue.main.async {
-                // Make sure to update the UI on the main thread
+        fetchUserEventsGoing { eventsGoingList in
+            guard let eventsGoingList = eventsGoingList else {
+                print("No events or error fetching eventsGoing list.")
+                return
+            }
+            print("eventsgoinglist")
+            print(eventsGoingList)
+
+            // Now fetch the corresponding events from Realtime Database
+            self.fetchEventsMatchingEventsGoing(currCity: currCity + "Events", eventsGoing: eventsGoingList) { matchedEvents in
+                // Process the matched events
+                //var pastEvents: [EventLoad] = []
+                //var upcomingEvents: [EventLoad] = []
+                let currentDate = Date()
+                print(matchedEvents)
+                for event in matchedEvents {
+                    if let eventDate = DateFormatter.yyyyMMdd.date(from: event.date), eventDate < currentDate {
+                        self.pastEvents.append(event)
+                    } else {
+                        self.upcomingEvents.append(event)
+                    }
+                }
                 self.setupUI()
 
-                // For example:
-                // self.updateTableView(with: pastEvents, upcomingEvents)
+                // Here, pastEvents and upcomingEvents are populated with the relevant events
+                // You can now use these arrays to update your UI, etc.
             }
         }
 
@@ -37,10 +53,14 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
         // Setup titleLabel
         titleLabel.font = UIFont(name: "Futura-Medium", size: 34)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = .white
+        titleLabel.text = "My Events"
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.widthAnchor.constraint(equalToConstant: 200),
+            titleLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
 
         // Setup buttons
@@ -67,83 +87,109 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
 
         NSLayoutConstraint.activate([
             myEventsTableView.topAnchor.constraint(equalTo: upcomingEventsButton.bottomAnchor, constant: 20),
-            myEventsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            myEventsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            myEventsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            myEventsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             myEventsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
     private func setupButton(_ button: UIButton, title: String) {
-        print("setting up buton")
         button.setTitle(title, for: .normal)
+
         button.addTarget(self, action: #selector(toggleEventView(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(button)
     }
 
-    @objc func toggleEventView(_ sender: UIButton) {
-        // Reverse the pastBool value
-        pastBool = !pastBool
+    private func updateButtonStyles() {
+        let underlineAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont(name: "Futura-Medium", size: 16) ?? UIFont.systemFont(ofSize: 16),
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
 
-        // Update the button styles based on the value of pastBool
+        let normalAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont(name: "Futura-Medium", size: 16) ?? UIFont.systemFont(ofSize: 16)
+        ]
+
         if pastBool {
-            // When pastBool is true, highlight the pastEventsButton and disable upcomingEventsButton
+            pastEventsButton.setAttributedTitle(NSAttributedString(string: pastEventsButton.currentTitle ?? "", attributes: underlineAttributes), for: .normal)
             pastEventsButton.setTitleColor(.white, for: .normal)
             pastEventsButton.isUserInteractionEnabled = false
 
+            upcomingEventsButton.setAttributedTitle(NSAttributedString(string: upcomingEventsButton.currentTitle ?? "", attributes: normalAttributes), for: .normal)
             upcomingEventsButton.setTitleColor(.gray, for: .normal)
             upcomingEventsButton.isUserInteractionEnabled = true
         } else {
-            // When pastBool is false, highlight the upcomingEventsButton and disable pastEventsButton
+            upcomingEventsButton.setAttributedTitle(NSAttributedString(string: upcomingEventsButton.currentTitle ?? "", attributes: underlineAttributes), for: .normal)
             upcomingEventsButton.setTitleColor(.white, for: .normal)
             upcomingEventsButton.isUserInteractionEnabled = false
 
+            pastEventsButton.setAttributedTitle(NSAttributedString(string: pastEventsButton.currentTitle ?? "", attributes: normalAttributes), for: .normal)
             pastEventsButton.setTitleColor(.gray, for: .normal)
             pastEventsButton.isUserInteractionEnabled = true
         }
+    }
 
-        // You might want to reload your table view or perform other UI updates here
-        // tableView.reloadData() for example
 
+    @objc func toggleEventView(_ sender: UIButton) {
+        pastBool = !pastBool
+        myEventsTableView.reloadData()
+        updateButtonStyles()
+        // Reload your table view or perform other UI updates here
+        // tableView.reloadData()
         print("Button pressed. PastBool is now \(pastBool)")
     }
 
 
-    private func updateButtonStyles() {
-        let buttons = [upcomingEventsButton, pastEventsButton]
-        buttons.forEach { button in
-            button.setTitleColor(button == upcomingEventsButton ? .white : .gray, for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-            // Additional style updates, e.g., underline
-        }
-    }
+
+
 
     // MARK: - TableView Delegate & DataSource Methods
 
+    func fetchUserEventsGoing(completion: @escaping ([String]?) -> Void) {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            completion(nil)
+            return
+        }
 
-    func fetchEvents(completion: @escaping ([EventLoad], [EventLoad]) -> Void) {
+        let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let eventsGoing = document.get("eventsGoing") as? [String] {
+                    // Successfully retrieved the list
+                    completion(eventsGoing)
+                } else {
+                    print("eventsGoing field does not exist")
+                    completion(nil)
+                }
+            } else {
+                print("Document does not exist or error: \(error?.localizedDescription ?? "")")
+                completion(nil)
+            }
+        }
+    }
+
+
+    func fetchEventsMatchingEventsGoing(currCity: String, eventsGoing: [String], completion: @escaping ([EventLoad]) -> Void) {
         let ref = Database.database().reference()
-        let currCityRef = ref.child(currCity + "Events")  // Replace 'currCity' with your current city variable
-        let currentUserUID = Auth.auth().currentUser?.uid ?? ""
-        let currentDate = Date()
+        let currCityRef = ref.child(currCity)
 
         currCityRef.observeSingleEvent(of: .value, with: { snapshot in
-            var pastEvents: [EventLoad] = []
-            var upcomingEvents: [EventLoad] = []
+            var matchedEvents: [EventLoad] = []
 
             guard let cityData = snapshot.value as? [String: Any] else {
-                completion([], [])
+                completion([])
                 return
             }
 
             for (dateString, dateNodes) in cityData {
-                guard let dateData = dateNodes as? [String: Any],
-                      let date = DateFormatter.yyyyMMdd.date(from: dateString) else { continue }
+                guard let dateData = dateNodes as? [String: Any] else { continue }
 
-                for (key, eventData) in dateData {
-                    if let eventDataDict = eventData as? [String: Any],
-                       let isGoing = eventDataDict["isGoing"] as? [String],
-                       isGoing.contains(currentUserUID),
+                for (eventKey, eventData) in dateData {
+                    if eventsGoing.contains(eventKey),
+                       let eventDataDict = eventData as? [String: Any],
                        let creator = eventDataDict["creator"] as? String,
                        let deals = eventDataDict["deals"] as? String,
                        let description = eventDataDict["description"] as? String,
@@ -154,24 +200,16 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
                        let venueName = eventDataDict["venueName"] as? String,
                        let type = eventDataDict["type"] as? String {
                         
-                        let event = EventLoad(creator: creator, date: dateString, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: isGoing, location: location, time: time, venueName: venueName, type: type, eventKey: key)
-                        print("event created")
-                        if date < currentDate {
-                            pastEvents.append(event)
-                        } else {
-                            upcomingEvents.append(event)
-                        }
-                    }
-                    else{
-                        print("missing event data")
+                        let event = EventLoad(creator: creator, date: dateString, deals: deals, description: description, eventName: eventName, imageURL: imageURL, isGoing: [], location: location, time: time, venueName: venueName, type: type, eventKey: eventKey)
+                        matchedEvents.append(event)
                     }
                 }
             }
 
-            completion(pastEvents, upcomingEvents)
+            completion(matchedEvents)
         }) { error in
             print(error.localizedDescription)
-            completion([], [])
+            completion([])
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -185,12 +223,17 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
 
         let event = pastBool ? pastEvents[indexPath.row] : upcomingEvents[indexPath.row]
         cell.configureWithEvent(event: event)
+        cell.backgroundColor = .clear
+        cell.layer.cornerRadius = 5
+        cell.clipsToBounds = true
+        cell.layer.borderColor = UIColor.white.cgColor
+        cell.layer.borderWidth = 1
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200 // Set cell height to 200px
+        return 150 // Set cell height to 200px
     }
 
 }
@@ -239,6 +282,8 @@ class MyEventsCell: UITableViewCell {
             eventNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             eventNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: eventImageView.leadingAnchor, constant: -10)
         ])
+        eventNameLabel.font = UIFont(name: "Futura-Medium", size: 20)
+        eventNameLabel.textColor = .white
 
         // Constraints for eventDateLabel
         NSLayoutConstraint.activate([
@@ -246,13 +291,15 @@ class MyEventsCell: UITableViewCell {
             eventDateLabel.topAnchor.constraint(equalTo: eventNameLabel.bottomAnchor, constant: 5),
             eventDateLabel.trailingAnchor.constraint(lessThanOrEqualTo: eventImageView.leadingAnchor, constant: -10)
         ])
+        eventDateLabel.font = UIFont(name: "Futura-Medium", size: 16)
+        eventDateLabel.textColor = .white
 
         // Constraints for eventImageView
         NSLayoutConstraint.activate([
-            eventImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            eventImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             eventImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            eventImageView.widthAnchor.constraint(equalToConstant: 60),
-            eventImageView.heightAnchor.constraint(equalToConstant: 60)
+            eventImageView.widthAnchor.constraint(equalToConstant: 150),
+            eventImageView.heightAnchor.constraint(equalToConstant: 150)
         ])
         eventImageView.contentMode = .scaleAspectFit
     }
@@ -265,6 +312,8 @@ class MyEventsCell: UITableViewCell {
         eventNameLabel.text = event.eventName
         eventDateLabel.text = event.date
         HorizontalCollectionViewCell().loadImage(from: event.imageURL, to: eventImageView)
+        
+
     }
 }
 
