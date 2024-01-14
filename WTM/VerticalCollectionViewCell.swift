@@ -6,6 +6,7 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
     var titleLabel: UILabel!
     var horizontalCollectionView: UICollectionView!
     var events: [EventLoad] = []
+    var nothingLabel: UILabel!
     weak var delegate: TopGalleryCollectionViewCellDelegate?
 
 
@@ -17,6 +18,8 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
     func configure(title: String, with events: [EventLoad]) {
         titleLabel.text = title
         self.events = events
+        setupNothingLabel()
+
     }
     
     required init?(coder: NSCoder) {
@@ -40,7 +43,34 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
             titleLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
+    private func setupNothingLabel() {
+        nothingLabel = UILabel()
+        //titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        nothingLabel.font = UIFont(name: "Futura-Medium", size: 20)
 
+        nothingLabel.translatesAutoresizingMaskIntoConstraints = false
+        nothingLabel.textColor = .lightGray
+        nothingLabel.text = "Nothing right now"
+        nothingLabel.textAlignment = .center
+        contentView.bringSubviewToFront(nothingLabel)
+        
+
+        if events.count == 0 {
+            nothingLabel.isHidden = false
+        }
+        else{
+            nothingLabel.isHidden = true
+
+        }
+        contentView.addSubview(nothingLabel)
+
+        NSLayoutConstraint.activate([
+            nothingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 20),
+            nothingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nothingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            nothingLabel.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
     private func setupHorizontalCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -164,7 +194,7 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
         //imageView.layer.cornerRadius = 10
         pplLabel.translatesAutoresizingMaskIntoConstraints = false
         pplLabel.text = String(event.isGoing.count)
-        pplLabel.font = UIFont.boldSystemFont(ofSize: 13)
+        pplLabel.font = UIFont(name: "Futura-Medium", size: 13)
         pplLabel.textColor = .white
         contentView.addSubview(pplLabel)
 
@@ -193,7 +223,7 @@ class HorizontalCollectionViewCell: UICollectionViewCell {
     private func setupCellDetailsLabel(event: EventLoad) {
         cellDetailsLabel = UILabel()
         cellDetailsLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellDetailsLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        cellDetailsLabel.font = UIFont(name: "Futura-Medium", size: 14)
         cellDetailsLabel.adjustsFontSizeToFitWidth = true
         cellDetailsLabel.textColor = .white
         cellDetailsLabel.text = event.eventName // MADE JUST evnet NAME CUZ TOO SMALL OTHERWISE

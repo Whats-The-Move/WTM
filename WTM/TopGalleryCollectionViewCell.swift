@@ -69,14 +69,19 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         let todayButton = createButtonWithTitle("Today")
         let tomorrowButton = createButtonWithTitle("Tomorrow")
         let thisWeekButton = createButtonWithTitle("This Week")
-
+        
+        for view in optionsStackView.arrangedSubviews {
+            optionsStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        
         optionsStackView.addArrangedSubview(todayButton)
         optionsStackView.addArrangedSubview(tomorrowButton)
         optionsStackView.addArrangedSubview(thisWeekButton)
 
         optionsStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            optionsStackView.topAnchor.constraint(equalTo: dropdownButton.bottomAnchor, constant: 5),
+            optionsStackView.topAnchor.constraint(equalTo: dropdownButton.bottomAnchor, constant: 15),
             optionsStackView.trailingAnchor.constraint(equalTo: dropdownButton.trailingAnchor),
             optionsStackView.widthAnchor.constraint(equalToConstant: 270),
             optionsStackView.heightAnchor.constraint(equalToConstant: 20)
@@ -85,7 +90,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
     func createButtonWithTitle(_ title: String) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        button.titleLabel?.font = UIFont(name: "Futura-Medium", size: 12)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.black
         button.layer.cornerRadius = 10
@@ -105,13 +110,14 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
 
 
     @objc func optionSelected(_ sender: UIButton) {
-            print("Selected option:")
+        print("Selected option:")
 
-            guard let title = sender.titleLabel?.text else { return }
-            print("Selected option: \(title)")
-            // Handle the selection
-            currentOption = title
-            dropdownTapped()
+        guard let title = sender.titleLabel?.text else { return }
+        print("Selected option: \(title)")
+        // Handle the selection
+        currentOption = title
+        dropdownTapped()
+        delegate?.refreshData()
             //RELOAD HERE
             // Update button alphas
 
@@ -184,6 +190,9 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         pageControl = UIPageControl()
         pageControl.numberOfPages = events.count// Replace with your number of pages
         pageControl.currentPage = 0
+        // Assuming you have a UIPageControl object named pageControl
+        pageControl.currentPageIndicatorTintColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1)
+
 
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(pageControl)
@@ -230,6 +239,34 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         print("delegate called")
         delegate?.didSelectEventLoad(eventLoad: eventLoad)
     }
+    func refreshData() {
+        delegate?.refreshData()
+    }
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage ?? image
+    }
 
 
 
@@ -239,6 +276,7 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
 }
 protocol TopGalleryCollectionViewCellDelegate: AnyObject {
     func didSelectEventLoad(eventLoad: EventLoad)
+    func refreshData()
 }
 
 class ImageCell: UICollectionViewCell {
@@ -282,9 +320,9 @@ class ImageCell: UICollectionViewCell {
     private func setupCellDetailsLabel(event: EventLoad) {
         cellDetailsLabel = UILabel()
         cellDetailsLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellDetailsLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        cellDetailsLabel.font = UIFont(name: "Futura-Medium", size: 14)
         cellDetailsLabel.textColor = .white
-        cellDetailsLabel.text = event.eventName + " @ " + event.venueName // Set your text
+        cellDetailsLabel.text = event.eventName // Set your text
         contentView.addSubview(cellDetailsLabel)
 
         NSLayoutConstraint.activate([
@@ -314,7 +352,7 @@ class ImageCell: UICollectionViewCell {
         pplLabel = UILabel()
         pplLabel.translatesAutoresizingMaskIntoConstraints = false
         pplLabel.text = String(event.isGoing.count) // Set the default text
-        pplLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        pplLabel.font = UIFont(name: "Futura-Medium", size: 14)
         pplLabel.textColor = .white
         contentView.addSubview(pplLabel)
 

@@ -9,7 +9,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var friendsGoingTableView: UITableView!
-    
+    var eventName = ""
     var selectedParty: Party?
     var selectedPrivateParty: privateParty?
 
@@ -24,19 +24,9 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if publicOrPriv {
-            partyID = selectedParty?.name ?? ""
-        } else {
-            partyID = selectedPrivateParty?.id ?? ""
-        }
-        print(partyID)
-
         titleText.textColor = .white
-        if publicOrPriv {
-            titleText.text = partyID
-        } else {
-            titleText.text = selectedPrivateParty?.event
-        }
+        titleText.text = eventName
+        
         searchBar.delegate = self
         searchBar.overrideUserInterfaceStyle = .dark
         friendsGoingTableView.register(addFriendCustomCellClass.self, forCellReuseIdentifier: "friendCell")
@@ -46,7 +36,7 @@ class friendsGoingViewController: UIViewController, UITableViewDelegate {
 
         db = Firestore.firestore()
 
-        fetchFriendsGoing()
+        //fetchFriendsGoing()
     }
 
     func fetchFriendsGoing() {
