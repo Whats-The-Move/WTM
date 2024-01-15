@@ -90,7 +90,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     
     
     private func setupTicketButton() {
-        ticketButton.setImage(UIImage(systemName: "ticket"), for: .normal)
+        ticketButton.setImage(UIImage(systemName: "gearshape.fill"), for: .normal)
         ticketButton.tintColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1)
         ticketButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(ticketButton)
