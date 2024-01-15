@@ -477,6 +477,7 @@ class EventDetailsViewController: UIViewController {
                 if isGoingList.contains(currentUserUID) {
                     // User is already in the list, remove them
                     isGoingList.removeAll { $0 == currentUserUID }
+                    self.removeEventKeyFromUser()
                     print("Removing user from isGoing")
                     self.locallyDecrement()
                     
@@ -484,6 +485,7 @@ class EventDetailsViewController: UIViewController {
                     // User is not in the list, add them
                     isGoingList.append(currentUserUID)
                     print("Adding user to isGoing")
+                    self.addEventKeyToUser()
                     self.locallyIncrement()
                 }
 
@@ -499,6 +501,61 @@ class EventDetailsViewController: UIViewController {
             }
         }
     }
+
+    func addEventKeyToUser() {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+        let eventKey = eventLoad.eventKey
+
+        let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if var eventsGoing = document.get("eventsGoing") as? [String] {
+                    // Append eventKey if not already present
+                    if !eventsGoing.contains(eventKey) {
+                        eventsGoing.append(eventKey)
+                        userRef.updateData(["eventsGoing": eventsGoing])
+                    }
+                } else {
+                    // Create eventsGoing field with eventKey
+                    userRef.setData(["eventsGoing": [eventKey]], merge: true)
+                }
+            } else {
+                print("Document does not exist or error: \(error?.localizedDescription ?? "")")
+            }
+        }
+    }
+    func removeEventKeyFromUser() {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+
+        let eventKey = eventLoad.eventKey
+
+        let userRef = Firestore.firestore().collection("users").document(currentUserUID)
+
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if var eventsGoing = document.get("eventsGoing") as? [String] {
+                    // Remove eventKey if present
+                    if let index = eventsGoing.firstIndex(of: eventKey) {
+                        eventsGoing.remove(at: index)
+                        userRef.updateData(["eventsGoing": eventsGoing])
+                    }
+                } else {
+                    print("eventsGoing field does not exist")
+                }
+            } else {
+                print("Document does not exist or error: \(error?.localizedDescription ?? "")")
+            }
+        }
+    }
+
+
     func locallyIncrement (){
         self.goingButton.backgroundColor = UIColor(red: 255/255, green: 28/255, blue: 142/255, alpha: 1.0)
         self.goingButton.layer.shadowColor = UIColor.black.cgColor
