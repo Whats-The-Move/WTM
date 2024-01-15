@@ -30,7 +30,8 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
     var imageUploadURL = ""
     var selectedUsers: [User] = []
     var selectedDays: [String] = []
-    var userEditing = false
+    
+    var eventToEdit: EventLoad?
 
     //var scrollView = UIScrollView()
     //var contentView = UIView()
@@ -53,7 +54,34 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         //addSubviews()
         setFonts()
         setupGestureRecognizers()
+        
+        if let event = eventToEdit {
+            setupToEdit()
+        }
 
+    }
+    func setupToEdit (){
+        eventTitle.text =  eventToEdit?.eventName ?? ""
+        
+        loadImage(from: eventToEdit?.imageURL ?? "", to: imageView)
+        self.imageUploadURL = eventToEdit?.imageURL ?? ""
+        
+        descriptionText.text = eventToEdit?.description ?? "" // Temporary text for debugging
+
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+        if let date = dateFormatter.date(from: eventToEdit?.date ?? "") {
+            datePicker.date = date
+            datePicker.isUserInteractionEnabled = false // Disables interaction
+        }
+        
+        deals.text =  eventToEdit?.deals ?? ""
+
+        time.text =  eventToEdit?.time ?? ""
+
+
+        
     }
     private func setFonts() {
         let futuraMedium20 = UIFont(name: "Futura-Medium", size: 20)
@@ -502,7 +530,11 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
                     // Successfully fetched the venueName
                     print("Venue Name: \(venueName)")
                     let privatesRef = Database.database().reference().child("\(creatorLocation)Events").child(dateString)
-                    let newEventRef = privatesRef.childByAutoId()
+                    
+                    var newEventRef = privatesRef.childByAutoId()
+                    if self.eventToEdit != nil {
+                        newEventRef = privatesRef.child(self.eventToEdit?.eventKey ?? "")
+                    }
                      let eventInfo: [String: Any] = [
                         "creator": currentUserUID,
                      "deals" : deals,
@@ -565,5 +597,12 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         }
 
     }
-
+    func loadImage(from urlString: String, to imageView: UIImageView) {
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL: \(urlString)")
+            return
+        }
+        
+        imageView.kf.setImage(with: url)
+    }
 }
