@@ -182,8 +182,14 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
                     // Successfully retrieved the list
                     completion(eventsGoing)
                 } else {
-                    print("eventsGoing field does not exist")
-                    completion(nil)
+                    userRef.updateData(["eventsGoing": []]) { error in
+                        if let error = error {
+                            print("Error updating user document: \(error)")
+                            completion(nil)
+                        } else {
+                            completion([])
+                        }
+                    }
                 }
             } else {
                 print("Document does not exist or error: \(error?.localizedDescription ?? "")")
