@@ -51,6 +51,7 @@
 		08CF03D9297D52770074A878 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF03D8297D52770074A878 /* popUpViewController.swift */; };
 		08D313A12A4A5CBA00FBF023 /* privateParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D313A02A4A5CBA00FBF023 /* privateParty.swift */; };
 		08E504952AA519BF000B4023 /* freeDrinkNightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E504942AA519BF000B4023 /* freeDrinkNightViewController.swift */; };
+		08F2604E2B54D5C7006C8435 /* replyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F2604D2B54D5C7006C8435 /* replyCell.swift */; };
 		08F7932A2A4A505300679EB9 /* privatePartyCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F793292A4A505300679EB9 /* privatePartyCellClass.swift */; };
 		08F92B812A2AA41200ABB873 /* friendPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */; };
 		08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */; };
@@ -148,6 +149,7 @@
 		08CF03D8297D52770074A878 /* popUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
 		08D313A02A4A5CBA00FBF023 /* privateParty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privateParty.swift; sourceTree = "<group>"; };
 		08E504942AA519BF000B4023 /* freeDrinkNightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = freeDrinkNightViewController.swift; sourceTree = "<group>"; };
+		08F2604D2B54D5C7006C8435 /* replyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = replyCell.swift; sourceTree = "<group>"; };
 		08F793292A4A505300679EB9 /* privatePartyCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = privatePartyCellClass.swift; sourceTree = "<group>"; };
 		08F92B802A2AA41200ABB873 /* friendPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendPopUpViewController.swift; sourceTree = "<group>"; };
 		08F92B842A2AC93B00ABB873 /* friendRequestCellClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendRequestCellClass.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				080DCDAD2B5066E3004FCA98 /* MessageCell.swift */,
 				08630DE82B525AF800046309 /* addMessageViewController.swift */,
 				08CACA4C2B528A5400707FD9 /* repliesViewController.swift */,
+				08F2604D2B54D5C7006C8435 /* replyCell.swift */,
 				08CF0398297CB6030074A878 /* Main.storyboard */,
 				087FE8ED298DDB0D001B17B6 /* ezgif-5-9342675cf1.gif */,
 				087FE8EF298E15E4001B17B6 /* finalillini.gif */,
@@ -631,6 +634,7 @@
 				08F92B852A2AC93B00ABB873 /* friendRequestCellClass.swift in Sources */,
 				0825CC2E2A87F18200C9C32E /* monthlyCalendarViewController.swift in Sources */,
 				10B5001F29FEDE01004FAC97 /* PicturesViewController.swift in Sources */,
+				08F2604E2B54D5C7006C8435 /* replyCell.swift in Sources */,
 				0825CC352A87FC4900C9C32E /* calendarCell.swift in Sources */,
 				08CF03C7297CD7850074A878 /* LoadingPageViewController.swift in Sources */,
 				088BD7C22A68885A008D3EA9 /* plainProfileViewController.swift in Sources */,

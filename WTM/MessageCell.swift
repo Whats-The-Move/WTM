@@ -39,6 +39,8 @@ class MessageCell: UITableViewCell {
     private let likeButton: UIButton = {
         let button = UIButton()
         //button.setTitle("👍", for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
+        button.tintColor = .black
         button.setTitleColor(.gray, for: .normal)
         return button
     }()
@@ -46,13 +48,17 @@ class MessageCell: UITableViewCell {
     private let dislikeButton: UIButton = {
         let button = UIButton()
         //button.setTitle("👎", for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsdown"), for: .normal)
+        button.tintColor = .black
         button.setTitleColor(.gray, for: .normal)
         return button
     }()
     
     private let repliesButton: UIButton = {
         let button = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis.message"), for: .normal)
         button.setTitleColor(.gray, for: .normal)
+        button.tintColor = .black
         return button
     }()
     
@@ -70,7 +76,6 @@ class MessageCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         setupButtons()
-        setupImageView()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -80,11 +85,14 @@ class MessageCell: UITableViewCell {
     // MARK: - Configuration
 
     func configure(with message: chatMessage) {
+        likeButton.tintColor = .black
+        dislikeButton.tintColor = .black
+        
         tagLabel.text = message.tag
         messageLabel.text = message.message
         timeLabel.text = timeAgoString(from: message.time)
-        likeButton.setTitle("👍\(message.likes.count - 1)", for: .normal)
-        dislikeButton.setTitle("👎\(message.dislikes.count - 1)", for: .normal)
+        likeButton.setTitle(" \(message.likes.count - 1)", for: .normal)
+        dislikeButton.setTitle(" \(message.dislikes.count - 1)", for: .normal)
         likeButton.backgroundColor = .clear
         dislikeButton.backgroundColor = .clear
         likeButton.setTitleColor(.gray, for: .normal)
@@ -92,13 +100,13 @@ class MessageCell: UITableViewCell {
         self.message = message
         
         if message.likes.contains(Auth.auth().currentUser!.uid) {
-            likeButton.layer.cornerRadius = 4
-            likeButton.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
-            likeButton.setTitleColor(.white, for: .normal)
+            //likeButton.layer.cornerRadius = 4
+            likeButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
+            //likeButton.setTitleColor(.white, for: .normal)
         } else if message.dislikes.contains(Auth.auth().currentUser!.uid) {
-            dislikeButton.layer.cornerRadius = 4
-            dislikeButton.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
-            dislikeButton.setTitleColor(.white, for: .normal)
+            //dislikeButton.layer.cornerRadius = 4
+            dislikeButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
+            //dislikeButton.setTitleColor(.white, for: .normal)
         }
 
         // Reference to the "replies" branch under the message.chatID in the Firebase Realtime Database
@@ -108,8 +116,12 @@ class MessageCell: UITableViewCell {
         repliesRef.observeSingleEvent(of: .value) { snapshot in
             if let repliesCount = snapshot.children.allObjects as? [DataSnapshot] {
                 // Update the repliesButton title with the number of replies
-                self.repliesButton.setTitle("💬\(repliesCount.count)", for: .normal)
+                self.repliesButton.setTitle(" \(repliesCount.count)", for: .normal)
             }
+        }
+        
+        if message.picture != "" {
+            setupImageView()
         }
         
         if message.picture != "" {
@@ -132,26 +144,29 @@ class MessageCell: UITableViewCell {
         // If the dislike button was already tapped, reset it
         if message.dislikes.contains(currentUID) {
             message.dislikes.removeAll { $0 == currentUID }
-            dislikeButton.backgroundColor = .clear
+            //dislikeButton.backgroundColor = .clear
             //dislikeButton.layer.cornerRadius = 0
-            dislikeButton.setTitle("👎\(message.dislikes.count - 1)", for: .normal)
-            dislikeButton.setTitleColor(.gray, for: .normal)
+            dislikeButton.setTitle(" \(message.dislikes.count - 1)", for: .normal)
+            //dislikeButton.setTitleColor(.gray, for: .normal)
+            dislikeButton.tintColor = .black
         }
 
         if message.likes.contains(currentUID) {
             // Remove UID from likes array
             message.likes.removeAll { $0 == currentUID }
-            likeButton.backgroundColor = .clear
+            //likeButton.backgroundColor = .clear
             //likeButton.layer.cornerRadius = 0
-            likeButton.setTitle("👍\(message.likes.count - 1)", for: .normal)
-            likeButton.setTitleColor(.gray, for: .normal)
+            likeButton.setTitle(" \(message.likes.count - 1)", for: .normal)
+            likeButton.tintColor = .black
+            //likeButton.setTitleColor(.gray, for: .normal)
         } else {
             // Add UID to likes array
             message.likes.append(currentUID)
-            likeButton.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
-            likeButton.layer.cornerRadius = 4
-            likeButton.setTitle("👍\(message.likes.count + 1)", for: .normal)
-            likeButton.setTitleColor(.white, for: .normal)
+            //likeButton.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
+            //likeButton.layer.cornerRadius = 4
+            likeButton.setTitle(" \(message.likes.count + 1)", for: .normal)
+            likeButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
+           // likeButton.setTitleColor(.white, for: .normal)
         }
 
         // Update likes array in the database
@@ -169,38 +184,34 @@ class MessageCell: UITableViewCell {
         // If the like button was already tapped, reset it
         if message.likes.contains(currentUID) {
             message.likes.removeAll { $0 == currentUID }
-            likeButton.backgroundColor = .clear
+            //likeButton.backgroundColor = .clear
             //likeButton.layer.cornerRadius = 0
-            likeButton.setTitle("👍\(message.likes.count - 1)", for: .normal)
-            likeButton.setTitleColor(.gray, for: .normal)
+            likeButton.setTitle(" \(message.likes.count - 1)", for: .normal)
+            likeButton.tintColor = .black
+            //likeButton.setTitleColor(.gray, for: .normal)
          }
 
         if message.dislikes.contains(currentUID) {
             // Remove UID from dislikes array
             message.dislikes.removeAll { $0 == currentUID }
-            dislikeButton.backgroundColor = .clear
+            //dislikeButton.backgroundColor = .clear
             //dislikeButton.layer.cornerRadius = 0
-            dislikeButton.setTitle("👎\(message.dislikes.count - 1)", for: .normal)
-            dislikeButton.setTitleColor(.gray, for: .normal)
+            dislikeButton.setTitle(" \(message.dislikes.count - 1)", for: .normal)
+            dislikeButton.tintColor = .black
+            //dislikeButton.setTitleColor(.gray, for: .normal)
         } else {
             // Add UID to dislikes array
             message.dislikes.append(currentUID)
-            dislikeButton.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
-            dislikeButton.layer.cornerRadius = 4
-            dislikeButton.setTitle("👎\(message.dislikes.count + 1)", for: .normal)
-            dislikeButton.setTitleColor(.white, for: .normal)
+            //dislikeButton.backgroundColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
+            //dislikeButton.layer.cornerRadius = 4
+            dislikeButton.setTitle(" \(message.dislikes.count + 1)", for: .normal)
+            dislikeButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
+            //dislikeButton.setTitleColor(.white, for: .normal)
         }
 
         // Update dislikes array in the database
         DispatchQueue.main.async {
             self.updateLikesDislikesInDatabase(message: message)
-        }
-    }
-    
-    @objc private func repliesButtonTapped() {
-        print("replies tapped")
-        if let message = message {
-            delegate?.repliesButtonTapped(inCell: self, withMessage: message)
         }
     }
 
@@ -215,12 +226,13 @@ class MessageCell: UITableViewCell {
         // Update the likes and dislikes arrays in the database
         chatRef.updateChildValues(["likes": message.likes, "dislikes": message.dislikes])
     }
-
-    private func updateLikeDislikeCounts() {
-        guard let message = self.message else { return }
-
-        likeButton.setTitle("👍\(message.likes.count - 1)", for: .normal)
-        dislikeButton.setTitle("👎\(message.dislikes.count - 1)", for: .normal)
+    
+    
+    @objc private func repliesButtonTapped() {
+        print("replies tapped")
+        if let message = message {
+            delegate?.repliesButtonTapped(inCell: self, withMessage: message)
+        }
     }
 
 
@@ -231,6 +243,7 @@ class MessageCell: UITableViewCell {
         contentView.addSubview(likeButton)
         contentView.addSubview(dislikeButton)
         contentView.addSubview(repliesButton)
+        contentView.addSubview(pictureImageView)
         contentView.backgroundColor = .white
 
         // Additional constraints for spacing and rounded corners
@@ -246,6 +259,11 @@ class MessageCell: UITableViewCell {
         messageLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
         messageLabel.topAnchor.constraint(equalTo: tagLabel.bottomAnchor, constant: 4).isActive = true
         messageLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+        if message?.picture == ""{
+            messageLabel.bottomAnchor.constraint(equalTo: likeButton.topAnchor, constant: -5).isActive = true
+        } else {
+            messageLabel.bottomAnchor.constraint(equalTo: pictureImageView.topAnchor, constant: -8).isActive = true
+        }
 
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
@@ -259,13 +277,11 @@ class MessageCell: UITableViewCell {
     }
     
     private func setupImageView() {
-        contentView.addSubview(pictureImageView)
-
         pictureImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        pictureImageView.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8).isActive = true
+        //pictureImageView.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8).isActive = true
         pictureImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
         pictureImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
-        //pictureImageView.bottomAnchor.constraint(equalTo: repliesButton.topAnchor, constant: 8).isActive = true
+        pictureImageView.bottomAnchor.constraint(equalTo: timeLabel.topAnchor, constant: -8).isActive = true
         
         // Constrain picture height to 200 if there is an image
         let pictureHeightConstraint = pictureImageView.heightAnchor.constraint(equalToConstant: 200)
@@ -291,7 +307,7 @@ class MessageCell: UITableViewCell {
         if keyPath == "contentSize", let newSize = change?[.newKey] as? CGSize {
             var heightIncrease = newSize.height - messageLabel.bounds.height + 25
 
-            if !message!.picture.isEmpty {
+            if message!.picture != "" {
                 heightIncrease += 200.0 + 10.0
             }
 
@@ -314,19 +330,30 @@ class MessageCell: UITableViewCell {
         dislikeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32).isActive = true
         dislikeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         dislikeButton.addTarget(self, action: #selector(dislikeButtonTapped), for: .touchUpInside)
-        dislikeButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
-
+        if message?.picture != ""{
+            dislikeButton.topAnchor.constraint(equalTo: pictureImageView.bottomAnchor, constant: 5).isActive = true
+        } else{
+            dislikeButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
+        }
         likeButton.translatesAutoresizingMaskIntoConstraints = false
         likeButton.trailingAnchor.constraint(equalTo: dislikeButton.leadingAnchor, constant: -16).isActive = true
         likeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
-        likeButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
+        if message?.picture != ""{
+            likeButton.topAnchor.constraint(equalTo: pictureImageView.bottomAnchor, constant: 5).isActive = true
+        } else{
+            likeButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
+        }
         
         repliesButton.translatesAutoresizingMaskIntoConstraints = false
         repliesButton.trailingAnchor.constraint(equalTo: likeButton.leadingAnchor, constant: -32).isActive = true
         repliesButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         repliesButton.addTarget(self, action: #selector(repliesButtonTapped), for: .touchUpInside)
-        repliesButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
+        if message?.picture != ""{
+            repliesButton.topAnchor.constraint(equalTo: pictureImageView.bottomAnchor, constant: 5).isActive = true
+        } else{
+            repliesButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
+        }
     }
 
     private func timeAgoString(from timestamp: Int) -> String {

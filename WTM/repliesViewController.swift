@@ -2,9 +2,11 @@ import UIKit
 import FirebaseAuth
 import Firebase
 
-class repliesViewController: UIViewController {
+class repliesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var mainMessage: chatMessage?
+    var replies: [chatMessage] = []
+    let tableView = UITableView()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -84,12 +86,60 @@ class repliesViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    private let cancelButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Cancel", for: .normal)
+        button.titleLabel?.font = UIFont(name: "Futura", size: 14)
+        button.setTitleColor(UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0), for: .normal)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupUI()
         setupBottomView()
+        setupTableView()
+        tableView.register(replyCell.self, forCellReuseIdentifier: "CellIdentifier")
+        fetchReplies()
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func fetchReplies() {
+        guard let mainMessage = mainMessage else { return }
+
+        let chatID = mainMessage.chatID
+        let repliesRef = Database.database().reference().child("\(currCity)Chat").child(chatID).child("replies")
+
+        repliesRef.observe(.value) { snapshot  in
+            self.replies.removeAll()
+
+            for child in snapshot.children {
+                if let childSnapshot = child as? DataSnapshot,
+                   let replyData = childSnapshot.value as? [String: Any] {
+
+                    // Use the chatID as the key for replies
+                    if let message = replyData["message"] as? String,
+                       let likes = replyData["likes"] as? [String],
+                       let dislikes = replyData["dislikes"] as? [String],
+                       let time = replyData["time"] as? Int {
+                                                                        
+                        let picture = ""
+                        let tag = ""
+                        
+                        let reply = chatMessage(chatID: childSnapshot.key, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+                        self.replies.append(reply)
+                    }
+                }
+            }
+            self.replies.sort { $0.time < $1.time }
+            self.tableView.reloadData()
+        }
     }
 
     private func setupUI() {
@@ -104,15 +154,20 @@ class repliesViewController: UIViewController {
         setupThumbsButtons()
 
         // Add subviews
-        [titleLabel, messageLabel, timeLabel, thumbsUpButton, likesCountLabel, thumbsDownButton, dislikesCountLabel, horizontalLine].forEach {
+        [titleLabel, messageLabel, timeLabel, thumbsUpButton, likesCountLabel, thumbsDownButton, dislikesCountLabel, horizontalLine, cancelButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
+        
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
 
         // Set up constraints
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
+            cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            cancelButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
 
             messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -140,11 +195,36 @@ class repliesViewController: UIViewController {
         ])
     }
     
+    func setupTableView() {
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: horizontalLine.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: bottomView.topAnchor),
+        ])
+
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellIdentifier")
+    }
+    
+    @objc func cancelButtonTapped(){
+        dismiss(animated: true)
+    }
+    
+    private var bottomViewBottomConstraint: NSLayoutConstraint!
+    
     private func setupBottomView() {
         view.addSubview(bottomView)
         bottomView.addSubview(replyTextField)
         bottomView.addSubview(sendButton)
         sendButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
+        
+        bottomViewBottomConstraint = bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        bottomViewBottomConstraint.isActive = true
 
         NSLayoutConstraint.activate([
             bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -161,25 +241,84 @@ class repliesViewController: UIViewController {
             sendButton.widthAnchor.constraint(equalToConstant: 30),
             sendButton.heightAnchor.constraint(equalToConstant: 30),
         ])
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+
+        let keyboardHeight = keyboardFrame.cgRectValue.height
+        updateBottomViewConstraints(with: keyboardHeight, show: true)
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        updateBottomViewConstraints(with: 0, show: false)
+    }
+
+    private func updateBottomViewConstraints(with height: CGFloat, show: Bool) {
+        // Update the bottom constraint based on keyboard height
+        bottomViewBottomConstraint.constant = show ? -height : 0
+
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    
     @objc func submitButtonTapped() {
+        guard let message = replyTextField.text, let mainMessage = mainMessage else {
+            return
+        }
+
+        let chatID = mainMessage.chatID
+        let chatRef = Database.database().reference().child("\(currCity)Chat").child(chatID)
+
+        // Check if "replies" child exists in Firebase Realtime Database
+        chatRef.child("replies").observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists() {
+                // "replies" child exists, proceed to add a new reply
+                self.addReplyToFirebase(chatRef: chatRef, message: message)
+            } else {
+                // "replies" child doesn't exist, create it and then add a new reply
+                chatRef.child("replies").setValue(true) { (error, _) in
+                    if let error = error {
+                        print("Error creating 'replies' child: \(error)")
+                    } else {
+                        // "replies" child created successfully
+                        self.addReplyToFirebase(chatRef: chatRef, message: message)
+                    }
+                }
+            }
+        }
         
-        let message = replyTextField.text
+        replyTextField.text = ""
+        dismissKeyboard()
+    }
 
-        let chatRef = Database.database().reference().child("\(currCity)Chat").child(mainMessage!.chatID)
-        let chatID = UUID().uuidString // Generate a unique 32-digit ID
-
-        let messageRef = chatRef.child(chatID)
+    private func addReplyToFirebase(chatRef: DatabaseReference, message: String) {
+        let replyID = UUID().uuidString
+        let replyRef = chatRef.child("replies").child(replyID)
         let currentTime = getCurrentDateTime()
 
-        // Set up chat message data
-        var chatMessageData: [String: Any] = [
+        // Set up reply message data
+        let replyMessageData: [String: Any] = [
             "message": message,
             "likes": ["a"],
             "dislikes": ["a"],
             "time": currentTime
         ]
+
+        // Save the reply message data to the database
+        replyRef.setValue(replyMessageData)
     }
     
     private func getCurrentDateTime() -> Int {
@@ -274,9 +413,25 @@ class repliesViewController: UIViewController {
         likesCountLabel.text = "\(mainMessage.likes.count - 1)"
         dislikesCountLabel.text = "\(mainMessage.dislikes.count - 1)"
     }
-
-
     
+    // MARK: - Table view data source
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return replies.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! replyCell
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+        // Configure the cell with your data
+        let replyMessage = replies[indexPath.row]
+        cell.replyMessage = replyMessage
+        cell.parentChatID = mainMessage?.chatID
+        cell.configure(with: replyMessage)
+
+        return cell
+    }
+        
     private func timeAgoString(from timestamp: Int) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
@@ -303,4 +458,5 @@ class repliesViewController: UIViewController {
             return "Invalid Timestamp"
         }
     }
+
 }

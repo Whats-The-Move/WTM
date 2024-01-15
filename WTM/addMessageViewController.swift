@@ -69,7 +69,7 @@ class addMessageViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }()
 
     var selectedImage: UIImage?
-    var eventList: [String] = ["Other"]
+    var eventList: [String] = ["", "Other"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,7 +200,7 @@ class addMessageViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     @objc func submitButtonTapped() {
         guard let tag = tagTextField.text, !tag.isEmpty,
-              let message = messageTextField.text, !message.isEmpty else {
+              let message = messageTextField.text, !message.isEmpty, tag != "" else {
             // Display alert if tagTextField or messageTextField is empty
             showAlert(message: "Please fill in all text fields to post.")
             return
