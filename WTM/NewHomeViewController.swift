@@ -11,7 +11,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     
     
     var verticalCollectionView: UICollectionView!
-    let filters = ["Trending Now", "Friend's Choice", "Rush Events", "Bars/Clubs", "Best Deals"]
+    let filters = ["Trending Now", "Friend's Choice", "Rush Events", "Bars/Clubs"]
     var events: [EventLoad] = []
     var rushList: [EventLoad] = []
     var barList: [EventLoad] = []
@@ -74,6 +74,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
                 DispatchQueue.main.async {
                     strongSelf.friendSortedList = friendSortedEvents
                     strongSelf.setupVerticalCollectionView()
+                    print("events i sent")
+                    print(loadedEvents)
                     strongSelf.setupPullToRefresh()
                     
                     // Any other UI updates

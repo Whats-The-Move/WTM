@@ -66,8 +66,8 @@ class VerticalCollectionViewCell: UICollectionViewCell, UICollectionViewDataSour
 
         NSLayoutConstraint.activate([
             nothingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 20),
-            nothingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            nothingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            nothingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -15),
+            nothingLabel.widthAnchor.constraint(equalToConstant: 300),
             nothingLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
     }

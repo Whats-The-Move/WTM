@@ -19,6 +19,10 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.tabBarItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        
         createButton.isHidden = true
         view.backgroundColor = .black
         var function = fetchUserEventsGoing
