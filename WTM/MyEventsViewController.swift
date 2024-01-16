@@ -65,6 +65,7 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
         titleLabel.textColor = .white
         titleLabel.text = "My Events"
         createButton.setImage(UIImage(systemName: "plus.app.fill"), for: .normal)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
         createButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
         createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
         let isPartyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
@@ -74,6 +75,7 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
         } else {
             createButton.isHidden = true
         }
+        
         view.addSubview(titleLabel)
         view.addSubview(createButton)
         NSLayoutConstraint.activate([
@@ -82,9 +84,10 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
             titleLabel.widthAnchor.constraint(equalToConstant: 200),
             titleLabel.heightAnchor.constraint(equalToConstant: 40),
             
-            createButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
-            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -60),
-            createButton.heightAnchor.constraint(equalToConstant: 100)
+            createButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            createButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 60),
+            createButton.widthAnchor.constraint(equalToConstant: 120),
+            createButton.heightAnchor.constraint(equalToConstant: 120)
         ])
 
         // Setup buttons
@@ -132,9 +135,9 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @objc func createButtonClicked(){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let createEvent = storyboard.instantiateViewController(withIdentifier: "CreateEvent") as! CreateEventViewController
-        present(createEvent, animated: true, completion: nil)
+        let createEventVC = CreateEventViewController()
+        createEventVC.modalPresentationStyle = .fullScreen // Optional: Present full screen
+        present(createEventVC, animated: true, completion: nil)
     }
 
     private func setupButton(_ button: UIButton, title: String) {

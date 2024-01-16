@@ -81,29 +81,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Set the user default for reviewRequested to false
         UserDefaults.standard.set(false, forKey: "reviewRequested")
         
-        if let currentUser = Auth.auth().currentUser {
-            let uid = currentUser.uid
+        let isBarAcct = UserDefaults.standard.bool(forKey: "partyAccount")
+        if isBarAcct{
+            if let currentUser = Auth.auth().currentUser {
+                let uid = currentUser.uid
 
-            // Reference to the Firestore collection "users"
-            let usersCollection = Firestore.firestore().collection("users")
+                // Reference to the Firestore collection "users"
+                let usersCollection = Firestore.firestore().collection("barUsers")
 
-            // Reference to the document with the user's UID
-            let userDocument = usersCollection.document(uid)
+                // Reference to the document with the user's UID
+                let userDocument = usersCollection.document(uid)
 
-            // Fetch user data from Firestore
-            userDocument.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    // Extract email from user data
-                    if let email = document["email"] as? String {
-                        // Set currCity based on the email suffix
-                        if email.hasSuffix("@illinois.edu") {
-                            currCity = "Champaign"
-                        } else if email.hasSuffix("@berkeley.edu") {
-                            currCity = "Berkeley"
+                // Fetch user data from Firestore
+                userDocument.getDocument { (document, error) in
+                    if let document = document, document.exists {
+                        // Extract email from user data
+                        if let city = document["location"] as? String {
+                            currCity = city
+                            print("currCity: ", currCity)
                         }
+                    } else {
+                        print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
                     }
-                } else {
-                    print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        } else {
+            if let currentUser = Auth.auth().currentUser {
+                let uid = currentUser.uid
+
+                // Reference to the Firestore collection "users"
+                let usersCollection = Firestore.firestore().collection("users")
+
+                // Reference to the document with the user's UID
+                let userDocument = usersCollection.document(uid)
+
+                // Fetch user data from Firestore
+                userDocument.getDocument { (document, error) in
+                    if let document = document, document.exists {
+                        // Extract email from user data
+                        if let email = document["email"] as? String {
+                            // Set currCity based on the email suffix
+                            if email.hasSuffix("@illinois.edu") {
+                                currCity = "Champaign"
+                            } else if email.hasSuffix("@berkeley.edu") {
+                                currCity = "Berkeley"
+                            }
+                        }
+                    } else {
+                        print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
+                    }
                 }
             }
         }
