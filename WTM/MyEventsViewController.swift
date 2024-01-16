@@ -21,34 +21,46 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         createButton.isHidden = true
         view.backgroundColor = .black
-        fetchUserEventsGoing { eventsGoingList in
-            guard let eventsGoingList = eventsGoingList else {
-                print("No events or error fetching eventsGoing list.")
-                return
+        var function = fetchUserEventsGoing
+        
+        if UserDefaults.standard.bool(forKey: "partyAccount") {
+            function = fetchBarEvents
+        }
+        
+        function { eventsGoingList in
+            
+            var newvar: [String] = []
+            if eventsGoingList != nil {
+                newvar = eventsGoingList ?? []
             }
+
             print("eventsgoinglist")
             print(eventsGoingList)
 
             // Now fetch the corresponding events from Realtime Database
-            self.fetchEventsMatchingEventsGoing(currCity: currCity + "Events", eventsGoing: eventsGoingList) { matchedEvents in
+            self.fetchEventsMatchingEventsGoing(currCity: currCity + "Events", eventsGoing: newvar) { matchedEvents in
                 // Process the matched events
                 //var pastEvents: [EventLoad] = []
                 //var upcomingEvents: [EventLoad] = []
                 let currentDate = Date()
-                print(matchedEvents)
+                print("Matched Events: \(matchedEvents)")
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMM dd, yyyy"
+                let calendar = Calendar.current
+
                 for event in matchedEvents {
-                    print(event.date)
-                    if let eventDate = dateFormatter.date(from: event.date), eventDate < currentDate {
+                    print("Event Date: \(event.date)")
+                    if let eventDate = dateFormatter.date(from: event.date),
+                       let endOfEventDay = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: eventDate),
+                       endOfEventDay < currentDate {
                         self.pastEvents.append(event)
-                        print("adding to past events")
+                        print("Adding to past events")
                     } else {
                         self.upcomingEvents.append(event)
-                        print("adding to upcoming events")
-
+                        print("Adding to upcoming events")
                     }
                 }
+
                 self.setupUI()
 
                 // Here, pastEvents and upcomingEvents are populated with the relevant events
@@ -191,7 +203,38 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
 
 
 
-    // MARK: - TableView Delegate & DataSource Methods
+    func fetchBarEvents(completion: @escaping ([String]) -> Void) {
+        let currentUserUID = Auth.auth().currentUser?.uid
+        print("heres the uid + uid " + (currentUserUID ?? ""))
+        let ref = Database.database().reference() // Reference to the Firebase database
+        var eventKeys: [String] = []
+
+        ref.child(currCity + "Events").observeSingleEvent(of: .value, with: { snapshot in
+            // Iterate through date strings
+            for dateChild in snapshot.children {
+                guard let dateSnapshot = dateChild as? DataSnapshot else { continue }
+                
+                // Iterate through event keys
+                for eventChild in dateSnapshot.children {
+                    guard let eventSnapshot = eventChild as? DataSnapshot,
+                          let eventDict = eventSnapshot.value as? [String: Any],
+                          let creator = eventDict["creator"] as? String else { continue }
+                    
+                    if creator == currentUserUID {
+                        // If the creator matches the current user, append the event key
+                        eventKeys.append(eventSnapshot.key)
+                    }
+                }
+            }
+
+            // Return the list of event keys that match the current user's UID
+            completion(eventKeys)
+        }) { error in
+            print(error.localizedDescription)
+            completion([]) // Return an empty array in case of an error
+        }
+    }
+
 
     func fetchUserEventsGoing(completion: @escaping ([String]?) -> Void) {
         guard let currentUserUID = Auth.auth().currentUser?.uid else {

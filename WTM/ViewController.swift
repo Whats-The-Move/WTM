@@ -216,7 +216,7 @@ class ViewController: UIViewController {
                         // Check if the query returned any documents
                         if let document = querySnapshot?.documents.first {
                             
-                            if self!.barAcct{
+                            /*if self!.barAcct{
                                 UserDefaults.standard.set(true, forKey: "authenticated")
                                 UserDefaults.standard.set(true, forKey: "partyAccount")
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -224,7 +224,7 @@ class ViewController: UIViewController {
                                 appHomeVC.modalPresentationStyle = .overFullScreen
                                 self?.present(appHomeVC, animated: true)
                                 
-                            }
+                            }*/
                             // Document exists with the given email
                             print("email already exists, wrong password")
                             UserDefaults.standard.set(false, forKey: "authenticated")
@@ -239,8 +239,14 @@ class ViewController: UIViewController {
                             
                             print("Document data: \(document.data())")
                         } else {
+                            //show alert that email was wrong maybe
                             // No document exists with the given email, make new account
                             print("Document does not exist")
+                            let alert = UIAlertController(title: "Alert", message: "Email not recognized.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Sorry, I'll get it right this time", style: .default, handler: nil))
+                            self?.present(alert, animated: true, completion:  {
+                                return
+                            })
                             //UserDefaults.standard.set(false, forKey: "partyAccount")
                             
                             UserDefaults.standard.set(true, forKey: "authenticated")
@@ -270,9 +276,8 @@ class ViewController: UIViewController {
             }
             //UserDefaults.standard.set(false, forKey: "partyAccount")
             
-            if self!.barAcct{
-                UserDefaults.standard.set(true, forKey: "partyAccount")
-            }
+
+            self?.updatePartyAccountStatus()
 
             UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -283,6 +288,39 @@ class ViewController: UIViewController {
 
 
     }
+
+    func updatePartyAccountStatus() {
+        // Check if self.barAcct is true
+        let currentUserID = Auth.auth().currentUser?.uid
+        print("current users uid is rn " + (currentUserID ?? ""))
+        if self.barAcct {
+            // Access Firestore
+            let firestore = Firestore.firestore()
+
+            // Reference to the 'barUsers' collection where UIDs are stored
+            let barUsersRef = firestore.collection("barUsers")
+
+            // Check if the current user's UID is in the 'barUsers' collection
+            barUsersRef.document(currentUserID ?? "").getDocument { document, error in
+                if let error = error {
+                    print("Error checking barUsers: \(error)")
+                    return
+                }
+
+                if let document = document, document.exists {
+                    // User UID exists in barUsers, set UserDefaults
+                    UserDefaults.standard.set(true, forKey: "partyAccount")
+                } else {
+                    // User UID does not exist in barUsers, set UserDefaults to false or handle as needed
+                    UserDefaults.standard.set(false, forKey: "partyAccount")
+                }
+            }
+        } else {
+            // If self.barAcct is false, set UserDefaults to false or handle as needed
+            UserDefaults.standard.set(false, forKey: "partyAccount")
+        }
+    }
+
     
     @objc func forgotPasswordTapped() {
         let alertController = UIAlertController(title: "Reset Password", message: "Enter your email to receive a password reset link.", preferredStyle: .alert)
