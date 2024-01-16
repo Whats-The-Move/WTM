@@ -37,6 +37,9 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     
     
     override func viewDidLoad() {
+        updatePartyAccountStatus()
+        
+        
         super.viewDidLoad()
         //setupGradientBackground()
         view.backgroundColor = .black
@@ -697,7 +700,34 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         
         
         
-        
+    func updatePartyAccountStatus() {
+        // Check if self.barAcct is true
+        let currentUserID = Auth.auth().currentUser?.uid
+        print("current users uid is rn " + (currentUserID ?? ""))
+
+        // Access Firestore
+        let firestore = Firestore.firestore()
+
+        // Reference to the 'barUsers' collection where UIDs are stored
+        let barUsersRef = firestore.collection("barUsers")
+
+        // Check if the current user's UID is in the 'barUsers' collection
+        barUsersRef.document(currentUserID ?? "").getDocument { document, error in
+            if let error = error {
+                print("Error checking barUsers: \(error)")
+                return
+            }
+
+            if let document = document, document.exists {
+                // User UID exists in barUsers, set UserDefaults
+                UserDefaults.standard.set(true, forKey: "partyAccount")
+            } else {
+                // User UID does not exist in barUsers, set UserDefaults to false or handle as needed
+                UserDefaults.standard.set(false, forKey: "partyAccount")
+            }
+        }
+         
+    }
         
     
 }

@@ -42,8 +42,12 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         let isPartyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
+        print("heres partyacct" )
+        print(isPartyAccount)
         if isPartyAccount {
             showBarProfile()
+            print("showing bar profile, this is bar acct")
+            
         }
         else{//show regular acct
             setupConstraints()
@@ -478,6 +482,9 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             try FirebaseAuth.Auth.auth().signOut()
             
             UserDefaults.standard.set(false, forKey: "authenticated")
+            
+            UserDefaults.standard.set(false, forKey: "partyAccount")
+
             //TAKE THEM TO LOG IN SCREEN
         }
         catch{
@@ -794,11 +801,14 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
 
         }
 
-
+        else{
+            print("i couldn't find uid, not signed in")
+        }
         
         //let tapGestureBack = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
 
     }
+    
     func setupHours() -> UILabel { //MAYBE I RETURN HOURS LABEL HERE SO I CAN PUT IT INTO BARSTACK????????
         hours = UILabel()
         hours.numberOfLines = 0
@@ -813,6 +823,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
 
         // Load hours from Firestore and set the label text
         if let currentUserUID = Auth.auth().currentUser?.uid {
+            print("here is current user uid" + currentUserUID)
             let db = Firestore.firestore()
             let userRef = db.collection("barUsers").document(currentUserUID)
 

@@ -515,7 +515,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                         //setting password to
                         let password = self.partyName.text
                         //do auth
-                        Auth.auth().createUser(withEmail: email ?? "nul", password: password ?? "nul") { (authResult, error) in
+                        Auth.auth().createUser(withEmail: email!, password: password! ) { (authResult, error) in
                             if let error = error {
                                 print("Error creating user: \(error.localizedDescription)")
                                 let alert = UIAlertController(title: "Alert", message: "Invalid email/password", preferredStyle: .alert)
@@ -527,8 +527,10 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                                 return
                                 // Handle the error here (e.g., show an error message to the user)
                             } else {
+                                UserDefaults.standard.set(true, forKey: "partyAcct")
+
                                 let uid = Auth.auth().currentUser?.uid
-                                
+                                print("created!" + uid!)
                                 let userRef = Firestore.firestore().collection("barUsers").document(uid ?? "")
                                 let data: [String: Any] = [
                                    
@@ -539,7 +541,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                                     "personName" : self.personName.text,
                                     "verified" : "no",
                                     "type" : self.selectedType ,//needs work
-                                    "location": self.selectedCity,
+                                    "location": self.selectedCity,         
                                     "hours" : "",
                                     "profilePic": ""
                                     
@@ -557,6 +559,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                                     // Success!
 
                                     self.submitSuccess()
+                                    currCity = self.selectedCity
                                     print("Image uploaded and download URL stored in Firestore!")
                                 }
                                 // User creation was successful

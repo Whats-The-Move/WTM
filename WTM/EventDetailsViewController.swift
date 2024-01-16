@@ -40,11 +40,11 @@ class EventDetailsViewController: UIViewController {
         addBackButton()
         addNameLabel()
         addInfoStackView()
-        /*checkFriendshipStatus(isGoing: eventLoad.isGoing) { commonFriends in
+        checkFriendshipStatus(isGoing: eventLoad.isGoing) { commonFriends in
             self.assignProfilePictures(commonFriends: commonFriends)
             //print(commonFriends)
-        }*/
-        assignProfilePictures(commonFriends: ["00NOZzy9prZdbWpLdE61dgZIEj83", "01sdNvA3ksgQn7ivXWEve9wpnQ83"])
+        }
+        //assignProfilePictures(commonFriends: ["00NOZzy9prZdbWpLdE61dgZIEj83", "01sdNvA3ksgQn7ivXWEve9wpnQ83"])
         addDescriptionLabel()
         setupGrayBkgd()
         setupBkgdLabel()
