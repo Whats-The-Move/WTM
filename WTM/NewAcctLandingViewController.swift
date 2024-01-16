@@ -52,6 +52,7 @@ class NewAcctLandingViewController: UIViewController, UITextFieldDelegate {
         
         email = createTextField(placeholder: "partygoer@college.edu", fontSize: 18)
         view.addSubview(email)
+        email.overrideUserInterfaceStyle = .light
 
         NSLayoutConstraint.activate([
             email.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
@@ -65,6 +66,7 @@ class NewAcctLandingViewController: UIViewController, UITextFieldDelegate {
         
         password = createTextField(placeholder: "Password (6 char minimum)", fontSize: 18, isSecure: true)
         view.addSubview(password)
+        password.overrideUserInterfaceStyle = .light
 
         NSLayoutConstraint.activate([
             password.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),

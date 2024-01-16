@@ -35,9 +35,11 @@ class BarSignInViewController: UIViewController {
         setupShowPasswordButton()
         setupConstraints()
         email.layer.cornerRadius = 8
+        email.overrideUserInterfaceStyle = .light
         password.layer.cornerRadius = 8
         email.clipsToBounds = true
         password.clipsToBounds = true
+        password.overrideUserInterfaceStyle = .light
         label.adjustsFontSizeToFitWidth = true
         
         if FirebaseAuth.Auth.auth().currentUser != nil {

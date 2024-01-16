@@ -68,7 +68,6 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
         descriptionText.text = eventToEdit?.description ?? "" // Temporary text for debugging
 
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
         if let date = dateFormatter.date(from: eventToEdit?.date ?? "") {
@@ -210,6 +209,7 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
 
     private func setupDescriptionText() {
         descriptionText = UITextView()
+        descriptionText.overrideUserInterfaceStyle = .light
         descriptionText.textColor = .black
         //descriptionText.backgroundColor = .lightGray // Temporary background color for visibility
         descriptionText.text = "Description" // Temporary text for debugging

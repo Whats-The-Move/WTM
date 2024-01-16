@@ -110,6 +110,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         partyName = UITextField()
         partyName.borderStyle = .roundedRect
         partyName.clipsToBounds = true
+        partyName.overrideUserInterfaceStyle = .light
 
         partyName.placeholder = "Name of Frat/Bar/Party"
         partyName.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
@@ -133,6 +134,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         venueAddress = UITextField()
         venueAddress.borderStyle = .roundedRect
         venueAddress.clipsToBounds = true
+        venueAddress.overrideUserInterfaceStyle = .light
 
         venueAddress.placeholder = "Address of Frat/Bar/Party"
         venueAddress.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)// Set background color to white
@@ -155,6 +157,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         personName = UITextField()
         personName.borderStyle = .roundedRect
         personName.clipsToBounds = true
+        personName.overrideUserInterfaceStyle = .light
 
         personName.placeholder = "Name of Person who is point of contact"
         personName.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
@@ -180,6 +183,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         contactEmail.placeholder = "Email address of primary contact"
         contactEmail.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
         contactEmail.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        contactEmail.overrideUserInterfaceStyle = .light
 
         contactEmail.layer.cornerRadius = 10 // Add rounded corners
         contactEmail.layer.borderWidth = 1.0 // Add border
@@ -203,6 +207,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         password.placeholder = "Password"
         password.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Set background color to white
         password.font = UIFont(name: "Futura-Medium", size: 14) // Set font style and size
+        password.overrideUserInterfaceStyle = .light
 
         password.layer.cornerRadius = 10 // Add rounded corners
         password.layer.borderWidth = 1.0 // Add border
@@ -242,6 +247,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         type.delegate = self
         type.dataSource = self
         type.translatesAutoresizingMaskIntoConstraints = false
+        type.overrideUserInterfaceStyle = .light
         type.frame = CGRect(x: 0, y: 0, width: 320, height: 40)
 
         view.addSubview(type)
@@ -260,6 +266,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         city = UIPickerView()
         city.delegate = self
         city.dataSource = self
+        city.overrideUserInterfaceStyle = .light
         city.translatesAutoresizingMaskIntoConstraints = false
         city.frame = CGRect(x: 0, y: 0, width: 320, height: 40)
 

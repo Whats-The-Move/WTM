@@ -26,7 +26,7 @@ class NewAcct2ViewController: UIViewController, UIImagePickerControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePickerController.delegate = self
-
+        view.backgroundColor = .white
         
         let vc = NewAcctLandingViewController()
         backButton = vc.createBackButton()

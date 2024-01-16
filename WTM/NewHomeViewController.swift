@@ -170,7 +170,8 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
                 if let data = document.data(),
                    let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
                     // Access the username and name values
-                    if pendingFriendRequests.isEmpty{
+                    let isPartyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
+                    if pendingFriendRequests.isEmpty || isPartyAccount{
                        self.notificationButton.isHidden = true
                     } else{
                        self.notificationButton.isHidden = false

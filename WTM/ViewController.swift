@@ -31,6 +31,7 @@ class ViewController: UIViewController {
         textField.borderStyle = .roundedRect
         textField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Light gray
         textField.autocapitalizationType = .none
+        textField.overrideUserInterfaceStyle = .light
 
         // Add any additional constraints as needed
         return textField
@@ -50,6 +51,7 @@ class ViewController: UIViewController {
         textField.borderStyle = .roundedRect
         textField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0) // Light gray
         textField.autocapitalizationType = .none
+        textField.overrideUserInterfaceStyle = .light
 
         // Add any additional constraints as needed
         return textField
@@ -318,6 +320,32 @@ class ViewController: UIViewController {
         } else {
             // If self.barAcct is false, set UserDefaults to false or handle as needed
             UserDefaults.standard.set(false, forKey: "partyAccount")
+            if let currentUser = Auth.auth().currentUser {
+                let uid = currentUser.uid
+
+                // Reference to the Firestore collection "users"
+                let usersCollection = Firestore.firestore().collection("users")
+
+                // Reference to the document with the user's UID
+                let userDocument = usersCollection.document(uid)
+
+                // Fetch user data from Firestore
+                userDocument.getDocument { (document, error) in
+                    if let document = document, document.exists {
+                        // Extract email from user data
+                        if let email = document["email"] as? String {
+                            // Set currCity based on the email suffix
+                            if email.hasSuffix("@illinois.edu") {
+                                currCity = "Champaign"
+                            } else if email.hasSuffix("@berkeley.edu") {
+                                currCity = "Berkeley"
+                            }
+                        }
+                    } else {
+                        print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
+                    }
+                }
+            }
         }
     }
 

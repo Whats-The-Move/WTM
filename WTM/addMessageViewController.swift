@@ -25,6 +25,7 @@ class addMessageViewController: UIViewController, UIPickerViewDelegate, UIPicker
     let tagTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Add a tag"
+        textField.overrideUserInterfaceStyle = .light
         textField.borderStyle = .roundedRect
         textField.inputView = UIPickerView()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -34,6 +35,7 @@ class addMessageViewController: UIViewController, UIPickerViewDelegate, UIPicker
     let messageTextField: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 16)
+        textView.backgroundColor = .white
         textView.layer.cornerRadius = 8
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
@@ -205,6 +207,8 @@ class addMessageViewController: UIViewController, UIPickerViewDelegate, UIPicker
             showAlert(message: "Please fill in all text fields to post.")
             return
         }
+        
+        submitButton.isUserInteractionEnabled = false
 
         let chatRef = Database.database().reference().child("\(currCity)Chat")
         let chatID = UUID().uuidString // Generate a unique 32-digit ID

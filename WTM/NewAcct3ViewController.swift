@@ -29,15 +29,17 @@ class NewAcct3ViewController: UIViewController {
         view.addSubview(descriptionLabel)
         username = vc.createTextField(placeholder: "Username", fontSize: 18)
         view.addSubview(username)
+        username.overrideUserInterfaceStyle = .light
+        view.backgroundColor = .white
 
 
         
         displayName = vc.createTextField(placeholder: "Display Name", fontSize: 18)
         view.addSubview(displayName)
+        displayName.overrideUserInterfaceStyle = .light
         interests = vc.createTextField(placeholder: "List 3 interests", fontSize: 18)
         view.addSubview(interests)
-
-
+        interests.overrideUserInterfaceStyle = .light
         
         setupConstraints()
         // Do any additional setup after loading the view.

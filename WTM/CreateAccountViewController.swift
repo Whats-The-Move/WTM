@@ -67,12 +67,18 @@ class CreateAccountViewController: UIViewController, UIImagePickerControllerDele
         super.viewDidLoad()
         setupBackButton()
         email = createTextField(placeholder: "Email")
+        email.overrideUserInterfaceStyle = .light
         password = createTextField(placeholder: "Password", isSecure: true)
         password.isSecureTextEntry = true
+        password.overrideUserInterfaceStyle = .light
         phone = createTextField(placeholder: "Phone Number")
+        phone.overrideUserInterfaceStyle = .light
         username = createTextField(placeholder: "Username")
+        username.overrideUserInterfaceStyle = .light
         name = createTextField(placeholder: "Display Name")
+        name.overrideUserInterfaceStyle = .light
         interests = createTextField(placeholder: "List 3 Interests")
+        interests.overrideUserInterfaceStyle = .light
         
         setupConstraints()
         setupShowPasswordButton()

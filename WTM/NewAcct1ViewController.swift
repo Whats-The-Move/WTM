@@ -35,6 +35,7 @@ class NewAcct1ViewController: UIViewController, UITextFieldDelegate {
         phone = vc.createTextField(placeholder: "Phone", fontSize: 18, isSecure: false)
         view.addSubview(phone)
         phone.keyboardType = .numberPad
+        phone.overrideUserInterfaceStyle = .light
         phone.delegate = self
 
 
