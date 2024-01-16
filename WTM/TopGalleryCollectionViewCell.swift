@@ -9,6 +9,8 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
     var pageControl: UIPageControl!
     var events: [EventLoad] = []
     weak var delegate: TopGalleryCollectionViewCellDelegate?
+    var nothingLabel: UILabel!
+
     
     let dropdownButton = UIButton(type: .system)
     let dates = ["This Week", "Tomorrow", "Today"]
@@ -21,12 +23,43 @@ class TopGalleryCollectionViewCell: UICollectionViewCell, UICollectionViewDataSo
         super.init(frame: frame)
         setupTitleLabel()
         setupGalleryCollectionView()
+        setupNothingLabel()
 
+
+    }
+    private func setupNothingLabel() {
+        nothingLabel = UILabel()
+        //titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        nothingLabel.font = UIFont(name: "Futura-Medium", size: 20)
+
+        nothingLabel.translatesAutoresizingMaskIntoConstraints = false
+        nothingLabel.textColor = .lightGray
+        nothingLabel.text = "Swipe down to reload"
+        nothingLabel.textAlignment = .center
+        contentView.bringSubviewToFront(nothingLabel)
+        
+
+
+        contentView.addSubview(nothingLabel)
+
+        NSLayoutConstraint.activate([
+            nothingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 20),
+            nothingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -20),
+            nothingLabel.widthAnchor.constraint(equalToConstant: 300),
+            nothingLabel.heightAnchor.constraint(equalToConstant: 40)
+        ])
     }
     func configure(title: String, with events: [EventLoad]) {
         self.titleLabel.text = title
         self.events = events
         setupPageControl()
+        if events.count == 0 {
+            nothingLabel.isHidden = false
+        }
+        else{
+            nothingLabel.isHidden = true
+
+        }
         
         setupDropdownButton()
         setupOptionsStackView()

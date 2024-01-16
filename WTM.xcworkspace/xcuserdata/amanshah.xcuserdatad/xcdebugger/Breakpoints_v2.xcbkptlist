@@ -526,8 +526,8 @@
             filePath = "WTM/TopGalleryCollectionViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "setupDropdownButton()"
             landmarkType = "7">
          </BreakpointContent>
