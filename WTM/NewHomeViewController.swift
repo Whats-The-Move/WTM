@@ -21,9 +21,10 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     //let dropdownButton = UIButton(type: .system)
     let dates = ["This Week", "Tomorrow", "Today"]
     //let optionsStackView = UIStackView()
-    let titleLabel = UILabel()
+    let titleLabel = UIImageView()
     
     private let ticketButton = UIButton(type: .system)
+    private let notificationButton = UIButton(type: .system)
     private let addFriendsButton = UIButton(type: .system)
     private let refreshControl = UIRefreshControl()
     
@@ -93,6 +94,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         ticketButton.setImage(UIImage(systemName: "gearshape.fill"), for: .normal)
         ticketButton.tintColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1)
         ticketButton.translatesAutoresizingMaskIntoConstraints = false
+        ticketButton.addTarget(self, action: #selector(ticketButtonClicked), for: .touchUpInside)
         view.addSubview(ticketButton)
         
         NSLayoutConstraint.activate([
@@ -105,19 +107,75 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         ])
     }
     private func setupAddFriendsButton() {
+        // Add Friends Button
         addFriendsButton.setImage(UIImage(systemName: "person.crop.circle.badge.plus"), for: .normal)
         addFriendsButton.tintColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1)
         addFriendsButton.translatesAutoresizingMaskIntoConstraints = false
+        addFriendsButton.addTarget(self, action: #selector(addFriendsButtonClicked), for: .touchUpInside)
         view.addSubview(addFriendsButton)
-        
+
+        // Notification Button
+        notificationButton.setImage(UIImage(systemName: "exclamationmark.circle.fill"), for: .normal)
+        notificationButton.translatesAutoresizingMaskIntoConstraints = false
+        notificationButton.addTarget(self, action: #selector(addFriendsButtonClicked), for: .touchUpInside)
+        view.addSubview(notificationButton)
+
         NSLayoutConstraint.activate([
+            // Add Friends Button constraints
             addFriendsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             addFriendsButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             addFriendsButton.heightAnchor.constraint(equalToConstant: 30),
-            addFriendsButton.widthAnchor.constraint(equalToConstant: 30)
-            
-            
+            addFriendsButton.widthAnchor.constraint(equalToConstant: 30),
+
+            // Notification Button constraints
+            notificationButton.leadingAnchor.constraint(equalTo: addFriendsButton.leadingAnchor, constant: 15),
+            notificationButton.centerYAnchor.constraint(equalTo: addFriendsButton.centerYAnchor, constant: -7),
+            notificationButton.heightAnchor.constraint(equalToConstant: 15),
+            notificationButton.widthAnchor.constraint(equalToConstant: 15)
         ])
+    }
+
+    
+    @objc private func ticketButtonClicked() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "plainProfile")
+        AppHomeVC.overrideUserInterfaceStyle = .dark
+        AppHomeVC.modalPresentationStyle = .fullScreen
+        self.present(AppHomeVC, animated: false, completion: nil)
+    }
+
+    @objc private func addFriendsButtonClicked() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "MyFriends")
+        AppHomeVC.overrideUserInterfaceStyle = .dark
+        AppHomeVC.modalPresentationStyle = .fullScreen
+        self.present(AppHomeVC, animated: false, completion: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {        
+        if let uid = Auth.auth().currentUser?.uid {
+            let userRef = Firestore.firestore().collection("users").document(uid)
+            
+            userRef.getDocument { [weak self] (document, error) in
+                guard let self = self, let document = document, document.exists else {
+                    // Handle error or nil self
+                    return
+                }
+                
+                if let data = document.data(),
+                   let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
+                    // Access the username and name values
+                    if pendingFriendRequests.isEmpty{
+                       self.notificationButton.isHidden = true
+                    } else{
+                       self.notificationButton.isHidden = false
+                       // self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                    }
+                } else {
+                    self.notificationButton.isHidden = true
+                }
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -129,16 +187,18 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
     func setupTitleLabel() {
         view.addSubview(titleLabel)
         
-        titleLabel.text = "WTM"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
-        titleLabel.textColor = .white
-        titleLabel.textAlignment = .center
+//        titleLabel.text = "WTM"
+//        titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
+//        titleLabel.textColor = .white
+//        titleLabel.textAlignment = .center
         
-        
+        titleLabel.image = UIImage(named:"wtmblack")
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.contentMode = .scaleAspectFit
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            titleLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     /*

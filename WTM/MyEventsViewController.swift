@@ -11,6 +11,7 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
     let pastEventsButton = UIButton()
     let myEventsTableView = UITableView()
     let bgView = UIView()
+    let createButton = UIButton()
     
     var pastEvents: [EventLoad] = []
     var upcomingEvents: [EventLoad] = []
@@ -18,6 +19,7 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        createButton.isHidden = true
         view.backgroundColor = .black
         fetchUserEventsGoing { eventsGoingList in
             guard let eventsGoingList = eventsGoingList else {
@@ -62,12 +64,27 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .white
         titleLabel.text = "My Events"
+        createButton.setImage(UIImage(systemName: "plus.app.fill"), for: .normal)
+        createButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
+        createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
+        let isPartyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
+        print("party account: ", isPartyAccount)
+        if isPartyAccount{
+            createButton.isHidden = false
+        } else {
+            createButton.isHidden = true
+        }
         view.addSubview(titleLabel)
+        view.addSubview(createButton)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             titleLabel.widthAnchor.constraint(equalToConstant: 200),
-            titleLabel.heightAnchor.constraint(equalToConstant: 40)
+            titleLabel.heightAnchor.constraint(equalToConstant: 40),
+            
+            createButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -60),
+            createButton.heightAnchor.constraint(equalToConstant: 100)
         ])
 
         // Setup buttons
@@ -112,6 +129,12 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
             myEventsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             myEventsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    @objc func createButtonClicked(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let createEvent = storyboard.instantiateViewController(withIdentifier: "CreateEvent") as! CreateEventViewController
+        present(createEvent, animated: true, completion: nil)
     }
 
     private func setupButton(_ button: UIButton, title: String) {

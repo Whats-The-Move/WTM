@@ -581,6 +581,8 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
             dismiss(animated: true, completion: nil)
        }
     func submitSuccess (){
+        UserDefaults.standard.set(true, forKey: "partyAcct")
+        UserDefaults.standard.set(true, forKey: "authenticated")
         self.success.isHidden = false
         self.fail.isHidden = true
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

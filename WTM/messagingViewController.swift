@@ -3,7 +3,7 @@ import Firebase
 
 class messagingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MessageCellDelegate {
 
-    private let titleLabel = UILabel()
+    private let titleLabel = UIImageView()
     private let tableView = UITableView()
     private let stackView = UIStackView()
     private let newButton = UIButton()
@@ -13,10 +13,11 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
     private var messagesTwo: [chatMessage] = []
     let addButton = UIButton(type: .system)
     let noMessagesLabel = UILabel()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        messages.removeAll()
+        messagesTwo.removeAll()
         setupTitleLabel()
         setupTableView()
         setupStackView()
@@ -35,6 +36,8 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
 
         view.backgroundColor = .black
         setupAddButton()
+        
+        messages.removeAll()
 
         // Reference to the "currCityChat" branch in the Firebase Realtime Database
         let chatRef = Database.database().reference().child("\(currCity)Chat")
@@ -142,6 +145,135 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         sortButtonTapped(newButton)
     }
+
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//        setupTitleLabel()
+//        setupTableView()
+//        setupStackView()
+//
+//        noMessagesLabel.text = "No messages available"
+//        noMessagesLabel.font = UIFont(name: "Futura", size: 18)
+//        noMessagesLabel.textColor = UIColor.gray
+//        noMessagesLabel.textAlignment = .center
+//        noMessagesLabel.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(noMessagesLabel)
+//
+//        NSLayoutConstraint.activate([
+//            noMessagesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            noMessagesLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+//        ])
+//
+//        view.backgroundColor = .black
+//        setupAddButton()
+//
+//        // Reference to the "currCityChat" branch in the Firebase Realtime Database
+//        let chatRef = Database.database().reference().child("\(currCity)Chat")
+//
+//        // Use .childAdded initially
+//        chatRef.observe(.childAdded) { snapshot, _ in
+//            let chatID = snapshot.key
+//            let messageRef = chatRef.child(chatID)
+//
+//            messageRef.observeSingleEvent(of: .value) { messageSnapshot in
+//                if
+//                    let messageData = messageSnapshot.value as? [String: Any],
+//                    let message = messageData["message"] as? String,
+//                    let tag = messageData["tag"] as? String,
+//                    let likes = messageData["likes"] as? [String],
+//                    let dislikes = messageData["dislikes"] as? [String],
+//                    let time = messageData["time"] as? Int
+//                {
+//                    var picture = ""
+//                    messageRef.child("picture").observeSingleEvent(of: .value) { snapshot in
+//                        if let pictureURL = snapshot.value as? String {
+//                            picture = pictureURL
+//                            let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+//                            self.messages.append(newMessage)
+//                            // Sort messages based on time before reloading the table view
+//                            self.messages.sort { $0.time > $1.time }
+//                            self.messagesTwo = self.messages
+//                            self.noMessagesLabel.isHidden = !self.messages.isEmpty
+//                            self.tableView.reloadData()
+//                        } else {
+//                            let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+//                            self.messages.append(newMessage)
+//                            // Sort messages based on time before reloading the table view
+//                            self.messages.sort { $0.time > $1.time }
+//                            self.messagesTwo = self.messages
+//                            self.noMessagesLabel.isHidden = !self.messages.isEmpty
+//                            self.tableView.reloadData()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Switch to .childChanged for subsequent updates
+//        chatRef.observe(.childChanged) { snapshot, _ in
+//            let chatID = snapshot.key
+//            let messageRef = chatRef.child(chatID)
+//
+//            messageRef.observeSingleEvent(of: .value) { messageSnapshot in
+//                if
+//                    let messageData = messageSnapshot.value as? [String: Any],
+//                    let message = messageData["message"] as? String,
+//                    let tag = messageData["tag"] as? String,
+//                    let likes = messageData["likes"] as? [String],
+//                    let dislikes = messageData["dislikes"] as? [String],
+//                    let time = messageData["time"] as? Int
+//                {
+//                    let picture = ""
+//                    messageRef.child("picture").observeSingleEvent(of: .value) { snapshot in
+//                        if let pictureURL = snapshot.value as? String {
+//                            let picture = pictureURL
+//                            // Check if the message already exists in the array
+//                            if let existingMessage = self.messages.first(where: { $0.chatID == chatID }) {
+//                                // Update the existing message
+//                                existingMessage.message = message
+//                                existingMessage.tag = tag
+//                                existingMessage.likes = likes
+//                                existingMessage.dislikes = dislikes
+//                                existingMessage.time = time
+//                                existingMessage.picture = picture
+//                            } else {
+//                                // Add the new message to the array
+//                                let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+//                                self.messages.append(newMessage)
+//                            }
+//
+//                            // Sort messages based on time before reloading the table view
+//                            self.messages.sort { $0.time > $1.time }
+//                            self.messagesTwo = self.messages
+//                            self.tableView.reloadData()
+//                        } else {
+//                            // Check if the message already exists in the array
+//                            if let existingMessage = self.messages.first(where: { $0.chatID == chatID }) {
+//                                // Update the existing message
+//                                existingMessage.message = message
+//                                existingMessage.tag = tag
+//                                existingMessage.likes = likes
+//                                existingMessage.dislikes = dislikes
+//                                existingMessage.time = time
+//                                existingMessage.picture = picture
+//                            } else {
+//                                // Add the new message to the array
+//                                let newMessage = chatMessage(chatID: chatID, message: message, tag: tag, likes: likes, dislikes: dislikes, time: time, picture: picture)
+//                                self.messages.append(newMessage)
+//                            }
+//
+//                            // Sort messages based on time before reloading the table view
+//                            self.messages.sort { $0.time > $1.time }
+//                            self.messagesTwo = self.messages
+//                            self.tableView.reloadData()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        sortButtonTapped(newButton)
+//    }
     
     func setupAddButton() {
         // Create and configure the large system image button
@@ -182,7 +314,7 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         [newButton, hotButton, topButton].forEach {
             $0.setTitleColor(.white, for: .normal)
             $0.backgroundColor = .clear
-            $0.titleLabel?.font = UIFont(name: "Futura", size: 16) // Replace with your desired font
+            //$0.titleLabel?.font = UIFont(name: "Futura", size: 16) // Replace with your desired font
             $0.addTarget(self, action: #selector(sortButtonTapped(_:)), for: .touchUpInside)
             stackView.addArrangedSubview($0)
         }
@@ -281,14 +413,23 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
     // Other UITableViewDelegate and UITableViewDataSource methods as needed
 
     func setupTitleLabel() {
-        titleLabel.text = currCity + " Chat"
-        titleLabel.textColor = .white
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont(name: "Futura", size: 24)
+//        titleLabel.text = currCity + " Chat"
+//        titleLabel.textColor = .white
+//        titleLabel.textAlignment = .center
+//        titleLabel.font = UIFont(name: "Futura", size: 24)
+        let illinoisLogo = UIImage(named: "illinoisLogo")
+        let calLogo = UIImage(named: "calLogo")
         view.addSubview(titleLabel)
+        if currCity == "Champaign" {
+            titleLabel.image = illinoisLogo
+        } else if currCity == "Berkeley" {
+            titleLabel.image = calLogo
+        }
+        titleLabel.contentMode = .scaleAspectFit
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
 
     func setupTableView() {

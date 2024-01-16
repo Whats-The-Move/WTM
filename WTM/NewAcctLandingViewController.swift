@@ -228,6 +228,13 @@ class NewAcctLandingViewController: UIViewController, UITextFieldDelegate {
                     
                     createEmail = email
                     createPassword = password
+                    if email.hasSuffix("@illinois.edu") {
+                        currCity = "Champaign"
+                    } else if email.hasSuffix("@berkeley.edu") {
+                        currCity = "Berkeley"
+                    } else {
+                        currCity = ""
+                    }
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let vc = storyboard.instantiateViewController(identifier: "CreateAccount1")
                     vc.modalPresentationStyle = .overFullScreen

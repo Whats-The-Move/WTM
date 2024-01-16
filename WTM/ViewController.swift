@@ -69,7 +69,7 @@ class ViewController: UIViewController {
 
     var logo: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "WTM_")
+        imageView.image = UIImage(named: "wtmwhite")
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 8.0
         imageView.layer.masksToBounds = true
@@ -192,7 +192,13 @@ class ViewController: UIViewController {
             return
         }
         
-
+        var finder = ""
+        
+        if self.barAcct{
+            finder = "barUsers"
+        } else {
+            finder = "users"
+        }
         
         FirebaseAuth.Auth.auth().signIn( withEmail: email, password: password, completion: {[weak self] result, error in
             guard let strongSelf = self else {return}
@@ -201,14 +207,24 @@ class ViewController: UIViewController {
                 //look through what we have in firestore, is the email entered already there? if so give alert which says wrong password
                 
                 let db = Firestore.firestore()
-                let usersCollection = db.collection("users")
-                usersCollection.whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
+                let usersCollection = db.collection(finder)
+                usersCollection.whereField("email", isEqualTo: email).getDocuments { [self] (querySnapshot, error) in
                     if let error = error {
                         // Handle the error
                         print("Error getting documents: \(error)")
                     } else {
                         // Check if the query returned any documents
                         if let document = querySnapshot?.documents.first {
+                            
+                            if self!.barAcct{
+                                UserDefaults.standard.set(true, forKey: "authenticated")
+                                UserDefaults.standard.set(true, forKey: "partyAccount")
+                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
+                                appHomeVC.modalPresentationStyle = .overFullScreen
+                                self?.present(appHomeVC, animated: true)
+                                
+                            }
                             // Document exists with the given email
                             print("email already exists, wrong password")
                             UserDefaults.standard.set(false, forKey: "authenticated")
@@ -225,7 +241,7 @@ class ViewController: UIViewController {
                         } else {
                             // No document exists with the given email, make new account
                             print("Document does not exist")
-                            UserDefaults.standard.set(false, forKey: "partyAccount")
+                            //UserDefaults.standard.set(false, forKey: "partyAccount")
                             
                             UserDefaults.standard.set(true, forKey: "authenticated")
                             //strongSelf.showCreateAccount(email: email, password: password)
@@ -252,7 +268,11 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            UserDefaults.standard.set(false, forKey: "partyAccount")
+            //UserDefaults.standard.set(false, forKey: "partyAccount")
+            
+            if self!.barAcct{
+                UserDefaults.standard.set(true, forKey: "partyAccount")
+            }
 
             UserDefaults.standard.set(true, forKey: "authenticated")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)

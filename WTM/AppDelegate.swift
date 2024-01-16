@@ -25,7 +25,7 @@ public var UID = ""
 public var publicOrPriv = true
 public var maxPeople = 0
 public var dbName = "Parties"
-public var currCity = "Champaign"
+public var currCity = ""
 public var userFcmToken = ""
 public var reviewRequested = false
 public var currentOption = "This Week"
@@ -80,7 +80,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         reviewRequested = UserDefaults.standard.bool(forKey: "reviewRequested")
         // Set the user default for reviewRequested to false
         UserDefaults.standard.set(false, forKey: "reviewRequested")
+        
+        if let currentUser = Auth.auth().currentUser {
+            let uid = currentUser.uid
 
+            // Reference to the Firestore collection "users"
+            let usersCollection = Firestore.firestore().collection("users")
+
+            // Reference to the document with the user's UID
+            let userDocument = usersCollection.document(uid)
+
+            // Fetch user data from Firestore
+            userDocument.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    // Extract email from user data
+                    if let email = document["email"] as? String {
+                        // Set currCity based on the email suffix
+                        if email.hasSuffix("@illinois.edu") {
+                            currCity = "Champaign"
+                        } else if email.hasSuffix("@berkeley.edu") {
+                            currCity = "Berkeley"
+                        }
+                    }
+                } else {
+                    print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
         
         let defaults = UserDefaults.standard
         var key = "LocationOptionsKey"

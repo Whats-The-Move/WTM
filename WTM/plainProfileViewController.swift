@@ -11,8 +11,9 @@ import FirebaseAuth
 import Firebase
 import FirebaseStorage
 
-class plainProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class plainProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var profileLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     var profBool = true
@@ -24,9 +25,12 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
     var barStats: UILabel!
     var hours: UILabel!
     @IBOutlet weak var myFriendsButton: UIButton!
+    let cities = ["", "Berkeley", "Champaign"]
+    var pickerView: UIPickerView!
+    var toolbar: UIToolbar!
     
     @IBOutlet weak var addFriendsButton: UIButton!
-    @IBOutlet weak var friendNotification: UIButton!
+    //@IBOutlet weak var friendNotification: UIButton!
     
     @IBOutlet weak var changeName: UIButton!
     @IBOutlet weak var changeUsername: UIButton!
@@ -59,6 +63,28 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             usernameLabel.adjustsFontSizeToFitWidth = true
             usernameLabel.numberOfLines = 1
             
+            pickerView = UIPickerView()
+            pickerView.delegate = self
+            pickerView.dataSource = self
+            pickerView.backgroundColor = .darkGray
+
+            toolbar = UIToolbar()
+            toolbar.sizeToFit()
+            toolbar.backgroundColor = .darkGray
+
+            let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+            toolbar.setItems([doneButton], animated: true)
+
+            // Add UIPickerView and UIToolbar as subviews
+            view.addSubview(pickerView)
+            view.addSubview(toolbar)
+
+            // Adjust the frames as needed
+            pickerView.frame = CGRect(x: 0, y: view.frame.size.height - pickerView.frame.size.height, width: view.frame.size.width, height: pickerView.frame.size.height)
+            toolbar.frame = CGRect(x: 0, y: pickerView.frame.origin.y - toolbar.frame.size.height, width: view.frame.size.width, height: toolbar.frame.size.height)
+            pickerView.isHidden = true
+            toolbar.isHidden = true
+            
             if let uid = Auth.auth().currentUser?.uid {
                 let userRef = Firestore.firestore().collection("users").document(uid)
                 
@@ -90,13 +116,13 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
                        let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
                         // Access the username and name values
                         if pendingFriendRequests.isEmpty{
-                            self.friendNotification.isHidden = true
+                            //self.friendNotification.isHidden = true
                         } else{
-                            self.friendNotification.isHidden = false
-                            self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                            //self.friendNotification.isHidden = false
+                            //self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
                         }
                     } else {
-                        self.friendNotification.isHidden = true
+                        //self.friendNotification.isHidden = true
                     }
                 }
             }
@@ -134,6 +160,51 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         }
 
     }
+    
+    // MARK: - UIPickerViewDataSource and UIPickerViewDelegate
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return cities.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return cities[row]
+    }
+    
+    @objc func doneButtonTapped() {
+        let selectedCity = cities[pickerView.selectedRow(inComponent: 0)]
+        if selectedCity != "" {
+            currCity = selectedCity
+            print(currCity)
+            let alert = UIAlertController(title: "City Set", message: "Your current city has been set to \(selectedCity)!", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        present(alert, animated: true, completion: nil)
+        }
+
+        // Hide UIPickerView and UIToolbar
+        UIView.animate(withDuration: 0.3) {
+            self.toolbar.frame.origin.y = self.view.frame.size.height
+            self.pickerView.frame.origin.y = self.view.frame.size.height
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @IBAction func addFriendsButton(_ sender: Any) {
+        // Show UIPickerView and UIToolbar
+        pickerView.isHidden = false
+        toolbar.isHidden = false
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = self.view.frame.size.height - self.pickerView.frame.size.height
+            self.toolbar.frame.origin.y = self.pickerView.frame.origin.y - self.toolbar.frame.size.height
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     func setupConstraints() {
         profilePic.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -145,7 +216,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         editLabel.font = UIFont(name: "Futura-Medium", size: 16)
         editLabel.textColor = UIColor.gray
         editLabel.translatesAutoresizingMaskIntoConstraints = false
-        addFriendsButton.addSubview(friendNotification)
+        //addFriendsButton.addSubview(friendNotification)
         view.addSubview(editLabel)
         NSLayoutConstraint.activate([
             // profilePic constraints
@@ -177,10 +248,10 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
             editLabel.widthAnchor.constraint(equalToConstant: 80),
             editLabel.heightAnchor.constraint(equalToConstant: 30),
             
-            friendNotification.centerYAnchor.constraint(equalTo: addFriendsButton.centerYAnchor),
-            friendNotification.leadingAnchor.constraint(equalTo: addFriendsButton.trailingAnchor, constant: 0),
-            friendNotification.widthAnchor.constraint(equalToConstant: 35),
-            friendNotification.heightAnchor.constraint(equalToConstant: 35)
+//            friendNotification.centerYAnchor.constraint(equalTo: addFriendsButton.centerYAnchor),
+//            friendNotification.leadingAnchor.constraint(equalTo: addFriendsButton.trailingAnchor, constant: 0),
+//            friendNotification.widthAnchor.constraint(equalToConstant: 35),
+//            friendNotification.heightAnchor.constraint(equalToConstant: 35)
 
             
         
@@ -225,13 +296,13 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
                    let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
                     // Access the username and name values
                     if pendingFriendRequests.isEmpty{
-                        self.friendNotification.isHidden = true
+                       // self.friendNotification.isHidden = true
                     } else{
-                        self.friendNotification.isHidden = false
-                        self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
+                       // self.friendNotification.isHidden = false
+                       // self.friendNotification.setTitle("\(pendingFriendRequests.count)", for: .normal)
                     }
                 } else {
-                    self.friendNotification.isHidden = true
+                    //self.friendNotification.isHidden = true
                 }
             }
         }
@@ -246,6 +317,18 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
 //    @IBAction func backButtonTapped(_ sender: Any) {
 //        dismiss(animated: true, completion: nil)
 //    }
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        // Find the tab bar controller in the view controller hierarchy
+        if let tabBarController = self.tabBarController {
+            // Switch to the first tab (index 0)
+            tabBarController.selectedIndex = 0
+        } else if let presentingViewController = self.presentingViewController as? UITabBarController {
+            // If presented modally, find the presenting tab bar controller
+            presentingViewController.selectedIndex = 0
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
     
     @IBAction func nameLabelTapped(_ sender: Any) {
         let alertController = UIAlertController(title: "Edit Name", message: nil, preferredStyle: .alert)
@@ -285,12 +368,12 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
         }
     }
     
-    @IBAction func addFriendsButton(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyboard.instantiateViewController(withIdentifier: "MyFriends") as! MyFriendsViewController
-        newViewController.modalPresentationStyle = .fullScreen
-        present(newViewController, animated: false, completion: nil)
-    }
+//    @IBAction func addFriendsButton(_ sender: Any) {
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let newViewController = storyboard.instantiateViewController(withIdentifier: "MyFriends") as! MyFriendsViewController
+//        newViewController.modalPresentationStyle = .fullScreen
+//        present(newViewController, animated: false, completion: nil)
+//    }
     
     @IBAction func privacyButtonTapped(_ sender: Any) {
         if let url = URL(string: "https://sites.google.com/view/wtmwhatsthemove/privacy-policy?authuser=0") {
@@ -660,7 +743,7 @@ class plainProfileViewController: UIViewController, UIImagePickerControllerDeleg
 
         myFriendsButton.isHidden = true
         addFriendsButton.isHidden = true
-        friendNotification.isHidden = true
+       // friendNotification.isHidden = true
         badgesButton.isHidden = true
         usernameLabel.isHidden = true
         changeName.isHidden = true
