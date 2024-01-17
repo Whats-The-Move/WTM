@@ -157,7 +157,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
         self.present(AppHomeVC, animated: false, completion: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {        
+    override func viewDidAppear(_ animated: Bool) {
         if let uid = Auth.auth().currentUser?.uid {
             let userRef = Firestore.firestore().collection("users").document(uid)
             
@@ -171,6 +171,7 @@ class NewHomeViewController: UIViewController, UICollectionViewDataSource, UICol
                    let pendingFriendRequests = data["pendingFriendRequests"] as? [String] {
                     // Access the username and name values
                     let isPartyAccount = UserDefaults.standard.bool(forKey: "partyAccount")
+                    print("this is a party? ", isPartyAccount)
                     if pendingFriendRequests.isEmpty || isPartyAccount{
                        self.notificationButton.isHidden = true
                     } else{

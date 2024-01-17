@@ -280,12 +280,20 @@ class ViewController: UIViewController {
             
 
             self?.updatePartyAccountStatus()
-
-            UserDefaults.standard.set(true, forKey: "authenticated")
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
-            appHomeVC.modalPresentationStyle = .overFullScreen
-            self?.present(appHomeVC, animated: true)
+            if !self!.barAcct{
+                UserDefaults.standard.set(true, forKey: "authenticated")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController")
+                appHomeVC.modalPresentationStyle = .overFullScreen
+                self?.present(appHomeVC, animated: true)
+            } else {
+                UserDefaults.standard.set(true, forKey: "authenticated")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let appHomeVC = storyboard.instantiateViewController(identifier: "TabBarController") as! UITabBarController
+                appHomeVC.selectedIndex = 2
+                appHomeVC.modalPresentationStyle = .overFullScreen
+                self?.present(appHomeVC, animated: true)
+            }
         })
 
 

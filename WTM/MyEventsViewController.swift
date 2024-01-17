@@ -16,9 +16,11 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
     var pastEvents: [EventLoad] = []
     var upcomingEvents: [EventLoad] = []
     var pastBool = false
+    private let refreshControl = UIRefreshControl()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 
         self.tabBarItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
@@ -71,7 +73,35 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
                 // You can now use these arrays to update your UI, etc.
             }
         }
+        setupPullToRefresh()
 
+    }
+    
+    private func setupPullToRefresh() {
+        // Set the target for the refresh control
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+        
+        // Set the tint color of the refresh control to hot pink (RGB: 255, 22, 148)
+        refreshControl.tintColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+        
+        // Add the refresh control to the table view
+        myEventsTableView.addSubview(refreshControl)
+    }
+    
+    @objc private func refreshData(_ sender: Any) {
+        // Add a delay of 5 milliseconds before refreshing the page
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            // Replace the below lines with your actual refresh logic
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
+            AppHomeVC.selectedIndex = 2
+            AppHomeVC.overrideUserInterfaceStyle = .dark
+            AppHomeVC.modalPresentationStyle = .fullScreen
+            self.present(AppHomeVC, animated: false, completion: nil)
+            
+            // End the refreshing animation
+            self.refreshControl.endRefreshing()
+        }
     }
 
     private func setupUI() {
@@ -582,7 +612,7 @@ class MyEventsCell: UITableViewCell {
 
     func configureWithEvent(event: EventLoad) {
         self.eventPassed = event
-        pplGoing.setTitle(String(event.isGoing.count) + " Attendees", for: .normal)
+        pplGoing.setTitle(String(event.isGoing.count - 1) + " Attendees", for: .normal)
         eventNameLabel.text = event.eventName
         eventDateLabel.text = event.date
         loadImage(from: event.imageURL, to: eventImageView)

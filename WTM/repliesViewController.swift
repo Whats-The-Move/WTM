@@ -94,6 +94,14 @@ class repliesViewController: UIViewController, UITableViewDelegate, UITableViewD
         button.setTitleColor(UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0), for: .normal)
         return button
     }()
+    
+    private let pictureImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,8 +112,17 @@ class repliesViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.register(replyCell.self, forCellReuseIdentifier: "CellIdentifier")
         fetchReplies()
         
+        if mainMessage!.picture != ""{
+            self.pictureImageView.isHidden = false
+            let url = URL(string: mainMessage!.picture)
+            self.pictureImageView.kf.setImage(with: url)
+        } else {
+            self.pictureImageView.isHidden = true
+        }
+        
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.overrideUserInterfaceStyle = .dark
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -154,15 +171,16 @@ class repliesViewController: UIViewController, UITableViewDelegate, UITableViewD
         setupThumbsButtons()
 
         // Add subviews
-        [titleLabel, messageLabel, timeLabel, thumbsUpButton, likesCountLabel, thumbsDownButton, dislikesCountLabel, horizontalLine, cancelButton].forEach {
+        [titleLabel, messageLabel, timeLabel, thumbsUpButton, likesCountLabel, thumbsDownButton, dislikesCountLabel, horizontalLine, cancelButton, pictureImageView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
         
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        
+        var constraints: [NSLayoutConstraint] = []
 
-        // Set up constraints
-        NSLayoutConstraint.activate([
+        constraints += [
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
@@ -187,12 +205,29 @@ class repliesViewController: UIViewController, UITableViewDelegate, UITableViewD
 
             dislikesCountLabel.centerYAnchor.constraint(equalTo: thumbsDownButton.centerYAnchor),
             dislikesCountLabel.leadingAnchor.constraint(equalTo: thumbsDownButton.trailingAnchor, constant: 5),
+            
+            pictureImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pictureImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            pictureImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            //pictureImageView.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: -8),
+            pictureImageView.bottomAnchor.constraint(equalTo: timeLabel.topAnchor, constant: -8),
+            pictureImageView.heightAnchor.constraint(equalToConstant: 200),
 
             horizontalLine.topAnchor.constraint(equalTo: dislikesCountLabel.bottomAnchor, constant: 20),
             horizontalLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            horizontalLine.heightAnchor.constraint(equalToConstant: 1),
-        ])
+            horizontalLine.heightAnchor.constraint(equalToConstant: 1)
+        ]
+
+        // Conditionally add constraint based on the presence of a picture
+        if mainMessage!.picture != "" {
+            constraints.append(messageLabel.bottomAnchor.constraint(equalTo: pictureImageView.topAnchor, constant: -8))
+        } else {
+            constraints.append(messageLabel.bottomAnchor.constraint(equalTo: timeLabel.topAnchor, constant: -10))
+        }
+
+        // Activate all constraints
+        NSLayoutConstraint.activate(constraints)
     }
     
     func setupTableView() {

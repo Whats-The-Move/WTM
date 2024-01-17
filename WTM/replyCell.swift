@@ -25,14 +25,14 @@ class replyCell: UITableViewCell {
     let thumbsUpButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .white
         return button
     }()
 
     let thumbsDownButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "hand.thumbsdown"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .white
         return button
     }()
     
@@ -41,10 +41,10 @@ class replyCell: UITableViewCell {
         messageLabel.text = message.message
         timeLabel.text = timeAgoString(from: message.time)
     
-        thumbsUpButton.setTitle("\(replyMessage!.likes.count - 1)", for: .normal)
-        thumbsDownButton.setTitle("\(replyMessage!.dislikes.count - 1)", for: .normal)
-        thumbsUpButton.setTitleColor(.gray, for: .normal)
-        thumbsDownButton.setTitleColor(.gray, for: .normal)
+        thumbsUpButton.setTitle(" \(replyMessage!.likes.count - 1)", for: .normal)
+        thumbsDownButton.setTitle(" \(replyMessage!.dislikes.count - 1)", for: .normal)
+        thumbsUpButton.setTitleColor(.white, for: .normal)
+        thumbsDownButton.setTitleColor(.white, for: .normal)
         
         setupThumbsButtons()
     }
@@ -80,19 +80,19 @@ class replyCell: UITableViewCell {
         if replyMessage.likes.contains(currentUID) {
             thumbsUpButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
         } else {
-            thumbsUpButton.tintColor = .black
+            thumbsUpButton.tintColor = .gray
         }
 
         // Update thumbs down button
         if replyMessage.dislikes.contains(currentUID) {
             thumbsDownButton.tintColor = UIColor(red: 1.0, green: 0.086, blue: 0.58, alpha: 1.0)
         } else {
-            thumbsDownButton.tintColor = .black
+            thumbsDownButton.tintColor = .gray
         }
 
         // Update likes and dislikes count labels
-        thumbsUpButton.setTitle("\(replyMessage.likes.count - 1)", for: .normal)
-        thumbsDownButton.setTitle("\(replyMessage.dislikes.count - 1)", for: .normal)
+        thumbsUpButton.setTitle(" \(replyMessage.likes.count - 1)", for: .normal)
+        thumbsDownButton.setTitle(" \(replyMessage.dislikes.count - 1)", for: .normal)
     }
     
     @objc private func thumbsUpButtonTapped() {

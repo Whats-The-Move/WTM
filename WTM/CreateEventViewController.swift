@@ -9,6 +9,21 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import StoreKit
+
+extension UIView {
+    func findFirstResponder() -> UIResponder? {
+        if isFirstResponder {
+            return self
+        }
+        for subview in subviews {
+            if let firstResponder = subview.findFirstResponder() {
+                return firstResponder
+            }
+        }
+        return nil
+    }
+}
+
 class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     
@@ -58,8 +73,48 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         if let event = eventToEdit {
             setupToEdit()
         }
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0.3
+        
+        UIView.animate(withDuration: duration) {
+            // Reset the frame or constraints of yourView to its original position
+            self.view.frame.origin.y = 0.0
+        }
+    }
+    
+    @objc private func keyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let textField = view.findFirstResponder() as? UITextField,
+              textField == deals || textField == time else {
+            return
+        }
+        
+        let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0.3
+        
+        UIView.animate(withDuration: duration) {
+            // Adjust the frame or constraints of yourView to move it up
+            self.view.frame.origin.y = self.view.frame.height - keyboardFrame.height - self.view.frame.height
+        }
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    deinit {
+        // Remove observers to avoid retain cycles
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     func setupToEdit (){
         eventTitle.text =  eventToEdit?.eventName ?? ""
         
@@ -300,6 +355,13 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         textField.resignFirstResponder()
         return true
     }
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == deals {
+            // Customize the keyboard for the "Deals" text field (if needed)
+            return true
+        }
+        return true
+    }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
@@ -384,43 +446,43 @@ class CreateEventViewController: UIViewController, UITextFieldDelegate, UITextVi
         
     }
     
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    @objc func keyboardWillHide(notification: Notification) {
-        // Restore the original position of the view
-        UIView.animate(withDuration: 0.3) {
-            self.view.transform = .identity
-        }
-    }
-    
-    @objc func keyboardWillShow(notification: Notification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
-            return
-        }
-    
-
-        // Calculate the height of the keyboard
-        let keyboardHeight = keyboardFrame.size.height
-
-        // Check if the text field is hidden by the keyboard
-        if eventTitle.isFirstResponder ||  descriptionText.isFirstResponder  {
-            let maxY = max(eventTitle.frame.maxY, descriptionText.frame.maxY)
-            let visibleHeight = view.frame.height - keyboardHeight
-            if maxY > visibleHeight {
-                // Adjust the view's frame to move the text field above the keyboard
-                let offsetY = maxY - visibleHeight + 10 // Add 10 for padding
-                UIView.animate(withDuration: 0.3) {
-                    self.view.transform = CGAffineTransform(translationX: 0, y: -offsetY)
-                }
-            }
-        }
-    
-    }
-    @objc func dismissKeyboard() {
-        descriptionText.resignFirstResponder()
-    }
+//    private func setupNotifications() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+//    }
+//    @objc func keyboardWillHide(notification: Notification) {
+//        // Restore the original position of the view
+//        UIView.animate(withDuration: 0.3) {
+//            self.view.transform = .identity
+//        }
+//    }
+//
+//    @objc func keyboardWillShow(notification: Notification) {
+//        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+//            return
+//        }
+//
+//
+//        // Calculate the height of the keyboard
+//        let keyboardHeight = keyboardFrame.size.height
+//
+//        // Check if the text field is hidden by the keyboard
+//        if eventTitle.isFirstResponder ||  descriptionText.isFirstResponder  {
+//            let maxY = max(eventTitle.frame.maxY, descriptionText.frame.maxY)
+//            let visibleHeight = view.frame.height - keyboardHeight
+//            if maxY > visibleHeight {
+//                // Adjust the view's frame to move the text field above the keyboard
+//                let offsetY = maxY - visibleHeight + 10 // Add 10 for padding
+//                UIView.animate(withDuration: 0.3) {
+//                    self.view.transform = CGAffineTransform(translationX: 0, y: -offsetY)
+//                }
+//            }
+//        }
+//
+//    }
+//    @objc func dismissKeyboard() {
+//        descriptionText.resignFirstResponder()
+//    }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
 

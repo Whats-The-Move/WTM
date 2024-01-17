@@ -14,6 +14,7 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
     var bgView = UIView()
     let addButton = UIButton(type: .system)
     let noMessagesLabel = UILabel()
+    private let refreshControl = UIRefreshControl()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -24,6 +25,7 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         setupBgView()
 
         setupTableView()
+        setupPullToRefresh()
         
         noMessagesLabel.text = "No messages available"
         noMessagesLabel.font = UIFont(name: "Futura", size: 18)
@@ -332,8 +334,14 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         stackView.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -10).isActive = true
         
         // Set default styles for selected and unselected states
-        let selectedAttributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
-        let normalAttributes: [NSAttributedString.Key: Any] = [:]
+        let selectedAttributes: [NSAttributedString.Key: Any] = [
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+            .foregroundColor: UIColor.white
+        ]
+
+        let normalAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.gray
+        ]
 
         newButton.setAttributedTitle(NSAttributedString(string: "New", attributes: selectedAttributes), for: .selected)
         newButton.setAttributedTitle(NSAttributedString(string: "New", attributes: normalAttributes), for: .normal)
@@ -462,6 +470,33 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(MessageCell.self, forCellReuseIdentifier: "cell")
+    }
+    
+    private func setupPullToRefresh() {
+        // Set the target for the refresh control
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+        
+        // Set the tint color of the refresh control to hot pink (RGB: 255, 22, 148)
+        refreshControl.tintColor = UIColor(red: 255/255, green: 22/255, blue: 148/255, alpha: 1.0)
+        
+        // Add the refresh control to the table view
+        tableView.addSubview(refreshControl)
+    }
+    
+    @objc private func refreshData(_ sender: Any) {
+        // Add a delay of 5 milliseconds before refreshing the page
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            // Replace the below lines with your actual refresh logic
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let AppHomeVC = storyboard.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
+            AppHomeVC.selectedIndex = 1
+            AppHomeVC.overrideUserInterfaceStyle = .dark
+            AppHomeVC.modalPresentationStyle = .fullScreen
+            self.present(AppHomeVC, animated: false, completion: nil)
+            
+            // End the refreshing animation
+            self.refreshControl.endRefreshing()
+        }
     }
     
     func repliesButtonTapped(inCell cell: MessageCell, withMessage message: chatMessage) {

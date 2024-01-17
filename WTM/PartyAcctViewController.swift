@@ -14,9 +14,18 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
     
     var typeOptions = ["Frat", "Bar", "Nightclub", "School club"]
-    var cityOptions = ["Berkeley", "Champaign", "Chicago"]
+    var cityOptions = ["Berkeley", "Champaign"]
     var selectedType = "Frat"
     var selectedCity = "Berkeley"
+    
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "wtmwhite")
+        imageView.contentMode = .scaleAspectFit // Adjust content mode as needed
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     @IBOutlet weak var barLabel: UILabel!
     
     var partyName: UITextField!
@@ -53,6 +62,16 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(logoImageView)
+        
+        // Setup constraints for logoImageView
+        NSLayoutConstraint.activate([
+            logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50), // Adjust top spacing as needed
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 60)   // Adjust height as needed
+        ])
+        
         setupPartyName()
 
         setupBackButton()
@@ -75,7 +94,30 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
         fail.isHidden = true
         imagePickerController.delegate = self
         certificateUpload.addTarget(self, action: #selector(certificateUploadTapped), for: .touchUpInside)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
 
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0.3
+        
+        UIView.animate(withDuration: duration) {
+            // Reset the frame or constraints of yourView to its original position
+            self.view.frame.origin.y = 0.0
+        }
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    deinit {
+        // Remove observers to avoid retain cycles
+        NotificationCenter.default.removeObserver(self)
     }
     
     func setupBackButton() {
@@ -520,7 +562,7 @@ class PartyAcctViewController: UIViewController, UIImagePickerControllerDelegate
                         // Store the download URL in Firestore
                         let email = self.contactEmail.text
                         //setting password to
-                        let password = self.partyName.text
+                        let password = self.password.text
                         //do auth
                         Auth.auth().createUser(withEmail: email!, password: password! ) { (authResult, error) in
                             if let error = error {
