@@ -11,6 +11,7 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
     private let topButton = UIButton()
     private var messages: [chatMessage] = []
     private var messagesTwo: [chatMessage] = []
+    var bgView = UIView()
     let addButton = UIButton(type: .system)
     let noMessagesLabel = UILabel()
     
@@ -19,8 +20,10 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         messages.removeAll()
         messagesTwo.removeAll()
         setupTitleLabel()
-        setupTableView()
         setupStackView()
+        setupBgView()
+
+        setupTableView()
         
         noMessagesLabel.text = "No messages available"
         noMessagesLabel.font = UIFont(name: "Futura", size: 18)
@@ -312,6 +315,8 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         topButton.setTitle("Top", for: .normal)
 
         [newButton, hotButton, topButton].forEach {
+            $0.titleLabel?.font = UIFont(name: "Futura", size: 18)
+
             $0.setTitleColor(.white, for: .normal)
             $0.backgroundColor = .clear
             //$0.titleLabel?.font = UIFont(name: "Futura", size: 16) // Replace with your desired font
@@ -321,10 +326,10 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
 
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -5).isActive = true
-        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -10).isActive = true
         
         // Set default styles for selected and unselected states
         let selectedAttributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
@@ -427,19 +432,31 @@ class messagingViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         titleLabel.contentMode = .scaleAspectFit
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant: 85).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 85).isActive = true
     }
-
+    //40,70, 15, 30, 15
+    func setupBgView(){
+        bgView.backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
+        bgView.clipsToBounds = true
+        view.addSubview(bgView)
+        bgView.translatesAutoresizingMaskIntoConstraints = false
+        bgView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 15).isActive = true
+        bgView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        bgView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        bgView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
     func setupTableView() {
         // Set up the table view
-        tableView.backgroundColor = .black
-        view.addSubview(tableView)
+        print("abt to error maybe?")
+        tableView.backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
+        bgView.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        //tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: bgView.topAnchor, constant: -20).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         tableView.delegate = self

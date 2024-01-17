@@ -91,14 +91,14 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
         } else {
             createButton.isHidden = true
         }
-        
+        //70,50,20,20,10
         view.addSubview(titleLabel)
         view.addSubview(createButton)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             titleLabel.widthAnchor.constraint(equalToConstant: 200),
-            titleLabel.heightAnchor.constraint(equalToConstant: 40),
+            titleLabel.heightAnchor.constraint(equalToConstant: 50),
             
             createButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             createButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 60),
@@ -112,10 +112,12 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
 
         // Position the buttons
         NSLayoutConstraint.activate([
-            upcomingEventsButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            upcomingEventsButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
             upcomingEventsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            pastEventsButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            pastEventsButton.leadingAnchor.constraint(equalTo: upcomingEventsButton.trailingAnchor, constant: 20)
+            pastEventsButton.topAnchor.constraint(equalTo: upcomingEventsButton.topAnchor),
+            pastEventsButton.leadingAnchor.constraint(equalTo: upcomingEventsButton.trailingAnchor, constant: 25),
+            upcomingEventsButton.heightAnchor.constraint(equalToConstant: 30),
+            pastEventsButton.heightAnchor.constraint(equalTo: upcomingEventsButton.heightAnchor)
         ])
 
         updateButtonStyles()
@@ -127,7 +129,7 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
         bgView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            bgView.topAnchor.constraint(equalTo: upcomingEventsButton.bottomAnchor, constant: 20),
+            bgView.topAnchor.constraint(equalTo: upcomingEventsButton.bottomAnchor, constant: 15),
             bgView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bgView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bgView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -166,12 +168,12 @@ class MyEventsViewController: UIViewController, UITableViewDelegate, UITableView
 
     private func updateButtonStyles() {
         let underlineAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: "Futura-Medium", size: 16) ?? UIFont.systemFont(ofSize: 16),
+            .font: UIFont(name: "Futura-Medium", size: 18) ?? UIFont.systemFont(ofSize: 18),
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
 
         let normalAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: "Futura-Medium", size: 16) ?? UIFont.systemFont(ofSize: 16)
+            .font: UIFont(name: "Futura-Medium", size: 18) ?? UIFont.systemFont(ofSize: 18)
         ]
 
         if pastBool {
